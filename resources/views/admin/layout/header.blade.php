@@ -65,7 +65,7 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('user')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-user-circle"></i> User
                 </a>
             </div>

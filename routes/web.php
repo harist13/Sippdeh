@@ -19,6 +19,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/kecamatan', [AdminController::class, 'kecamatan'])->name('kecamatan');
     Route::get('/kelurahan', [AdminController::class, 'kelurahan'])->name('kelurahan');
     Route::get('/tps', [AdminController::class, 'tps'])->name('tps');
+    Route::get('/user', [AdminController::class, 'user'])->name('user');
 
 
 

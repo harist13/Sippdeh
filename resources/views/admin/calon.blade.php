@@ -35,6 +35,9 @@
                         Nama Pasangan Calon
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                        Partai
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
                         Kabupaten/Kota
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
@@ -49,6 +52,9 @@
                 <tr>
                     <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">
                         001
+                    </td>
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">
+                        Demokrat
                     </td>
                     <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">
                         Andi Harun / Saefuddin Zuhri
