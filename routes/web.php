@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
+
+Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login'); // Route untuk proses login
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Route untuk logout
 
