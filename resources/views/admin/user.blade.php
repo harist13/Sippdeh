@@ -49,7 +49,102 @@
 
 <main class="container flex-grow px-4 mx-auto mt-6">
     <!-- Table Container -->
-    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+
+
+<!-- Modal Tambah User -->
+<div id="modalTambahUser" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold">Tambah User</h2>
+            <button id="closeTambahUserModal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="tambahUserForm">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="namaLengkap" class="block text-sm">Nama</label>
+                    <input type="text" id="namaLengkap" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Nama Lengkap">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm">Email</label>
+                    <input type="email" id="email" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Email">
+                </div>
+                <div>
+                    <label for="role" class="block text-sm">Role</label>
+                    <select id="role" class="w-full bg-gray-100 px-3 py-2 rounded-md">
+                        <option>Pilih Role</option>
+                        <option>Admin</option>
+                        <option>Operator</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm">Password</label>
+                    <input type="password" id="password" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Password">
+                </div>
+                <div class="col-span-2">
+                    <label for="kota" class="block text-sm">Kota</label>
+                    <select id="kota" class="w-full bg-gray-100 px-3 py-2 rounded-md">
+                        <option>Pilih Kab/Kota</option>
+                        <!-- Populate with options dynamically -->
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 text-right">
+                <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded-md">Tambah User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit User (can be similar to Tambah User modal) -->
+<div id="modalEditUser" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold">Edit User</h2>
+            <button id="closeEditUserModal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="editUserForm">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="editNamaLengkap" class="block text-sm">Nama</label>
+                    <input type="text" id="editNamaLengkap" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Nama Lengkap">
+                </div>
+                <div>
+                    <label for="editEmail" class="block text-sm">Email</label>
+                    <input type="email" id="editEmail" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Email">
+                </div>
+                <div>
+                    <label for="editRole" class="block text-sm">Role</label>
+                    <select id="editRole" class="w-full bg-gray-100 px-3 py-2 rounded-md">
+                        <option>Pilih Role</option>
+                        <option>Admin</option>
+                        <option>Operator</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editPassword" class="block text-sm">Password</label>
+                    <input type="password" id="editPassword" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Password">
+                </div>
+                <div class="col-span-2">
+                    <label for="editKota" class="block text-sm">Kota</label>
+                    <select id="editKota" class="w-full bg-gray-100 px-3 py-2 rounded-md">
+                        <option>Pilih Kab/Kota</option>
+                        <!-- Populate with options dynamically -->
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 text-right">
+                <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded-md">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
         <!-- Table Header -->
         <div class="flex justify-between items-center mb-4">
             <div class="flex border border-gray-300 rounded-lg overflow-hidden">
@@ -164,4 +259,28 @@
     });
 </script>
 
+
+<script>
+    // Show and hide the "Tambah User" modal
+document.querySelector('.btn-tambah-user').addEventListener('click', function () {
+    document.getElementById('modalTambahUser').classList.remove('hidden');
+});
+
+document.getElementById('closeTambahUserModal').addEventListener('click', function () {
+    document.getElementById('modalTambahUser').classList.add('hidden');
+});
+
+// Show and hide the "Edit User" modal (adjust this to your edit button)
+document.querySelectorAll('.fa-edit').forEach(function (editBtn) {
+    editBtn.addEventListener('click', function () {
+        document.getElementById('modalEditUser').classList.remove('hidden');
+        // Optionally, populate modal with user data for editing
+    });
+});
+
+document.getElementById('closeEditUserModal').addEventListener('click', function () {
+    document.getElementById('modalEditUser').classList.add('hidden');
+});
+
+</script>
 @include('admin.layout.footer')
