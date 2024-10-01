@@ -13,7 +13,16 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // R
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
     Route::get('/rangkuman', [AdminController::class, 'rangkuman'])->name('rangkuman');
-    
+    Route::get('/calon', [AdminController::class, 'calon'])->name('calon');
+    Route::get('/provinsi', [AdminController::class, 'provinsi'])->name('provinsi');
+    Route::get('/kabupaten', [AdminController::class, 'kabupaten'])->name('kabupaten');
+    Route::get('/kecamatan', [AdminController::class, 'kecamatan'])->name('kecamatan');
+    Route::get('/kelurahan', [AdminController::class, 'kelurahan'])->name('kelurahan');
+    Route::get('/tps', [AdminController::class, 'tps'])->name('tps');
+
+
+
+
 });
 
 // Middleware untuk operator

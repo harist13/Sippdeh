@@ -51,7 +51,7 @@
                 <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 far fa-clipboard"></i> Rekapitulasi
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('rangkuman') }}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-chart-bar"></i> Rangkuman
                 </a>
             </div>
@@ -79,22 +79,22 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('provinsi')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-building"></i> Provinsi
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('kabupaten')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-city"></i> Kabupaten/Kota
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('kecamatan')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-map-marker-alt"></i> Kecamatan
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('kelurahan')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-home"></i> Kelurahan
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('tps')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-vote-yea"></i> TPS
                 </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('calon')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-users"></i> Calon Kabupaten/Kota
                 </a>
             </div>

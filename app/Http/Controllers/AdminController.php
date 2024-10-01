@@ -19,4 +19,29 @@ class AdminController extends Controller
     {
         return view('admin.rangkuman');
     }
+    public function calon()
+    {
+        return view('admin.calon');
+    }
+    public function provinsi()
+    {
+        return view('admin.provinsi');
+    }
+    public function tps()
+    {
+        return view('admin.tps');
+    }
+    public function kabupaten()
+    {
+        return view('admin.kabupaten');
+    }
+    public function kecamatan()
+    {
+        return view('admin.kecamatan');
+    }
+    public function kelurahan()
+    {
+        return view('admin.kelurahan');
+    }
+
 }
