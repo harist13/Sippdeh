@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -15,35 +16,36 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input dari form login
-        $credentials = $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => ['required', 'email'],
-            'password' => ['required'],
+            'password' => ['required', 'min:6'],
+        ], [
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'password.required' => 'Password harus diisi.',
+            'password.min' => 'Password harus minimal 6 karakter.',
         ]);
 
-        // Autentikasi pengguna
-        if (Auth::attempt($credentials)) {
-            // Regenerasi sesi
-            $request->session()->regenerate();
-
-            // Mendapatkan pengguna yang sedang login
-            $user = Auth::user();
-
-            // Mengarahkan berdasarkan peran (role)
-            if ($user->hasRole('admin')) {
-                return redirect()->route('Dashboard'); // Admin dashboard route
-            } elseif ($user->hasRole('operator')) {
-                return redirect()->route('operator.dashboard'); // Operator dashboard route
-            }
-
-            // Redirect default jika role tidak dikenali
-            return redirect()->intended('/');
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
 
-        // Mengembalikan error jika login gagal
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            if ($user->hasRole('admin')) {
+                return redirect()->route('Dashboard')->with('success', 'Login berhasil!');
+            } elseif ($user->hasRole('operator')) {
+                return redirect()->route('operator.dashboard')->with('success', 'Login berhasil!');
+            }
+
+            return redirect()->intended('/')->with('success', 'Login berhasil!');
+        }
+
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+            'email' => 'Email atau password salah.',
+        ])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
@@ -51,6 +53,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/')->with('success', 'Anda telah berhasil logout.');
     }
 }
