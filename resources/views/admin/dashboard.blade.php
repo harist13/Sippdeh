@@ -74,35 +74,30 @@
 </div>
 
         <!-- Kandidat -->
-       <!-- Kandidat -->
 <div class="grid grid-cols-3 gap-6 mb-6">
     <!-- Paslon 1 -->
     <div class="overflow-hidden bg-blue-600 rounded-lg shadow">
+        <div class="relative">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Andi Harun" class="w-full h-48 object-cover">
+            <span class="absolute top-2 left-2 px-2 py-1 text-sm bg-blue-700 rounded text-white">Samarinda</span>
+        </div>
         <div class="p-4 text-white">
-            <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-1 text-sm bg-blue-700 rounded">Samarinda</span>
-            </div>
-            <div class="flex justify-center mb-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Andi Harun" class="w-24 h-24 mr-2 rounded-full">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Safaruddin Zuhri" class="w-24 h-24 rounded-full">
-            </div>
-            <h3 class="font-bold text-center">Andi Harun / Safaruddin Zuhri</h3>
+            <h3 class="font-bold text-center">Andi Harun / Saefuddin Zuhri</h3>
             <p class="text-sm text-center">PASLON 1</p>
         </div>
         <div class="p-2 text-center text-white bg-blue-700">
-            <p class="font-bold">21,69% - 268,131 Suara</p>
+            <p class="font-bold">21,69% - 288.131 Suara</p>
         </div>
     </div>
 
     <!-- Paslon 2 (Kotak Kosong) -->
     <div class="overflow-hidden bg-blue-600 rounded-lg shadow">
+        <div class="relative h-48 bg-gray-200 flex items-center justify-center">
+            <p class="text-2xl font-bold text-gray-600">Kotak Kosong</p>
+            <span class="absolute top-2 left-2 px-2 py-1 text-sm bg-blue-700 rounded text-white">Samarinda</span>
+        </div>
         <div class="p-4 text-white">
-            <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-1 text-sm bg-blue-700 rounded">Samarinda</span>
-            </div>
-            <div class="flex items-center justify-center h-48">
-                <p class="text-2xl font-bold">Kotak Kosong</p>
-            </div>
+            <h3 class="font-bold text-center">Kotak Kosong</h3>
             <p class="text-sm text-center">PASLON 2</p>
         </div>
         <div class="p-2 text-center text-white bg-blue-700">
@@ -112,14 +107,11 @@
 
     <!-- Paslon 3 -->
     <div class="overflow-hidden bg-blue-600 rounded-lg shadow">
+        <div class="relative">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Muhammad Sabhani" class="w-full h-48 object-cover">
+            <span class="absolute top-2 left-2 px-2 py-1 text-sm bg-blue-700 rounded text-white">Balikpapan</span>
+        </div>
         <div class="p-4 text-white">
-            <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-1 text-sm bg-blue-700 rounded">Balikpapan</span>
-            </div>
-            <div class="flex justify-center mb-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Muhammad Sabhani" class="w-24 h-24 mr-2 rounded-full">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Syafril Wahid" class="w-24 h-24 rounded-full">
-            </div>
             <h3 class="font-bold text-center">Muhammad Sabhani / Syafril Wahid</h3>
             <p class="text-sm text-center">PASLON 1</p>
         </div>
@@ -137,27 +129,26 @@
 </div>
 
         <!-- Statistik Suara -->
-       <!-- Statistik Suara -->
 <div class="p-6 mb-6 bg-white rounded-lg shadow">
     <div class="flex items-start mb-6">
-        <img src="{{ asset('assets/logo')}}" alt="Logo Kota" class="mr-6 w-28 h-28">
+        <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-6 w-30 h-28">
         <div class="flex-grow">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-700">Total Suara Sah</h2>
-                    <p class="text-3xl font-bold text-blue-600">2,224,562 Suara</p>
+            <div class="space-y-2">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-700">Total Suara Tidak Sah</h2>
-                    <p class="text-3xl font-bold text-blue-600">37,251 Suara</p>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-700">Jumlah Pengguna Hak Pilih</h2>
-                    <p class="text-3xl font-bold text-blue-600">2,261,813 Orang</p>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-700">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                    <p class="text-3xl font-bold text-blue-600">516,831 Orang</p>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
                 </div>
             </div>
         </div>

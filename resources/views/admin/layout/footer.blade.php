@@ -3,7 +3,7 @@
         <div class="container px-4 mx-auto">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <img src="/api/placeholder/60/60" alt="Logo" class="w-16 h-16 mr-4">
+                    <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-15 h-16 mr-4">
                     <div>
                         <h3 class="font-bold">BADAN KESATUAN BANGSA DAN POLITIK</h3>
                         <p>Jalan Jenderal Sudirman</p>
