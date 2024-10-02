@@ -1,4 +1,19 @@
 @include('admin.layout.header')
+<style>
+    .container {
+        max-width: 1200px;
+    }
+    .rounded-lg {
+        border-radius: 0.5rem;
+    }
+    .shadow-md {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    table tr:nth-child(even) {
+        background-color: #f8f8f8;
+    }
+</style>
+
 <main class="container flex-grow px-4 mx-auto mt-6">
 <div class="container mx-auto mt-8">
     <div class="flex justify-between items-center mb-4">
@@ -6,7 +21,7 @@
             <span class="text-lg font-bold"><i class="fas fa-map-marked-alt"></i> Provinsi</span>
         </div>
         <div class="flex space-x-2">
-            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg">+ Tambah Provinsi</button>
+            <button id="addProvinsiBtn" class="bg-blue-500 text-white py-2 px-4 rounded-lg">+ Tambah Provinsi</button>
             <div class="relative">
                 <button id="dropdownButton" class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center">
                     Pilih Kab/Kota <i class="fas fa-chevron-right ml-2"></i>
@@ -42,36 +57,115 @@
                     <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">001</td>
                     <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">Kalimantan Timur</td>
                     <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">
-                        <a href="#" class="text-blue-600 hover:text-blue-900"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="text-red-600 hover:text-red-900 ml-3"><i class="fas fa-trash-alt"></i></a>
+                        <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 </tr>
-                <!-- Add more rows here if needed -->
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- Add Provinsi Modal -->
+<div id="addProvinsiModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Tambah Provinsi</h3>
+            <div class="mt-2 px-7 py-3">
+                <input type="text" id="addProvinsiName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nama Provinsi">
+            </div>
+            <div class="items-center px-4 py-3">
+                <button id="cancelAddProvinsi" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">Batalkan</button>
+                <button id="confirmAddProvinsi" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Tambah</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Provinsi Modal -->
+<div id="editProvinsiModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Provinsi</h3>
+            <div class="mt-2 px-7 py-3">
+                <input type="text" id="editProvinsiName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nama Provinsi">
+            </div>
+            <div class="items-center px-4 py-3">
+                <button id="cancelEditProvinsi" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">Batalkan</button>
+                <button id="confirmEditProvinsi" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </main>
-<style>
-    .container {
-        max-width: 1200px;
-    }
-    .rounded-lg {
-        border-radius: 0.5rem;
-    }
-    .shadow-md {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-    table tr:nth-child(even) {
-        background-color: #f8f8f8;
-    }
-</style>
+
 
 <script>
     document.getElementById('dropdownButton').addEventListener('click', function() {
         var menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
     });
+
+    // Add Provinsi Modal
+    const addProvinsiBtn = document.getElementById('addProvinsiBtn');
+    const addProvinsiModal = document.getElementById('addProvinsiModal');
+    const cancelAddProvinsi = document.getElementById('cancelAddProvinsi');
+    const confirmAddProvinsi = document.getElementById('confirmAddProvinsi');
+
+    addProvinsiBtn.onclick = function() {
+        addProvinsiModal.classList.remove('hidden');
+    }
+
+    cancelAddProvinsi.onclick = function() {
+        addProvinsiModal.classList.add('hidden');
+    }
+
+    confirmAddProvinsi.onclick = function() {
+        const provinsiName = document.getElementById('addProvinsiName').value;
+        console.log('Adding new provinsi:', provinsiName);
+        // Add your logic here to save the new provinsi
+        addProvinsiModal.classList.add('hidden');
+    }
+
+    // Edit Provinsi Modal
+    const editProvinsiModal = document.getElementById('editProvinsiModal');
+    const cancelEditProvinsi = document.getElementById('cancelEditProvinsi');
+    const confirmEditProvinsi = document.getElementById('confirmEditProvinsi');
+    const editButtons = document.querySelectorAll('.edit-provinsi-btn');
+
+    editButtons.forEach(button => {
+        button.onclick = function() {
+            const provinsiName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
+            document.getElementById('editProvinsiName').value = provinsiName;
+            editProvinsiModal.classList.remove('hidden');
+        }
+    });
+
+    cancelEditProvinsi.onclick = function() {
+        editProvinsiModal.classList.add('hidden');
+    }
+
+    confirmEditProvinsi.onclick = function() {
+        const provinsiName = document.getElementById('editProvinsiName').value;
+        console.log('Editing provinsi:', provinsiName);
+        // Add your logic here to save the edited provinsi
+        editProvinsiModal.classList.add('hidden');
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        if (event.target == addProvinsiModal) {
+            addProvinsiModal.classList.add('hidden');
+        }
+        if (event.target == editProvinsiModal) {
+            editProvinsiModal.classList.add('hidden');
+        }
+    }
 </script>
 
 @include('admin.layout.footer')

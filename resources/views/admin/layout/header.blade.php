@@ -48,7 +48,7 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('Dashboard') }}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 far fa-clipboard"></i> Rekapitulasi
                 </a>
                 <a href="{{ route('rangkuman') }}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
@@ -109,9 +109,9 @@
             <button id="openSidebar" class="mr-4 text-gray-600 focus:outline-none">
                 <i class="text-xl fas fa-bars"></i>
             </button>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Coat_of_arms_of_East_Kalimantan.svg/800px-Coat_of_arms_of_East_Kalimantan.svg.png" alt="Logo" class="w-10 h-10 mr-2">
+            <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-8 h-10 mr-2">
             <div class="flex flex-col">
-                <span class="text-lg font-semibold">Badan Kesatuan Bangsa Dan Politik</span>
+                <span class="text-lg font-semibold text-blue-600">Badan Kesatuan Bangsa Dan Politik</span>
                 <span class="text-sm text-gray-600">Provinsi Kalimantan Timur</span>
             </div>
         </div>

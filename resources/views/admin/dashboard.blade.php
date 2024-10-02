@@ -140,7 +140,7 @@
        <!-- Statistik Suara -->
 <div class="p-6 mb-6 bg-white rounded-lg shadow">
     <div class="flex items-start mb-6">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wagub_Kaltim_Hadi_Mulyadi.jpg/800px-Wagub_Kaltim_Hadi_Mulyadi.jpg" alt="Logo Kota" class="mr-6 w-28 h-28">
+        <img src="{{ asset('assets/logo')}}" alt="Logo Kota" class="mr-6 w-28 h-28">
         <div class="flex-grow">
             <div class="grid grid-cols-2 gap-4">
                 <div>
