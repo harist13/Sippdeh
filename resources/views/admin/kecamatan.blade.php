@@ -28,7 +28,7 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-<div class="container mx-auto mt-8">
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
     <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
         <div class="flex items-center space-x-2 w-full-mobile">
             <span class="text-lg font-bold"><i class="fa fa-map-marker"></i> Kecamatan</span>
@@ -64,12 +64,12 @@
                     <th class="px-4 py-3 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">001</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">Palaran</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">Samarinda</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">
+            <tbody class="bg-gray-100">
+                <tr class="hover:bg-gray-200">
+                    <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">001</td>
+                    <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">Palaran</td>
+                    <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">Samarinda</td>
+                    <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
                         <button class="editKecamatanBtn text-blue-600 hover:text-blue-900"><i class="fas fa-edit"></i></button>
                         <button class="text-red-600 hover:text-red-900 ml-3"><i class="fa fa-trash"></i></button>
                     </td>
