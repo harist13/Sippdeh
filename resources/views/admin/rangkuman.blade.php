@@ -1,50 +1,103 @@
- @include('admin.layout.header')
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-   <style>
-        .hidden {
-            display: none;
-        }
-        #tpsBtn, #suaraBtn, #paslonBtn {
-        margin-right: 1px; /* Adjust the value as needed */
+@include('admin.layout.header')
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+    
+    #tpsBtn, #suaraBtn, #paslonBtn {
+        margin-right: 1px;
     }
-     .btn-group button {
+    .btn-group button {
         margin: 0;
         padding: 10px 20px;
         border: none;
     }
     .btn-group button:not(:last-child) {
-        border-right: 1px solid #d1d5db; /* Light gray color */
+        border-right: 1px solid #d1d5db;
     }
-    </style>
- <main class="container flex-grow px-4 mx-auto mt-6">
- <!-- Table Container -->
-<div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
-    <!-- Table Header -->
-        <div class="flex justify-between items-center mb-4">
-           <div class="flex border border-gray-300 rounded-lg overflow-hidden">
-    <button id="tpsBtn" class="px-4 py-2 bg-blue-700 text-white rounded-l-lg border-r border-gray-300">TPS</button>
-    <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300">SUARA</button>
-    <button id="paslonBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg">PASLON</button>
-</div>
+    @media (max-width: 640px) {
+        .container {
+            padding: 1rem;
+        }
+        .flex-wrap-mobile {
+            flex-wrap: wrap;
+        }
+        .w-full-mobile {
+            width: 100%;
+        }
+        .mt-4-mobile {
+            margin-top: 1rem;
+        }
+        .overflow-x-auto {
+            overflow-x: auto;
+        }
+        .btn-group button {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+        }
+    }
+</style>
 
+<main class="container flex-grow px-4 mx-auto mt-6">
+    <div class="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
+        <!-- Table Header -->
+        <div class="flex flex-wrap-mobile justify-between items-center mb-4">
+            <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile mb-4 sm:mb-0">
+                <button id="tpsBtn" class="px-4 py-2 bg-blue-700 text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
+                <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">SUARA</button>
+                <button id="paslonBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">PASLON</button>
+            </div>
 
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center bg-gray-100 rounded-md px-3 py-2">
-                    <span class="text-gray-700 mr-2">Pilih Kab/Kota</span>
-                    <i class="fas fa-chevron-right text-gray-400"></i>
+            <div class="flex flex-wrap-mobile items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full-mobile sm:w-auto">
+                <div class="relative w-full sm:w-auto">
+                    <button id="dropdownButton" class="flex items-center justify-between bg-gray-100 rounded-md px-3 py-2 w-full sm:w-auto">
+                        <span class="text-gray-700 mr-2">Pilih Kab/Kota</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div id="dropdownMenu" class="absolute mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden z-10">
+                        <ul class="py-1 text-gray-700">
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Samarinda</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Balikpapan</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Bontang</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Kutai Kartanegara</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Kutai Timur</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Kutai Barat</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Berau</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paser</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Penajam Paser Utara</li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Mahakam Ulu</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="relative">
-                    <input type="text" placeholder="Search" class="bg-gray-100 rounded-md px-3 py-2 pl-8">
+                <div class="relative w-full sm:w-auto">
+                    <input type="text" placeholder="Search" class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full">
                     <i class="fas fa-search absolute left-2 top-3 text-gray-400"></i>
                 </div>
-                <button class="bg-gray-100 rounded-md px-3 py-2">
-                    <i class="fas fa-filter text-gray-600"></i>
-                </button>
+                <div class="relative w-full sm:w-auto">
+                    <button id="filterButton" class="flex items-center justify-between bg-gray-100 rounded-md px-3 py-2 w-full sm:w-auto">
+                        <i class="fas fa-filter text-gray-600 mr-2"></i>
+                        <span class="text-gray-700">Filter</span>
+                        <i class="fas fa-chevron-down text-gray-400 ml-2"></i>
+                    </button>
+                    <div id="filterMenu" class="absolute mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden z-10">
+                        <ul class="py-1 text-gray-700">
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <span class="text-green-500 font-semibold">Hijau</span>
+                            </li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <span class="text-yellow-500 font-semibold">Kuning</span>
+                            </li>
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <span class="text-red-500 font-semibold">Merah</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Table TPS (initially visible) -->
-        <div id="tpsTable">
+        <div id="tpsTable" class="overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-blue-700 text-white">
@@ -57,8 +110,7 @@
                         <th class="px-4 py-2 text-left">PARTISIPASI</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Table rows -->
+                <tbody class="bg-gray-100">
                     <tr class="border-b">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Samarinda</td>
@@ -74,7 +126,7 @@
         </div>
 
         <!-- Table SUARA (initially hidden) -->
-        <div id="suaraTable" class="hidden">
+        <div id="suaraTable" class="hidden overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-blue-700 text-white">
@@ -87,8 +139,7 @@
                         <th class="px-4 py-2 text-left">PARTISIPASI</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Table rows -->
+                <tbody class="bg-gray-100">
                     <tr class="border-b">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Samarinda</td>
@@ -104,7 +155,7 @@
         </div>
 
         <!-- Table PASLON (initially hidden) -->
-        <div id="paslonTable" class="hidden">
+        <div id="paslonTable" class="hidden overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-blue-700 text-white">
@@ -117,8 +168,7 @@
                         <th class="px-4 py-2 text-left">PARTISIPASI</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Table rows -->
+                <tbody class="bg-gray-100">
                     <tr class="border-b">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
@@ -142,19 +192,19 @@
             </table>
         </div>
 
-    <!-- Pagination -->
-    <div class="flex justify-between items-center mt-4">
-        <span class="text-gray-600">1 - 10 dari 40 tabel</span>
-        <div class="flex space-x-2">
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Previous</button>
-            <button class="px-3 py-1 bg-blue-700 text-white rounded">1</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">2</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Next</button>
+        <!-- Pagination -->
+        <div class="flex flex-wrap-mobile justify-between items-center mt-4">
+            <span class="text-gray-600 w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">1 - 10 dari 40 tabel</span>
+            <div class="flex space-x-2 w-full sm:w-auto justify-center sm:justify-end">
+                <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Previous</button>
+                <button class="px-3 py-1 bg-blue-700 text-white rounded">1</button>
+                <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">2</button>
+                <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Next</button>
+            </div>
         </div>
     </div>
-</div>
-
 </main>
+
 <script>
     // JavaScript to toggle between TPS, SUARA, and PASLON tables
     document.getElementById('tpsBtn').addEventListener('click', function() {
@@ -192,7 +242,57 @@
         document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
         document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
+
+            // Dropdown functionality
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        dropdownButton.addEventListener('click', function() {
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        // Close the dropdown when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+
+        // Optional: Update button text when an option is selected
+        const dropdownItems = dropdownMenu.querySelectorAll('li');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function() {
+                dropdownButton.querySelector('span').textContent = this.textContent;
+                dropdownMenu.classList.add('hidden');
+            });
+        });
+            
+            // Filter dropdown functionality
+        const filterButton = document.getElementById('filterButton');
+        const filterMenu = document.getElementById('filterMenu');
+
+        filterButton.addEventListener('click', function() {
+            filterMenu.classList.toggle('hidden');
+        });
+
+        // Close the filter dropdown when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!filterButton.contains(event.target) && !filterMenu.contains(event.target)) {
+                filterMenu.classList.add('hidden');
+            }
+        });
+
+        // Update filter button text when an option is selected
+        const filterItems = filterMenu.querySelectorAll('li');
+        filterItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const colorName = this.textContent.trim();
+                filterButton.querySelector('span').textContent = colorName;
+                filterButton.querySelector('span').className = this.querySelector('span').className;
+                filterMenu.classList.add('hidden');
+                // You can add filtering logic here based on the selected color
+            });
+        });
 </script>
 
-
- @include('admin.layout.footer')
+@include('admin.layout.footer')

@@ -9,16 +9,42 @@
     .shadow-md {
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
+    
+    /* Responsive styles */
+    @media (max-width: 640px) {
+        .flex-col-mobile {
+            flex-direction: column;
+        }
+        .w-full-mobile {
+            width: 100%;
+        }
+        .space-y-2-mobile > * + * {
+            margin-top: 0.5rem;
+        }
+        .mt-4-mobile {
+            margin-top: 1rem;
+        }
+        .px-2-mobile {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .text-sm-mobile {
+            font-size: 0.875rem;
+        }
+        .overflow-x-auto {
+            overflow-x: auto;
+        }
+    }
 </style>
 <main class="container flex-grow px-4 mx-auto mt-6">
 <div class="container mx-auto mt-8">
-    <div class="flex justify-between items-center mb-4">
-        <div class="flex items-center space-x-2">
+    <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
+        <div class="flex items-center space-x-2 w-full-mobile">
             <span class="text-lg font-bold"><i class="fa fa-user-group"></i> Calon</span>
         </div>
-        <div class="flex space-x-2">
-            <div class="relative">
-                <button id="dropdownButton" class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center">
+        <div class="flex flex-col-mobile space-y-2-mobile w-full-mobile">
+            <div class="relative w-full-mobile">
+                <button id="dropdownButton" class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
                     Pilih Kab/Kota <i class="fa fa-chevron-down ml-2"></i>
                 </button>
                 <div id="dropdownMenu" class="absolute mt-2 w-full rounded-lg shadow-lg bg-white z-10 hidden">
@@ -29,18 +55,17 @@
                     </ul>
                 </div>
             </div>
-            <button id="addCalonBtn" class="bg-blue-500 text-white py-2 px-4 rounded-lg">+ Tambah Calon</button>
-            <input type="text" placeholder="Cari" class="border border-gray-300 rounded-lg px-4 py-2">
+            <button id="addCalonBtn" class="bg-blue-500 text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah Calon</button>
+            <input type="text" placeholder="Cari" class="border border-gray-300 rounded-lg px-4 py-2 w-full-mobile">
         </div>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <table class="min-w-full leading-normal text-sm">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
+        <table class="min-w-full leading-normal text-sm-mobile">
             <thead>
                 <tr class="bg-blue-600 text-white">
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nama Pasangan Calon</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Partai</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Kabupaten/Kota</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Foto</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Aksi</th>
@@ -48,12 +73,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">001</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">Andi Harun / Saefuddin Zuhri</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">Demokrat</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">Samarinda</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">Gambar belum upload</td>
-                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm">
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">001</td>
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">Andi Harun / Saefuddin Zuhri</td>
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">Samarinda</td>
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">Gambar belum upload</td>
+                    <td class="px-4 py-4 border-b border-gray-200 bg-white text-sm-mobile">
                         <button class="editCalonBtn text-blue-600 hover:text-blue-900"><i class="fas fa-edit"></i></button>
                         <button class="text-red-600 hover:text-red-900 ml-3"><i class="fa fa-trash"></i></button>
                     </td>
@@ -66,7 +90,7 @@
 
 <!-- Add Calon Modal -->
 <div id="addCalonModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-full sm:w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4 mt-3 text-center" >Tambah Calon</h3>
             <div class="mt-2 space-y-4">
@@ -99,10 +123,10 @@
                 </div>
             </div>
             <div class="items-center px-4 py-3 mt-4 flex justify-end space-x-3">
-                <button id="cancelAddCalon" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-24 hover:bg-gray-400">
+                <button id="cancelAddCalon" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full sm:w-24 hover:bg-gray-400">
                     Batalkan
                 </button>
-                <button id="confirmAddCalon" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-24 hover:bg-blue-600">
+                <button id="confirmAddCalon" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full sm:w-24 hover:bg-blue-600">
                     Tambah
                 </button>
             </div>
@@ -112,7 +136,7 @@
 
 <!-- Edit Calon Modal -->
 <div id="editCalonModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-full sm:w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4 mt-3 text-center">Edit Calon</h3>
             <div class="mt-2 space-y-4">
@@ -145,10 +169,10 @@
                 </div>
             </div>
             <div class="items-center px-4 py-3 mt-4 flex justify-end space-x-3">
-                <button id="cancelEditCalon" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-24 hover:bg-gray-400">
+                <button id="cancelEditCalon" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full sm:w-24 hover:bg-gray-400">
                     Batalkan
                 </button>
-                <button id="confirmEditCalon" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-24 hover:bg-blue-600">
+                <button id="confirmEditCalon" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full sm:w-24 hover:bg-blue-600">
                     Simpan
                 </button>
             </div>
@@ -157,7 +181,6 @@
 </div>
 
 </main>
-
 
 <script>
     // Dropdown functionality

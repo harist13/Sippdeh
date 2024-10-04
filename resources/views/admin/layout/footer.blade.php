@@ -1,33 +1,34 @@
  <!-- Footer -->
-    <footer class="py-6 text-white bg-blue-600">
-        <div class="container px-4 mx-auto">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-15 h-16 mr-4">
-                    <div>
-                        <h3 class="font-bold">BADAN KESATUAN BANGSA DAN POLITIK</h3>
-                        <p>Jalan Jenderal Sudirman</p>
-                        <p>Nomor 1, Samarinda</p>
-                        <p>Kalimantan Timur 75117</p>
-                    </div>
-                </div>
+<footer class="py-6 text-white bg-blue-600">
+    <div class="container px-4 mx-auto">
+        <div class="flex flex-col items-start space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div class="flex flex-col items-start md:flex-row md:items-center">
+                <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-12 h-12 mb-4 md:mb-0 md:w-15 md:h-16 md:mr-4">
                 <div>
-                    <h3 class="mb-2 font-bold">KONTAK</h3>
-                    <p><i class="mr-2 fas fa-phone"></i>+62541-733333</p>
-                    <p><i class="mr-2 fas fa-envelope"></i>kesbangpolkaltim@gmail.com</p>
+                    <h3 class="text-lg font-bold">BADAN KESATUAN BANGSA DAN POLITIK</h3>
+                    <p class="text-sm">Jalan Jenderal Sudirman</p>
+                    <p class="text-sm">Nomor 1, Samarinda</p>
+                    <p class="text-sm">Kalimantan Timur 75117</p>
                 </div>
             </div>
-            <div class="mt-6 text-center">
-                <p>Kesbangpolkaltim.info</p>
-                <p class="mt-2 text-sm">Copyright © 2023 detikcom, All right reserved</p>
-                <div class="mt-2">
-                    <i class="mx-2 fab fa-instagram"></i>
-                    <i class="mx-2 fab fa-twitter"></i>
-                    <i class="mx-2 fab fa-facebook"></i>
-                </div>
+            <div class="w-full md:w-auto">
+                <h3 class="mb-2 text-lg font-bold">KONTAK</h3>
+                <p class="text-sm"><i class="mr-2 fas fa-phone"></i>+62541-733333</p>
+                <p class="text-sm"><i class="mr-2 fas fa-envelope"></i>kesbangpolkaltim@gmail.com</p>
             </div>
         </div>
-    </footer>
+        <div class="mt-6 text-center">
+            <p>Kesbangpolkaltim.info</p>
+            <p class="mt-2 text-xs text-gray-200">Copyright © 2023 detikcom, All rights reserved</p>
+            <div class="flex justify-center mt-2 space-x-4">
+                <i class="text-xl fab fa-instagram"></i>
+                <i class="text-xl fab fa-twitter"></i>
+                <i class="text-xl fab fa-facebook"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
 
     <script>
     // Bar Chart
@@ -129,6 +130,24 @@
         }
     });
 </script>
+
+<script>
+    // Toggle profile dropdown
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileDropdown.addEventListener('click', () => {
+        profileMenu.classList.toggle('hidden');
+    });
+
+    // Close the dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!profileDropdown.contains(event.target) && !profileMenu.contains(event.target)) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+</script>
+
 
 </body>
 </html>

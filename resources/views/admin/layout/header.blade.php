@@ -12,6 +12,7 @@
     <style>
         .sidebar {
             transition: transform 0.3s ease-in-out;
+            z-index: 1050; /* pastikan lebih tinggi dari navbar */
         }
         .sidebar.hidden {
             transform: translateX(-100%);
@@ -22,14 +23,24 @@
             transition: max-height 0.3s ease-in-out;
         }
         .submenu.show {
-            max-height: 300px; /* Increased max-height to accommodate all items */
+            max-height: 300px;
+        }
+        body {
+            padding-top: 80px; /* Sesuaikan dengan tinggi navbar Anda */
+        }
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* pastikan lebih rendah dari sidebar */
         }
     </style>
 </head>
 <body class="flex flex-col h-full bg-gray-100">
 
 <!-- Sidebar -->
-<div id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-full overflow-y-auto bg-white shadow-lg sidebar hidden">
+<div id="sidebar" class="fixed top-0 left-0 z-1050 w-64 h-full overflow-y-auto bg-white shadow-lg sidebar hidden">
     <div class="flex items-center justify-between p-4 bg-blue-700">
         <h2 class="text-xl font-bold text-white">PILKADA PROVINSI</h2>
         <button id="closeSidebar" class="text-white focus:outline-none">
@@ -103,7 +114,7 @@
 </div>
 
 <!-- Header & Navbar -->
-<header class="bg-white shadow">
+<header class="bg-white shadow navbar-fixed">
     <div class="container flex items-center justify-between px-4 py-3 mx-auto">
         <div class="flex items-center">
             <button id="openSidebar" class="mr-4 text-gray-600 focus:outline-none">
@@ -116,20 +127,18 @@
             </div>
         </div>
         <div class="flex items-center">
-            <span class="mr-2"> {{ Auth::user()->roles->first()->name }} </span>
             <div class="relative">
                 <button id="profileDropdown" class="flex items-center text-gray-600 focus:outline-none">
-                    <i class="text-xl fas fa-user mr-2"></i>
-                    <span class="mr-1">{{ Auth::user()->name }}</span>
-                    <i class="fas fa-chevron-down"></i>
+                    <img src="{{ asset('assets/user.png')}}" alt="Logo" class="w-10 h-10 mr-2">
+                    
+                    <div class="flex-col text-left hidden sm:flex">
+                        <span class="font-semibold">{{ Auth::user()->wilayah }}</span>
+                        <span class="text-sm text-gray-500">{{ Auth::user()->roles->first()->name }}</span>
+                    </div>
                 </button>
+                <!-- Dropdown Menu -->
                 <div id="profileMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
                     <div class="py-1">
-                        <div class="px-4 py-2 text-sm text-gray-700">
-                            <p><strong>Username:</strong> {{ Auth::user()->username }}</p>
-                            <p><strong>Role:</strong> {{ Auth::user()->roles->first()->name }}</p>
-                            <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
-                        </div>
                         <div class="border-t border-gray-100"></div>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-user-circle mr-2"></i> Profile
@@ -150,23 +159,3 @@
         </div>
     </div>
 </header>
-
-<script>
-    // Toggle profile dropdown
-    const profileDropdown = document.getElementById('profileDropdown');
-    const profileMenu = document.getElementById('profileMenu');
-
-    profileDropdown.addEventListener('click', () => {
-        profileMenu.classList.toggle('hidden');
-    });
-
-    // Close the dropdown when clicking outside
-    document.addEventListener('click', (event) => {
-        if (!profileDropdown.contains(event.target) && !profileMenu.contains(event.target)) {
-            profileMenu.classList.add('hidden');
-        }
-    });
-</script>
-
-</body>
-</html>
