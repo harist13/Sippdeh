@@ -33,7 +33,7 @@
                 <h2 class="mb-2 text-2xl font-bold text-gray-800 lg:text-3xl">Selamat Datang di SIPPPDEH</h2>
                 <p class="mb-8 text-sm text-gray-600 lg:text-base">Mohon masukkan informasi akun Anda mulai menggunakan SIPPPDEH</p>
                 
-                <form id="loginForm" action="{{ route('login') }}" method="POST">
+                <form id="loginForm" action="{{ route('submitLogin') }}" method="POST">
                     @csrf
                     <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-700" for="email">
