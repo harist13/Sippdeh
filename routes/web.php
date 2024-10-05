@@ -22,6 +22,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/kelurahan', [AdminController::class, 'kelurahan'])->name('kelurahan');
     Route::get('/tps', [AdminController::class, 'tps'])->name('tps');
     Route::get('/user', [AdminController::class, 'user'])->name('user');
+    Route::post('/storeUser', [AdminController::class, 'storeUser'])->name('storeUser');
+    Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
+    Route::delete('/deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
+     Route::post('/forceLogout/{id}', [AdminController::class, 'forceLogout'])->name('forceLogout');
+    Route::post('/reactivateUser/{id}', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
 
 
 

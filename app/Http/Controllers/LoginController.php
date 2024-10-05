@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LoginHistory;
 
 class LoginController extends Controller
 {
@@ -31,8 +32,24 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
             $user = Auth::user();
+            
+            if ($user->is_forced_logout) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah dikeluarkan oleh admin. Silakan hubungi admin untuk informasi lebih lanjut.',
+                ])->withInput($request->only('email'));
+            }
+
+            $request->session()->regenerate();
+
+            // Simpan riwayat login
+            LoginHistory::create([
+                'user_id' => $user->id,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'login_at' => now(),
+            ]);
 
             if ($user->hasRole('admin')) {
                 return redirect()->route('Dashboard')->with('success', 'Login berhasil!');

@@ -20,6 +20,7 @@ class Petugas extends Authenticatable
         'email',
         'wilayah',
         'role',
+        'is_forced_logout',
     ];
 
     protected $hidden = [
@@ -27,4 +28,8 @@ class Petugas extends Authenticatable
         'remember_token',
     ];
 
+    public function loginHistories()
+    {
+        return $this->hasMany(LoginHistory::class, 'user_id');
+    }
 }
