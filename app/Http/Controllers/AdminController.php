@@ -58,81 +58,95 @@ class AdminController extends Controller
         return view('admin.user', compact('users', 'roles', 'loginHistories'));
     }
 
-    public function forceLogout($id)
-    {
-        $user = Petugas::findOrFail($id);
-        $user->update(['is_forced_logout' => true]);
-        
-        // Hapus semua sesi pengguna
-        \DB::table('sessions')->where('user_id', $user->id)->delete();
-        
-        return redirect()->route('user')->with('success', 'User berhasil dikeluarkan dari sistem.');
-    }
-
-    public function reactivateUser($id)
-    {
-        $user = Petugas::findOrFail($id);
-        $user->update(['is_forced_logout' => false]);
-        
-        return redirect()->route('user')->with('success', 'User berhasil diaktifkan kembali.');
-    }
-
     public function storeUser(Request $request)
     {
-        $validated = $request->validate([
-            'username' => 'required|unique:petugas',
-            'email' => 'required|email|unique:petugas',
-            'password' => 'required|min:6',
-            'wilayah' => 'required',
-            'role' => 'required|exists:roles,name',
-        ]);
+        try {
+            $validated = $request->validate([
+                'username' => 'required|unique:petugas',
+                'email' => 'required|email|unique:petugas',
+                'password' => 'required|min:6',
+                'wilayah' => 'required',
+                'role' => 'required|exists:roles,name',
+            ]);
 
-        $user = Petugas::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'wilayah' => $validated['wilayah'],
-            'role' => $validated['role'],
-            'is_forced_logout' => false,
-        ]);
+            $user = Petugas::create([
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'wilayah' => $validated['wilayah'],
+                'role' => $validated['role'],
+                'is_forced_logout' => false,
+            ]);
 
-        $user->assignRole($validated['role']);
+            $user->assignRole($validated['role']);
 
-        return redirect()->route('user')->with('success', 'User berhasil ditambahkan.');
+            return response()->json(['success' => true, 'message' => 'User berhasil ditambahkan.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal menambahkan user.'], 500);
+        }
     }
 
     public function updateUser(Request $request, $id)
     {
-        $user = Petugas::findOrFail($id);
+        try {
+            $user = Petugas::findOrFail($id);
 
-        $validated = $request->validate([
-            'username' => ['required', Rule::unique('petugas')->ignore($user->id)],
-            'email' => ['required', 'email', Rule::unique('petugas')->ignore($user->id)],
-            'wilayah' => 'required',
-            'role' => 'required|exists:roles,name',
-        ]);
+            $validated = $request->validate([
+                'username' => ['required', Rule::unique('petugas')->ignore($user->id)],
+                'email' => ['required', 'email', Rule::unique('petugas')->ignore($user->id)],
+                'wilayah' => 'required',
+                'role' => 'required|exists:roles,name',
+            ]);
 
-        $user->update([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'wilayah' => $validated['wilayah'],
-        ]);
+            $user->update([
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'wilayah' => $validated['wilayah'],
+            ]);
 
-        if ($request->filled('password')) {
-            $user->update(['password' => Hash::make($request->password)]);
+            if ($request->filled('password')) {
+                $user->update(['password' => Hash::make($request->password)]);
+            }
+
+            $user->syncRoles([$validated['role']]);
+
+            return response()->json(['success' => true, 'message' => 'User berhasil diperbarui.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal memperbarui user.'], 500);
         }
-
-        $user->syncRoles([$validated['role']]);
-
-        return redirect()->route('user')->with('success', 'User berhasil diperbarui.');
     }
 
     public function deleteUser($id)
     {
-        $user = Petugas::findOrFail($id);
-        $user->delete();
+        try {
+            $user = Petugas::findOrFail($id);
+            $user->delete();
+            return redirect()->route('user')->with('success', 'User berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal menghapus user.');
+        }
+    }
 
-        return redirect()->route('user')->with('success', 'User berhasil dihapus.');
+    public function forceLogout($id)
+    {
+        try {
+            $user = Petugas::findOrFail($id);
+            $user->update(['is_forced_logout' => true]);
+            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal mengeluarkan user.');
+        }
+    }
+
+    public function reactivateUser($id)
+    {
+        try {
+            $user = Petugas::findOrFail($id);
+            $user->update(['is_forced_logout' => false]);
+            return redirect()->route('user')->with('success', 'User berhasil diaktifkan kembali.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal mengaktifkan kembali user.');
+        }
     }
 
 }

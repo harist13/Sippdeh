@@ -127,17 +127,17 @@
                             <form action="{{ route('deleteUser', $user->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer" onclick="return confirm('Are you sure you want to delete this user?')"></button>
+                                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer"></button>
                             </form>
                             @if(!$user->is_forced_logout)
                                 <form action="{{ route('forceLogout', $user->id) }}" method="POST" class="inline">
                                     @csrf
-                                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer" onclick="return confirm('Are you sure you want to force logout this user?')"></button>
+                                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer"></button>
                                 </form>
                             @else
                                 <form action="{{ route('reactivateUser', $user->id) }}" method="POST" class="inline">
                                     @csrf
-                                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer" onclick="return confirm('Are you sure you want to reactivate this user?')"></button>
+                                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer"></button>
                                 </form>
                             @endif
                         </td>
@@ -270,256 +270,226 @@
     </div>
 </div>
 
+@if(session('success'))
+    <script>
+        showSuccessMessage("{{ session('success') }}");
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        showErrorMessage("{{ session('error') }}");
+    </script>
+@endif
 
 <script>
-    // JavaScript to toggle between TPS and SUARA tables
-    document.getElementById('tpsBtn').addEventListener('click', function() {
-        document.getElementById('tpsTable').classList.remove('hidden');
-        document.getElementById('suaraTable').classList.add('hidden');
-        this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-700', 'text-white');
-        document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
-        document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+    // Show success message
+function showSuccessMessage(message) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: message,
+        timer: 2000,
+        showConfirmButton: false
     });
+}
 
-    document.getElementById('suaraBtn').addEventListener('click', function() {
-        document.getElementById('tpsTable').classList.add('hidden');
-        document.getElementById('suaraTable').classList.remove('hidden');
-        this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-700', 'text-white');
-        document.getElementById('tpsBtn').classList.remove('bg-blue-700', 'text-white');
-        document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
+// Show error message
+function showErrorMessage(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: message
     });
+}
 
-    // Show and hide the "Tambah User" modal
-    document.querySelector('.btn-tambah-user').addEventListener('click', function () {
-        document.getElementById('modalTambahUser').classList.remove('hidden');
+// Show confirmation dialog
+function showConfirmationDialog(title, text, confirmButtonText, callback) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
     });
+}
 
-    document.getElementById('closeTambahUserModal').addEventListener('click', function () {
+// JavaScript to toggle between TPS and SUARA tables
+document.getElementById('tpsBtn').addEventListener('click', function() {
+    document.getElementById('tpsTable').classList.remove('hidden');
+    document.getElementById('suaraTable').classList.add('hidden');
+    this.classList.remove('bg-gray-200', 'text-gray-700');
+    this.classList.add('bg-blue-700', 'text-white');
+    document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
+    document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+});
+
+document.getElementById('suaraBtn').addEventListener('click', function() {
+    document.getElementById('tpsTable').classList.add('hidden');
+    document.getElementById('suaraTable').classList.remove('hidden');
+    this.classList.remove('bg-gray-200', 'text-gray-700');
+    this.classList.add('bg-blue-700', 'text-white');
+    document.getElementById('tpsBtn').classList.remove('bg-blue-700', 'text-white');
+    document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
+});
+
+// Show and hide the "Tambah User" modal
+document.querySelector('.btn-tambah-user').addEventListener('click', function () {
+    document.getElementById('modalTambahUser').classList.remove('hidden');
+});
+
+document.getElementById('closeTambahUserModal').addEventListener('click', function () {
+    document.getElementById('modalTambahUser').classList.add('hidden');
+});
+
+// Show and hide the "Edit User" modal
+document.querySelectorAll('.edit-user').forEach(function (editBtn) {
+    editBtn.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id');
+        const userRow = this.closest('tr');
+        const username = userRow.querySelector('td:nth-child(2)').textContent;
+        const email = userRow.querySelector('td:nth-child(3)').textContent;
+        const wilayah = userRow.querySelector('td:nth-child(4)').textContent;
+        const role = userRow.querySelector('td:nth-child(5)').textContent;
+
+        document.getElementById('editUsername').value = username;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editWilayah').value = wilayah;
+        document.getElementById('editRole').value = role;
+        
+        document.getElementById('editUserForm').action = `/updateUser/${userId}`;
+        document.getElementById('modalEditUser').classList.remove('hidden');
+    });
+});
+
+document.getElementById('closeEditUserModal').addEventListener('click', function () {
+    document.getElementById('modalEditUser').classList.add('hidden');
+});
+
+// Close modals when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('modalTambahUser')) {
         document.getElementById('modalTambahUser').classList.add('hidden');
-    });
-
-    // Show and hide the "Edit User" modal (adjust this to your edit button)
-    document.querySelectorAll('.fa-edit').forEach(function (editBtn) {
-        editBtn.addEventListener('click', function () {
-            document.getElementById('modalEditUser').classList.remove('hidden');
-            // Optionally, populate modal with user data for editing
-            // You can add code here to fetch user data and populate the form
-        });
-    });
-
-    document.getElementById('closeEditUserModal').addEventListener('click', function () {
-        document.getElementById('modalEditUser').classList.add('hidden');
-    });
-
-    // Close modals when clicking outside
-    window.addEventListener('click', function(event) {
-        if (event.target === document.getElementById('modalTambahUser')) {
-            document.getElementById('modalTambahUser').classList.add('hidden');
-        }
-        if (event.target === document.getElementById('modalEditUser')) {
-            document.getElementById('modalEditUser').classList.add('hidden');
-        }
-    });
-
-
-    // Form submission for Edit User
-    document.getElementById('editUserForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Add your code here to handle form submission
-        // You can use AJAX to send the data to the server
-        console.log('Edit User form submitted');
-        // Close the modal after submission
-        document.getElementById('modalEditUser').classList.add('hidden');
-    });
-
-    // Handle delete user action
-    document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
-        deleteBtn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to delete this user?')) {
-                // Add your code here to handle user deletion
-                console.log('User deleted');
-            }
-        });
-    });
-
-    // Handle "Keluar Akun" button click
-    document.querySelectorAll('.btn-aksi').forEach(function(logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to log out this user?')) {
-                // Add your code here to handle user logout
-                console.log('User logged out');
-            }
-        });
-    });
-
-    // Search functionality
-    document.querySelector('input[placeholder="Cari User"]').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#tpsTable tbody tr, #suaraTable tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
-
-    
-
-    // Edit User
-    document.querySelectorAll('.edit-user').forEach(function (editBtn) {
-        editBtn.addEventListener('click', function () {
-            const userId = this.getAttribute('data-id');
-            const userRow = this.closest('tr');
-            const username = userRow.querySelector('td:nth-child(2)').textContent;
-            const email = userRow.querySelector('td:nth-child(3)').textContent;
-            const wilayah = userRow.querySelector('td:nth-child(4)').textContent;
-            const role = userRow.querySelector('td:nth-child(5)').textContent;
-
-            document.getElementById('editUsername').value = username;
-            document.getElementById('editEmail').value = email;
-            document.getElementById('editWilayah').value = wilayah;
-            document.getElementById('editRole').value = role;
-            
-            document.getElementById('editUserForm').action = `/updateUser/${userId}`;
-            document.getElementById('modalEditUser').classList.remove('hidden');
-        });
-    });
-
-    // Edit User Form Submission
-    document.getElementById('editUserForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        this.submit();
-    });
-
-
-    // Tambahkan fungsi untuk menampilkan SweetAlert
-    function showAlert(icon, title, text) {
-        Swal.fire({
-            icon: icon,
-            title: title,
-            text: text,
-        });
     }
+    if (event.target === document.getElementById('modalEditUser')) {
+        document.getElementById('modalEditUser').classList.add('hidden');
+    }
+});
 
-    // Modifikasi form submission untuk Tambah User
-    document.getElementById('tambahUserForm').addEventListener('submit', function(event) {
+// Form submission for Tambah User
+document.getElementById('tambahUserForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const form = this;
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccessMessage('User berhasil ditambahkan');
+            document.getElementById('modalTambahUser').classList.add('hidden');
+            // Reload the page or update the table
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            showErrorMessage('Gagal menambahkan user');
+        }
+    })
+    .catch(error => {
+        showErrorMessage('Terjadi kesalahan');
+    });
+});
+
+// Form submission for Edit User
+document.getElementById('editUserForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const form = this;
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccessMessage('User berhasil diperbarui');
+            document.getElementById('modalEditUser').classList.add('hidden');
+            // Reload the page or update the table
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            showErrorMessage('Gagal memperbarui user');
+        }
+    })
+    .catch(error => {
+        showErrorMessage('Terjadi kesalahan');
+    });
+});
+
+// Handle delete user action
+document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
+    deleteBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        const form = this;
-        Swal.fire({
-            title: 'Tambah User',
-            text: "Apakah Anda yakin ingin menambahkan user ini?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, tambahkan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        const form = this.closest('form');
+        showConfirmationDialog(
+            'Konfirmasi Hapus',
+            'Apakah Anda yakin ingin menghapus user ini?',
+            'Ya, Hapus',
+            function() {
                 form.submit();
             }
-        });
+        );
     });
+});
 
-    // Modifikasi form submission untuk Edit User
-    document.getElementById('editUserForm').addEventListener('submit', function(event) {
+// Handle "Keluar Akun" button click
+document.querySelectorAll('.fa-sign-out-alt').forEach(function(logoutBtn) {
+    logoutBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        const form = this;
-        Swal.fire({
-            title: 'Edit User',
-            text: "Apakah Anda yakin ingin menyimpan perubahan?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, simpan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        const form = this.closest('form');
+        showConfirmationDialog(
+            'Konfirmasi Keluar Akun',
+            'Apakah Anda yakin ingin mengeluarkan user ini?',
+            'Ya, Keluarkan',
+            function() {
                 form.submit();
             }
-        });
+        );
     });
+});
 
-    // Modifikasi delete user action
-    document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
-        deleteBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            const form = this.closest('form');
-            Swal.fire({
-                title: 'Hapus User',
-                text: "Apakah Anda yakin ingin menghapus user ini?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
+// Handle "aktifkan Akun" button click
+document.querySelectorAll('.fa-user-check').forEach(function(logoutBtn) {
+    logoutBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = this.closest('form');
+        showConfirmationDialog(
+            'Konfirmasi Keluar Akun',
+            'Apakah Anda yakin ingin mengaktifkan user ini?',
+            'Ya, Aktifkan',
+            function() {
+                form.submit();
+            }
+        );
     });
+});
 
-    // Modifikasi force logout action
-    document.querySelectorAll('.fa-sign-out-alt').forEach(function(logoutBtn) {
-        logoutBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            const form = this.closest('form');
-            Swal.fire({
-                title: 'Keluarkan User',
-                text: "Apakah Anda yakin ingin mengeluarkan user ini?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, keluarkan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
+
+// Search functionality
+document.querySelector('input[placeholder="Cari User"]').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#tpsTable tbody tr, #suaraTable tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
     });
-
-    // Modifikasi reactivate user action
-    document.querySelectorAll('.fa-user-check').forEach(function(reactivateBtn) {
-        reactivateBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            const form = this.closest('form');
-            Swal.fire({
-                title: 'Aktifkan Kembali User',
-                text: "Apakah Anda yakin ingin mengaktifkan kembali user ini?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, aktifkan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-
-
-</script>
-
-<script>
-    @if(session('success'))
-        showAlert('success', 'Berhasil!', '{{ session('success') }}');
-    @endif
-
-    @if(session('error'))
-        showAlert('error', 'Gagal!', '{{ session('error') }}');
-    @endif
+});
 </script>
 
 @include('admin.layout.footer')
