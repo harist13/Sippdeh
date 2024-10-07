@@ -54,7 +54,7 @@
                 <span class="text-lg font-bold"><i class="fas fa-map-marked-alt"></i> Provinsi</span>
             </div>
             
-            <div class="flex flex-col-mobile space-y-2-mobile w-full-mobile">
+            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
                 <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah
                     Provinsi</button>
                 <div class="relative w-full-mobile">
