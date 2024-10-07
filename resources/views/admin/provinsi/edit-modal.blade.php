@@ -21,27 +21,39 @@
 </div>
 
 <script>
-    // Edit Provinsi Modal
-    const editProvinsiModal = document.getElementById('editProvinsiModal');
-    const editProvinsiForm = document.getElementById('editProvinsiForm');
-    const cancelEditProvinsi = document.getElementById('cancelEditProvinsi');
-    const editButtons = document.querySelectorAll('.edit-provinsi-btn');
+    function showEditProvinsiModal() {
+        const editProvinsiModal = document.getElementById('editProvinsiModal');
+        editProvinsiModal.classList.remove('hidden');
+    }
 
-    editButtons.forEach(button => {
-        button.onclick = function () {
-            const provinsiName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
-            document.getElementById('editProvinsiName').value = provinsiName;
-            editProvinsiModal.classList.remove('hidden');
-
-            const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
-            const provinsiUpdateRoute = `{{ route('provinsi.update', ['provinsi' => '__provinsi__']) }}`;
-            const provinsiUpdateUrl = provinsiUpdateRoute.replace('__provinsi__', provinsiId);
-
-            editProvinsiForm.action = provinsiUpdateUrl;
-        }
-    });
-
-    cancelEditProvinsi.onclick = function () {
+    function closeEditProvinsiModal() {
+        const editProvinsiModal = document.getElementById('editProvinsiModal');
         editProvinsiModal.classList.add('hidden');
     }
+
+    function getProvinsiName() {
+        return this.closest('tr').querySelector('td:nth-child(2)').textContent;
+    }
+
+    function getUpdateProvinsiUrl() {
+        const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+        const provinsiUpdateRoute = `{{ route('provinsi.update', ['provinsi' => '__provinsi__']) }}`;
+        const provinsiUpdateUrl = provinsiUpdateRoute.replace('__provinsi__', provinsiId);
+
+        return provinsiUpdateUrl;
+    }
+
+    document.querySelectorAll('.edit-provinsi-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            showEditProvinsiModal();
+
+            const editProvinsiName = document.getElementById('editProvinsiName');
+            editProvinsiName.value = getProvinsiName.call(this);
+            
+            const editProvinsiForm = document.getElementById('editProvinsiForm');
+            editProvinsiForm.action = getUpdateProvinsiUrl.call(this);
+        });
+    });
+
+    document.getElementById('cancelEditProvinsi').addEventListener('click', closeEditProvinsiModal);
 </script>
