@@ -88,18 +88,20 @@
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
-                    <tr class="hover:bg-gray-200">
-                        <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">001</td>
-                        <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">Kalimantan Timur</td>
-                        <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
-                            <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    @foreach ($provinsi as $p)
+                        <tr class="hover:bg-gray-200">
+                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->id }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
+                                <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

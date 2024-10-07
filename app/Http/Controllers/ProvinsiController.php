@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Provinsi;
 use Illuminate\Http\Request;
 
 class ProvinsiController extends Controller
@@ -11,7 +12,8 @@ class ProvinsiController extends Controller
      */
     public function index()
     {
-        return view('admin.provinsi');
+        $provinsi = Provinsi::all();
+        return view('admin.provinsi.index', compact('provinsi'));
     }
 
     /**
