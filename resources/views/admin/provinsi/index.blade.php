@@ -55,8 +55,10 @@
             </div>
             
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
-                <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah
-                    Provinsi</button>
+                <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    + Tambah Provinsi
+                </button>
+
                 <div class="relative w-full-mobile">
                     <button id="dropdownButton"
                         class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
@@ -120,27 +122,6 @@
         var menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
     });
-
-    // Add Provinsi Modal
-    const addProvinsiBtn = document.getElementById('addProvinsiBtn');
-    const addProvinsiModal = document.getElementById('addProvinsiModal');
-    const cancelAddProvinsi = document.getElementById('cancelAddProvinsi');
-    const confirmAddProvinsi = document.getElementById('confirmAddProvinsi');
-
-    addProvinsiBtn.onclick = function () {
-        addProvinsiModal.classList.remove('hidden');
-    }
-
-    cancelAddProvinsi.onclick = function () {
-        addProvinsiModal.classList.add('hidden');
-    }
-
-    confirmAddProvinsi.onclick = function () {
-        const provinsiName = document.getElementById('addProvinsiName').value;
-        console.log('Adding new provinsi:', provinsiName);
-        // Add your logic here to save the new provinsi
-        addProvinsiModal.classList.add('hidden');
-    }
 
     // Edit Provinsi Modal
     const editProvinsiModal = document.getElementById('editProvinsiModal');
