@@ -35,8 +35,12 @@
         return this.closest('tr').querySelector('td:nth-child(2)').textContent;
     }
 
+    function getProvinsiId() {
+        return this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+    }
+
     function getUpdateProvinsiUrl() {
-        const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+        const provinsiId = getProvinsiId.call(this);
         const provinsiUpdateRoute = `{{ route('provinsi.update', ['provinsi' => '__provinsi__']) }}`;
         const provinsiUpdateUrl = provinsiUpdateRoute.replace('__provinsi__', provinsiId);
 
