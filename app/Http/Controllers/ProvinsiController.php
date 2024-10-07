@@ -12,7 +12,7 @@ class ProvinsiController extends Controller
      */
     public function index()
     {
-        $provinsi = Provinsi::all();
+        $provinsi = Provinsi::paginate(10);
         return view('admin.provinsi.index', compact('provinsi'));
     }
 
