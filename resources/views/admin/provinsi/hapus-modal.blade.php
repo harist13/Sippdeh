@@ -27,8 +27,12 @@
 		deleteProvinsiModal.classList.add('hidden');
 	}
 
+	function getProvinsiId() {
+		return this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+	}
+
 	function getDestroyProvinsiUrl() {
-		const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+		const provinsiId = getProvinsiId.call(this);
 		const provinsiDestroyRoute = `{{ route('provinsi.destroy', ['provinsi' => '__provinsi__']) }}`;
 		const provinsiDestroyUrl = provinsiDestroyRoute.replace('__provinsi__', provinsiId);
 
