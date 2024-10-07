@@ -85,6 +85,14 @@ class ProvinsiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $provinsi = Provinsi::find($id);
+            $provinsi->delete();
+    
+            return redirect()->back()->with('status_penghapusan_provinsi', 'berhasil');
+        } catch (Exception $error) {
+            dd($error);
+            return redirect()->back()->with('status_penghapusan_provinsi', 'gagal');
+        }
     }
 }
