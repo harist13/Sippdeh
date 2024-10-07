@@ -17,24 +17,32 @@
 </div>
 
 <script>
-	const deleteButtons = document.querySelectorAll('.hapus-provinsi-btn');
-	const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
-	const cancelDeleteProvinsi = document.getElementById('cancelDeleteProvinsi');
-	const deleteProvinsiForm = document.getElementById('deleteProvinsiForm');
+	function showDeleteProvinsiModal() {
+		const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
+		deleteProvinsiModal.classList.remove('hidden');
+	}
 
-	deleteButtons.forEach(button => {
-		button.onclick = function () {
-			deleteProvinsiModal.classList.remove('hidden');
+	function closeDeleteProvinsiModal() {
+		const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
+		deleteProvinsiModal.classList.add('hidden');
+	}
 
-			const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
-			const provinsiDestroyRoute = `{{ route('provinsi.destroy', ['provinsi' => '__provinsi__']) }}`;
-			const provinsiDestroyUrl = provinsiDestroyRoute.replace('__provinsi__', provinsiId);
+	function getDestroyProvinsiUrl() {
+		const provinsiId = this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+		const provinsiDestroyRoute = `{{ route('provinsi.destroy', ['provinsi' => '__provinsi__']) }}`;
+		const provinsiDestroyUrl = provinsiDestroyRoute.replace('__provinsi__', provinsiId);
 
-			deleteProvinsiForm.action = provinsiDestroyUrl;
-		}
+		return provinsiDestroyUrl;
+	}
+
+	document.querySelectorAll('.hapus-provinsi-btn').forEach(button => {
+		button.addEventListener('click', function () {
+			showDeleteProvinsiModal();
+
+			const deleteProvinsiForm = document.getElementById('deleteProvinsiForm');
+			deleteProvinsiForm.action = getDestroyProvinsiUrl.call(this);
+		});
 	});
 
-	cancelDeleteProvinsi.onclick = function () {
-        deleteProvinsiModal.classList.add('hidden');
-    }
+	document.getElementById('cancelDeleteProvinsi').addEventListener('click', closeDeleteProvinsiModal);
 </script>
