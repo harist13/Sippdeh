@@ -48,6 +48,15 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
+    @php $status = session('status_pembuatan_provinsi'); @endphp
+    @if($status != null)
+        @if ($status == 'berhasil')
+            @include('components.alert-berhasil', ['message' => 'Provinsi berhasil ditambahkan.'])
+        @else
+            @include('components.alert-gagal', ['message' => 'Provinsi gagal ditambahkan.'])
+        @endif
+    @endif
+
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
             <div class="flex items-center space-x-2 w-full-mobile">

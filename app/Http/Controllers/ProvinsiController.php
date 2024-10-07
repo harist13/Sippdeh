@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProvinsiRequest;
 use App\Models\Provinsi;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProvinsiController extends Controller
@@ -27,9 +29,19 @@ class ProvinsiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProvinsiRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $provinsi = new Provinsi();
+            $provinsi->nama = $validated['nama'];
+            $provinsi->save();
+    
+            return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_pembuatan_provinsi', 'gagal');
+        }
     }
 
     /**
