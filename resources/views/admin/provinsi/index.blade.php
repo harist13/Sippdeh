@@ -57,6 +57,15 @@
         @endif
     @endif
 
+    @php $status = session('status_pengeditan_provinsi'); @endphp
+    @if($status != null)
+        @if ($status == 'berhasil')
+            @include('components.alert-berhasil', ['message' => 'Provinsi berhasil diedit.'])
+        @else
+            @include('components.alert-gagal', ['message' => 'Provinsi gagal diedit.'])
+        @endif
+    @endif
+
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
             <div class="flex items-center space-x-2 w-full-mobile">
@@ -102,7 +111,7 @@
                 <tbody class="bg-gray-100">
                     @foreach ($provinsi as $p)
                         <tr class="hover:bg-gray-200">
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->id }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile" data-id="{{ $p->id }}">{{ $p->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
                                 <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
@@ -131,31 +140,6 @@
         var menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
     });
-
-    // Edit Provinsi Modal
-    const editProvinsiModal = document.getElementById('editProvinsiModal');
-    const cancelEditProvinsi = document.getElementById('cancelEditProvinsi');
-    const confirmEditProvinsi = document.getElementById('confirmEditProvinsi');
-    const editButtons = document.querySelectorAll('.edit-provinsi-btn');
-
-    editButtons.forEach(button => {
-        button.onclick = function () {
-            const provinsiName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
-            document.getElementById('editProvinsiName').value = provinsiName;
-            editProvinsiModal.classList.remove('hidden');
-        }
-    });
-
-    cancelEditProvinsi.onclick = function () {
-        editProvinsiModal.classList.add('hidden');
-    }
-
-    confirmEditProvinsi.onclick = function () {
-        const provinsiName = document.getElementById('editProvinsiName').value;
-        console.log('Editing provinsi:', provinsiName);
-        // Add your logic here to save the edited provinsi
-        editProvinsiModal.classList.add('hidden');
-    }
 
     // Close modals when clicking outside
     window.onclick = function (event) {

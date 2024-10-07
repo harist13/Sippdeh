@@ -14,11 +14,8 @@ class Provinsi extends Model
 
     protected $fillable = ['nama'];
 
-    protected function id(): Attribute {
-        return Attribute::make(get: fn (string $id) => $this->_getThreeDigitsId($id));
-    }
-
-    private function _getThreeDigitsId(string $id): string {
+    public function getThreeDigitsId(): string {
+        $id = $this->getKey();
         $digits = strlen($id);
 
         if ($digits == 1) {

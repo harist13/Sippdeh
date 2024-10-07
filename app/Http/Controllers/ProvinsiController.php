@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProvinsiRequest;
+use App\Http\Requests\UpdateProvinsiRequest;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
@@ -63,9 +64,20 @@ class ProvinsiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProvinsiRequest $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $provinsi = Provinsi::find($id);
+            $provinsi->nama = $validated['nama'];
+            $provinsi->save();
+    
+            return redirect()->back()->with('status_pengeditan_provinsi', 'berhasil');
+        } catch (Exception $error) {
+            dd($error);
+            return redirect()->back()->with('status_pengeditan_provinsi', 'gagal');
+        }
     }
 
     /**
