@@ -20,10 +20,6 @@
 </div>
 
 <script>
-    const addProvinsiBtn = document.getElementById('addProvinsiBtn');
-    const addProvinsiModal = document.getElementById('addProvinsiModal');
-    const cancelAddProvinsi = document.getElementById('cancelAddProvinsi');
-
     function showAddProvinsiModal() {
         addProvinsiModal.classList.remove('hidden');
     }
@@ -31,6 +27,9 @@
     function closeAddProvinsiModal() {
         addProvinsiModal.classList.add('hidden');
     }
+
+    document.getElementById('addProvinsiBtn').addEventListener('click', showAddProvinsiModal);
+    document.getElementById('cancelAddProvinsi').addEventListener('click', closeAddProvinsiModal);
 </script>
 
 @php $isThereAnyError = $errors->count() > 0; @endphp
@@ -39,8 +38,3 @@
         showAddProvinsiModal();
     </script>
 @endif
-
-<script>
-    addProvinsiBtn.onclick = showAddProvinsiModal;
-    cancelAddProvinsi.onclick = closeAddProvinsiModal;
-</script>
