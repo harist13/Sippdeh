@@ -117,7 +117,7 @@
                                 <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="text-red-600 hover:text-red-900">
+                                <button class="text-red-600 hover:text-red-900 hapus-provinsi-btn">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>
@@ -132,6 +132,7 @@
 
     @include('admin.provinsi.tambah-modal')
     @include('admin.provinsi.edit-modal')
+    @include('admin.provinsi.hapus-modal')
 </main>
 
 
