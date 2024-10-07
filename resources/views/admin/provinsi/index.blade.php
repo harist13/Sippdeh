@@ -138,29 +138,34 @@
 
         {{ $provinsi->links('vendor.pagination.tailwind', ['namaModel' => 'provinsi']) }}
     </div>
-
-    @include('admin.provinsi.tambah-modal')
-    @include('admin.provinsi.edit-modal')
-    @include('admin.provinsi.hapus-modal')
 </main>
 
+@include('admin.provinsi.tambah-modal')
+@include('admin.provinsi.edit-modal')
+@include('admin.provinsi.hapus-modal')
 
 <script>
-    document.getElementById('dropdownButton').addEventListener('click', function () {
-        var menu = document.getElementById('dropdownMenu');
+    function toggleCitiesDropdown() {
+        const menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
-    });
-
-    // Close modals when clicking outside
-    window.onclick = function (event) {
-        if (event.target == addProvinsiModal) {
-            addProvinsiModal.classList.add('hidden');
-        }
-        if (event.target == editProvinsiModal) {
-            editProvinsiModal.classList.add('hidden');
-        }
     }
 
+    document.getElementById('dropdownButton').addEventListener('click', toggleCitiesDropdown);
+
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target == addProvinsiModal) {
+            closeAddProvinsiModal();
+        }
+        
+        if (event.target == editProvinsiModal) {
+            closeEditProvinsiModal();
+        }
+
+        if (event.target == deleteProvinsiModal) {
+            closeDeleteProvinsiModal();
+        }
+    });
 </script>
 
 @include('admin.layout.footer')
