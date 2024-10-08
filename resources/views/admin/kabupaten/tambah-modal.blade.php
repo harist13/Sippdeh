@@ -34,3 +34,18 @@
         </form>
     </div>
 </div>
+
+<script>
+	function showAddKabupatenModal() {
+		const addKabupatenModal = document.getElementById('addKabupatenModal');
+		addKabupatenModal.classList.remove('hidden');
+	}
+
+	function closeAddKabupatenModal() {
+		const addKabupatenModal = document.getElementById('addKabupatenModal');
+		addKabupatenModal.classList.add('hidden');
+	}
+
+    document.getElementById('addKabupatenBtn').addEventListener('click', showAddKabupatenModal);
+    document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
+</script>

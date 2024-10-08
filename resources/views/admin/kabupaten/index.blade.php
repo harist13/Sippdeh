@@ -156,20 +156,6 @@
         menu.classList.toggle('hidden');
     });
 
-    // Add Kabupaten/Kota Modal
-    var addKabupatenModal = document.getElementById('addKabupatenModal');
-    var addKabupatenBtn = document.getElementById('addKabupatenBtn');
-    var cancelAddKabupaten = document.getElementById('cancelAddKabupaten');
-    var confirmAddKabupaten = document.getElementById('confirmAddKabupaten');
-
-    addKabupatenBtn.onclick = function() {
-        addKabupatenModal.classList.remove('hidden');
-    }
-
-    cancelAddKabupaten.onclick = function() {
-        addKabupatenModal.classList.add('hidden');
-    }
-
     // Edit Kabupaten/Kota Modal
     var editKabupatenModal = document.getElementById('editKabupatenModal');
     var editKabupatenBtns = document.querySelectorAll('.editKabupatenBtn');
