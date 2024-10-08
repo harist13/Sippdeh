@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreKabupatenRequest;
 use App\Models\Kabupaten;
+use App\Models\Provinsi;
+use Exception;
 use Illuminate\Http\Request;
 
 class KabupatenController extends Controller
@@ -12,8 +15,9 @@ class KabupatenController extends Controller
      */
     public function index()
     {
+        $provinsi = Provinsi::all();
         $kabupaten = Kabupaten::orderByDesc('id')->paginate(10);
-        return view('admin.kabupaten.index', compact('kabupaten'));
+        return view('admin.kabupaten.index', compact('provinsi', 'kabupaten'));
     }
 
     /**
@@ -27,9 +31,20 @@ class KabupatenController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreKabupatenRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $kabupaten = new Kabupaten();
+            $kabupaten->nama = $validated['nama'];
+            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->save();
+
+            return redirect()->back()->with('status_pembuatan_kabupaten', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_pembuatan_kabupaten', 'gagal');
+        }
     }
 
     /**
