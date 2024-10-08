@@ -27,7 +27,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
      Route::post('/forceLogout/{id}', [AdminController::class, 'forceLogout'])->name('forceLogout');
     Route::post('/reactivateUser/{id}', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
-
+Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [AdminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
 
 
 

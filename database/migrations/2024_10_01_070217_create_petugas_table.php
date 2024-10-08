@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('wilayah');
             $table->string('role');
             $table->boolean('is_forced_logout')->default(false);
+            $table->integer('limit')->default(5);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -50,12 +50,30 @@ class AdminController extends Controller
     {
         return view('admin.kelurahan');
     }
-    public function user()
+     public function user()
     {
         $users = Petugas::all();
         $roles = Role::all();
-        $loginHistories = LoginHistory::with('user')->orderBy('login_at', 'desc')->get();
-        return view('admin.user', compact('users', 'roles', 'loginHistories'));
+        $loginHistories = LoginHistory::with('user')->active()->orderBy('login_at', 'desc')->get();
+        
+        // Hitung jumlah device aktif untuk setiap user
+        $activeDevices = [];
+        foreach ($users as $user) {
+            $activeDevices[$user->id] = LoginHistory::where('user_id', $user->id)->active()->count();
+        }
+        
+        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices'));
+    }
+
+    public function forceLogoutDevice($userId, $loginHistoryId)
+    {
+        try {
+            $loginHistory = LoginHistory::findOrFail($loginHistoryId);
+            $loginHistory->delete();
+            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan dari device.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal mengeluarkan user dari device.');
+        }
     }
 
     public function storeUser(Request $request)

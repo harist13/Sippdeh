@@ -21,6 +21,7 @@ class Petugas extends Authenticatable
         'wilayah',
         'role',
         'is_forced_logout',
+        'limit',
     ];
 
     protected $hidden = [

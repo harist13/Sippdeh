@@ -1,6 +1,5 @@
 <?php
 
-// app/Models/LoginHistory.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,5 +19,10 @@ class LoginHistory extends Model
     public function user()
     {
         return $this->belongsTo(Petugas::class, 'user_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('login_at', '>=', now()->subDays(1));
     }
 }

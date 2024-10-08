@@ -94,27 +94,31 @@
         </div>
 
         <!-- Table TPS (initially visible) -->
-        <div id="tpsTable" class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="bg-blue-700 text-white">
-                        <th class="px-4 py-2 text-left">NO</th>
-                        <th class="px-4 py-2 text-left">Username</th>
-                        <th class="px-4 py-2 text-left">Email</th>
-                        <th class="px-4 py-2 text-left">Wilayah</th>
-                        <th class="px-4 py-2 text-left">Role</th>
-                        <th class="px-4 py-2 text-left">Status</th>
-                        <th class="px-4 py-2 text-left">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-100">
-                    @foreach($users as $user)
-                    <tr class="border-b">
-                        <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-2">{{ $user->username }}</td>
-                        <td class="px-4 py-2">{{ $user->email }}</td>
-                        <td class="px-4 py-2">{{ $user->wilayah }}</td>
-                        <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
+<div id="tpsTable" class="overflow-x-auto">
+    <table class="w-full">
+        <thead>
+            <tr class="bg-blue-700 text-white">
+                <th class="px-4 py-2 text-left">NO</th>
+                <th class="px-4 py-2 text-left">Username</th>
+                <th class="px-4 py-2 text-left">Email</th>
+                <th class="px-4 py-2 text-left">Wilayah</th>
+                <th class="px-4 py-2 text-left">Role</th>
+                <th class="px-4 py-2 text-left">Limit</th>
+                <th class="px-4 py-2 text-left">Device Aktif</th>
+                <th class="px-4 py-2 text-left">Status</th>
+                <th class="px-4 py-2 text-left">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="bg-gray-100">
+            @foreach($users as $user)
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                <td class="px-4 py-2">{{ $user->username }}</td>
+                <td class="px-4 py-2">{{ $user->email }}</td>
+                <td class="px-4 py-2">{{ $user->wilayah }}</td>
+                <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
+                <td class="px-4 py-2">{{ $user->limit }}</td>
+                <td class="px-4 py-2">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
                         <td class="px-4 py-2">
                             @if($user->is_forced_logout)
                                 <span class="text-red-600">Dikeluarkan</span>
@@ -147,35 +151,44 @@
             </table>
         </div>
 
-       <!-- Table HISTORY (initially hidden) -->
-        <div id="suaraTable" class="hidden overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="bg-blue-700 text-white">
-                        <th class="px-4 py-2 text-left">NO</th>
-                        <th class="px-4 py-2 text-left">Email</th>
-                        <th class="px-4 py-2 text-left">Wilayah</th>
-                        <th class="px-4 py-2 text-left">Role</th>
-                        <th class="px-4 py-2 text-left">Terakhir Login</th>
-                        <th class="px-4 py-2 text-left">Device</th>
-                        <th class="px-4 py-2 text-left">IP Address</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-100">
-                    @foreach($loginHistories as $history)
-                    <tr class="border-b">
-                        <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-2">{{ $history->user->email }}</td>
-                        <td class="px-4 py-2">{{ $history->user->wilayah }}</td>
-                        <td class="px-4 py-2">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
-                        <td class="px-4 py-2">{{ $history->login_at }}</td>
-                        <td class="px-4 py-2">{{ $history->user_agent }}</td>
-                        <td class="px-4 py-2">{{ $history->ip_address }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+      <!-- Table HISTORY (initially hidden) -->
+<div id="suaraTable" class="hidden overflow-x-auto">
+    <table class="w-full">
+        <thead>
+            <tr class="bg-blue-700 text-white">
+                <th class="px-4 py-2 text-left">NO</th>
+                <th class="px-4 py-2 text-left">Email</th>
+                <th class="px-4 py-2 text-left">Wilayah</th>
+                <th class="px-4 py-2 text-left">Role</th>
+                <th class="px-4 py-2 text-left">Terakhir Login</th>
+                <th class="px-4 py-2 text-left">Device</th>
+                <th class="px-4 py-2 text-left">IP Address</th>
+                <th class="px-4 py-2 text-left">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="bg-gray-100">
+            @foreach($loginHistories as $history)
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                <td class="px-4 py-2">{{ $history->user->email }}</td>
+                <td class="px-4 py-2">{{ $history->user->wilayah }}</td>
+                <td class="px-4 py-2">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
+                <td class="px-4 py-2">{{ $history->login_at }}</td>
+                <td class="px-4 py-2">{{ $history->user_agent }}</td>
+                <td class="px-4 py-2">{{ $history->ip_address }}</td>
+                <td class="px-4 py-2">
+                    <form action="{{ route('forceLogoutDevice', ['userId' => $history->user_id, 'loginHistoryId' => $history->id]) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                            Keluarkan
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
     </div>
 </main>
 
@@ -383,53 +396,8 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Form submission for Tambah User
-document.getElementById('tambahUserForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const form = this;
-    fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showSuccessMessage('User berhasil ditambahkan');
-            document.getElementById('modalTambahUser').classList.add('hidden');
-            // Reload the page or update the table
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            showErrorMessage('Gagal menambahkan user');
-        }
-    })
-    .catch(error => {
-        showErrorMessage('Terjadi kesalahan');
-    });
-});
 
-// Form submission for Edit User
-document.getElementById('editUserForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const form = this;
-    fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showSuccessMessage('User berhasil diperbarui');
-            document.getElementById('modalEditUser').classList.add('hidden');
-            // Reload the page or update the table
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            showErrorMessage('Gagal memperbarui user');
-        }
-    })
-    .catch(error => {
-        showErrorMessage('Terjadi kesalahan');
-    });
-});
+
 
 // Handle delete user action
 document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
@@ -490,6 +458,122 @@ document.querySelector('input[placeholder="Cari User"]').addEventListener('input
         row.style.display = text.includes(searchTerm) ? '' : 'none';
     });
 });
+
+
+// Function to validate email
+function isValidEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+// Function to validate form
+function validateForm(form) {
+    const username = form.querySelector('[name="username"]').value.trim();
+    const email = form.querySelector('[name="email"]').value.trim();
+    const role = form.querySelector('[name="role"]').value;
+    const wilayah = form.querySelector('[name="wilayah"]').value.trim();
+    const password = form.querySelector('[name="password"]').value;
+
+    let isValid = true;
+    let errorMessage = '';
+
+    if (username.length < 3) {
+        errorMessage += 'Username harus memiliki minimal 3 karakter.\n';
+        isValid = false;
+    }
+
+    if (!isValidEmail(email)) {
+        errorMessage += 'Email tidak valid.\n';
+        isValid = false;
+    }
+
+    if (role === '') {
+        errorMessage += 'Harap pilih role.\n';
+        isValid = false;
+    }
+
+    if (wilayah.length < 2) {
+        errorMessage += 'Wilayah harus diisi.\n';
+        isValid = false;
+    }
+
+    // For add user form, password is required
+    if (form.id === 'tambahUserForm' && password.length < 6) {
+        errorMessage += 'Password harus memiliki minimal 6 karakter.\n';
+        isValid = false;
+    }
+
+    if (!isValid) {
+        showErrorMessage(errorMessage);
+    }
+
+    return isValid;
+}
+
+// Add event listeners to forms
+document.getElementById('tambahUserForm').addEventListener('submit', function(event) {
+    if (!validateForm(this)) {
+        event.preventDefault();
+    }
+});
+
+document.getElementById('editUserForm').addEventListener('submit', function(event) {
+    if (!validateForm(this)) {
+        event.preventDefault();
+    }
+});
+
+// Update existing form submission handlers
+document.getElementById('tambahUserForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (validateForm(this)) {
+        const form = this;
+        fetch(form.action, {
+            method: form.method,
+            body: new FormData(form)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showSuccessMessage('User berhasil ditambahkan');
+                document.getElementById('modalTambahUser').classList.add('hidden');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showErrorMessage('Gagal menambahkan user');
+            }
+        })
+        .catch(error => {
+            showErrorMessage('Terjadi kesalahan');
+        });
+    }
+});
+
+document.getElementById('editUserForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (validateForm(this)) {
+        const form = this;
+        fetch(form.action, {
+            method: form.method,
+            body: new FormData(form)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showSuccessMessage('User berhasil diperbarui');
+                document.getElementById('modalEditUser').classList.add('hidden');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showErrorMessage('Gagal memperbarui user');
+            }
+        })
+        .catch(error => {
+            showErrorMessage('Terjadi kesalahan');
+        });
+    }
+});
+
+
+
 </script>
 
 @include('admin.layout.footer')
