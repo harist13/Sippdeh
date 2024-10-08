@@ -12,7 +12,7 @@ class KabupatenController extends Controller
      */
     public function index()
     {
-        $kabupaten = Kabupaten::orderByDesc('id')->get();
+        $kabupaten = Kabupaten::orderByDesc('id')->paginate(10);
         return view('admin.kabupaten.index', compact('kabupaten'));
     }
 

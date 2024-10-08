@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto mb-5">
             <table class="min-w-full leading-normal text-sm-mobile">
                 <thead>
                     <tr class="bg-blue-600 text-white">
@@ -89,6 +89,8 @@
                 </tbody>
             </table>
         </div>
+
+        {{ $kabupaten->links('vendor.pagination.tailwind', ['namaModel' => 'kabupaten']) }}
     </div>
 
     <!-- Add Kabupaten/Kota Modal -->
