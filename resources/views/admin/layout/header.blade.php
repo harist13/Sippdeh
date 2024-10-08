@@ -38,7 +38,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col h-full bg-gray-100">
+<body class="relative flex flex-col h-full bg-gray-100">
 
 <!-- Sidebar -->
 <div id="sidebar" class="fixed top-0 left-0 z-1050 w-64 h-full overflow-y-auto bg-white shadow-lg sidebar hidden">
