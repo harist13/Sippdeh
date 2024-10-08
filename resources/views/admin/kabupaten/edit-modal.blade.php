@@ -84,3 +84,10 @@
 
     document.getElementById('cancelEditKabupaten').addEventListener('click', closeEditKabupatenModal);
 </script>
+
+@php $isThereAnyError = $errors->count() > 0; @endphp
+@if ($isThereAnyError)
+    <script>
+        showEditKabupatenModal();
+    </script>
+@endif

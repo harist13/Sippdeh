@@ -49,3 +49,10 @@
     document.getElementById('addKabupatenBtn').addEventListener('click', showAddKabupatenModal);
     document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
 </script>
+
+@php $isThereAnyError = $errors->count() > 0; @endphp
+@if ($isThereAnyError)
+    <script>
+        showAddKabupatenModal();
+    </script>
+@endif
