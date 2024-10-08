@@ -30,10 +30,6 @@ class AdminController extends Controller
     {
         return view('admin.calon');
     }
-    public function provinsi()
-    {
-        return view('admin.provinsi');
-    }
     public function tps()
     {
         return view('admin.tps');

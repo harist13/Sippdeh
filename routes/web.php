@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\ProvinsiController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -16,7 +17,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
     Route::get('/rangkuman', [AdminController::class, 'rangkuman'])->name('rangkuman');
     Route::get('/calon', [AdminController::class, 'calon'])->name('calon');
-    Route::get('/provinsi', [AdminController::class, 'provinsi'])->name('provinsi');
+    
+    Route::resource('provinsi', ProvinsiController::class)->names([
+        'index' => 'provinsi'
+    ]);
+
     Route::get('/kabupaten', [AdminController::class, 'kabupaten'])->name('kabupaten');
     Route::get('/kecamatan', [AdminController::class, 'kecamatan'])->name('kecamatan');
     Route::get('/kelurahan', [AdminController::class, 'kelurahan'])->name('kelurahan');
