@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreKabupatenRequest;
+use App\Http\Requests\UpdateKabupatenRequest;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
@@ -66,9 +67,20 @@ class KabupatenController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateKabupatenRequest $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $kabupaten = Kabupaten::find($id);
+            $kabupaten->nama = $validated['nama'];
+            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->save();
+
+            return redirect()->back()->with('status_pengeditan_kabupaten', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_pengeditan_kabupaten', 'gagal');
+        }
     }
 
     /**

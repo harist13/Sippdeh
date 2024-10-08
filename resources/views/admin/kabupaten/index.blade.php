@@ -105,10 +105,10 @@
                 <tbody class="bg-gray-100">
                     @foreach ($kabupaten as $kota)
                         <tr class="hover:bg-gray-200">
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $kota->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $kota->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $kota->provinsi->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $kota->getThreeDigitsId() }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}">{{ $kota->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kota->provinsi->id }}">{{ $kota->provinsi->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                 <button class="editKabupatenBtn text-[#3560A0] hover:text-blue-900"><i class="fas fa-edit"></i></button>
                                 <button class="text-red-600 hover:text-red-900 ml-3"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -120,56 +120,16 @@
 
         {{ $kabupaten->links('vendor.pagination.tailwind', ['namaModel' => 'kabupaten']) }}
     </div>
-
-    @include('admin.kabupaten.tambah-modal')
-
-    <!-- Edit Kabupaten/Kota Modal -->
-    <div id="editKabupatenModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Kabupaten/Kota</h3>
-                <div class="mt-2 px-7 py-3">
-                    <input type="text" id="editKabupatenName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Nama Kabupaten/Kota">
-                    <select id="editKabupatenProvinsi" class="w-full px-3 py-2 mt-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-                        <option>Pilih Provinsi</option>
-                        <option>Kalimantan Timur</option>
-                        <!-- Add more provinces as needed -->
-                    </select>
-                </div>
-                <div class="items-center px-4 py-3">
-                    <button id="cancelEditKabupaten" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-24 mr-2">
-                        Batalkan
-                    </button>
-                    <button id="confirmEditKabupaten" class="px-4 py-2 bg-[#3560A0] text-white text-base font-medium rounded-md w-24 ml-2">
-                        Simpan
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
+
+@include('admin.kabupaten.tambah-modal')
+@include('admin.kabupaten.edit-modal')
 
 <script>
     // Dropdown functionality
     document.getElementById('dropdownButton').addEventListener('click', function() {
         var menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
-    });
-
-    // Edit Kabupaten/Kota Modal
-    var editKabupatenModal = document.getElementById('editKabupatenModal');
-    var editKabupatenBtns = document.querySelectorAll('.editKabupatenBtn');
-    var cancelEditKabupaten = document.getElementById('cancelEditKabupaten');
-    var confirmEditKabupaten = document.getElementById('confirmEditKabupaten');
-
-    editKabupatenBtns.forEach(function(btn) {
-        btn.onclick = function() {
-            var kabupatenName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
-            var kabupatenProvinsi = this.closest('tr').querySelector('td:nth-child(3)').textContent;
-            document.getElementById('editKabupatenName').value = kabupatenName;
-            document.getElementById('editKabupatenProvinsi').value = kabupatenProvinsi;
-            editKabupatenModal.classList.remove('hidden');
-        }
     });
 
     cancelEditKabupaten.onclick = function() {
