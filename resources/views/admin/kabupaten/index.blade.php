@@ -110,7 +110,7 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kota->provinsi->id }}">{{ $kota->provinsi->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                 <button class="editKabupatenBtn text-[#3560A0] hover:text-blue-900"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900 ml-3"><i class="fas fa-trash-alt"></i></button>
+                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-kabupaten-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -124,6 +124,7 @@
 
 @include('admin.kabupaten.tambah-modal')
 @include('admin.kabupaten.edit-modal')
+@include('admin.kabupaten.hapus-modal')
 
 <script>
     // Dropdown functionality

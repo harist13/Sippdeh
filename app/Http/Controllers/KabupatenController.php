@@ -88,6 +88,13 @@ class KabupatenController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $kabupaten = Kabupaten::find($id);
+            $kabupaten->delete();
+
+            return redirect()->back()->with('status_penghapusan_kabupaten', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_penghapusan_kabupaten', 'gagal');
+        }
     }
 }
