@@ -75,6 +75,15 @@
                 <span class="text-lg font-bold"><i class="fas fa-city"></i> Kecamatan</span>
             </div>
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+                <form action="{{ route('kecamatan') }}" method="GET">
+                    <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                        </svg>
+                        <input type="search" placeholder="Cari Kecamatan" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                    </div>                  
+                </form>
+
                 <button id="addKecamatanBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah Kecamatan</button>
 
                 <div class="relative w-full-mobile">
