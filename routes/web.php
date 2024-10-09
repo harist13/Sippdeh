@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\KabupatenController;
+use App\Http\Controllers\KecamatanController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -27,7 +28,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'index' => 'kabupaten'
     ]);
 
-    Route::get('/kecamatan', [AdminController::class, 'kecamatan'])->name('kecamatan');
+    Route::resource('kecamatan', KecamatanController::class)->names([
+        'index' => 'kecamatan'
+    ]);
+
     Route::get('/kelurahan', [AdminController::class, 'kelurahan'])->name('kelurahan');
     Route::get('/tps', [AdminController::class, 'tps'])->name('tps');
     Route::get('/user', [AdminController::class, 'user'])->name('user');
