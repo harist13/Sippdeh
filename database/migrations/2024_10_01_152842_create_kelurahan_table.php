@@ -10,9 +10,8 @@ return new class extends Migration
     {
         Schema::create('kelurahan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('cascade');
+            $table->string('nama');
             $table->foreignId('kecamatan_id')->constrained('kecamatan')->onDelete('cascade');
-            $table->string('kelurahan');
             $table->timestamps();
         });
     }

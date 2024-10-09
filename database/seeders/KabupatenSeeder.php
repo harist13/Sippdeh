@@ -13,22 +13,8 @@ class KabupatenSeeder extends Seeder
     public function run(): void
     {
         $kabupaten = [
-            ['nama' => 'Kabupaten Bengkayang', 'provinsi_id' => 20], // Sesuaikan 'provinsi_id' dengan ID provinsi Kalimantan Barat
-            ['nama' => 'Kabupaten Kapuas Hulu', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Kayong Utara', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Ketapang', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Kubu Raya', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Landak', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Melawi', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Mempawah', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Sambas', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Sanggau', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Sekadau', 'provinsi_id' => 20],
-            ['nama' => 'Kabupaten Sintang', 'provinsi_id' => 20],
-            ['nama' => 'Kota Pontianak', 'provinsi_id' => 20],
-            ['nama' => 'Kota Singkawang', 'provinsi_id' => 20],
-            
-            ['nama' => 'Kabupaten Berau', 'provinsi_id' => 23], // Sesuaikan 'provinsi_id' dengan ID provinsi Kalimantan Timur
+            // Sesuaikan 'provinsi_id' dengan ID provinsi Kalimantan Timur
+            ['nama' => 'Kabupaten Berau', 'provinsi_id' => 23],
             ['nama' => 'Kabupaten Kutai Barat', 'provinsi_id' => 23],
             ['nama' => 'Kabupaten Kutai Kartanegara', 'provinsi_id' => 23],
             ['nama' => 'Kabupaten Kutai Timur', 'provinsi_id' => 23],
