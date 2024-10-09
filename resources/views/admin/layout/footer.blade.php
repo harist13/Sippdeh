@@ -1,5 +1,5 @@
  <!-- Footer -->
-<footer class="py-6 text-white bg-blue-600">
+<footer class="py-6 text-white bg-[#3560A0]">
     <div class="container px-4 mx-auto">
         <div class="flex flex-col items-start space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div class="flex flex-col items-start md:flex-row md:items-center">

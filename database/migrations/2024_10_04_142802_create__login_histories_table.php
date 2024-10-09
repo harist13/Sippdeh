@@ -14,6 +14,8 @@ class CreateLoginHistoriesTable extends Migration
             $table->string('ip_address');
             $table->string('user_agent');
             $table->timestamp('login_at');
+            $table->boolean('is_logged_out')->default(false);
+            $table->timestamp('logged_out_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('petugas')->onDelete('cascade');

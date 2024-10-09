@@ -77,7 +77,7 @@
         <!-- Table Header -->
         <div class="flex flex-wrap-mobile justify-between items-center mb-4">
             <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile">
-                <button id="tpsBtn" class="px-4 py-2 bg-blue-700 text-white rounded-l-lg border-r border-gray-300 flex-grow">LIST USER</button>
+                <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">LIST USER</button>
                 <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">HISTORY</button>
             </div>
 
@@ -97,7 +97,7 @@
 <div id="tpsTable" class="overflow-x-auto">
     <table class="w-full">
         <thead>
-            <tr class="bg-blue-700 text-white">
+            <tr class="bg-[#3560A0] text-white">
                 <th class="px-4 py-2 text-left">NO</th>
                 <th class="px-4 py-2 text-left">Username</th>
                 <th class="px-4 py-2 text-left">Email</th>
@@ -109,45 +109,48 @@
                 <th class="px-4 py-2 text-left">Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-gray-100">
-            @foreach($users as $user)
-            <tr class="border-b">
-                <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="px-4 py-2">{{ $user->username }}</td>
-                <td class="px-4 py-2">{{ $user->email }}</td>
-                <td class="px-4 py-2">{{ $user->wilayah }}</td>
-                <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
-                <td class="px-4 py-2">{{ $user->limit }}</td>
-                <td class="px-4 py-2">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
-                        <td class="px-4 py-2">
-                            @if($user->is_forced_logout)
-                                <span class="text-red-600">Dikeluarkan</span>
-                            @else
-                                <span class="text-green-600">Aktif</span>
-                            @endif
-                        </td>
-                        <td class="px-4 py-2">
-                            <i class="fas fa-edit text-blue-600 cursor-pointer mr-2 edit-user" data-id="{{ $user->id }}"></i>
-                            <form action="{{ route('deleteUser', $user->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer"></button>
-                            </form>
-                            @if(!$user->is_forced_logout)
-                                <form action="{{ route('forceLogout', $user->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer"></button>
-                                </form>
-                            @else
-                                <form action="{{ route('reactivateUser', $user->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer"></button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+       <!-- ... (previous code remains the same) -->
+
+<tbody class="bg-gray-100">
+    @foreach($users as $user)
+    <tr class="border-b">
+        <td class="px-4 py-2">{{ $loop->iteration }}</td>
+        <td class="px-4 py-2">{{ $user->username }}</td>
+        <td class="px-4 py-2">{{ $user->email }}</td>
+        <td class="px-4 py-2">{{ $user->wilayah }}</td>
+        <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
+        <td class="px-4 py-2">{{ $user->limit }}</td>
+        <td class="px-4 py-2">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
+        <td class="px-4 py-2">
+            @if($user->is_forced_logout)
+                <span class="text-red-600">Dikeluarkan</span>
+            @else
+                <span class="text-green-600">Aktif</span>
+            @endif
+        </td>
+        <td class="px-4 py-2">
+            <i class="fas fa-edit text-blue-600 cursor-pointer mr-2 edit-user" data-id="{{ $user->id }}"></i>
+            <form action="{{ route('deleteUser', $user->id) }}" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer"></button>
+            </form>
+            @if(!$user->is_forced_logout)
+                <form action="{{ route('forceLogout', $user->id) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer"></button>
+                </form>
+            @else
+                <form action="{{ route('reactivateUser', $user->id) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer"></button>
+                </form>
+            @endif
+        </td>
+    </tr>
+    @endforeach
+</tbody>
+
             </table>
         </div>
 
@@ -155,7 +158,7 @@
 <div id="suaraTable" class="hidden overflow-x-auto">
     <table class="w-full">
         <thead>
-            <tr class="bg-blue-700 text-white">
+            <tr class="bg-[#3560A0] text-white">
                 <th class="px-4 py-2 text-left">NO</th>
                 <th class="px-4 py-2 text-left">Email</th>
                 <th class="px-4 py-2 text-left">Wilayah</th>
@@ -231,7 +234,7 @@
                 </div>
             </div>
             <div class="mt-4 text-right">
-                <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded-md">Tambah User</button>
+                <button type="submit" class="bg-[#3560A0] text-white px-4 py-2 rounded-md">Tambah User</button>
             </div>
         </form>
     </div>
@@ -277,7 +280,7 @@
                 </div>
             </div>
             <div class="mt-4 text-right">
-                <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded-md">Simpan Perubahan</button>
+                <button type="submit" class="bg-[#3560A0] text-white px-4 py-2 rounded-md">Simpan Perubahan</button>
             </div>
         </form>
     </div>
@@ -339,8 +342,8 @@ document.getElementById('tpsBtn').addEventListener('click', function() {
     document.getElementById('tpsTable').classList.remove('hidden');
     document.getElementById('suaraTable').classList.add('hidden');
     this.classList.remove('bg-gray-200', 'text-gray-700');
-    this.classList.add('bg-blue-700', 'text-white');
-    document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
+    this.classList.add('bg-[#3560A0]', 'text-white');
+    document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
     document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
 });
 
@@ -348,8 +351,8 @@ document.getElementById('suaraBtn').addEventListener('click', function() {
     document.getElementById('tpsTable').classList.add('hidden');
     document.getElementById('suaraTable').classList.remove('hidden');
     this.classList.remove('bg-gray-200', 'text-gray-700');
-    this.classList.add('bg-blue-700', 'text-white');
-    document.getElementById('tpsBtn').classList.remove('bg-blue-700', 'text-white');
+    this.classList.add('bg-[#3560A0]', 'text-white');
+    document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
     document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
 });
 
@@ -415,37 +418,7 @@ document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
     });
 });
 
-// Handle "Keluar Akun" button click
-document.querySelectorAll('.fa-sign-out-alt').forEach(function(logoutBtn) {
-    logoutBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-        const form = this.closest('form');
-        showConfirmationDialog(
-            'Konfirmasi Keluar Akun',
-            'Apakah Anda yakin ingin mengeluarkan user ini?',
-            'Ya, Keluarkan',
-            function() {
-                form.submit();
-            }
-        );
-    });
-});
 
-// Handle "aktifkan Akun" button click
-document.querySelectorAll('.fa-user-check').forEach(function(logoutBtn) {
-    logoutBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-        const form = this.closest('form');
-        showConfirmationDialog(
-            'Konfirmasi Keluar Akun',
-            'Apakah Anda yakin ingin mengaktifkan user ini?',
-            'Ya, Aktifkan',
-            function() {
-                form.submit();
-            }
-        );
-    });
-});
 
 
 // Search functionality
@@ -572,6 +545,38 @@ document.getElementById('editUserForm').addEventListener('submit', function(even
     }
 });
 
+
+// Handle "Keluar Akun" button click
+document.querySelectorAll('.fa-sign-out-alt').forEach(function(logoutBtn) {
+    logoutBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = this.closest('form');
+        showConfirmationDialog(
+            'Konfirmasi Keluar Akun',
+            'Apakah Anda yakin ingin mengeluarkan user ini dari semua device?',
+            'Ya, Keluarkan',
+            function() {
+                form.submit();
+            }
+        );
+    });
+});
+
+// Handle "Aktifkan Akun" button click
+document.querySelectorAll('.fa-user-check').forEach(function(activateBtn) {
+    activateBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = this.closest('form');
+        showConfirmationDialog(
+            'Konfirmasi Aktifkan Akun',
+            'Apakah Anda yakin ingin mengaktifkan kembali user ini?',
+            'Ya, Aktifkan',
+            function() {
+                form.submit();
+            }
+        );
+    });
+});
 
 
 </script>

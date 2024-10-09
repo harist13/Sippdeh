@@ -16,7 +16,7 @@ class LoginController extends Controller
         return view('login');
     }
 
-     public function login(Request $request)
+    public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email'],
@@ -38,12 +38,14 @@ class LoginController extends Controller
             if ($user->is_forced_logout) {
                 Auth::logout();
                 return back()->withErrors([
-                    'email' => 'Akun Anda telah dikeluarkan oleh admin. Silakan hubungi admin untuk informasi lebih lanjut.',
+                    'email' => 'Akun Anda telah dikeluarkan oleh admin. Silakan hubungi admin untuk mengaktifkan kembali akun Anda.',
                 ])->withInput($request->only('email'));
             }
 
             // Check the number of active devices
-            $activeDevices = LoginHistory::where('user_id', $user->id)->count();
+            $activeDevices = LoginHistory::where('user_id', $user->id)
+                                         ->where('is_logged_out', false)
+                                         ->count();
 
             if ($activeDevices >= $user->limit) {
                 Auth::logout();
@@ -60,6 +62,7 @@ class LoginController extends Controller
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
                 'login_at' => now(),
+                'is_logged_out' => false,
             ]);
 
             if ($user->hasRole('admin')) {
@@ -78,11 +81,15 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        // Hapus entri login history untuk user dan device ini
+        // Mark the current session as logged out
         LoginHistory::where('user_id', Auth::id())
             ->where('ip_address', $request->ip())
             ->where('user_agent', $request->userAgent())
-            ->delete();
+            ->where('is_logged_out', false)
+            ->update([
+                'is_logged_out' => true,
+                'logged_out_at' => now(),
+            ]);
 
         Auth::logout();
         $request->session()->invalidate();

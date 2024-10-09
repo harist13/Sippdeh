@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -61,14 +60,53 @@ class AdminController extends Controller
         return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices'));
     }
 
-    public function forceLogoutDevice($userId, $loginHistoryId)
+   public function forceLogoutDevice($userId, $loginHistoryId)
     {
         try {
             $loginHistory = LoginHistory::findOrFail($loginHistoryId);
-            $loginHistory->delete();
-            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan dari device.');
+            
+            // Instead of deleting, mark this specific session as logged out
+            $loginHistory->update([
+                'is_logged_out' => true,
+                'logged_out_at' => now(),
+            ]);
+
+            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan dari device tersebut.');
         } catch (\Exception $e) {
             return redirect()->route('user')->with('error', 'Gagal mengeluarkan user dari device.');
+        }
+    }
+
+    public function forceLogout($id)
+    {
+        try {
+            $user = Petugas::findOrFail($id);
+            
+            // Mark user as forced logout
+            $user->update(['is_forced_logout' => true]);
+
+            // Mark all active sessions for this user as logged out
+            LoginHistory::where('user_id', $id)
+                ->where('is_logged_out', false)
+                ->update([
+                    'is_logged_out' => true,
+                    'logged_out_at' => now(),
+                ]);
+
+            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan dari semua device.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal mengeluarkan user.');
+        }
+    }
+
+    public function reactivateUser($id)
+    {
+        try {
+            $user = Petugas::findOrFail($id);
+            $user->update(['is_forced_logout' => false]);
+            return redirect()->route('user')->with('success', 'User berhasil diaktifkan kembali.');
+        } catch (\Exception $e) {
+            return redirect()->route('user')->with('error', 'Gagal mengaktifkan kembali user.');
         }
     }
 
@@ -141,26 +179,8 @@ class AdminController extends Controller
         }
     }
 
-    public function forceLogout($id)
-    {
-        try {
-            $user = Petugas::findOrFail($id);
-            $user->update(['is_forced_logout' => true]);
-            return redirect()->route('user')->with('success', 'User berhasil dikeluarkan.');
-        } catch (\Exception $e) {
-            return redirect()->route('user')->with('error', 'Gagal mengeluarkan user.');
-        }
-    }
+   
 
-    public function reactivateUser($id)
-    {
-        try {
-            $user = Petugas::findOrFail($id);
-            $user->update(['is_forced_logout' => false]);
-            return redirect()->route('user')->with('success', 'User berhasil diaktifkan kembali.');
-        } catch (\Exception $e) {
-            return redirect()->route('user')->with('error', 'Gagal mengaktifkan kembali user.');
-        }
-    }
+   
 
 }

@@ -14,6 +14,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('submitLogin'); // Route untuk proses login
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Route untuk logout
 
+Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
 // Middleware untuk admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
@@ -50,3 +51,5 @@ Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [AdminController::cl
 Route::middleware(['auth', 'role:operator'])->group(function () {
     Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
 });
+});
+

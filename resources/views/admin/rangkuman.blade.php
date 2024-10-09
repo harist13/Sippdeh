@@ -43,7 +43,7 @@
         <!-- Table Header -->
         <div class="flex flex-wrap-mobile justify-between items-center mb-4">
             <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile mb-4 sm:mb-0">
-                <button id="tpsBtn" class="px-4 py-2 bg-blue-700 text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
+                <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
                 <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">SUARA</button>
                 <button id="paslonBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">PASLON</button>
             </div>
@@ -100,7 +100,7 @@
         <div id="tpsTable" class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="bg-blue-700 text-white">
+                    <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-2 text-left">No</th>
                         <th class="px-4 py-2 text-left">KAB/KOTA</th>
                         <th class="px-4 py-2 text-left">KECAMATAN</th>
@@ -129,7 +129,7 @@
         <div id="suaraTable" class="hidden overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="bg-blue-700 text-white">
+                    <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-2 text-left">No</th>
                         <th class="px-4 py-2 text-left">KAB/KOTA</th>
                         <th class="px-4 py-2 text-left">SUARA SAH</th>
@@ -158,7 +158,7 @@
         <div id="paslonTable" class="hidden overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="bg-blue-700 text-white">
+                    <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-2 text-left">No</th>
                         <th class="px-4 py-2 text-left">NAMA PASLON</th>
                         <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
@@ -197,7 +197,7 @@
             <span class="text-gray-600 w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">1 - 10 dari 40 tabel</span>
             <div class="flex space-x-2 w-full sm:w-auto justify-center sm:justify-end">
                 <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Previous</button>
-                <button class="px-3 py-1 bg-blue-700 text-white rounded">1</button>
+                <button class="px-3 py-1 bg-[#3560A0] text-white rounded">1</button>
                 <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">2</button>
                 <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Next</button>
             </div>
@@ -212,10 +212,10 @@
         document.getElementById('suaraTable').classList.add('hidden');
         document.getElementById('paslonTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-700', 'text-white');
-        document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
+        this.classList.add('bg-[#3560A0]', 'text-white');
+        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('paslonBtn').classList.remove('bg-blue-700', 'text-white');
+        document.getElementById('paslonBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('paslonBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
@@ -224,10 +224,10 @@
         document.getElementById('suaraTable').classList.remove('hidden');
         document.getElementById('paslonTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-700', 'text-white');
-        document.getElementById('tpsBtn').classList.remove('bg-blue-700', 'text-white');
+        this.classList.add('bg-[#3560A0]', 'text-white');
+        document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('paslonBtn').classList.remove('bg-blue-700', 'text-white');
+        document.getElementById('paslonBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('paslonBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
@@ -236,10 +236,10 @@
         document.getElementById('suaraTable').classList.add('hidden');
         document.getElementById('paslonTable').classList.remove('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-700', 'text-white');
-        document.getElementById('tpsBtn').classList.remove('bg-blue-700', 'text-white');
+        this.classList.add('bg-[#3560A0]', 'text-white');
+        document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('suaraBtn').classList.remove('bg-blue-700', 'text-white');
+        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 

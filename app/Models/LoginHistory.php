@@ -14,6 +14,8 @@ class LoginHistory extends Model
         'ip_address',
         'user_agent',
         'login_at',
+        'is_logged_out',
+        'logged_out_at',
     ];
 
     public function user()
@@ -23,6 +25,7 @@ class LoginHistory extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('login_at', '>=', now()->subDays(1));
+        return $query->where('login_at', '>=', now()->subDays(1))
+                     ->where('is_logged_out', false);
     }
 }

@@ -42,7 +42,7 @@
 
 <!-- Sidebar -->
 <div id="sidebar" class="fixed top-0 left-0 z-1050 w-64 h-full overflow-y-auto bg-white shadow-lg sidebar hidden">
-    <div class="flex items-center justify-between p-4 bg-blue-700">
+    <div class="flex items-center justify-between p-4 bg-[#3560A0]">
         <h2 class="text-xl font-bold text-white">PILKADA PROVINSI</h2>
         <button id="closeSidebar" class="text-white focus:outline-none">
             <i class="fas fa-times"></i>
