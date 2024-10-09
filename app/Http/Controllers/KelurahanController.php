@@ -14,10 +14,23 @@ class KelurahanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $kecamatan = Kecamatan::all();
-        $kelurahan = Kelurahan::orderByDesc('id')->paginate(10);
+        $kelurahanQuery = Kelurahan::query();
+
+        if ($request->has('cari')) {
+            $kataKunci = $request->get('cari');
+
+            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            if ($kataKunci == '') {
+                return redirect()->route('kelurahan');
+            }
+
+            $kelurahanQuery->whereLike('nama', "%$kataKunci%");
+        }
+
+        $kelurahan = $kelurahanQuery->orderByDesc('id')->paginate(10);
         
         return view('admin.kelurahan.index', compact('kecamatan', 'kelurahan'));
     }
