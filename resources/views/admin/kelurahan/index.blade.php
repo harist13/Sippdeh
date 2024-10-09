@@ -75,15 +75,36 @@
                 <span class="text-lg font-bold"><i class="fas fa-city"></i> Kelurahan</span>
             </div>
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
-                <div class="relative w-full-mobile">
-                    <button id="dropdownButton" class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
+                <div class="relative w-[300px] w-full-mobile">
+                    <button id="dropdownButton" class="bg-gray-100 w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
                         Pilih Kab/Kota <i class="fas fa-chevron-right ml-2"></i>
                     </button>
-                    <div id="dropdownMenu" class="absolute mt-2 w-full rounded-lg shadow-lg bg-white z-10 hidden">
+                    <div id="dropdownMenu" class="absolute mt-2 inset-x-0 rounded-lg shadow-lg bg-white z-10 hidden">
                         <ul class="py-1 text-gray-700">
-                            <li class="px-4 py-2 hover:bg-gray-100">Samarinda</li>
-                            <li class="px-4 py-2 hover:bg-gray-100">Balikpapan</li>
-                            <!-- Add more cities as needed -->
+                            @if (request()->has('cari'))
+                                <a href="{{ route('kelurahan') }}?cari={{ request()->get('cari') }}">
+                                    <li class="px-4 py-2 hover:bg-gray-100">
+                                        Semua
+                                    </li>
+                                </a>
+                            @else
+                                <a href="{{ route('kelurahan') }}">
+                                    <li class="px-4 py-2 hover:bg-gray-100">
+                                        Semua
+                                    </li>
+                                </a>
+                            @endif
+                            @foreach ($kabupaten as $kab)
+                                @if (request()->has('cari'))
+                                    <a href="{{ route('kelurahan') }}?cari={{ request()->get('cari') }}&kabupaten={{ $kab->id }}">   
+                                        <li class="px-4 py-2 hover:bg-gray-100">{{ $kab->nama }}</li>
+                                    </a>
+                                @else
+                                    <a href="{{ route('kelurahan') }}?kabupaten={{ $kab->id }}">
+                                        <li class="px-4 py-2 hover:bg-gray-100">{{ $kab->nama }}</li>
+                                    </a>
+                                @endif
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -94,6 +115,9 @@
                           <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                         </svg>
                         <input type="search" placeholder="Cari Kelurahan" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                        @if (request()->has('kabupaten'))
+                            <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
+                        @endif
                     </div>                  
                 </form>
 
