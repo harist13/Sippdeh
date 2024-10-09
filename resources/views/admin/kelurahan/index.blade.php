@@ -142,10 +142,6 @@
         menu.classList.toggle('hidden');
     });
 
-    cancelEditKelurahan.onclick = function() {
-        editKelurahanModal.classList.add('hidden');
-    }
-
     // Close modals when clicking outside
     window.onclick = function(event) {
         if (event.target == addKelurahanModal) {

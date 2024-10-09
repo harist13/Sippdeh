@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreKelurahanRequest;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use Exception;
 use Illuminate\Http\Request;
 
 class KelurahanController extends Controller
@@ -30,9 +32,20 @@ class KelurahanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreKelurahanRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $kelurahan = new Kelurahan();
+            $kelurahan->nama = $validated['nama'];
+            $kelurahan->kecamatan_id = $validated['kecamatan_id'];
+            $kelurahan->save();
+
+            return redirect()->back()->with('status_pembuatan_kelurahan', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_pembuatan_kelurahan', 'gagal');
+        }
     }
 
     /**
