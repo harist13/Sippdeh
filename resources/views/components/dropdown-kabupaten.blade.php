@@ -22,11 +22,11 @@
             @foreach ($kabupaten as $kab)
                 @if (request()->has('cari'))
                     <a href="{{ route($routeName) }}?cari={{ request()->get('cari') }}&kabupaten={{ $kab->id }}" class="line-clamp-1 text-ellipsis">
-                        <li class="px-4 py-2 hover:bg-gray-100">{{ $kab->nama }}</li>
+                        <li class="px-4 py-2 {{ request()->get('kabupaten') == $kab->id ? 'bg-[#3560A0] text-white' : 'hover:bg-gray-100' }}">{{ $kab->nama }}</li>
                     </a>
                 @else
                     <a href="{{ route($routeName) }}?kabupaten={{ $kab->id }}" class="line-clamp-1 text-ellipsis">
-                        <li class="px-4 py-2 hover:bg-gray-100">{{ $kab->nama }}</li>
+                        <li class="px-4 py-2 {{ request()->get('kabupaten') == $kab->id ? 'bg-[#3560A0] text-white' : 'hover:bg-gray-100' }}">{{ $kab->nama }}</li>
                     </a>
                 @endif
             @endforeach
