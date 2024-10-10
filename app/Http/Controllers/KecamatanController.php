@@ -25,15 +25,24 @@ class KecamatanController extends Controller
 
             // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
+                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
+                if ($request->has('kabupaten')) {
+                    return redirect()->route('kecamatan', ['kabupaten' => $request->get('kabupaten')]);
+                }
+
                 return redirect()->route('kecamatan');
             }
 
             $kecamatanQuery->whereLike('nama', "%$kataKunci%");
         }
 
-        $kecamatan = $kecamatanQuery->orderByDesc('id')->paginate(10);
+        if ($request->has('kabupaten')) {
+            $kecamatanQuery->where('kabupaten_id', $request->get('kabupaten'));
+        }
 
-        return view('admin.kecamatan.index', compact('kecamatan', 'kabupaten'));
+        $kecamatan = $kecamatanQuery->orderByDesc('id')->paginate(10);
+        
+        return view('admin.kecamatan.index', compact('kabupaten', 'kecamatan'));
     }
 
     /**
@@ -53,8 +62,8 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kabupaten = new Kecamatan();
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->kabupaten_id = $validated['kabupaten_id'];
+            $kabupaten->nama = $validated['nama_kecamatan_baru'];
+            $kabupaten->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pembuatan_kecamatan', 'berhasil');
@@ -88,8 +97,8 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kabupaten = Kecamatan::find($id);
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->kabupaten_id = $validated['kabupaten_id'];
+            $kabupaten->nama = $validated['nama_kecamatan'];
+            $kabupaten->kabupaten_id = $validated['kabupaten_id_kecamatan'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pengeditan_kecamatan', 'berhasil');

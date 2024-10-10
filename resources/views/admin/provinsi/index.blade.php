@@ -118,7 +118,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
-                    @foreach ($provinsi as $p)
+                    @forelse ($provinsi as $p)
                         <tr class="hover:bg-gray-200">
                             <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile" data-id="{{ $p->id }}">{{ $p->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->nama }}</td>
@@ -131,7 +131,17 @@
                                 </button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr class="hover:bg-gray-200 text-center">
+                            <td class="py-5" colspan="4">
+                                @if (request()->has('cari'))
+                                    <p>Tidak ada data provinsi dengan kata kunci "{{ request()->get('cari') }}"</p>
+                                @else
+                                    <p>Belum ada data provinsi</p>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
