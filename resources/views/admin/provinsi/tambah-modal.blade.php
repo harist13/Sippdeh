@@ -37,9 +37,3 @@
         showAddProvinsiModal();
     </script>
 @enderror
-
-@error('kecamatan_id')
-    <script>
-        showAddProvinsiModal();
-    </script>
-@enderror
