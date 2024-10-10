@@ -24,24 +24,24 @@ class UpdateKabupatenRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama' => [
+            'nama_kabupaten' => [
                 'required',
                 'max:300',
                 Rule::unique('kabupaten', 'nama')->ignore($id)
             ],
-            'provinsi_id' => 'required|exists:provinsi,id'
+            'provinsi_id_kabupaten' => 'required|exists:provinsi,id'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama.required' => 'Mohon isi nama kabupaten.',
-            'nama.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'nama_kabupaten.required' => 'Mohon isi nama kabupaten.',
+            'nama_kabupaten.unique' => 'Kabupaten tersebut sudah ada.',
+            'nama_kabupaten.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
 
-            'provinsi_id.required' => 'Mohon pilih provinsi untuk kota tersebut.',
-            'provinsi_id.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
+            'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
         ];
     }
 }

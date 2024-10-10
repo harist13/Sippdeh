@@ -14,11 +14,25 @@ class KabupatenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $provinsi = Provinsi::all();
-        $kabupaten = Kabupaten::orderByDesc('id')->paginate(10);
-        return view('admin.kabupaten.index', compact('provinsi', 'kabupaten'));
+        $kabupatenQuery = Kabupaten::query();
+
+        if ($request->has('cari')) {
+            $kataKunci = $request->get('cari');
+
+            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            if ($kataKunci == '') {
+                return redirect()->route('kabupaten');
+            }
+
+            $kabupatenQuery->whereLike('nama', "%$kataKunci%");
+        }
+
+        $kabupaten = $kabupatenQuery->orderByDesc('id')->paginate(10);
+
+        return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
     }
 
     /**
@@ -38,8 +52,8 @@ class KabupatenController extends Controller
             $validated = $request->validated();
 
             $kabupaten = new Kabupaten();
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->nama = $validated['nama_kabupaten_baru'];
+            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten_baru'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pembuatan_kabupaten', 'berhasil');
@@ -73,8 +87,8 @@ class KabupatenController extends Controller
             $validated = $request->validated();
 
             $kabupaten = Kabupaten::find($id);
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->nama = $validated['nama_kabupaten'];
+            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pengeditan_kabupaten', 'berhasil');

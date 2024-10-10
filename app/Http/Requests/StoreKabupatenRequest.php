@@ -22,20 +22,20 @@ class StoreKabupatenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|unique:kabupaten|max:300',
-            'provinsi_id' => 'required|exists:provinsi,id'
+            'nama_kabupaten_baru' => 'required|unique:kabupaten,nama|max:300',
+            'provinsi_id_kabupaten_baru' => 'required|exists:provinsi,id'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama.required' => 'Mohon isi nama kabupaten.',
-            'nama.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'nama_kabupaten_baru.required' => 'Mohon isi nama kabupaten.',
+            'nama_kabupaten_baru.unique' => 'Kabupaten tersebut sudah ada.',
+            'nama_kabupaten_baru.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
 
-            'provinsi_id.required' => 'Mohon pilih provinsi untuk kota tersebut.',
-            'provinsi_id.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
+            'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
         ];
     }
 }
