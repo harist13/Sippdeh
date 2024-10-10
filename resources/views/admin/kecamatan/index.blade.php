@@ -138,7 +138,16 @@
 @include('admin.kecamatan.hapus-modal')
 
 <script>
-    window.onclick = function(event) {
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if (event.key === "Escape") {
+            closeAddKecamatanModal();
+            closeEditKecamatanModal();
+            closeDeleteKecamatanModal();
+        }
+    });
+
+    document.addEventListener('click', function(event) {
         if (event.target == addKecamatanModal) {
             addKecamatanModal.classList.add('hidden');
         }
@@ -146,7 +155,11 @@
         if (event.target == editKecamatanModal) {
             editKecamatanModal.classList.add('hidden');
         }
-    }
+
+        if (event.target == deleteKecamatanModal) {
+            deleteKecamatanModal.classList.add('hidden');
+        }
+    });
 </script>
 
 @include('admin.layout.footer')
