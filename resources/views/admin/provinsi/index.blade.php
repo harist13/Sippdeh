@@ -145,19 +145,27 @@
 @include('admin.provinsi.hapus-modal')
 
 <script>
-    function toggleCitiesDropdown() {
+    // Dropdown kabupaten/kota
+    document.getElementById('dropdownButton').addEventListener('click', function() {
         const menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
-    }
+    });
 
-    document.getElementById('dropdownButton').addEventListener('click', toggleCitiesDropdown);
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if(event.key === "Escape") {
+            closeAddProvinsiModal();
+            closeEditProvinsiModal();
+            closeDeleteProvinsiModal();
+        }
+    });
 
-    // Close modals when clicking outside
-    window.addEventListener('click', function(event) {
+    // Tutup modal saat overlay diklik
+    document.addEventListener('click', function(event) {
         if (event.target == addProvinsiModal) {
             closeAddProvinsiModal();
         }
-        
+
         if (event.target == editProvinsiModal) {
             closeEditProvinsiModal();
         }
