@@ -211,7 +211,7 @@
                         <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-gray-100">
                     <tr>
                         <td>01</td>
                         <td>Andi Harun/Saefuddin Zuhri</td>

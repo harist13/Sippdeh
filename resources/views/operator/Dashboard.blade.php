@@ -123,7 +123,7 @@
                                 <th>PARTISIPASI</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-gray-100">
                             <tr>
                                 <td>01</td>
                                 <td>Samarinda</td>
@@ -227,7 +227,7 @@
                                 <th>PARTISIPASI</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-gray-100">
                             <tr>
                                 <td>01</td>
                                 <td>Samarinda</td>
@@ -331,7 +331,7 @@
                                 <th>PARTISIPASI</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-gray-100">
                             <tr>
                                 <td>01</td>
                                 <td>Andi Harun<br>Saefuddin Zuhri</td>

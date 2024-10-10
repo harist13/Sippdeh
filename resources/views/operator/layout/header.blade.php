@@ -79,7 +79,7 @@
                     <i class="mr-2 fas fa-user-circle"></i> Input Data Paslon
                 </a>
                  <a href="{{ route('input-tps.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 fas fa-user-circle"></i> Input Data TPS
+                    <i class="mr-2 fas fa-archive"></i> Input Data TPS
                 </a>
             </div>
         </div>

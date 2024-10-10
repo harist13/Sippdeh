@@ -248,7 +248,7 @@
                         <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-gray-100 text-center">
                     <tr>
                         <td>01</td>
                         <td>Kecamatan A</td>

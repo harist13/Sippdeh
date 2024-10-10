@@ -253,7 +253,7 @@
                 <th class="action-column">Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-gray-100 text-center">
             <tr>
                 <td>01</td>
                 <td>Palaran</td>
@@ -271,7 +271,7 @@
                     <i class="fas fa-pen action-icon"></i>
                 </td>
             </tr>
-            <tr class="gray-bg">
+            <tr>
                 <td>02</td>
                 <td>Samarinda Ulu</td>
                 <td>Bugis</td>
@@ -288,7 +288,7 @@
                     <i class="fas fa-pen action-icon"></i>
                 </td>
             </tr>
-            <tr class="gray-bg">
+            <tr>
                 <td>03</td>
                 <td>Samarinda Ilir</td>
                 <td>Selili</td>
@@ -305,7 +305,7 @@
                     <i class="fas fa-pen action-icon"></i>
                 </td>
             </tr>
-            <tr class="gray-bg">
+            <tr>
                 <td>04</td>
                 <td>Sambutan</td>
                 <td>Makroman</td>
