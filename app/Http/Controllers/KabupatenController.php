@@ -38,8 +38,8 @@ class KabupatenController extends Controller
             $validated = $request->validated();
 
             $kabupaten = new Kabupaten();
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->nama = $validated['nama_kabupaten_baru'];
+            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten_baru'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pembuatan_kabupaten', 'berhasil');
@@ -73,8 +73,8 @@ class KabupatenController extends Controller
             $validated = $request->validated();
 
             $kabupaten = Kabupaten::find($id);
-            $kabupaten->nama = $validated['nama'];
-            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            $kabupaten->nama = $validated['nama_kabupaten'];
+            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten'];
             $kabupaten->save();
 
             return redirect()->back()->with('status_pengeditan_kabupaten', 'berhasil');
