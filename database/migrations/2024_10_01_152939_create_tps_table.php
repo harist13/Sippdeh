@@ -10,10 +10,8 @@ return new class extends Migration
     {
         Schema::create('tps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('cascade');
-            $table->foreignId('kecamatan_id')->constrained('kecamatan')->onDelete('cascade');
+            $table->string('nama');
             $table->foreignId('kelurahan_id')->constrained('kelurahan')->onDelete('cascade');
-            $table->string('TPS');
             $table->timestamps();
         });
     }
