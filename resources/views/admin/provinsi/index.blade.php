@@ -155,12 +155,6 @@
 @include('admin.provinsi.hapus-modal')
 
 <script>
-    // Dropdown kabupaten/kota
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-        const menu = document.getElementById('dropdownMenu');
-        menu.classList.toggle('hidden');
-    });
-
     // Tutup modal saat tombol esc di tekan
     document.addEventListener('keyup', function(event) {
         if(event.key === "Escape") {

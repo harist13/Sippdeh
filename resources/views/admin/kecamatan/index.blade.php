@@ -138,26 +138,28 @@
 @include('admin.kecamatan.hapus-modal')
 
 <script>
-    // Dropdown functionality
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-        var menu = document.getElementById('dropdownMenu');
-        menu.classList.toggle('hidden');
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if (event.key === "Escape") {
+            closeAddKecamatanModal();
+            closeEditKecamatanModal();
+            closeDeleteKecamatanModal();
+        }
     });
 
-    cancelEditKecamatan.onclick = function() {
-        editKecamatanModal.classList.add('hidden');
-    }
-
-    // Close modals when clicking outside
-    window.onclick = function(event) {
+    document.addEventListener('click', function(event) {
         if (event.target == addKecamatanModal) {
-            addKecamatanModal.classList.add('hidden');
+            closeAddKecamatanModal();
         }
 
         if (event.target == editKecamatanModal) {
-            editKecamatanModal.classList.add('hidden');
+            closeEditKecamatanModal();
         }
-    }
+
+        if (event.target == deleteKecamatanModal) {
+            closeDeleteKecamatanModal();
+        }
+    });
 </script>
 
 @include('admin.layout.footer')
