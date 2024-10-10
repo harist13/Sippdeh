@@ -75,7 +75,7 @@
         @endif
     @endif
 
-    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
             <div class="flex items-center space-x-2 w-full-mobile">
                 <span class="text-lg font-bold"><i class="fas fa-map-marked-alt"></i> Provinsi</span>
