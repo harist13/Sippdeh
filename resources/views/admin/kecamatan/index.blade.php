@@ -160,4 +160,8 @@
     }
 </script>
 
+<script>
+    
+</script>
+
 @include('admin.layout.footer')
