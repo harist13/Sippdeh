@@ -1,4 +1,5 @@
 @include('operator.layout.header')
+
 <style>
     body {
         font-family: 'Inter', sans-serif;
@@ -39,6 +40,21 @@
     .filter-item i {
         margin-right: 8px;
     }
+
+     .action-column {
+        width: 60px;
+        text-align: center;
+    }
+    .action-icon {
+        color: #3560a0;
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    .action-icon:hover {
+        color: #1e3a8a;
+    }
+    
     .dropdown {
         position: relative;
         display: inline-block;
@@ -93,11 +109,12 @@
     }
     .table-container {
         overflow-x: auto;
+        padding-bottom: 15px;
     }
     .table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 600px;
+        min-width: 1200px;
     }
     .table th {
         background-color: #3560a0;
@@ -105,10 +122,12 @@
         text-align: left;
         padding: 15px;
         font-weight: 600;
+        white-space: nowrap;
     }
     .table td {
         padding: 15px;
         border-bottom: 1px solid #e6e6e6;
+        white-space: nowrap;
     }
     .btn {
         background-color: #3560a0;
@@ -150,6 +169,18 @@
         text-align: center;
     }
 
+    /* Custom scrollbar for table container */
+    .table-container::-webkit-scrollbar {
+        height: 8px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+    }
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background-color: #888;
+    }
+
     @media (min-width: 768px) {
         .filters {
             flex-direction: row;
@@ -171,7 +202,7 @@
             <div class="filter-left">
                 <div class="">
                     <i class="fas fa-users"></i>
-                    Pilih Paslon
+                    Total Suara
                 </div>
             </div>
             <div class="filter-right">
@@ -206,54 +237,61 @@
                 <thead>
                     <tr>
                         <th>NO</th>
-                        <th>NAMA PASLON</th>
-                        <th>KABUPATEN/KOTA</th>
+                        <th>KECAMATAN</th>
+                        <th>DPT</th>
+                        <th>ANDI HARUN/ SAEFUDDIN ZUHRI</th>
+                        <th>SUARA SAH</th>
+                        <th>SUARA TDK SAH</th>
+                        <th>JML PENG HAK PILIH</th>
+                        <th>JML PENG TDK PILIH</th>
+                        <th>PARTISIPASI</th>
                         <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>01</td>
-                        <td>Andi Harun/Saefuddin Zuhri</td>
-                        <td>Samarinda</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
+                        <td>Kecamatan A</td>
+                        <td>10000</td>
+                        <td>5000</td>
+                        <td>9500</td>
+                        <td>500</td>
+                        <td>10000</td>
+                        <td>0</td>
+                        <td>100%</td>
+                        <td class="action-column">
+                            <i class="fas fa-pen action-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>02</td>
-                        <td>Rahmad Mas'ud/Bagus Susetyo</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
+                        <td>Kecamatan B</td>
+                        <td>15000</td>
+                        <td>7500</td>
+                        <td>14000</td>
+                        <td>1000</td>
+                        <td>15000</td>
+                        <td>1000</td>
+                        <td>93.33%</td>
+                        <td class="action-column">
+                            <i class="fas fa-pen action-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>03</td>
-                        <td>Rendi Susiswo Ismail/Eddy Sunardi Darmawan</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
+                        <td>Kecamatan C</td>
+                        <td>12000</td>
+                        <td>6000</td>
+                        <td>11500</td>
+                        <td>500</td>
+                        <td>12000</td>
+                        <td>500</td>
+                        <td>95.83%</td>
+                        <td class="action-column">
+                            <i class="fas fa-pen action-icon"></i>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>04</td>
-                        <td>Muhammad Sa'bani/Syukri Wahid</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
-                    </tr>
-                    <tr>
-                        <td>05</td>
-                        <td>Neni Moerniaeni/Agus Haris</td>
-                        <td>Bontang</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
-                    </tr>
-                    <tr>
-                        <td>06</td>
-                        <td>Basri Rase/Chusnul Dhihin</td>
-                        <td>Bontang</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
-                    </tr>
-                    <tr>
-                        <td>07</td>
-                        <td>Najirah/Muhammad Aswar</td>
-                        <td>Bontang</td>
-                        <td class="action-column"><button class="btn">Pilih</button></td>
-                    </tr>
+                    <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </div>

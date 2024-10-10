@@ -75,10 +75,10 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="{{ route('operator.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('input-paslon.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-user-circle"></i> Input Data Paslon
                 </a>
-                 <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                 <a href="{{ route('input-tps.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-user-circle"></i> Input Data TPS
                 </a>
             </div>

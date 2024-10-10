@@ -301,8 +301,6 @@
 
             <!-- Table 3: Paslon Dengan Suara Terbanyak -->
             <div>
-                <div class="flex flex-col sm:<!-- Table 3: Paslon Dengan Suara Terbanyak -->
-            <div>
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
                     <div class="flex items-center space-x-2">
                         <img src="{{ asset('assets/users.png')}}" alt="">

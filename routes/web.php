@@ -10,6 +10,8 @@ use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KelurahanController;
 use App\Http\Controllers\PaslonController;
 use App\Http\Controllers\TPSController;
+use App\Http\Controllers\InputPaslonController;
+use App\Http\Controllers\InputTpsController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -58,8 +60,10 @@ Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [AdminController::cl
 
 // Middleware untuk operator
 Route::middleware(['auth', 'role:operator'])->group(function () {
-    Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
-    Route::get('/operator/input-paslon', [PaslonController::class, 'Index'])->name('operator.index');
+     Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
+    Route::get('/operator/input-paslon', [InputPaslonController::class, 'Index'])->name('input-paslon.index');
+    Route::get('/operator/nama-paslon', [InputPaslonController::class, 'namapaslon'])->name('input-paslon.namapaslon');
+    Route::get('/operator/input-tps', [InputTpsController::class, 'index'])->name('input-tps.index');
 
 });
 });
