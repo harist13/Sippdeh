@@ -22,16 +22,16 @@ class StoreProvinsiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|unique:provinsi|max:300'
+            'nama_provinsi_baru' => 'required|unique:provinsi,nama|max:300'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama.required' => 'Mohon isi nama provinsi.',
-            'nama.unique' => 'Provinsi tersebut sudah ada.',
-            'nama.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
+            'nama_provinsi_baru.required' => 'Mohon isi nama provinsi.',
+            'nama_provinsi_baru.unique' => 'Provinsi tersebut sudah ada.',
+            'nama_provinsi_baru.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
         ];
     }
 }

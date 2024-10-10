@@ -36,7 +36,7 @@ class ProvinsiController extends Controller
             $validated = $request->validated();
 
             $provinsi = new Provinsi();
-            $provinsi->nama = $validated['nama'];
+            $provinsi->nama = $validated['nama_provinsi_baru'];
             $provinsi->save();
     
             return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
