@@ -9,7 +9,7 @@ use App\Http\Controllers\KabupatenController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KelurahanController;
 use App\Http\Controllers\PaslonController;
-
+use App\Http\Controllers\TPSController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -40,7 +40,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'index' => 'kelurahan'
     ]);
 
-    Route::get('/tps', [AdminController::class, 'tps'])->name('tps');
+    Route::resource('tps', TPSController::class)->names([
+        'index' => 'tps'
+    ]);
+
     Route::get('/user', [AdminController::class, 'user'])->name('user');
     Route::post('/storeUser', [AdminController::class, 'storeUser'])->name('storeUser');
     Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
