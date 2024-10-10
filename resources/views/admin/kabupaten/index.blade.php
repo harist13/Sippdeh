@@ -102,7 +102,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
-                    @foreach ($kabupaten as $kota)
+                    @forelse ($kabupaten as $kota)
                         <tr class="hover:bg-gray-200">
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $kota->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}">{{ $kota->nama }}</td>
@@ -112,7 +112,17 @@
                                 <button class="text-red-600 hover:text-red-900 ml-3 hapus-kabupaten-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr class="hover:bg-gray-200 text-center">
+                            <td class="py-5" colspan="4">
+                                @if (request()->has('cari'))
+                                    <p>Tidak ada data kabupaten dengan kata kunci "{{ request()->get('cari') }}"</p>
+                                @else
+                                    <p>Belum ada data kabupaten</p>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
