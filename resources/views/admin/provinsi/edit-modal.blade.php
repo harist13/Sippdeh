@@ -5,10 +5,10 @@
             @csrf
             @method('PUT')
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Provinsi</h3>
-            <input type="text" id="editProvinsiName" name="nama"
+            <input type="text" id="editProvinsiName" name="nama_provinsi"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama provinsi" required>
-            <span class="text-red-800">{{ $errors->first('nama') }}</span>
+            <span class="text-red-800">{{ $errors->first('nama_provinsi') }}</span>
             <hr class="h-1 my-3">
             <div class="flex items-center">
                 <button type="button" id="cancelEditProvinsi"
@@ -61,3 +61,9 @@
 
     document.getElementById('cancelEditProvinsi').addEventListener('click', closeEditProvinsiModal);
 </script>
+
+@error('nama_provinsi')
+    <script>
+        showEditProvinsiModal();
+    </script>
+@enderror

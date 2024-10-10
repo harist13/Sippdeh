@@ -70,7 +70,7 @@ class ProvinsiController extends Controller
             $validated = $request->validated();
 
             $provinsi = Provinsi::find($id);
-            $provinsi->nama = $validated['nama'];
+            $provinsi->nama = $validated['nama_provinsi'];
             $provinsi->save();
     
             return redirect()->back()->with('status_pengeditan_provinsi', 'berhasil');
