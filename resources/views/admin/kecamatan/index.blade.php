@@ -149,15 +149,15 @@
 
     document.addEventListener('click', function(event) {
         if (event.target == addKecamatanModal) {
-            addKecamatanModal.classList.add('hidden');
+            closeAddKecamatanModal();
         }
 
         if (event.target == editKecamatanModal) {
-            editKecamatanModal.classList.add('hidden');
+            closeEditKecamatanModal();
         }
 
         if (event.target == deleteKecamatanModal) {
-            deleteKecamatanModal.classList.add('hidden');
+            closeDeleteKecamatanModal();
         }
     });
 </script>
