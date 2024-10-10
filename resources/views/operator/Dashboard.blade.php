@@ -1,15 +1,20 @@
 @include('operator.layout.header')
- <style>
-        .table-separator {
-            height: 3px;
-            background-color: #d9d9d9;
-            margin: 2rem 0;
-        }
-        .custom-table th, .custom-table td {
-            padding: 0.75rem 1rem;
-        }
-
-         .custom-title-container {
+<style>
+    .table-separator {
+        height: 3px;
+        background-color: #d9d9d9;
+        margin: 2rem 0;
+    }
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .custom-table th, .custom-table td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        white-space: nowrap;
+    }
+    .custom-title-container {
         background-color: #f8f9fa;
         border-radius: 0.25rem;
         padding: 0.75rem 1rem;
@@ -24,54 +29,46 @@
         line-height: 1.4;
         margin: 0;
     }
-        .custom-table th {
-            background-color: #3560a0;
-            color: white;
-            font-weight: 600;
-        }
-        .custom-table tr {
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .participation-cell {
-            width: 120px;
-            text-align: center;
-        }
-        .participation-button {
-            width: 100%;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-        }
-        .participation-button.green {
-            background-color: #10B981;
-        }
-        .participation-button.yellow {
-            background-color: #F59E0B;
-        }
-        .participation-button.red {
-            background-color: #EF4444;
-        }
-    </style>
+    .custom-table th {
+        background-color: #3560a0;
+        color: white;
+        font-weight: 600;
+    }
+    .custom-table tr {
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .participation-cell {
+        width: 120px;
+        text-align: center;
+    }
+    .participation-button {
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-align: center;
+        color: white;
+    }
+    .participation-button.green { background-color: #10B981; }
+    .participation-button.yellow { background-color: #F59E0B; }
+    .participation-button.red { background-color: #EF4444; }
+</style>
 <body class="bg-gray-100 font-sans">
-   
-
     <main class="container mx-auto px-4 py-8">
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-           <div class="custom-title-container">
-    <h2 class="custom-title">
-        Data Perolehan Suara Calon Gubernur dan Wakil Gubernur<br>
-        di Tingkat Provinsi
-    </h2>
-</div>
+            <div class="custom-title-container">
+                <h2 class="custom-title">
+                    Data Perolehan Suara Calon Gubernur dan Wakil Gubernur<br>
+                    di Tingkat Provinsi
+                </h2>
+            </div>
             
             <!-- Table 1: Partisipasi TPS Terbaik -->
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <img src="{{ asset('assets/Archive.png')}}" alt="">
                         <span class="text-sm font-medium">Partisipasi TPS Terbaik 1-10 Sekaltim</span>
                     </div>
                     <div class="flex space-x-2">
@@ -87,7 +84,7 @@
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="w-full custom-table">
+                    <table class="custom-table">
                         <thead>
                             <tr>
                                 <th>NO</th>
@@ -108,7 +105,51 @@
                                 <td>TPS 1</td>
                                 <td>55,345</td>
                                 <td class="participation-cell">
-                                    <div class="participation-button green">88%</div>
+                                    <div class="participation-button green">Hijau</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>Palaran</td>
+                                <td>Bantuas</td>
+                                <td>TPS 1</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button green">Hijau</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>Palaran</td>
+                                <td>Bantuas</td>
+                                <td>TPS 1</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button green">Hijau</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>Palaran</td>
+                                <td>Bantuas</td>
+                                <td>TPS 1</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button green">Hijau</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>Palaran</td>
+                                <td>Bantuas</td>
+                                <td>TPS 1</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button green">Hijau</div>
                                 </td>
                             </tr>
                             <!-- More rows would be added here -->
@@ -132,7 +173,7 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <img src="{{ asset('assets/dokumen.png')}}" alt="">
                         <span class="text-sm font-medium">Suara Terbanyak Kabupaten Kota Sekaltim</span>
                     </div>
                     <div class="flex space-x-2">
@@ -148,7 +189,7 @@
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="w-full custom-table">
+                    <table class="custom-table">
                         <thead>
                             <tr>
                                 <th>NO</th>
@@ -162,6 +203,50 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button red">30%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button yellow">50%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button green">70%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button red">30%</div>
+                                </td>
+                            </tr>
+                             <tr>
                                 <td>01</td>
                                 <td>Samarinda</td>
                                 <td>55,345</td>
@@ -193,7 +278,7 @@
             <div>
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <img src="{{ asset('assets/users.png')}}" alt="">
                         <span class="text-sm font-medium">Paslon Dengan Suara Terbanyak 1-10 Sekaltim</span>
                     </div>
                     <div class="flex space-x-2">
@@ -209,7 +294,7 @@
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="w-full custom-table">
+                    <table class="custom-table">
                         <thead>
                             <tr>
                                 <th>NO</th>
@@ -224,7 +309,7 @@
                         <tbody>
                             <tr>
                                 <td>01</td>
-                                <td>Andi Harun<br/>Saefuddin Zuhri</td>
+                                <td>Andi Harun<br>Saefuddin Zuhri</td>
                                 <td>Samarinda</td>
                                 <td>55,345</td>
                                 <td>55,345</td>
@@ -234,6 +319,50 @@
                                 </td>
                             </tr>
                             <!-- More rows would be added here -->
+                              <tr>
+                                <td>01</td>
+                                <td>Andi Harun<br>Saefuddin Zuhri</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button yellow">60%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Andi Harun<br>Saefuddin Zuhri</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button yellow">60%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Andi Harun<br>Saefuddin Zuhri</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button yellow">60%</div>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>01</td>
+                                <td>Andi Harun<br>Saefuddin Zuhri</td>
+                                <td>Samarinda</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td>55,345</td>
+                                <td class="participation-cell">
+                                    <div class="participation-button yellow">60%</div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -249,5 +378,5 @@
             </div>
         </div>
     </main>
-
-    @include('operator.layout.footer')
+</body>
+@include('operator.layout.footer')

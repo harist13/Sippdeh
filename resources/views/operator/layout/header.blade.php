@@ -60,10 +60,8 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 far fa-clipboard"></i> Rekapitulasi
-                </a>
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                
+                <a href="{{ route('operator.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-chart-bar"></i> Rangkuman
                 </a>
             </div>
@@ -72,13 +70,16 @@
         <div class="mb-2">
             <a href="#" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-100">
                 <span class="flex items-center">
-                    <i class="mr-3 fas fa-user"></i> User
+                    <i class="mr-3 fas fa-user"></i> Data
                 </span>
                 <i class="fas fa-chevron-right"></i>
             </a>
             <div class="submenu ml-8">
-                <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 fas fa-user-circle"></i> User
+                <a href="{{ route('operator.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                    <i class="mr-2 fas fa-user-circle"></i> Input Data Paslon
+                </a>
+                 <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                    <i class="mr-2 fas fa-user-circle"></i> Input Data TPS
                 </a>
             </div>
         </div>
