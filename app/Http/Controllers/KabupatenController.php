@@ -14,11 +14,25 @@ class KabupatenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $provinsi = Provinsi::all();
-        $kabupaten = Kabupaten::orderByDesc('id')->paginate(10);
-        return view('admin.kabupaten.index', compact('provinsi', 'kabupaten'));
+        $kabupatenQuery = Kabupaten::query();
+
+        if ($request->has('cari')) {
+            $kataKunci = $request->get('cari');
+
+            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            if ($kataKunci == '') {
+                return redirect()->route('kabupaten');
+            }
+
+            $kabupatenQuery->whereLike('nama', "%$kataKunci%");
+        }
+
+        $kabupaten = $kabupatenQuery->orderByDesc('id')->paginate(10);
+
+        return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
     }
 
     /**
