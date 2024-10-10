@@ -133,19 +133,29 @@
         menu.classList.toggle('hidden');
     });
 
-    cancelEditKabupaten.onclick = function() {
-        editKabupatenModal.classList.add('hidden');
-    }
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if(event.key === "Escape") {
+            closeAddKabupatenModal();
+            closeEditKabupatenModal();
+            closeDeleteKabupatenModal();
+        }
+    });
 
-    // Close modals when clicking outside
-    window.onclick = function(event) {
+    // Tutup modal saat overlay diklik
+    document.addEventListener('click', function(event) {
         if (event.target == addKabupatenModal) {
-            addKabupatenModal.classList.add('hidden');
+            closeAddKabupatenModal();
         }
+
         if (event.target == editKabupatenModal) {
-            editKabupatenModal.classList.add('hidden');
+            closeEditKabupatenModal();
         }
-    }
+
+        if (event.target == deleteKabupatenModal) {
+            closeDeleteKabupatenModal();
+        }
+    });
 </script>
 
 @include('admin.layout.footer')
