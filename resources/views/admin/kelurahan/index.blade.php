@@ -170,14 +170,23 @@
 @include('admin.kelurahan.hapus-modal')
 
 <script>
-    // Dropdown functionality
+    // Dropdown kabupaten/kota
     document.getElementById('dropdownButton').addEventListener('click', function() {
-        var menu = document.getElementById('dropdownMenu');
+        const menu = document.getElementById('dropdownMenu');
         menu.classList.toggle('hidden');
     });
 
-    // Close modals when clicking outside
-    window.onclick = function(event) {
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if(event.key === "Escape") {
+            closeAddKelurahanModal();
+            closeEditKelurahanModal();
+            closeDeleteKelurahanModal();
+        }
+    });
+
+    // Tutup modal saat overlay diklik
+    document.addEventListener('click', function(event) {
         if (event.target == addKelurahanModal) {
             closeAddKelurahanModal();
         }
@@ -189,7 +198,7 @@
         if (event.target == deleteKelurahanModal) {
             closeDeleteKelurahanModal();
         }
-    }
+    });
 </script>
 
 @include('admin.layout.footer')
