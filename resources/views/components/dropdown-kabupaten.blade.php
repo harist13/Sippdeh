@@ -3,8 +3,8 @@
         class="bg-gray-100 w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
         Pilih Kab/Kota <i class="fas fa-chevron-right ml-2"></i>
     </button>
-    <div id="dropdownMenu" class="absolute mt-2 inset-x-0 rounded-lg shadow-lg bg-white z-10 hidden">
-        <ul class="py-1 text-gray-700">
+    <div id="dropdownMenu" class="absolute h-[300px] overflow-y-scroll mt-2 inset-x-0 rounded-lg shadow-lg bg-white z-10 hidden">
+        <ul class=" text-gray-700">
             @if (request()->has('cari'))
                 <a href="{{ route($routeName) }}?cari={{ request()->get('cari') }}">
                     <li class="px-4 py-2 hover:bg-gray-100">
