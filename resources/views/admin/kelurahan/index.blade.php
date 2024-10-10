@@ -179,11 +179,15 @@
     // Close modals when clicking outside
     window.onclick = function(event) {
         if (event.target == addKelurahanModal) {
-            addKelurahanModal.classList.add('hidden');
+            closeAddKelurahanModal();
         }
 
         if (event.target == editKelurahanModal) {
-            editKelurahanModal.classList.add('hidden');
+            closeEditKelurahanModal();
+        }
+
+        if (event.target == deleteKelurahanModal) {
+            closeDeleteKelurahanModal();
         }
     }
 </script>

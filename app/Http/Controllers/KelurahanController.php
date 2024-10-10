@@ -65,7 +65,7 @@ class KelurahanController extends Controller
             $validated = $request->validated();
 
             $kelurahan = new Kelurahan();
-            $kelurahan->nama = $validated['nama'];
+            $kelurahan->nama = $validated['nama_kelurahan_baru'];
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
@@ -100,7 +100,7 @@ class KelurahanController extends Controller
             $validated = $request->validated();
 
             $kelurahan = Kelurahan::find($id);
-            $kelurahan->nama = $validated['nama'];
+            $kelurahan->nama = $validated['nama_kelurahan'];
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 

@@ -8,10 +8,10 @@
 
 			{{-- Nama kelurahan --}}
 			<label for="editKelurahanName" class="mb-1 block">Nama</label>
-            <input type="text" id="editKelurahanName" name="nama"
+            <input type="text" id="editKelurahanName" name="nama_kelurahan"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama kelurahan" required>
-            <span class="text-red-800">{{ $errors->first('nama') }}</span>
+            <span class="text-red-800">{{ $errors->first('nama_kelurahan') }}</span>
 
 			{{-- Kecamatan --}}
 			<label for="editKelurahanKecamatanId" class="my-1 block">Kecamatan</label>
@@ -85,9 +85,14 @@
     document.getElementById('cancelEditKelurahan').addEventListener('click', closeEditKelurahanModal);
 </script>
 
-@php $isThereAnyError = $errors->count() > 0; @endphp
-@if ($isThereAnyError)
+@error('nama_kelurahan')
     <script>
         showEditKelurahanModal();
     </script>
-@endif
+@enderror
+
+@error('kecamatan_id')
+    <script>
+        showEditKelurahanModal();
+    </script>
+@enderror

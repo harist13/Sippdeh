@@ -7,10 +7,10 @@
 
 			{{-- Nama kelurahan --}}
 			<label for="addKelurahanName" class="mb-1 block">Nama</label>
-            <input type="text" id="addKelurahanName" name="nama"
+            <input type="text" id="addKelurahanName" name="nama_kelurahan_baru"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama kelurahan" required>
-            <span class="text-red-800">{{ $errors->first('nama') }}</span>
+            <span class="text-red-800">{{ $errors->first('nama_kelurahan_baru') }}</span>
 
 			{{-- Kecamatan --}}
 			<label for="addKelurahanKecamatan" class="my-1 block">Kecamatan</label>
@@ -50,9 +50,14 @@
     document.getElementById('cancelAddKelurahan').addEventListener('click', closeAddKelurahanModal);
 </script>
 
-@php $isThereAnyError = $errors->count() > 0; @endphp
-@if ($isThereAnyError)
+@error('nama_kelurahan_baru')
     <script>
         showAddKelurahanModal();
     </script>
-@endif
+@enderror
+
+@error('kecamatan_id')
+    <script>
+        showAddKelurahanModal();
+    </script>
+@enderror
