@@ -61,7 +61,7 @@
             </a>
             <div class="submenu ml-8">
                 
-                <a href="{{ route('operator.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
+                <a href="{{ route('operator.dashboard')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
                     <i class="mr-2 fas fa-chart-bar"></i> Rangkuman
                 </a>
             </div>

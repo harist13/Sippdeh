@@ -17,16 +17,13 @@
     }
     .filters {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 15px;
         margin-bottom: 20px;
     }
-    .filter-left {
+    .filter-left, .filter-right {
         display: flex;
-        align-items: center;
-    }
-    .filter-right {
-        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
     }
     .filter-item {
@@ -37,6 +34,7 @@
         align-items: center;
         font-size: 14px;
         color: #344054;
+        flex-grow: 1;
     }
     .filter-item i {
         margin-right: 8px;
@@ -44,8 +42,8 @@
     .dropdown {
         position: relative;
         display: inline-block;
+        flex-grow: 1;
     }
-
     .dropbtn {
         background-color: #eceff5;
         color: #344054;
@@ -55,9 +53,10 @@
         cursor: pointer;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         border-radius: 8px;
+        width: 100%;
     }
-
     .dropdown-content {
         display: none;
         position: absolute;
@@ -68,26 +67,21 @@
         border-radius: 8px;
         overflow: hidden;
     }
-
     .dropdown-content a {
         color: black;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
     }
-
     .dropdown-content a:hover {
         background-color: #f1f1f1;
     }
-
     .dropdown:hover .dropdown-content {
         display: block;
     }
-
     .dropdown:hover .dropbtn {
         background-color: #e2e6ef;
     }
-
     .fa-chevron-down {
         margin-left: 10px;
     }
@@ -95,11 +89,15 @@
         border: none;
         background: transparent;
         outline: none;
-        width: 100px;
+        width: 100%;
+    }
+    .table-container {
+        overflow-x: auto;
     }
     .table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 600px;
     }
     .table th {
         background-color: #3560a0;
@@ -120,13 +118,14 @@
         padding: 6px 12px;
         cursor: pointer;
         font-weight: 600;
-        width: 80px; /* Adjusted width */
+        width: 80px;
         text-align: center;
     }
     .pagination {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
+        gap: 15px;
         margin-top: 20px;
     }
     .pagination-buttons {
@@ -147,8 +146,22 @@
         border-radius: 5px;
     }
     .action-column {
-        width: 100px; /* Adjust this value to match the image */
+        width: 100px;
         text-align: center;
+    }
+
+    @media (min-width: 768px) {
+        .filters {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .filter-right {
+            justify-content: flex-end;
+        }
+        .pagination {
+            flex-direction: row;
+            justify-content: space-between;
+        }
     }
 </style>
 
@@ -188,61 +201,62 @@
             </div>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>NO</th>
-                    <th>NAMA PASLON</th>
-                    <th>KABUPATEN/KOTA</th>
-                    <th class="action-column">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>Andi Harun/Saefuddin Zuhri</td>
-                    <td>Samarinda</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>02</td>
-                    <td>Rahmad Mas'ud/Bagus Susetyo</td>
-                    <td>Balikpapan</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>03</td>
-                    <td>Rendi Susiswo Ismail/Eddy Sunardi Darmawan</td>
-                    <td>Balikpapan</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>04</td>
-                    <td>Muhammad Sa'bani/Syukri Wahid</td>
-                    <td>Balikpapan</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>05</td>
-                    <td>Neni Moerniaeni/Agus Haris</td>
-                    <td>Bontang</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>06</td>
-                    <td>Basri Rase/Chusnul Dhihin</td>
-                    <td>Bontang</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <tr>
-                    <td>07</td>
-                    <td>Najirah/Muhammad Aswar</td>
-                    <td>Bontang</td>
-                    <td class="action-column"><button class="btn">Pilih</button></td>
-                </tr>
-                <!-- Add more rows here if needed -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>NO</th>
+                        <th>NAMA PASLON</th>
+                        <th>KABUPATEN/KOTA</th>
+                        <th class="action-column">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01</td>
+                        <td>Andi Harun/Saefuddin Zuhri</td>
+                        <td>Samarinda</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Rahmad Mas'ud/Bagus Susetyo</td>
+                        <td>Balikpapan</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>Rendi Susiswo Ismail/Eddy Sunardi Darmawan</td>
+                        <td>Balikpapan</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>Muhammad Sa'bani/Syukri Wahid</td>
+                        <td>Balikpapan</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>Neni Moerniaeni/Agus Haris</td>
+                        <td>Bontang</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>06</td>
+                        <td>Basri Rase/Chusnul Dhihin</td>
+                        <td>Bontang</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                    <tr>
+                        <td>07</td>
+                        <td>Najirah/Muhammad Aswar</td>
+                        <td>Bontang</td>
+                        <td class="action-column"><button class="btn">Pilih</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="pagination">
             <span>1 - 10 dari 40 tabel</span>
