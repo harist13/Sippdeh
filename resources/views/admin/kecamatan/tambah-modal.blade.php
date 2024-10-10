@@ -7,19 +7,19 @@
 
 			{{-- Nama kecamatan --}}
 			<label for="addKecamatanName" class="mb-1 block">Nama</label>
-            <input type="text" id="addKecamatanName" name="nama"
+            <input type="text" id="addKecamatanName" name="nama_kecamatan_baru"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama provinsi" required>
-            <span class="text-red-800">{{ $errors->first('nama') }}</span>
+            <span class="text-red-800">{{ $errors->first('nama_kecamatan_baru') }}</span>
 
 			{{-- Kabupaten --}}
 			<label for="addKecamatanKabupaten" class="my-1 block">Kabupaten</label>
-			<select id="addKecamatanKabupaten" name="kabupaten_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+			<select id="addKecamatanKabupaten" name="kabupaten_id_kecamatan_baru" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
 				@endforeach
 			</select>
-			<span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span>
+			<span class="text-red-800">{{ $errors->first('kabupaten_id_kecamatan_baru') }}</span>
 
             <hr class="h-1 my-3">
 
@@ -50,9 +50,14 @@
     document.getElementById('cancelAddKecamatan').addEventListener('click', closeAddKecamatanModal);
 </script>
 
-@php $isThereAnyError = $errors->count() > 0; @endphp
-@if ($isThereAnyError)
+@error('nama_kecamatan_baru')
     <script>
         showAddKecamatanModal();
     </script>
-@endif
+@enderror
+
+@error('provinsi_id_kecamatan_baru')
+    <script>
+        showAddKecamatanModal();
+    </script>
+@enderror
