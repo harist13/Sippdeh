@@ -82,23 +82,23 @@
             </div>
             
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+                @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'provinsi'])
+
+                <form action="{{ route('provinsi') }}" method="GET">
+                    <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                        </svg>
+                        <input type="search" placeholder="Cari provinsi" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                        @if (request()->has('kabupaten'))
+                            <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
+                        @endif
+                    </div>                  
+                </form>
+                
                 <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
                     + Tambah Provinsi
                 </button>
-
-                <div class="relative w-full-mobile">
-                    <button id="dropdownButton"
-                        class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
-                        Pilih Kab/Kota <i class="fas fa-chevron-right ml-2"></i>
-                    </button>
-                    <div id="dropdownMenu" class="absolute mt-2 w-full rounded-lg shadow-lg bg-white z-10 hidden">
-                        <ul class="py-1 text-gray-700">
-                            <li class="px-4 py-2 hover:bg-gray-100">Samarinda</li>
-                            <li class="px-4 py-2 hover:bg-gray-100">Balikpapan</li>
-                            <!-- Add more cities as needed -->
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
 
