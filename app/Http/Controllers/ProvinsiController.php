@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
+use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,10 +14,36 @@ class ProvinsiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $provinsi = Provinsi::orderBy('created_at')->paginate(10);
-        return view('admin.provinsi.index', compact('provinsi'));
+        $kabupaten = Kabupaten::all();
+        $provinsiQuery = Provinsi::query();
+
+        if ($request->has('cari')) {
+            $kataKunci = $request->get('cari');
+
+            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            if ($kataKunci == '') {
+                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
+                if ($request->has('kabupaten')) {
+                    return redirect()->route('provinsi', ['kabupaten' => $request->get('kabupaten')]);
+                }
+
+                return redirect()->route('provinsi');
+            }
+
+            $provinsiQuery->whereLike('nama', "%$kataKunci%");
+        }
+
+        if ($request->has('kabupaten')) {
+            $provinsiQuery->whereHas('kabupaten', function($builder) use ($request) {
+                $builder->where('id', $request->get('kabupaten'));
+            });
+        }
+
+        $provinsi = $provinsiQuery->orderByDesc('id')->paginate(10);
+        
+        return view('admin.provinsi.index', compact('kabupaten', 'provinsi'));
     }
 
     /**
@@ -36,7 +63,7 @@ class ProvinsiController extends Controller
             $validated = $request->validated();
 
             $provinsi = new Provinsi();
-            $provinsi->nama = $validated['nama'];
+            $provinsi->nama = $validated['nama_provinsi_baru'];
             $provinsi->save();
     
             return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
@@ -70,7 +97,7 @@ class ProvinsiController extends Controller
             $validated = $request->validated();
 
             $provinsi = Provinsi::find($id);
-            $provinsi->nama = $validated['nama'];
+            $provinsi->nama = $validated['nama_provinsi'];
             $provinsi->save();
     
             return redirect()->back()->with('status_pengeditan_provinsi', 'berhasil');

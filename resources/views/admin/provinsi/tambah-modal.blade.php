@@ -4,10 +4,10 @@
         <form action="{{ route('provinsi.store') }}" method="POST">
             @csrf
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Tambah Provinsi</h3>
-            <input type="text" id="addProvinsiName" name="nama"
+            <input type="text" id="addProvinsiName" name="nama_provinsi_baru"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama provinsi" required>
-            <span class="text-red-800">{{ $errors->first('nama') }}</span>
+            <span class="text-red-800">{{ $errors->first('nama_provinsi_baru') }}</span>
             <hr class="h-1 my-3">
             <div class="flex items-center">
                 <button id="cancelAddProvinsi"
@@ -32,9 +32,8 @@
     document.getElementById('cancelAddProvinsi').addEventListener('click', closeAddProvinsiModal);
 </script>
 
-@php $isThereAnyError = $errors->count() > 0; @endphp
-@if ($isThereAnyError)
+@error('nama_provinsi_baru')
     <script>
         showAddProvinsiModal();
     </script>
-@endif
+@enderror

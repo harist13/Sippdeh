@@ -24,7 +24,7 @@ class UpdateProvinsiRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama' => [
+            'nama_provinsi' => [
                 'required',
                 'max:300',
                 Rule::unique('provinsi', 'nama')->ignore($id)
@@ -35,9 +35,9 @@ class UpdateProvinsiRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama.required' => 'Mohon isi nama provinsi.',
-            'nama.unique' => 'Provinsi tersebut sudah ada.',
-            'nama.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
+            'nama_provinsi.required' => 'Mohon isi nama provinsi.',
+            'nama_provinsi.unique' => 'Provinsi tersebut sudah ada.',
+            'nama_provinsi.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
         ];
     }
 }
