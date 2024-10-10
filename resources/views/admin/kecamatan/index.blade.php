@@ -138,17 +138,6 @@
 @include('admin.kecamatan.hapus-modal')
 
 <script>
-    // Dropdown functionality
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-        var menu = document.getElementById('dropdownMenu');
-        menu.classList.toggle('hidden');
-    });
-
-    cancelEditKecamatan.onclick = function() {
-        editKecamatanModal.classList.add('hidden');
-    }
-
-    // Close modals when clicking outside
     window.onclick = function(event) {
         if (event.target == addKecamatanModal) {
             addKecamatanModal.classList.add('hidden');
@@ -158,10 +147,6 @@
             editKecamatanModal.classList.add('hidden');
         }
     }
-</script>
-
-<script>
-    
 </script>
 
 @include('admin.layout.footer')
