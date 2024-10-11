@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('calon', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_paslon');
+            $table->string('nama');
             $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('cascade');
-            $table->string('foto')->nullable();
+            $table->string('foto', 300)->nullable();
             $table->timestamps();
         });
     }
