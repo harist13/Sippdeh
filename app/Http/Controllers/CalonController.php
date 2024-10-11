@@ -8,7 +8,9 @@ use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Traits\UploadImage;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
@@ -16,9 +18,12 @@ class CalonController extends Controller
 {
     use UploadImage;
 
+    private string $diskName = 'foto_calon_lokal';
+
     public function __construct()
     {
         $this->imageManager = ImageManager::imagick();
+        $this->disk = Storage::disk($this->diskName);
     }
 
     /**
@@ -34,12 +39,7 @@ class CalonController extends Controller
 
             // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
-                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
-                if ($request->has('kabupaten')) {
-                    return redirect()->route('calon', ['kabupaten' => $request->get('kabupaten')]);
-                }
-
-                return redirect()->route('calon');
+                return $this->arahkanKembali($request);
             }
 
             $calonQuery->whereLike('nama', "%$kataKunci%");
@@ -52,6 +52,15 @@ class CalonController extends Controller
         $calon = $calonQuery->orderByDesc('id')->paginate(10);
         
         return view('admin.calon.index', compact('kabupaten', 'calon'));
+    }
+
+    private function arahkanKembali(Request $request): RedirectResponse {
+        if ($request->has('kabupaten')) {
+            // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
+            return redirect()->route('calon', ['kabupaten' => $request->get('kabupaten')]);
+        }
+
+        return redirect()->route('calon');
     }
 
     /**
@@ -75,12 +84,7 @@ class CalonController extends Controller
             $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
 
             if ($request->hasFile('foto_calon_baru')) {
-                $foto = $request->file('foto_calon_baru');
-                $namaFoto = $foto->store('', 'foto_calon_lokal');
-                $pathFoto = Storage::disk('foto_calon_lokal')->path($namaFoto);
-
-                $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, storage_path('app/public/foto_calon'));
-                $calon->foto = $namaFoto;
+                $calon->foto = $this->simpanFoto($request->file('foto_calon_baru'));
             }
 
             $calon->save();
@@ -89,6 +93,20 @@ class CalonController extends Controller
         } catch (Exception $error) {
             dd($error);
             return redirect()->back()->with('status_pembuatan_calon', 'gagal');
+        }
+    }
+
+    private function simpanFoto(UploadedFile $foto): string {
+        try {
+            $namaFoto = $foto->store(options: $this->diskName);
+            $pathFoto = $this->disk->path($namaFoto);
+
+            // Ubah ukuran foto menjadi 300x200
+            $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, $this->disk->path(''));
+
+            return $namaFoto;
+        } catch (Exception $error) {
+            throw $error;
         }
     }
 
@@ -120,13 +138,13 @@ class CalonController extends Controller
             $calon->nama = $validated['nama_calon'];
             $calon->kabupaten_id = $validated['kabupaten_id_calon'];
 
-            if ($request->hasFile('foto_calon_baru')) {
-                $foto = $request->file('foto_calon_baru');
-                $namaFoto = $foto->store('', 'foto_calon_lokal');
-                $pathFoto = Storage::disk('foto_calon_lokal')->path($namaFoto);
+            if ($request->hasFile('foto_calon')) {
+                // hapus foto lama
+                if ($calon->foto != null) {
+                    $this->disk->delete($calon->foto);
+                }
 
-                $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, storage_path('app/public/foto_calon'));
-                $calon->foto = $namaFoto;
+                $calon->foto = $this->simpanFoto($request->file('foto_calon'));
             }
 
             $calon->save();
@@ -148,7 +166,7 @@ class CalonController extends Controller
 
             $calon->delete();
 
-            Storage::disk('foto_calon_lokal')->delete($namaFoto);
+            $this->disk->delete($namaFoto);
 
             return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
         } catch (Exception $error) {

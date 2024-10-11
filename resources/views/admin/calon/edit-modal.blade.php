@@ -24,10 +24,10 @@
 
             {{-- Foto --}}
             <label for="addCalonPhoto" class="my-1 block">Foto</label>
-            <input type="file" id="addCalonPhoto" name="foto_calon_baru"
+            <input type="file" id="addCalonPhoto" name="foto_calon"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Foto calon">
-            <span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
+            <span class="text-red-800">{{ $errors->first('foto_calon') }}</span>
 
             <hr class="h-1 my-3">
 
@@ -99,6 +99,12 @@
 @enderror
 
 @error('provinsi_id_calon')
+    <script>
+        showEditCalonModal();
+    </script>
+@enderror
+
+@error('foto_calon')
     <script>
         showEditCalonModal();
     </script>
