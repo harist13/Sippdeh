@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CalonController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\KabupatenController;
@@ -24,7 +25,6 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
     Route::get('/rangkuman', [AdminController::class, 'rangkuman'])->name('rangkuman');
-    Route::get('/calon', [AdminController::class, 'calon'])->name('calon');
     
     Route::resource('provinsi', ProvinsiController::class)->names([
         'index' => 'provinsi'
@@ -45,6 +45,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('tps', TPSController::class)->names([
         'index' => 'tps'
     ]);
+
+    Route::resource('calon', CalonController::class)->names([
+        'index' => 'calon'
+    ]);
+    Route::delete('calon/{id}/gambar', [CalonController::class, 'destroyGambar'])->name('calon.destroy-gambar');
 
     Route::get('/user', [AdminController::class, 'user'])->name('user');
     Route::post('/storeUser', [AdminController::class, 'storeUser'])->name('storeUser');
