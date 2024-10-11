@@ -51,7 +51,7 @@ class CalonController extends Controller
 
         $calon = $calonQuery->orderByDesc('id')->paginate(10);
         
-        return view('admin.calon.index', compact('kabupaten', 'calon'));
+        return view('admin.calon.index', [...compact('kabupaten', 'calon'), 'disk' => $this->disk]);
     }
 
     private function arahkanKembali(Request $request): RedirectResponse {

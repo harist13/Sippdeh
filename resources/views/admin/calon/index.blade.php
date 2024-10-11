@@ -112,7 +112,7 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                 @if ($cal->foto != null)
-                                    <img src="{{ Storage::disk('foto_calon_lokal')->url($cal->foto) }}" width="150" height="75" alt="{{ $cal->nama }}">
+                                    <img src="{{ $disk->url($cal->foto) }}" width="150" height="75" alt="{{ $cal->nama }}">
                                 @else
                                     Gambar belum diunggah
                                 @endif
