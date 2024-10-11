@@ -110,7 +110,13 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $cal->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}">{{ $cal->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">Gambar belum diupload</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
+                                @if ($cal->foto != null)
+                                    <img src="{{ Storage::disk('foto_calon_lokal')->url($cal->foto) }}" width="150" height="75" alt="{{ $cal->nama }}">
+                                @else
+                                    Gambar belum diunggah
+                                @endif
+                            </td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                 <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
                                 <button class="text-red-600 hover:text-red-900 ml-3 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>

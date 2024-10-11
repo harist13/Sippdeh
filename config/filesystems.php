@@ -45,6 +45,14 @@ return [
             'throw' => false,
         ],
 
+        'foto_calon_lokal' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/foto_calon'),
+            'url' => env('APP_URL').'/storage/foto_calon',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

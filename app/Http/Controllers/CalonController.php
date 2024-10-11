@@ -6,11 +6,21 @@ use App\Http\Requests\StoreCalonRequest;
 use App\Http\Requests\UpdateCalonRequest;
 use App\Models\Calon;
 use App\Models\Kabupaten;
+use App\Traits\UploadImage;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 
 class CalonController extends Controller
 {
+    use UploadImage;
+
+    public function __construct()
+    {
+        $this->imageManager = ImageManager::imagick();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -63,10 +73,21 @@ class CalonController extends Controller
             $calon = new Calon();
             $calon->nama = $validated['nama_calon_baru'];
             $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
+
+            if ($request->hasFile('foto_calon_baru')) {
+                $foto = $request->file('foto_calon_baru');
+                $namaFoto = $foto->store('', 'foto_calon_lokal');
+                $pathFoto = Storage::disk('foto_calon_lokal')->path($namaFoto);
+
+                $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, storage_path('app/public/foto_calon'));
+                $calon->foto = $namaFoto;
+            }
+
             $calon->save();
 
             return redirect()->back()->with('status_pembuatan_calon', 'berhasil');
         } catch (Exception $error) {
+            dd($error);
             return redirect()->back()->with('status_pembuatan_calon', 'gagal');
         }
     }
@@ -98,6 +119,16 @@ class CalonController extends Controller
             $calon = Calon::find($id);
             $calon->nama = $validated['nama_calon'];
             $calon->kabupaten_id = $validated['kabupaten_id_calon'];
+
+            if ($request->hasFile('foto_calon_baru')) {
+                $foto = $request->file('foto_calon_baru');
+                $namaFoto = $foto->store('', 'foto_calon_lokal');
+                $pathFoto = Storage::disk('foto_calon_lokal')->path($namaFoto);
+
+                $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, storage_path('app/public/foto_calon'));
+                $calon->foto = $namaFoto;
+            }
+
             $calon->save();
 
             return redirect()->back()->with('status_pengeditan_calon', 'berhasil');
@@ -113,7 +144,11 @@ class CalonController extends Controller
     {
         try {
             $calon = Calon::find($id);
+            $namaFoto = $calon->foto;
+
             $calon->delete();
+
+            Storage::disk('foto_calon_lokal')->delete($namaFoto);
 
             return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
         } catch (Exception $error) {

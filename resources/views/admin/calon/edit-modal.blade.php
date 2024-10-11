@@ -1,7 +1,7 @@
 <!-- Edit Calon Modal -->
 <div id="editCalonModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
-        <form id="editCalonForm" action="#" method="POST">
+        <form id="editCalonForm" action="#" method="POST" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Calon</h3>
@@ -21,6 +21,13 @@
 				@endforeach
 			</select>
 			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon') }}</span>
+
+            {{-- Foto --}}
+            <label for="addCalonPhoto" class="my-1 block">Foto</label>
+            <input type="file" id="addCalonPhoto" name="foto_calon_baru"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Foto calon">
+            <span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
 
             <hr class="h-1 my-3">
 
