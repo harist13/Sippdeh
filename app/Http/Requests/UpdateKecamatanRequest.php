@@ -36,12 +36,12 @@ class UpdateKecamatanRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_kecamatan.required' => 'Mohon isi nama kabupaten.',
-            'nama_kecamatan.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama_kecamatan.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'nama_kecamatan.required' => 'Mohon isi nama kecamatan.',
+            'nama_kecamatan.unique' => 'Kecamatan tersebut sudah ada.',
+            'nama_kecamatan.max' => 'Nama kecamatan terlalu panjang, maksimal 300 karakter.',
 
             'kabupaten_id_kecamatan.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
-            'kabupaten_id_kecamatan.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'kabupaten_id_kecamatan.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
         ];
     }
 }
