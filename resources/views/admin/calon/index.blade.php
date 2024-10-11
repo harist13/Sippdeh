@@ -110,9 +110,13 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $cal->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}">{{ $cal->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
                                 @if ($cal->foto != null)
-                                    <img src="{{ $disk->url($cal->foto) }}" width="150" height="75" alt="{{ $cal->nama }}">
+                                    <img src="{{ $disk->url($cal->foto) }}" class="rounded-md mr-1" width="150" height="75" alt="{{ $cal->nama }}">
+                                    <button id="hapusGambar" class="bg-red-600 text-white py-1 px-2 rounded-lg w-full-mobile text-xs">
+                                        <i class="fas fa-trash text-xs mr-1"></i>
+                                        Hapus
+                                    </button>
                                 @else
                                     Gambar belum diunggah
                                 @endif
@@ -144,6 +148,7 @@
 @include('admin.calon.tambah-modal')
 @include('admin.calon.edit-modal')
 @include('admin.calon.hapus-modal')
+@include('admin.calon.hapus-gambar-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan

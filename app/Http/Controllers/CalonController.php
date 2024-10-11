@@ -173,4 +173,20 @@ class CalonController extends Controller
             return redirect()->back()->with('status_penghapusan_calon', 'gagal');
         }
     }
+
+    public function destroyGambar(string $id)
+    {
+        try {
+            $calon = Calon::find($id);
+
+            $this->disk->delete($calon->foto);
+
+            $calon->foto = null;
+            $calon->save();
+
+            return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
+        } catch (Exception $error) {
+            return redirect()->back()->with('status_penghapusan_calon', 'gagal');
+        }
+    }
 }

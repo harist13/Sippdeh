@@ -47,6 +47,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('calon', CalonController::class)->names([
         'index' => 'calon'
     ]);
+    Route::delete('calon/{id}/gambar', [CalonController::class, 'destroyGambar'])->name('calon.destroy-gambar');
 
     Route::get('/user', [AdminController::class, 'user'])->name('user');
     Route::post('/storeUser', [AdminController::class, 'storeUser'])->name('storeUser');
