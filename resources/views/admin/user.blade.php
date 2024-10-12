@@ -114,7 +114,7 @@
 <tbody class="bg-gray-100">
     @foreach($users as $user)
     <tr class="border-b">
-        <td class="px-4 py-2">{{ $loop->iteration }}</td>
+        <td class="px-4 py-2">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
         <td class="px-4 py-2">{{ $user->username }}</td>
         <td class="px-4 py-2">{{ $user->email }}</td>
         <td class="px-4 py-2">{{ $user->wilayah }}</td>
@@ -152,6 +152,9 @@
 </tbody>
 
             </table>
+            <div class="mt-4">
+                {{ $users->links() }}
+            </div>
         </div>
 
       <!-- Table HISTORY (initially hidden) -->
@@ -172,7 +175,7 @@
         <tbody class="bg-gray-100">
             @foreach($loginHistories as $history)
             <tr class="border-b">
-                <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                 <td class="px-4 py-2">{{ ($loginHistories->currentPage() - 1) * $loginHistories->perPage() + $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $history->user->email }}</td>
                 <td class="px-4 py-2">{{ $history->user->wilayah }}</td>
                 <td class="px-4 py-2">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
@@ -191,6 +194,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="mt-4">
+        {{ $loginHistories->links() }}
+    </div>
 </div>
     </div>
 </main>
@@ -230,7 +236,12 @@
                 </div>
                 <div class="col-span-1 sm:col-span-2">
                     <label for="wilayah" class="block text-sm">Wilayah</label>
-                    <input type="text" id="wilayah" name="wilayah" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Wilayah" required>
+                    <select id="wilayah" name="wilayah" class="w-full bg-gray-100 px-3 py-2 rounded-md" required>
+                        <option value="">Pilih Wilayah</option>
+                        @foreach($kabupatens as $kabupaten)
+                            <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="mt-4 text-right">
@@ -276,7 +287,12 @@
                 </div>
                 <div class="col-span-1 sm:col-span-2">
                     <label for="editWilayah" class="block text-sm">Wilayah</label>
-                    <input type="text" id="editWilayah" name="wilayah" class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="Wilayah" required>
+                    <select id="editWilayah" name="wilayah" class="w-full bg-gray-100 px-3 py-2 rounded-md" required>
+                        <option value="">Pilih Wilayah</option>
+                        @foreach($kabupatens as $kabupaten)
+                            <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="mt-4 text-right">
@@ -377,13 +393,75 @@ document.querySelectorAll('.edit-user').forEach(function (editBtn) {
 
         document.getElementById('editUsername').value = username;
         document.getElementById('editEmail').value = email;
-        document.getElementById('editWilayah').value = wilayah;
+        
+        // Find and select the correct wilayah option
+        const wilayahSelect = document.getElementById('editWilayah');
+        for (let i = 0; i < wilayahSelect.options.length; i++) {
+            if (wilayahSelect.options[i].text === wilayah) {
+                wilayahSelect.selectedIndex = i;
+                break;
+            }
+        }
+        
+        // If no match was found in the dropdown, add a new option with the current wilayah
+        if (wilayahSelect.selectedIndex === 0 && wilayah !== "") {
+            const newOption = new Option(wilayah, "");
+            wilayahSelect.add(newOption);
+            wilayahSelect.selectedIndex = wilayahSelect.options.length - 1;
+        }
+        
         document.getElementById('editRole').value = role;
         
         document.getElementById('editUserForm').action = `/updateUser/${userId}`;
         document.getElementById('modalEditUser').classList.remove('hidden');
     });
 });
+
+// ... (rest of the JavaScript code remains unchanged)
+
+// Function to validate form
+function validateForm(form) {
+    const username = form.querySelector('[name="username"]').value.trim();
+    const email = form.querySelector('[name="email"]').value.trim();
+    const role = form.querySelector('[name="role"]').value;
+    const wilayah = form.querySelector('[name="wilayah"]').value;
+    const password = form.querySelector('[name="password"]').value;
+
+    let isValid = true;
+    let errorMessage = '';
+
+    if (username.length < 3) {
+        errorMessage += 'Username harus memiliki minimal 3 karakter.\n';
+        isValid = false;
+    }
+
+    if (!isValidEmail(email)) {
+        errorMessage += 'Email tidak valid.\n';
+        isValid = false;
+    }
+
+    if (role === '') {
+        errorMessage += 'Harap pilih role.\n';
+        isValid = false;
+    }
+
+    if (wilayah === '') {
+        errorMessage += 'Harap pilih wilayah.\n';
+        isValid = false;
+    }
+
+    // For add user form, password is required
+    if (form.id === 'tambahUserForm' && password.length < 6) {
+        errorMessage += 'Password harus memiliki minimal 6 karakter.\n';
+        isValid = false;
+    }
+
+    if (!isValid) {
+        showErrorMessage(errorMessage);
+    }
+
+    return isValid;
+}
 
 document.getElementById('closeEditUserModal').addEventListener('click', function () {
     document.getElementById('modalEditUser').classList.add('hidden');
@@ -439,49 +517,6 @@ function isValidEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-// Function to validate form
-function validateForm(form) {
-    const username = form.querySelector('[name="username"]').value.trim();
-    const email = form.querySelector('[name="email"]').value.trim();
-    const role = form.querySelector('[name="role"]').value;
-    const wilayah = form.querySelector('[name="wilayah"]').value.trim();
-    const password = form.querySelector('[name="password"]').value;
-
-    let isValid = true;
-    let errorMessage = '';
-
-    if (username.length < 3) {
-        errorMessage += 'Username harus memiliki minimal 3 karakter.\n';
-        isValid = false;
-    }
-
-    if (!isValidEmail(email)) {
-        errorMessage += 'Email tidak valid.\n';
-        isValid = false;
-    }
-
-    if (role === '') {
-        errorMessage += 'Harap pilih role.\n';
-        isValid = false;
-    }
-
-    if (wilayah.length < 2) {
-        errorMessage += 'Wilayah harus diisi.\n';
-        isValid = false;
-    }
-
-    // For add user form, password is required
-    if (form.id === 'tambahUserForm' && password.length < 6) {
-        errorMessage += 'Password harus memiliki minimal 6 karakter.\n';
-        isValid = false;
-    }
-
-    if (!isValid) {
-        showErrorMessage(errorMessage);
-    }
-
-    return isValid;
-}
 
 // Add event listeners to forms
 document.getElementById('tambahUserForm').addEventListener('submit', function(event) {

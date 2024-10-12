@@ -19,11 +19,10 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email'],
+            'username' => ['required'],
             'password' => ['required', 'min:6'],
         ], [
-            'email.required' => 'Email harus diisi.',
-            'email.email' => 'Format email tidak valid.',
+            'username.required' => 'Username harus diisi.',
             'password.required' => 'Password harus diisi.',
             'password.min' => 'Password harus minimal 6 karakter.',
         ]);
@@ -32,14 +31,14 @@ class LoginController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('username', 'password'))) {
             $user = Auth::user();
             
             if ($user->is_forced_logout) {
                 Auth::logout();
                 return back()->withErrors([
-                    'email' => 'Akun Anda telah dikeluarkan oleh admin. Silakan hubungi admin untuk mengaktifkan kembali akun Anda.',
-                ])->withInput($request->only('email'));
+                    'username' => 'Akun Anda telah dikeluarkan oleh admin. Silakan hubungi admin untuk mengaktifkan kembali akun Anda.',
+                ])->withInput($request->only('username'));
             }
 
             // Check the number of active devices
@@ -50,8 +49,8 @@ class LoginController extends Controller
             if ($activeDevices >= $user->limit) {
                 Auth::logout();
                 return back()->withErrors([
-                    'email' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan.',
-                ])->withInput($request->only('email'));
+                    'username' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan.',
+                ])->withInput($request->only('username'));
             }
 
             $request->session()->regenerate();
@@ -75,8 +74,8 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->withInput($request->only('email'));
+            'username' => 'Username atau password salah.',
+        ])->withInput($request->only('username'));
     }
 
     public function logout(Request $request)

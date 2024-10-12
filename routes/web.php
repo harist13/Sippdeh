@@ -58,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
      Route::post('/forceLogout/{id}', [AdminController::class, 'forceLogout'])->name('forceLogout');
     Route::post('/reactivateUser/{id}', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
 Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [AdminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
-
+Route::post('/updateProfile', [AdminController::class, 'updateProfile'])->name('updateProfile');
 
 
 });
@@ -69,6 +69,7 @@ Route::middleware(['auth', 'role:operator'])->group(function () {
     Route::get('/operator/input-paslon', [InputPaslonController::class, 'Index'])->name('input-paslon.index');
     Route::get('/operator/nama-paslon', [InputPaslonController::class, 'namapaslon'])->name('input-paslon.namapaslon');
     Route::get('/operator/input-tps', [InputTpsController::class, 'index'])->name('input-tps.index');
+Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
 
 });
 });

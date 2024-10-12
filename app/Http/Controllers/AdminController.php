@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
+use App\Models\Kabupaten;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -47,17 +48,18 @@ class AdminController extends Controller
     }
      public function user()
     {
-        $users = Petugas::all();
+        $users = Petugas::paginate(10);
         $roles = Role::all();
-        $loginHistories = LoginHistory::with('user')->active()->orderBy('login_at', 'desc')->get();
+        $loginHistories = LoginHistory::with('user')->active()->orderBy('login_at', 'desc')->paginate(10);
+        $kabupatens = Kabupaten::all();
         
-        // Hitung jumlah device aktif untuk setiap user
+        // Calculate active devices for each user
         $activeDevices = [];
         foreach ($users as $user) {
             $activeDevices[$user->id] = LoginHistory::where('user_id', $user->id)->active()->count();
         }
         
-        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices'));
+        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
     }
 
    public function forceLogoutDevice($userId, $loginHistoryId)
@@ -117,15 +119,17 @@ class AdminController extends Controller
                 'username' => 'required|unique:petugas',
                 'email' => 'required|email|unique:petugas',
                 'password' => 'required|min:6',
-                'wilayah' => 'required',
+                'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
             ]);
+
+            $kabupaten = Kabupaten::findOrFail($validated['wilayah']);
 
             $user = Petugas::create([
                 'username' => $validated['username'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'wilayah' => $validated['wilayah'],
+                'wilayah' => $kabupaten->nama, // Store the kabupaten name instead of ID
                 'role' => $validated['role'],
                 'is_forced_logout' => false,
             ]);
@@ -146,14 +150,16 @@ class AdminController extends Controller
             $validated = $request->validate([
                 'username' => ['required', Rule::unique('petugas')->ignore($user->id)],
                 'email' => ['required', 'email', Rule::unique('petugas')->ignore($user->id)],
-                'wilayah' => 'required',
+                'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
             ]);
+
+            $kabupaten = Kabupaten::findOrFail($validated['wilayah']);
 
             $user->update([
                 'username' => $validated['username'],
                 'email' => $validated['email'],
-                'wilayah' => $validated['wilayah'],
+                'wilayah' => $kabupaten->nama, // Store the kabupaten name instead of ID
             ]);
 
             if ($request->filled('password')) {
@@ -178,6 +184,26 @@ class AdminController extends Controller
             return redirect()->route('user')->with('error', 'Gagal menghapus user.');
         }
     }
+
+    public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+    
+    $validatedData = $request->validate([
+        'email' => 'required|email|unique:petugas,email,'.$user->id,
+        'password' => 'nullable|min:6|confirmed',
+    ]);
+
+    $user->email = $validatedData['email'];
+    
+    if (!empty($validatedData['password'])) {
+        $user->password = Hash::make($validatedData['password']);
+    }
+
+    $user->save();
+
+    return response()->json(['success' => true]);
+}
 
    
 

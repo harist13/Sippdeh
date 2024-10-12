@@ -36,14 +36,14 @@
                 <form id="loginForm" action="{{ route('submitLogin') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-700" for="email">
-                            Email
+                        <label class="block mb-2 text-sm font-medium text-gray-700" for="username">
+                            Username
                         </label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <i class="text-gray-400 fas fa-user"></i>
                             </span>
-                            <input name="email" class="w-full px-3 py-2 pl-10 leading-tight text-gray-700 border rounded appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" type="email" placeholder="Masukan email yang telah terdaftar" value="{{ old('email') }}">
+                            <input name="username" class="w-full px-3 py-2 pl-10 leading-tight text-gray-700 border rounded appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500" id="username" type="text" placeholder="Masukan username yang telah terdaftar" value="{{ old('username') }}">
                         </div>
                     </div>
                     <div class="mb-6">
@@ -81,14 +81,12 @@
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            let email = document.getElementById('email').value;
+            let username = document.getElementById('username').value;
             let password = document.getElementById('password').value;
             let errors = [];
 
-            if (!email) {
-                errors.push('Email harus diisi.');
-            } else if (!/\S+@\S+\.\S+/.test(email)) {
-                errors.push('Format email tidak valid.');
+            if (!username) {
+                errors.push('Username harus diisi.');
             }
 
             if (!password) {

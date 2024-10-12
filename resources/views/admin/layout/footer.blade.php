@@ -33,6 +33,83 @@
     
 
 <script>
+
+    // Get the modal
+var modal = document.getElementById("profileModal");
+
+// Get the button that opens the modal
+var btn = document.querySelector("a[href='#']:has(i.fas.fa-user-circle)");
+
+// Get the <span> element that closes the modal
+var span = document.getElementById("closeModal");
+
+// Get the save button
+var saveBtn = document.getElementById("saveProfile");
+
+// When the user clicks the button, open the modal 
+btn.onclick = function(event) {
+    event.preventDefault();
+    modal.classList.remove("hidden");
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.classList.add("hidden");
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.classList.add("hidden");
+    }
+}
+
+// Handle save profile
+saveBtn.onclick = function() {
+    var form = document.getElementById("profileForm");
+    var formData = new FormData(form);
+
+    fetch('/updateProfile', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Profile updated successfully',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    modal.classList.add("hidden");
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Error updating profile: ' + data.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while updating the profile',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
+        
     // Toggle profile dropdown
     const profileDropdown = document.getElementById('profileDropdown');
     const profileMenu = document.getElementById('profileMenu');
