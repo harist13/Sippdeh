@@ -15,7 +15,7 @@
     }
     
     /* Responsive styles */
-    @media (max-width: 640px) {
+    @media (max-width: 1024px) {
         .flex-col-mobile {
             flex-direction: column;
         }
