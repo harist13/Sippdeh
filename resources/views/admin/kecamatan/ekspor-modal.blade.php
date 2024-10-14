@@ -1,7 +1,7 @@
 <!-- Export Kecamatan Modal -->
 <div id="exportKecamatanModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
-        <form action="{{ route('kecamatan.store') }}" method="POST">
+        <form action="{{ route('kecamatan.export') }}" method="GET">
             @csrf
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Ekspor Kecamatan</h3>
 
