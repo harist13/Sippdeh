@@ -98,7 +98,10 @@
                 </div>
 
                 <div class="flex flex-col-mobile gap-3">
-                    <button id="addKecamatanBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah Kecamatan</button>
+                    <button id="addKecamatanBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-plus me-1"></i>
+                        <span>Tambah Kecamatan</span>
+                    </button>
                     
                     <div class="flex">
                         <button id="importKecamatanBtn" class="bg-[#008080] w-full-mobile text-white py-2 px-4 rounded-s-lg">
