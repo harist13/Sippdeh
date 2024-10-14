@@ -14,7 +14,12 @@ class KecamatanExport implements FromView {
   }
   
   public function view(): View {
-    $kecamatan = Kecamatan::whereKabupatenId($this->kabupatenId)->get();
+    if ($this->kabupatenId == 0) {
+        $kecamatan = Kecamatan::all();
+    } else {
+        $kecamatan = Kecamatan::whereKabupatenId($this->kabupatenId)->get();
+    }
+    
     return view('exports.kecamatan', compact('kecamatan'));
   }
 }
