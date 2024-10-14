@@ -74,6 +74,7 @@
             <div class="flex items-center space-x-2 w-full-mobile">
                 <span class="text-lg font-bold"><i class="fas fa-city"></i> Kecamatan</span>
             </div>
+            
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'kecamatan'])
 
@@ -147,6 +148,7 @@
 @include('admin.kecamatan.tambah-modal')
 @include('admin.kecamatan.edit-modal')
 @include('admin.kecamatan.hapus-modal')
+@include('admin.kecamatan.ekspor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan
@@ -155,6 +157,7 @@
             closeAddKecamatanModal();
             closeEditKecamatanModal();
             closeDeleteKecamatanModal();
+            closeExportKecamatanModal();
         }
     });
 
@@ -169,6 +172,10 @@
 
         if (event.target == deleteKecamatanModal) {
             closeDeleteKecamatanModal();
+        }
+
+        if (event.target == exportKecamatanModal) {
+            closeExportKecamatanModal();
         }
     });
 </script>
