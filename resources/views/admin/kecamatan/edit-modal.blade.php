@@ -10,7 +10,7 @@
 			<label for="editKecamatanName" class="mb-1 block">Nama</label>
             <input type="text" id="editKecamatanName" name="nama_kecamatan"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama provinsi" required>
+                placeholder="Nama kecamatan" required>
             <span class="text-red-800">{{ $errors->first('nama_kecamatan') }}</span>
 
 			{{-- Kabupaten --}}
