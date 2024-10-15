@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KecamatanExport;
 use App\Http\Requests\StoreKecamatanRequest;
 use App\Http\Requests\UpdateKecamatanRequest;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
-use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KecamatanController extends Controller
 {
@@ -78,6 +79,15 @@ class KecamatanController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
+            return Excel::download(new KecamatanExport($request->get('kabupaten_id')), 'kecamatan.xlsx');
+        }
+        
+        return redirect()->back()->with('status_ekspor_kecamatan', 'gagal');
     }
 
     /**

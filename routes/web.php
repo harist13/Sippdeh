@@ -34,6 +34,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'index' => 'kabupaten'
     ]);
 
+    Route::get('kecamatan/ekspor', [KecamatanController::class, 'export'])->name('kecamatan.export');
     Route::resource('kecamatan', KecamatanController::class)->names([
         'index' => 'kecamatan'
     ]);

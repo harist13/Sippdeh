@@ -1,8 +1,9 @@
 <div class="relative w-[300px] w-full-mobile">
     <button id="dropdownButton"
         class="bg-gray-100 w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
-        <span id="kabupatenTerpilih">Pilih Kabupaten/Kota</span> <i class="fas fa-chevron-right ml-2"></i>
+        <span id="kabupatenTerpilih" class="text-ellipsis line-clamp-1">Pilih Kabupaten/Kota</span> <i class="fas fa-chevron-right ml-2"></i>
     </button>
+
     <div id="dropdownMenu" class="absolute h-[300px] overflow-y-scroll mt-2 inset-x-0 rounded-lg shadow-lg bg-white z-10 hidden">
         <ul class=" text-gray-700">
             @if (request()->has('cari'))
