@@ -43,7 +43,7 @@
 <!-- Sidebar -->
 <div id="sidebar" class="fixed top-0 left-0 z-1050 w-64 h-full overflow-y-auto bg-white shadow-lg sidebar hidden">
     <div class="flex items-center justify-between p-4 bg-[#3560A0]">
-        <h2 class="text-xl font-bold text-white">PILKADA PROVINSI</h2>
+        <h2 class="text-xl font-bold text-white">SIPPDEH KALTIM</h2>
         <button id="closeSidebar" class="text-white focus:outline-none">
             <i class="fas fa-times"></i>
         </button>
@@ -51,38 +51,23 @@
     
     <!-- Sidebar Navigation -->
     <nav class="mt-4">
-        <!-- Resume Section -->
-        <div class="mb-2">
-            <a href="#" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <span class="flex items-center">
-                    <i class="mr-3 fas fa-file-alt"></i> Resume
-                </span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <div class="submenu ml-8">
-                
-                <a href="{{ route('operator.dashboard')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 fas fa-chart-bar"></i> Rangkuman
-                </a>
-            </div>
-        </div>
-        <!-- User Section -->
-        <div class="mb-2">
-            <a href="#" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <span class="flex items-center">
-                    <i class="mr-3 fas fa-user"></i> Data
-                </span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <div class="submenu ml-8">
-                <a href="{{ route('input-paslon.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 fas fa-user-circle"></i> Input Data Paslon
-                </a>
-                 <a href="{{ route('input-tps.index')}}" class="block py-2 text-sm text-gray-600 hover:text-blue-700">
-                    <i class="mr-2 fas fa-archive"></i> Input Data TPS
-                </a>
-            </div>
-        </div>
+        <div class="px-4 py-2 text-gray-700 font-bold text-base">Resume</div>
+        <a href="{{ route('rangkuman') }}" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="#" alt="" class="w-5 h-5 mr-3">
+            <span>Rangkuman</span>
+        </a>
+        <hr class="my-2 border-gray-200">
+        
+
+        <div class="px-4 py-2 text-gray-700 font-bold text-base">Data</div>
+        <a href="#" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="{{ asset('assets/icon/Building3.png') }}" alt="" class="w-5 h-5 mr-3">
+            <span>Provinsi</span>
+        </a>
+        <a href="#" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="{{ asset('assets/icon/Building2.png') }}" alt="" class="w-5 h-5 mr-3">
+            <span>Kabupaten/Kota</span>
+        </a>
        
     </nav>
 </div>

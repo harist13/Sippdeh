@@ -138,15 +138,31 @@ saveBtn.onclick = function() {
         sidebar.classList.add('hidden');
     });
 
-    // Toggle submenus
-    document.querySelectorAll('#sidebar > nav > div > a').forEach(item => {
-        item.addEventListener('click', event => {
-            event.preventDefault();
-            const submenu = event.currentTarget.nextElementSibling;
-            submenu.classList.toggle('show');
-            event.currentTarget.querySelector('.fa-chevron-right').classList.toggle('rotate-90');
+   document.addEventListener('DOMContentLoaded', function() {
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove active class from all items
+            sidebarItems.forEach(i => i.classList.remove('bg-blue-200', 'text-blue-700'));
+            
+            // Add active class to clicked item
+            this.classList.add('bg-blue-200', 'text-blue-700');
+            
+            // Store active item in localStorage
+            localStorage.setItem('activeMenuItem', this.getAttribute('href'));
         });
     });
+    
+    // Check for active item on page load
+    const activeMenuItem = localStorage.getItem('activeMenuItem');
+    if (activeMenuItem) {
+        const activeItem = document.querySelector(`.sidebar-item[href="${activeMenuItem}"]`);
+        if (activeItem) {
+            activeItem.classList.add('bg-blue-200', 'text-blue-700');
+        }
+    }
+});
 
     // Close sidebar when clicking outside
     document.addEventListener('click', (event) => {
