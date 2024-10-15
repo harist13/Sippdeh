@@ -38,11 +38,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('kecamatan', KecamatanController::class)->names([
         'index' => 'kecamatan'
     ]);
-
+    
     Route::resource('kelurahan', KelurahanController::class)->names([
         'index' => 'kelurahan'
     ]);
-
+    
+    Route::get('tps/ekspor', [KecamatanController::class, 'export'])->name('tps.export');
     Route::resource('tps', TPSController::class)->names([
         'index' => 'tps'
     ]);

@@ -70,26 +70,45 @@
     @endif
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
-        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <span class="text-lg font-bold"><i class="fas fa-map-marker-alt"></i> TPS</span>
+        <div class="flex flex-col justify-between items-start mb-4 space-y-2-mobile">
+            <div class="flex items-center space-x-2 w-full-mobile mb-8">
+                <span class="text-lg font-bold"><i class="fas fa-vote-yea me-1"></i> TPS</span>
             </div>
-            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
-                @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'tps'])
 
-                <form action="{{ route('tps') }}" method="GET">
-                    <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
-                        </svg>
-                        <input type="search" placeholder="Cari tps" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
-                        @if (request()->has('kabupaten'))
-                            <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
-                        @endif
-                    </div>                  
-                </form>
+            <div class="flex flex-col-mobile w-full justify-between gap-5 space-y-2-mobile">
+                <div class="flex flex-col-mobile gap-3">
+                    <form action="{{ route('tps') }}" method="GET">
+                        <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                            </svg>
+                            <input type="search" placeholder="Cari TPS" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                            @if (request()->has('kabupaten'))
+                                <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
+                            @endif
+                        </div>                  
+                    </form>
+    
+                    @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'tps'])
+                </div>
 
-                <button id="addTPSBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah TPS</button>
+                <div class="flex flex-col-mobile gap-3">
+                    <button id="addTPSBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-plus me-1"></i>
+                        <span>Tambah TPS</span>
+                    </button>
+                    
+                    <div class="flex">
+                        {{-- <button id="importTPSBtn" class="bg-[#008080] w-full-mobile text-white py-2 px-4 rounded-s-lg">
+                            <i class="fas fa-file-import me-1"></i>
+                            <span>Impor</span>
+                        </button> --}}
+                        <button id="exportTPSBtn" class="bg-[#FA8072] w-full-mobile text-white py-2 px-4 rounded-lg">
+                            <i class="fas fa-file-export me-1"></i>
+                            <span>Ekspor</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -140,6 +159,7 @@
 @include('admin.tps.tambah-modal')
 @include('admin.tps.edit-modal')
 @include('admin.tps.hapus-modal')
+@include('admin.tps.ekspor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan
@@ -148,6 +168,7 @@
             closeAddTPSModal();
             closeEditTPSModal();
             closeDeleteTPSModal();
+            closeExportTPSModal();
         }
     });
 
@@ -163,6 +184,10 @@
 
         if (event.target == deleteTPSModal) {
             closeDeleteTPSModal();
+        }
+
+        if (event.target == exportTPSModal) {
+            closeExportTPSModal();
         }
     });
 </script>
