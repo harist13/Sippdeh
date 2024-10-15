@@ -104,11 +104,11 @@
                     </button>
                     
                     <div class="flex">
-                        <button id="importKecamatanBtn" class="bg-[#008080] w-full-mobile text-white py-2 px-4 rounded-s-lg">
+                        {{-- <button id="importKecamatanBtn" class="bg-[#008080] w-full-mobile text-white py-2 px-4 rounded-s-lg">
                             <i class="fas fa-file-import me-1"></i>
                             <span>Impor</span>
-                        </button>
-                        <button id="exportKecamatanBtn" class="bg-[#FA8072] w-full-mobile text-white py-2 px-4 rounded-e-lg">
+                        </button> --}}
+                        <button id="exportKecamatanBtn" class="bg-[#FA8072] w-full-mobile text-white py-2 px-4 rounded-lg">
                             <i class="fas fa-file-export me-1"></i>
                             <span>Ekspor</span>
                         </button>
