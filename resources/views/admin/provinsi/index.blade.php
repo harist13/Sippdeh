@@ -76,12 +76,12 @@
     @endif
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
+        <div class="flex items-center space-x-2 w-full-mobile mb-5">
+            <i class="fas fa-map-marker-alt"></i>
+            <span class="text-lg font-bold">Provinsi</span>
+        </div>
+
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <i class="fas fa-map-marker-alt"></i>
-                <span class="text-lg font-bold">Provinsi</span>
-            </div>
-            
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'provinsi'])
 
@@ -94,10 +94,15 @@
                         @if (request()->has('kabupaten'))
                             <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
                         @endif
-                    </div>                  
+                    </div>         
                 </form>
-                
-                <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
+            </div>
+            <div class="flex flex-col-mobile gap-2 space-y-2-mobile w-full-mobile">
+                <button id="addProvinsiBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-file-export me-1"></i>
+                    <span>Ekspor</span>
+                </button>
+                <button id="addProvinsiBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     + Tambah Provinsi
                 </button>
             </div>
