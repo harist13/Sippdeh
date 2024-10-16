@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProvinsiExport;
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProvinsiController extends Controller
 {
@@ -44,6 +46,15 @@ class ProvinsiController extends Controller
         $provinsi = $provinsiQuery->orderByDesc('id')->paginate(10);
         
         return view('admin.provinsi.index', compact('kabupaten', 'provinsi'));
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
+            return Excel::download(new ProvinsiExport($request->get('kabupaten_id')), 'provinsi.xlsx');
+        }
+        
+        return redirect()->back()->with('status_ekspor_kecamatan', 'gagal');
     }
 
     /**

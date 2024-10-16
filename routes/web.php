@@ -26,6 +26,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
     Route::get('/rangkuman', [AdminController::class, 'rangkuman'])->name('rangkuman');
     
+    Route::get('provinsi/ekspor', [ProvinsiController::class, 'export'])->name('provinsi.export');
     Route::resource('provinsi', ProvinsiController::class)->names([
         'index' => 'provinsi'
     ]);
