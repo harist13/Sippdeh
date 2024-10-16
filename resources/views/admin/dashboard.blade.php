@@ -1,6 +1,6 @@
 @include('admin.layout.header')
-    <main class="container mx-auto px-4 py-8">
-        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
+        <section class= "rounded-lg p-6 mb-8">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <img src="/api/placeholder/50/50" alt="Isran Noor/Hady Mulyadi" class="rounded-full mr-2">
@@ -21,12 +21,15 @@
             </div>
         </section>
 
-        <div class="grid grid-cols-2 gap-8 mb-8">
-            <section class="bg-white rounded-lg shadow-md overflow-hidden">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-                <div class="p-4">
-                     @include('admin.peta-kaltim.map')
-                    <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
+         <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+            <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
+            <div class="p-4">
+                <div class="flex justify-center">
+                    @include('admin.peta-kaltim.map')
+                </div>
+                <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
                     <p class="mb-2 font-bold">Kutai Kartanegara</p>
                     <div class="grid grid-cols-2 gap-1">
                         <p>Total Suara Sah</p>
@@ -34,34 +37,30 @@
                         <p>Total Suara Tidak Sah</p>
                         <p>: 18.000 orang</p>
                     </div>
-                 </div>
+                </div>
 
-                    <div class="flex justify-end mt-4">
-                        <div class="flex items-center mr-4">
-                            <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
-                            <span class="text-sm">Suara Terbanyak 1</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
-                            <span class="text-sm">Suara Terbanyak 2</span>
-                        </div>
+                <div class="flex justify-center mt-4">
+                    <div class="flex items-center mr-4">
+                        <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
+                        <span class="text-sm">Suara Terbanyak 1</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
+                        <span class="text-sm">Suara Terbanyak 2</span>
                     </div>
                 </div>
-            </section>
-            <section class="bg-white rounded-lg shadow-md overflow-hidden">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Partisipasi Kabupaten/Kota</h3>
-                <div class="p-4">
-                    <canvas id="participationChart" width="400" height="400"></canvas>
+            </div>
+        </section>
+        <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+            <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Partisipasi Kabupaten/Kota</h3>
+            <div class="p-4 flex flex-col items-center">
+                <div class="w-full max-w-md">
+                    <canvas id="participationChart"></canvas>
                 </div>
-            </section>
-        </div>
-
-           <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                <div class="p-4">
-                    <canvas id="voteCountChart" width="800" height="300"></canvas>
-                </div>
-            </section>
+                <div id="chartLegend" class="mt-4 flex flex-wrap justify-center"></div>
+            </div>
+        </section>
+    </div>
 
         <div class="grid grid-cols-5 gap-4 mb-8">
             <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Samarinda</button>
@@ -76,162 +75,161 @@
             <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Mahakam Ulu</button>
         </div>
 
-        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <div class="p-6 mb-6 bg-white rounded-lg shadow">
-                    <div class="flex items-start mb-6">
-                        <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                        <div class="flex-grow pl-10">
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                </div>
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                </div>
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
-                                </div>
+        <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
+            <div class="mb-6 rounded-lg">
+                <div class="flex items-start mb-6">
+                    <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                    <div class="flex-grow pl-10">
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
                             </div>
                         </div>
+                    </div>
                 </div>
-                <div class="p-4 text-white bg-blue-900 rounded-lg">
-                    <div class="flex items-center justify-between">
-                        <div class="flex flex-col items-start">
-                            <div class="flex items-center mb-1">
-                                <div class="w-4 h-4 mr-2 bg-red-500"></div> <!-- Warna diubah ke merah -->
-                                <span>> 90,00% DPT » Merah</span> <!-- Teks diubah -->
-                            </div>
-                            <div class="flex items-center mb-1">
-                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                <span>> 80,00% DPT » Kuning</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-4 h-4 mr-2 bg-green-500"></div> <!-- Warna diubah ke hijau -->
-                                <span>> 70,00% DPT » Hijau</span>
-                            </div>
+            </div>
+            <div class="p-4 text-white bg-blue-900 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <div class="flex flex-col items-start">
+                        <div class="flex items-center mb-1">
+                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                            <span>> 90,00% DPT » Merah</span>
                         </div>
-                        <div class="text-right">
-                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                            <div class="mt-2 text-4xl font-bold">81.40%</div>
+                        <div class="flex items-center mb-1">
+                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                            <span>> 80,00% DPT » Kuning</span>
                         </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                            <span>> 70,00% DPT » Hijau</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                        <div class="mt-2 text-4xl font-bold">81.40%</div>
                     </div>
                 </div>
             </div>
         </section>
 
-      <div class="relative overflow-hidden">
-        <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Andi Harun / Saefuddin Zuhri" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Samarinda</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+        <div class="relative overflow-hidden">
+            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Andi Harun / Saefuddin Zuhri" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Samarinda</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Kotak Kosong" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Samarinda</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Kotak Kosong</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 2</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Kotak Kosong" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Samarinda</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Kotak Kosong</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 2</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-1/3 flex-shrink-0 px-2">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
-                        <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                        <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
-                            <span>21,69%</span>
-                            <span>288.131 Suara</span>
+                <div class="w-1/3 flex-shrink-0 px-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="relative">
+                            <img src="/api/placeholder/400/250" alt="Muhammad Sabani / Syukri Wahid" class="w-full h-48 object-cover">
+                            <div class="absolute bottom-0 left-0 bg-[#3560A0] text-white px-2 py-1 text-sm">Balikpapan</div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                            <p class="text-gray-600 text-sm mb-2">PASLON 1</p>
+                            <div class="flex justify-between text-[#3560A0] text-sm font-semibold">
+                                <span>21,69%</span>
+                                <span>288.131 Suara</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+    <div class="flex justify-center mt-4">
+        <button id="prevBtn" class="w-3 h-3 rounded-full bg-gray-300 mx-1"></button>
+        <button id="nextBtn" class="w-3 h-3 rounded-full bg-[#3560A0] mx-1"></button>
     </div>
-
-<div class="flex justify-center mt-4">
-    <button id="prevBtn" class="w-3 h-3 rounded-full bg-gray-300 mx-1"></button>
-    <button id="nextBtn" class="w-3 h-3 rounded-full bg-[#3560A0] mx-1"></button>
-</div>
-
     </main>
 
 @include('admin.layout.footer')
