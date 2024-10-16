@@ -4,7 +4,7 @@
 
 <style>
     
-    #tpsBtn, #suaraBtn, #paslonBtn {
+    #tpsBtn, #suaraBtn, #pilgubBtn {
         margin-right: 1px;
     }
     .btn-group button {
@@ -42,11 +42,22 @@
     <div class="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
         <!-- Table Header -->
         <div class="flex flex-wrap-mobile justify-between items-center mb-4">
-            <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile mb-4 sm:mb-0">
-                <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
-                <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">SUARA</button>
-                <button id="paslonBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">PASLON</button>
+            <div class="flex items-center space-x-2 w-full-mobile mb-4 sm:mb-0">
+                <div class="flex border border-gray-300 rounded-lg overflow-hidden flex-grow">
+                    <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
+                    <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">SUARA</button>
+                    <button id="pilgubBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">PILGUB</button>
+                    <button id="pilkadaBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">PILKADA</button>
+                </div>
+               <button id="exportBtn" class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
+                    <img src="{{ asset('assets/icon/download.png')}}">
+                    <span>Export</span>
+                </button>
             </div>
+
+
+          
+            
 
             <div class="flex flex-wrap-mobile items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full-mobile sm:w-auto">
                 <div class="relative w-full sm:w-auto">
@@ -154,8 +165,47 @@
             </table>
         </div>
 
-        <!-- Table PASLON (initially hidden) -->
-        <div id="paslonTable" class="hidden overflow-x-auto">
+        <!-- Table pilgub (initially hidden) -->
+        <div id="pilgubTable" class="hidden overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-[#3560A0] text-white">
+                        <th class="px-4 py-2 text-left">No</th>
+                        <th class="px-4 py-2 text-left">NAMA PASLON</th>
+                        <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
+                        <th class="px-4 py-2 text-left">TOTAL DPT</th>
+                        <th class="px-4 py-2 text-left">SUARA SAH</th>
+                        <th class="px-4 py-2 text-left">SUARA TIDAK SAH</th>
+                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-100">
+                    <tr class="border-b">
+                        <td class="px-4 py-2">01</td>
+                        <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
+                        <td class="px-4 py-2">Samarinda</td>
+                        <td class="px-4 py-2">55,345</td>
+                        <td class="px-4 py-2">55,345</td>
+                        <td class="px-4 py-2">55,345</td>
+                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="px-4 py-2">02</td>
+                        <td class="px-4 py-2">Rahmad Mas'ud, Bagus Susetyo</td>
+                        <td class="px-4 py-2">Balikpapan</td>
+                        <td class="px-4 py-2">70,324</td>
+                        <td class="px-4 py-2">70,324</td>
+                        <td class="px-4 py-2">70,324</td>
+                        <td class="px-4 py-2"><span class="bg-yellow-400 text-white px-2 py-1 rounded">60%</span></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Table pilkada (initially hidden) -->
+        <div id="pilkadaTable" class="hidden overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -206,39 +256,63 @@
 </main>
 
 <script>
-    // JavaScript to toggle between TPS, SUARA, and PASLON tables
+    // JavaScript to toggle between TPS, SUARA, and pilgub tables
     document.getElementById('tpsBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.remove('hidden');
         document.getElementById('suaraTable').classList.add('hidden');
-        document.getElementById('paslonTable').classList.add('hidden');
+        document.getElementById('pilgubTable').classList.add('hidden');
+        document.getElementById('pilkadaTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
         this.classList.add('bg-[#3560A0]', 'text-white');
         document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('paslonBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('paslonBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
     document.getElementById('suaraBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.add('hidden');
         document.getElementById('suaraTable').classList.remove('hidden');
-        document.getElementById('paslonTable').classList.add('hidden');
+        document.getElementById('pilgubTable').classList.add('hidden');
+        document.getElementById('pilkadaTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
         this.classList.add('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('paslonBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('paslonBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
-    document.getElementById('paslonBtn').addEventListener('click', function() {
+    document.getElementById('pilgubBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.add('hidden');
         document.getElementById('suaraTable').classList.add('hidden');
-        document.getElementById('paslonTable').classList.remove('hidden');
+        document.getElementById('pilgubTable').classList.remove('hidden');
+        document.getElementById('pilkadaTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
         this.classList.add('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
+    });
+
+     document.getElementById('pilkadaBtn').addEventListener('click', function() {
+        document.getElementById('tpsTable').classList.add('hidden');
+        document.getElementById('suaraTable').classList.add('hidden');
+        document.getElementById('pilgubTable').classList.add('hidden');
+        document.getElementById('pilkadaTable').classList.remove('hidden');
+        this.classList.remove('bg-gray-200', 'text-gray-700');
+        this.classList.add('bg-[#3560A0]', 'text-white');
+        document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
+        document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
+        document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
         document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
