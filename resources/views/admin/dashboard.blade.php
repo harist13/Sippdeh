@@ -22,42 +22,48 @@
         </section>
 
          <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
-            <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-            <div class="p-4">
-                <div class="flex justify-center">
-                    @include('admin.peta-kaltim.map')
-                </div>
-                <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
-                    <p class="mb-2 font-bold">Kutai Kartanegara</p>
-                    <div class="grid grid-cols-2 gap-1">
-                        <p>Total Suara Sah</p>
-                        <p>: 70.000 orang</p>
-                        <p>Total Suara Tidak Sah</p>
-                        <p>: 18.000 orang</p>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
+                    <div class="p-4">
+                        @include('admin.peta-kaltim.map')
+                        <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
+                            <p class="mb-2 font-bold">Kutai Kartanegara</p>
+                            <div class="grid grid-cols-2 gap-1">
+                                <p>Total Suara Sah</p>
+                                <p>: 70.000 orang</p>
+                                <p>Total Suara Tidak Sah</p>
+                                <p>: 18.000 orang</p>
+                            </div>
+                        </div>
 
-                <div class="flex justify-center mt-4">
-                    <div class="flex items-center mr-4">
-                        <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
-                        <span class="text-sm">Suara Terbanyak 1</span>
+                        <div class="flex justify-end mt-4">
+                            <div class="flex items-center mr-4">
+                                <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
+                                <span class="text-sm">Suara Terbanyak 1</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
+                                <span class="text-sm">Suara Terbanyak 2</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
-                        <span class="text-sm">Suara Terbanyak 2</span>
+                </section>
+               <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <canvas id="participationChart"></canvas>
+                        </div>
+                        <div id="legendContainer" class="bg-white p-4 rounded-lg grid grid-cols-2 gap-4"></div>
                     </div>
-                </div>
-            </div>
-        </section>
-        <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
-            <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Partisipasi Kabupaten/Kota</h3>
-            <div class="p-4 flex flex-col items-center">
-                <div class="w-full max-w-md">
-                    <canvas id="participationChart"></canvas>
-                </div>
-                <div id="chartLegend" class="mt-4 flex flex-wrap justify-center"></div>
+                </section>
+        </div>
+
+        <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+            <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+            <div class="p-4">
+                <canvas id="voteCountChart" width="800" height="300"></canvas>
             </div>
         </section>
     </div>
@@ -314,88 +320,38 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        boxWidth: 15,
-                        padding: 15,
-                    },
-                    display: false, // Hide default legend
+                    display: false,
                 },
                 title: {
                     display: false,
                 },
             },
-            layout: {
-                padding: {
-                    bottom: 100 // Add padding for custom legend
-                }
-            }
         }
     });
 
     // Custom legend
     const chart = Chart.getChart(ctx);
-    const legendContainer = document.createElement('div');
-    legendContainer.style.display = 'flex';
-    legendContainer.style.flexWrap = 'wrap';
-    legendContainer.style.justifyContent = 'center';
-    legendContainer.style.marginTop = '20px';
+    const legendContainer = document.getElementById('legendContainer');
 
     chart.data.labels.forEach((label, index) => {
         const legendItem = document.createElement('div');
-        legendItem.style.display = 'flex';
-        legendItem.style.alignItems = 'center';
-        legendItem.style.marginRight = '10px';
-        legendItem.style.marginBottom = '5px';
-        legendItem.style.width = 'calc(50% - 10px)'; // Two columns
+        legendItem.className = 'flex items-center';
 
         const colorBox = document.createElement('div');
-        colorBox.style.width = '15px';
-        colorBox.style.height = '15px';
+        colorBox.className = 'w-3 h-3 mr-2 flex-shrink-0';
         colorBox.style.backgroundColor = chart.data.datasets[0].backgroundColor[index];
-        colorBox.style.marginRight = '5px';
 
         const text = document.createElement('span');
+        text.className = 'text-sm';
         text.textContent = `${label}: ${chart.data.datasets[0].data[index]}%`;
 
         legendItem.appendChild(colorBox);
         legendItem.appendChild(text);
         legendContainer.appendChild(legendItem);
     });
-
-    ctx.canvas.parentNode.appendChild(legendContainer);
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.getElementById('candidateSlider');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    let currentSlide = 0;
-
-    function showSlide(index) {
-        slider.style.transform = `translateX(-${index * 100}%)`;
-        currentSlide = index;
-        updateButtons();
-    }
-
-    function updateButtons() {
-        prevBtn.classList.toggle('bg-[#3560A0]', currentSlide === 0);
-        prevBtn.classList.toggle('bg-gray-300', currentSlide !== 0);
-        nextBtn.classList.toggle('bg-[#3560A0]', currentSlide === 1);
-        nextBtn.classList.toggle('bg-gray-300', currentSlide !== 1);
-    }
-
-    prevBtn.addEventListener('click', () => showSlide(0));
-    nextBtn.addEventListener('click', () => showSlide(1));
-
-    function autoSlide() {
-        showSlide((currentSlide + 1) % 2);
-    }
-
-    setInterval(autoSlide, 5000);
 });
 
 
