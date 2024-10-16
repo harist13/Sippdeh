@@ -1,26 +1,25 @@
 @include('admin.layout.header')
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
-        <section class= "rounded-lg p-6 mb-8">
+        <section class="rounded-lg p-6 mb-8">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
-                    <img src="/api/placeholder/50/50" alt="Isran Noor/Hady Mulyadi" class="rounded-full mr-2">
-                    <span class="font-semibold">Isran Noor/Hady Mulyadi</span>
+                    <img src="https://d22gwcrfo2de51.cloudfront.net/wp-content/uploads/2021/09/isran1-122e74ac-41bc-4213-91e3-677f58c1eab4_jpg-1024x683-1.jpg" alt="Isran Noor/Hady Mulyadi" class="rounded-full mr-4 w-20 h-20">
+                    <span class="font-semibold text-lg">Isran Noor/Hady Mulyadi</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="font-semibold mr-2">Rudy Mas'ud/Seno Aji</span>
-                    <img src="/api/placeholder/50/50" alt="Rudy Mas'ud/Seno Aji" class="rounded-full">
+                    <span class="font-semibold text-lg mr-4">Rudy Mas'ud/Seno Aji</span>
+                    <img src="https://d22gwcrfo2de51.cloudfront.net/wp-content/uploads/2021/09/isran1-122e74ac-41bc-4213-91e3-677f58c1eab4_jpg-1024x683-1.jpg" alt="Rudy Mas'ud/Seno Aji" class="rounded-full w-20 h-20">
                 </div>
             </div>
-            <div class="bg-gray-200 h-8 rounded-full overflow-hidden flex">
+            <div class="bg-gray-200 h-10 rounded-full overflow-hidden flex">
                 <div class="bg-[#3560A0] h-full flex-grow flex items-center">
-                    <span class="text-white text-xs font-semibold ml-2">372,987 Suara</span>
+                    <span class="text-white text-sm font-semibold ml-4">372,987 Suara</span>
                 </div>
                 <div class="bg-yellow-400 h-full w-[32.6%] flex items-center justify-end">
-                    <span class="text-white text-xs font-semibold mr-2">180,181 Suara</span>
+                    <span class="text-white text-sm font-semibold mr-4">180,181 Suara</span>
                 </div>
             </div>
         </section>
-
          <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 gap-8 mb-8">
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
