@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ProvinsiExport;
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
+use App\Imports\ProvinsiImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
@@ -54,7 +55,7 @@ class ProvinsiController extends Controller
             return Excel::download(new ProvinsiExport($request->get('kabupaten_id')), 'provinsi.xlsx');
         }
         
-        return redirect()->back()->with('status_ekspor_kecamatan', 'gagal');
+        return redirect()->back()->with('status_ekspor_provinsi', 'gagal');
     }
 
     /**
@@ -80,6 +81,19 @@ class ProvinsiController extends Controller
             return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
         } catch (Exception $error) {
             return redirect()->back()->with('status_pembuatan_provinsi', 'gagal');
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+            Excel::import(new ProvinsiImport, $namaSpreadsheet, 'local');
+
+            return redirect()->back()->with('status_impor_provinsi', 'berhasil');
+        } catch (Exception $error) {
+            dd($error);
+            return redirect()->back()->with('status_impor_provinsi', 'gagal');
         }
     }
 

@@ -98,6 +98,10 @@
                 </form>
             </div>
             <div class="flex flex-col-mobile gap-2 space-y-2-mobile w-full-mobile">
+                <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-file-import me-1"></i>
+                    <span>Impor</span>
+                </button>
                 <button id="exportProvinsiBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-file-export me-1"></i>
                     <span>Ekspor</span>
@@ -160,6 +164,7 @@
 @include('admin.provinsi.edit-modal')
 @include('admin.provinsi.hapus-modal')
 @include('admin.provinsi.ekspor-modal')
+@include('admin.provinsi.impor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan
