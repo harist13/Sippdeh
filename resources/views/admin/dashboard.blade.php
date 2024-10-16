@@ -23,9 +23,9 @@
 
          <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 gap-8 mb-8">
-                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-                    <div class="p-4">
+                    <div class="p-4 relative">
                         @include('admin.peta-kaltim.map')
                         <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
                             <p class="mb-2 font-bold">Kutai Kartanegara</p>
@@ -36,15 +36,16 @@
                                 <p>: 18.000 orang</p>
                             </div>
                         </div>
-
-                        <div class="flex justify-end mt-4">
-                            <div class="flex items-center mr-4">
-                                <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
-                                <span class="text-sm">Suara Terbanyak 1</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
-                                <span class="text-sm">Suara Terbanyak 2</span>
+                        <div class="absolute bottom-2 right-2 bg-white p-2 rounded-lg shadow">
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
+                                    <span class="text-sm">Suara Terbanyak 1</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
+                                    <span class="text-sm">Suara Terbanyak 2</span>
+                                </div>
                             </div>
                         </div>
                     </div>
