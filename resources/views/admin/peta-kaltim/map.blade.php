@@ -1,4 +1,4 @@
-<div id="map" style="width: 600px;">
+<div id="map" style="width: 500px;">
   <?xml version="1.0" encoding="utf-8"?>
   <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
     @include('admin.peta-kaltim.regions.berau', ['color' => '#2259A8'])
