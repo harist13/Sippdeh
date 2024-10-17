@@ -29,74 +29,8 @@
     </div>
 </footer>
 
-
-    <script>
-    // Bar Chart
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Berau', 'Balikpapan', 'Bontang', 'Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-            datasets: [{
-                label: 'Jumlah Suara',
-                data: [433163, 189399, 106684, 265548, 57000, 389909, 89000, 340145, 217231, 0],
-                backgroundColor: 'rgba(54, 162, 235, 0.8)',
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 500000,
-                    ticks: {
-                        stepSize: 100000
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Jumlah Suara per Daerah',
-                    font: {
-                        size: 16
-                    }
-                }
-            }
-        }
-    });
-
-    // Pie Chart
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Tidak Menggunakan Hak Pilih', 'Pengguna Hak Pilih'],
-            datasets: [{
-                data: [32, 68],
-                backgroundColor: ['#4299e1', '#2b6cb0'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                title: {
-                    display: true,
-                    text: 'Tingkat Partisipasi',
-                    font: {
-                        size: 16
-                    }
-                }
-            }
-        }
-    });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    
     
 
   <script>

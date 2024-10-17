@@ -1,406 +1,756 @@
 @include('operator.layout.header')
-<style>
-    .table-separator {
-        height: 3px;
-        background-color: #d9d9d9;
-        margin: 2rem 0;
-    }
-    .custom-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .custom-table th, .custom-table td {
-        padding: 0.75rem 1rem;
-        text-align: left;
-        white-space: nowrap;
-    }
-    .custom-title-container {
-        background-color: #f8f9fa;
-        border-radius: 0.25rem;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    }
-    .custom-title {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #333;
-        text-align: center;
-        line-height: 1.4;
-        margin: 0;
-    }
-    .custom-table th {
-        background-color: #3560a0;
-        color: white;
-        font-weight: 600;
-    }
-    .custom-table tr {
-        border-bottom: 1px solid #e5e7eb;
-    }
-    .participation-cell {
-        width: 120px;
-        text-align: center;
-    }
-    .participation-button {
-        width: 100%;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.75rem;
-        font-weight: bold;
-        text-align: center;
-        color: white;
-    }
-    .participation-button.green { background-color: #10B981; }
-    .participation-button.yellow { background-color: #F59E0B; }
-    .participation-button.red { background-color: #EF4444; }
+ <style>
+        .participation-button {
+            display: inline-block;
+            width: 100px;
+            padding: 3px 0;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+        }
+        .participation-red { background-color: #ff7675; }
+        .participation-yellow { background-color: #feca57; }
+        .participation-green { background-color: #69d788; }
+    </style>
+<body class="bg-[#f9fafc]">
+    
 
-    /* Responsive styles */
-    @media (max-width: 768px) {
-        .custom-title {
-            font-size: 1.5rem;
-        }
-        .custom-table {
-            font-size: 0.875rem;
-        }
-        .custom-table th, .custom-table td {
-            padding: 0.5rem;
-        }
-        .filter-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        .filter-container > * {
-            margin-bottom: 0.5rem;
-        }
-        .pagination-container {
-            flex-direction: column;
-            align-items: center;
-        }
-        .pagination-container > * {
-            margin-bottom: 0.5rem;
-        }
-    }
-</style>
-<body class="bg-gray-100 font-sans">
-    <main class="container mx-auto px-4 py-8">
-        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-8">
-            <div class="custom-title-container">
-                <h2 class="custom-title">
-                    Data Perolehan Suara Calon Gubernur dan Wakil Gubernur<br>
-                    di Tingkat Provinsi
-                </h2>
-            </div>
+   <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-[20px] p-8 mb-8 shadow-lg">
+            <h1 class="text-4xl font-bold text-center bg-[#eceff5] rounded-lg p-4 mb-8">
+                Data Perolehan Suara Calon Gubernur dan Wakil Gubernur di Tingkat Provinsi
+            </h1>
+
+            <!-- Chart Section -->
+            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                <div class="p-4">
+                    <canvas id="voteCountChart" width="800" height="300"></canvas>
+                </div>
+            </section>
             
-            <!-- Table 1: Partisipasi TPS Terbaik -->
-            <div class="mb-8">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-                    <div class="flex items-center space-x-2">
-                        <img src="{{ asset('assets/Archive.png')}}" alt="">
-                        <span class="text-sm font-medium">Partisipasi TPS Terbaik 1-10 Sekaltim</span>
+
+            <!-- Data Table Section -->
+            <div class="overflow-hidden mb-8">
+                <div class="mb-4 flex justify-between items-center">
+                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
+                        Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                     </div>
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                        <select class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                            <option>Pilih Kab/Kota</option>
-                        </select>
-                        <input type="text" placeholder="Search" class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                        <button class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm flex items-center justify-center w-full sm:w-auto">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-gray-600">Sort by</span>
+                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                                <option>Samarinda</option>
+                            </select>
+                        </div>
+                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                            </svg>
                             Filter
                         </button>
                     </div>
                 </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="custom-table">
-                        <thead>
+               <div class="overflow-x-auto">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <thead class="bg-[#3560a0] text-white">
                             <tr>
-                                <th>NO</th>
-                                <th>KAB/KOTA</th>
-                                <th>KECAMATAN</th>
-                                <th>KELURAHAN</th>
-                                <th>TPS</th>
-                                <th>DPT</th>
-                                <th>PARTISIPASI</th>
+                                <th class="py-3 px-4 text-left">NO</th>
+                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
+                                <th class="py-3 px-4 text-left">SUARA SAH</th>
+                                <th class="py-3 px-4 text-left">SUARA TDK SAH</th>
+                                <th class="py-3 px-4 text-left">JML PENG HAK PILIH</th>
+                                <th class="py-3 px-4 text-left">JML PENG TDK PILIH</th>
+                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-100">
-                            <tr>
-                                <td>01</td>
-                                <td>Samarinda</td>
-                                <td>Palaran</td>
-                                <td>Bantuas</td>
-                                <td>TPS 1</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">Hijau</div>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">01</td>
+                                <td class="py-3 px-4">Samarinda</td>
+                                <td class="py-3 px-4">455.345</td>
+                                <td class="py-3 px-4">2.123</td>
+                                <td class="py-3 px-4">582.467</td>
+                                <td class="py-3 px-4">124.999</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">78.5%</div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>02</td>
-                                <td>Samarinda</td>
-                                <td>Palaran</td>
-                                <td>Bantuas</td>
-                                <td>TPS 1</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">Hijau</div>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">02</td>
+                                <td class="py-3 px-4">Balikpapan</td>
+                                <td class="py-3 px-4">378.912</td>
+                                <td class="py-3 px-4">1.876</td>
+                                <td class="py-3 px-4">498.234</td>
+                                <td class="py-3 px-4">117.446</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-yellow">76.4%</div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>03</td>
-                                <td>Samarinda</td>
-                                <td>Palaran</td>
-                                <td>Bantuas</td>
-                                <td>TPS 1</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">Hijau</div>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">03</td>
+                                <td class="py-3 px-4">Kutai Kartanegara</td>
+                                <td class="py-3 px-4">412.567</td>
+                                <td class="py-3 px-4">2.345</td>
+                                <td class="py-3 px-4">543.210</td>
+                                <td class="py-3 px-4">128.298</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">76.2%</div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>04</td>
-                                <td>Samarinda</td>
-                                <td>Palaran</td>
-                                <td>Bantuas</td>
-                                <td>TPS 1</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">Hijau</div>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">04</td>
+                                <td class="py-3 px-4">Bontang</td>
+                                <td class="py-3 px-4">98.765</td>
+                                <td class="py-3 px-4">543</td>
+                                <td class="py-3 px-4">132.456</td>
+                                <td class="py-3 px-4">33.148</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-yellow">75.0%</div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>05</td>
-                                <td>Samarinda</td>
-                                <td>Palaran</td>
-                                <td>Bantuas</td>
-                                <td>TPS 1</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">Hijau</div>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">05</td>
+                                <td class="py-3 px-4">Berau</td>
+                                <td class="py-3 px-4">145.678</td>
+                                <td class="py-3 px-4">876</td>
+                                <td class="py-3 px-4">198.765</td>
+                                <td class="py-3 px-4">52.211</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-yellow">73.7%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">06</td>
+                                <td class="py-3 px-4">Paser</td>
+                                <td class="py-3 px-4">132.456</td>
+                                <td class="py-3 px-4">765</td>
+                                <td class="py-3 px-4">187.654</td>
+                                <td class="py-3 px-4">54.433</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-yellow">71.0%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">07</td>
+                                <td class="py-3 px-4">Kutai Timur</td>
+                                <td class="py-3 px-4">178.901</td>
+                                <td class="py-3 px-4">1.234</td>
+                                <td class="py-3 px-4">256.789</td>
+                                <td class="py-3 px-4">76.654</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-yellow">70.2%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">08</td>
+                                <td class="py-3 px-4">Penajam Paser Utara</td>
+                                <td class="py-3 px-4">87.654</td>
+                                <td class="py-3 px-4">432</td>
+                                <td class="py-3 px-4">132.456</td>
+                                <td class="py-3 px-4">44.370</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-red">66.5%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">09</td>
+                                <td class="py-3 px-4">Kutai Barat</td>
+                                <td class="py-3 px-4">76.543</td>
+                                <td class="py-3 px-4">321</td>
+                                <td class="py-3 px-4">121.234</td>
+                                <td class="py-3 px-4">44.370</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-red">63.4%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">10</td>
+                                <td class="py-3 px-4">Mahakam Ulu</td>
+                                <td class="py-3 px-4">23.456</td>
+                                <td class="py-3 px-4">123</td>
+                                <td class="py-3 px-4">43.210</td>
+                                <td class="py-3 px-4">19.631</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-red">54.6%</div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="flex flex-col sm:flex-row justify-between items-center mt-4 text-sm">
-                    <span class="mb-2 sm:mb-0">1 - 10 dari 40 tabel</span>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 rounded bg-blue-500 text-white">1</button>
-                        <button class="px-3 py-1 rounded">2</button>
-                        <button class="px-3 py-1 rounded">Next</button>
+            </div>
+
+            <!-- Candidate Cards Section -->
+            <div class="mb-8 overflow-hidden">
+    <div class="relative">
+        <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 200%;">
+            <!-- Original set of cards -->
+            <div class="flex justify-between w-1/2 px-4">
+                <!-- Andi Harun / Saefuddin Zuhri -->
+                <div class="w-[32%] flex flex-col">
+                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                    </div>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
+                    </div>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kotak Kosong -->
+                <div class="w-[32%] flex flex-col">
+                    <!-- Content for Kotak Kosong -->
+                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                    </div>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
+                    </div>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Muhammad Sabani / Syukri Wahid -->
+                <div class="w-[32%] flex flex-col">
+                    <!-- Content for Muhammad Sabani / Syukri Wahid -->
+                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                    </div>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
+                    </div>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="table-separator"></div>
+            <!-- Duplicate set of cards for smooth transition -->
+             <div class="flex justify-between w-1/2 px-4">
+                <!-- Andi Harun / Saefuddin Zuhri -->
+                <div class="w-[32%] flex flex-col">
+                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                    </div>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
+                    </div>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Table 2: Suara Terbanyak Kabupaten Kota Sekaltim -->
-            <div class="mb-8">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-                    <div class="flex items-center space-x-2">
-                        <img src="{{ asset('assets/dokumen.png')}}" alt="">
-                        <span class="text-sm font-medium">Suara Terbanyak Kabupaten Kota Sekaltim</span>
+                <!-- Kotak Kosong -->
+                <div class="w-[32%] flex flex-col">
+                    <!-- Content for Kotak Kosong -->
+                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
                     </div>
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                        <select class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                            <option>Pilih Kab/Kota</option>
-                        </select>
-                        <input type="text" placeholder="Search" class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                        <button class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm flex items-center justify-center w-full sm:w-auto">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                            Filter
-                        </button>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
                     </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>NO</th>
-                                <th>KAB/KOTA</th>
-                                <th>SUARA SAH</th>
-                                <th>SUARA TDK SAH</th>
-                                <th>JML PENG HAK PILIH</th>
-                                <th>JML PENG TDK PILIH</th>
-                                <th>PARTISIPASI</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-gray-100">
-                            <tr>
-                                <td>01</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button red">30%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>02</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">50%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>03</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button green">70%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>04</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button red">30%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>05</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button red">30%</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row justify-between items-center mt-4 text-sm">
-                    <span class="mb-2 sm:mb-0">1 - 10 dari 40 tabel</span>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 rounded bg-blue-500 text-white">1</button>
-                        <button class="px-3 py-1 rounded">2</button>
-                        <button class="px-3 py-1 rounded">Next</button>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="table-separator"></div>
-
-            <!-- Table 3: Paslon Dengan Suara Terbanyak -->
-            <div>
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-                    <div class="flex items-center space-x-2">
-                        <img src="{{ asset('assets/users.png')}}" alt="">
-                        <span class="text-sm font-medium">Paslon Dengan Suara Terbanyak 1-10 Sekaltim</span>
+                <!-- Muhammad Sabani / Syukri Wahid -->
+                <div class="w-[32%] flex flex-col">
+                    <!-- Content for Muhammad Sabani / Syukri Wahid -->
+                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
                     </div>
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                        <select class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                            <option>Pilih Kab/Kota</option>
-                        </select>
-                        <input type="text" placeholder="Search" class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm w-full sm:w-auto">
-                        <button class="bg-gray-100 text-gray-700 rounded px-3 py-2 text-sm flex items-center justify-center w-full sm:w-auto">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                            Filter
-                        </button>
+                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        Samarinda
                     </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>NO</th>
-                                <th>NAMA PASLON</th>
-                                <th>KABUPATEN/KOTA</th>
-                                <th>TOTAL DPT</th>
-                                <th>SUARA SAH</th>
-                                <th>SUARA TIDAK SAH</th>
-                                <th>PARTISIPASI</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-gray-100">
-                            <tr>
-                                <td>01</td>
-                                <td>Andi Harun<br>Saefuddin Zuhri</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">60%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>02</td>
-                                <td>Andi Harun<br>Saefuddin Zuhri</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">60%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>03</td>
-                                <td>Andi Harun<br>Saefuddin Zuhri</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">60%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>04</td>
-                                <td>Andi Harun<br>Saefuddin Zuhri</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">60%</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>05</td>
-                                <td>Andi Harun<br>Saefuddin Zuhri</td>
-                                <td>Samarinda</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td>55,345</td>
-                                <td class="participation-cell">
-                                    <div class="participation-button yellow">60%</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row justify-between items-center mt-4 text-sm">
-                    <span class="mb-2 sm:mb-0">1 - 10 dari 3 tabel</span>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 rounded bg-blue-500 text-white">1</button>
-                        <button class="px-3 py-1 rounded">2</button>
-                        <button class="px-3 py-1 rounded">Next</button>
+                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                        <div class="flex justify-center items-center text-[#008bf9]">
+                            <span class="font-medium">21,69%</span>
+                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                            <span class="font-medium">288.131 Suara</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="flex justify-center mt-4">
+        <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
+        <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
+    </div>
+</div>
+
+            <!-- Paslon Data Table Section -->
+            <div class="overflow-hidden mb-8">
+                <div class="mb-4 flex justify-between items-center">
+                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
+                        Daftar 10 Paslon Dengan Perolehan Suara Tertinggi Se-Kalimantan Timur
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-gray-600">Sort by</span>
+                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                                <option>Samarinda</option>
+                            </select>
+                        </div>
+                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                            </svg>
+                            Filter
+                        </button>
+                    </div>
+                </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead class="bg-[#3560a0] text-white">
+                                <tr>
+                                    <th class="py-3 px-4 text-left">NO</th>
+                                    <th class="py-3 px-4 text-left">NAMA PASLON</th>
+                                    <th class="py-3 px-4 text-left">KABUPATEN/KOTA</th>
+                                    <th class="py-3 px-4 text-left">TOTAL DPT</th>
+                                    <th class="py-3 px-4 text-left">SUARA SAH</th>
+                                    <th class="py-3 px-4 text-left">SUARA TIDAK SAH</th>
+                                    <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-gray-100">
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">01</td>
+                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4">Samarinda</td>
+                                    <td class="py-3 px-4">582.467</td>
+                                    <td class="py-3 px-4">255.345</td>
+                                    <td class="py-3 px-4">2.123</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-green">78.5%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">02</td>
+                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4">Balikpapan</td>
+                                    <td class="py-3 px-4">498.234</td>
+                                    <td class="py-3 px-4">228.912</td>
+                                    <td class="py-3 px-4">1.876</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-yellow">76.4%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">03</td>
+                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4">Kutai Kartanegara</td>
+                                    <td class="py-3 px-4">543.210</td>
+                                    <td class="py-3 px-4">242.567</td>
+                                    <td class="py-3 px-4">2.345</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-green">77.2%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">04</td>
+                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4">Bontang</td>
+                                    <td class="py-3 px-4">132.456</td>
+                                    <td class="py-3 px-4">88.765</td>
+                                    <td class="py-3 px-4">543</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-yellow">75.0%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">05</td>
+                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4">Berau</td>
+                                    <td class="py-3 px-4">198.765</td>
+                                    <td class="py-3 px-4">135.678</td>
+                                    <td class="py-3 px-4">876</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-yellow">73.7%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">06</td>
+                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4">Paser</td>
+                                    <td class="py-3 px-4">187.654</td>
+                                    <td class="py-3 px-4">122.456</td>
+                                    <td class="py-3 px-4">765</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-yellow">71.0%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">07</td>
+                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4">Kutai Timur</td>
+                                    <td class="py-3 px-4">256.789</td>
+                                    <td class="py-3 px-4">168.901</td>
+                                    <td class="py-3 px-4">1.234</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-yellow">70.2%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">08</td>
+                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4">Penajam Paser Utara</td>
+                                    <td class="py-3 px-4">132.456</td>
+                                    <td class="py-3 px-4">77.654</td>
+                                    <td class="py-3 px-4">432</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-red">66.5%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">09</td>
+                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4">Kutai Barat</td>
+                                    <td class="py-3 px-4">121.234</td>
+                                    <td class="py-3 px-4">66.543</td>
+                                    <td class="py-3 px-4">321</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-red">63.4%</div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 px-4">10</td>
+                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4">Mahakam Ulu</td>
+                                    <td class="py-3 px-4">43.210</td>
+                                    <td class="py-3 px-4">21.456</td>
+                                    <td class="py-3 px-4">123</td>
+                                    <td class="py-3 px-4">
+                                        <div class="participation-button participation-red">54.6%</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+
+            <!-- TPS Data Table Section -->
+            <div class="overflow-hidden mb-8">
+                <div class="mb-4 flex justify-between items-center">
+                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
+                        Daftar 10 TPS Dengan Partisipasi Tertinggi Se-Kalimantan Timur
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-gray-600">Sort by</span>
+                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                                <option>Samarinda</option>
+                            </select>
+                        </div>
+                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                            </svg>
+                            Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <thead class="bg-[#3560a0] text-white">
+                            <tr>
+                                <th class="py-3 px-4 text-left">NO</th>
+                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
+                                <th class="py-3 px-4 text-left">KECAMATAN</th>
+                                <th class="py-3 px-4 text-left">KELURAHAN</th>
+                                <th class="py-3 px-4 text-left">TPS</th>
+                                <th class="py-3 px-4 text-left">DPT</th>
+                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-100">
+                            <tr class="border-b">
+                                <td class="py-3 px-4">01</td>
+                                <td class="py-3 px-4">Samarinda</td>
+                                <td class="py-3 px-4">Samarinda Ulu</td>
+                                <td class="py-3 px-4">Jawa</td>
+                                <td class="py-3 px-4">TPS 01</td>
+                                <td class="py-3 px-4">300</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">98.7%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">02</td>
+                                <td class="py-3 px-4">Balikpapan</td>
+                                <td class="py-3 px-4">Balikpapan Selatan</td>
+                                <td class="py-3 px-4">Sepinggan</td>
+                                <td class="py-3 px-4">TPS 03</td>
+                                <td class="py-3 px-4">285</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">97.9%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">03</td>
+                                <td class="py-3 px-4">Kutai Kartanegara</td>
+                                <td class="py-3 px-4">Tenggarong</td>
+                                <td class="py-3 px-4">Melayu</td>
+                                <td class="py-3 px-4">TPS 05</td>
+                                <td class="py-3 px-4">310</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">97.4%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">04</td>
+                                <td class="py-3 px-4">Bontang</td>
+                                <td class="py-3 px-4">Bontang Utara</td>
+                                <td class="py-3 px-4">Guntung</td>
+                                <td class="py-3 px-4">TPS 02</td>
+                                <td class="py-3 px-4">295</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">96.9%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">05</td>
+                                <td class="py-3 px-4">Berau</td>
+                                <td class="py-3 px-4">Tanjung Redeb</td>
+                                <td class="py-3 px-4">Bugis</td>
+                                <td class="py-3 px-4">TPS 04</td>
+                                <td class="py-3 px-4">280</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">96.4%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">06</td>
+                                <td class="py-3 px-4">Paser</td>
+                                <td class="py-3 px-4">Tanah Grogot</td>
+                                <td class="py-3 px-4">Tanah Grogot</td>
+                                <td class="py-3 px-4">TPS 01</td>
+                                <td class="py-3 px-4">305</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">95.7%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">07</td>
+                                <td class="py-3 px-4">Kutai Timur</td>
+                                <td class="py-3 px-4">Sangatta Utara</td>
+                                <td class="py-3 px-4">Teluk Lingga</td>
+                                <td class="py-3 px-4">TPS 03</td>
+                                <td class="py-3 px-4">290</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">95.2%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">08</td>
+                                <td class="py-3 px-4">Penajam Paser Utara</td>
+                                <td class="py-3 px-4">Penajam</td>
+                                <td class="py-3 px-4">Nipah-nipah</td>
+                                <td class="py-3 px-4">TPS 02</td>
+                                <td class="py-3 px-4">275</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">94.9%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">09</td>
+                                <td class="py-3 px-4">Kutai Barat</td>
+                                <td class="py-3 px-4">Melak</td>
+                                <td class="py-3 px-4">Melak Ulu</td>
+                                <td class="py-3 px-4">TPS 01</td>
+                                <td class="py-3 px-4">270</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">94.4%</div>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">10</td>
+                                <td class="py-3 px-4">Mahakam Ulu</td>
+                                <td class="py-3 px-4">Long Bagun</td>
+                                <td class="py-3 px-4">Long Bagun Ilir</td>
+                                <td class="py-3 px-4">TPS 01</td>
+                                <td class="py-3 px-4">260</td>
+                                <td class="py-3 px-4">
+                                    <div class="participation-button participation-green">93.8%</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
-</body>
+
 @include('operator.layout.footer')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('voteCountChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+            datasets: [
+                {
+                    label: 'Suara Masuk',
+                    data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
+                    backgroundColor: '#3560A0',
+                    barPercentage: 0.6,
+                },
+                {
+                    label: 'DPT',
+                    data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
+                    backgroundColor: '#99C9FF',
+                    barPercentage: 0.6,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 500000,
+                    ticks: {
+                        stepSize: 100000,
+                        callback: function(value) {
+                            return value.toLocaleString();
+                        }
+                    },
+                    grid: {
+                        color: '#E0E0E0'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: false
+                }
+            }
+        }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('candidateSlider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentPosition = 0;
+    const slideWidth = slider.clientWidth / 2;
+    const totalSlides = 2;
+
+    function slideRight() {
+        currentPosition -= slideWidth;
+        if (currentPosition <= -slideWidth * totalSlides) {
+            currentPosition = 0;
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${currentPosition}px)`;
+            setTimeout(() => {
+                slider.style.transition = 'transform 500ms ease-in-out';
+                currentPosition -= slideWidth;
+                slider.style.transform = `translateX(${currentPosition}px)`;
+            }, 50);
+        } else {
+            slider.style.transform = `translateX(${currentPosition}px)`;
+        }
+        updateButtons();
+    }
+
+    function slideLeft() {
+        currentPosition += slideWidth;
+        if (currentPosition > 0) {
+            currentPosition = -slideWidth * (totalSlides - 1);
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${currentPosition}px)`;
+            setTimeout(() => {
+                slider.style.transition = 'transform 500ms ease-in-out';
+                currentPosition += slideWidth;
+                slider.style.transform = `translateX(${currentPosition}px)`;
+            }, 50);
+        } else {
+            slider.style.transform = `translateX(${currentPosition}px)`;
+        }
+        updateButtons();
+    }
+
+    function updateButtons() {
+        if (currentPosition === 0) {
+            prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+        } else {
+            prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+        }
+    }
+
+    let autoSlideInterval = setInterval(slideRight, 5000);
+
+    prevBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideLeft();
+        autoSlideInterval = setInterval(slideRight, 5000);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideRight();
+        autoSlideInterval = setInterval(slideRight, 5000);
+    });
+});
+
+    
+</script>
