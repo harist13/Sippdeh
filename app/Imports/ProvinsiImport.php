@@ -25,14 +25,14 @@ class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
 
     public function rules(): array
     {
-        $kabupaten = Kabupaten::selectRaw('lower(nama) AS nama')->get()->pluck('nama')->toArray();
+        $kabupaten = Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
         return [
             '0' => function($attribute, $value, $onFailure) use ($kabupaten) {
-                if (strtolower($value) == 'provinsi') {
+                if ($value == 'PROVINSI') {
                     $onFailure('Provinsi value is not valid.');
                 }
                 
-                if (in_array(strtolower($value), $kabupaten)) {
+                if (in_array(strtoupper($value), $kabupaten)) {
                     $onFailure('Value already exists as a kabupaten.');
                 }
             },
