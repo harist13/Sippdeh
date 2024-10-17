@@ -36,7 +36,22 @@
             right: 0;
             z-index: 1000; /* pastikan lebih rendah dari sidebar */
         }
+
+         .participation-button {
+            display: inline-block;
+            width: 100px;
+            padding: 3px 0;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+        }
+        .participation-red { background-color: #ff7675; }
+        .participation-yellow { background-color: #feca57; }
+        .participation-green { background-color: #69d788; }
     </style>
+    
 </head>
 <body class="relative flex flex-col h-full bg-gray-100">
 
@@ -52,21 +67,21 @@
     <!-- Sidebar Navigation -->
     <nav class="mt-4">
         <div class="px-4 py-2 text-gray-700 font-bold text-base">Resume</div>
-        <a href="{{ route('rangkuman') }}" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
-            <img src="#" alt="" class="w-5 h-5 mr-3">
+        <a href="{{ route('operator.dashboard') }}" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="{{asset('assets/icon/dokumen.png')}}" alt="" class="w-5 h-5 mr-3">
             <span>Rangkuman</span>
         </a>
         <hr class="my-2 border-gray-200">
         
 
         <div class="px-4 py-2 text-gray-700 font-bold text-base">Data</div>
-        <a href="#" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
-            <img src="{{ asset('assets/icon/Building3.png') }}" alt="" class="w-5 h-5 mr-3">
-            <span>Provinsi</span>
+        <a href="{{ route('operator.pilgub') }}" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="{{ asset('assets/icon/Chart.png') }}" alt="" class="w-5 h-5 mr-3">
+            <span>Input Suara Pilgub</span>
         </a>
-        <a href="#" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
-            <img src="{{ asset('assets/icon/Building2.png') }}" alt="" class="w-5 h-5 mr-3">
-            <span>Kabupaten/Kota</span>
+        <a href="{{ route('operator.pilkada') }}" class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-100">
+            <img src="{{ asset('assets/icon/Chart2.png') }}" alt="" class="w-5 h-5 mr-3">
+            <span>Input Suara Pilkada</span>
         </a>
        
     </nav>
