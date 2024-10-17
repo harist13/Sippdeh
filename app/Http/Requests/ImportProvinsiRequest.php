@@ -22,16 +22,17 @@ class ImportProvinsiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'spreadsheet' => 'required|mimes:csv|size:2048'
+            'spreadsheet' => 'required|file|mimes:csv,xlsx|max:2048'
         ];
     }
 
     public function messages()
     {
         return [
-            'spreadsheet.required' => 'Mohon pilih berkas .csv untuk diimpor.',
-            'spreadsheet.mimes' => 'Berkas yang didukung hanya yang bertipe .csv.',
-            'spreadsheet.size' => 'Ukuran berkas maksimal hanya 2 MB.',
+            'spreadsheet.required' => 'Mohon pilih berkas .csv atau .xlsx untuk diimpor.',
+            'spreadsheet.file' => 'Berkas yang didukung hanya yang bertipe .csv atau .xlsx.',
+            'spreadsheet.mimes' => 'Berkas yang didukung hanya yang bertipe .csv atau .xlsx.',
+            'spreadsheet.max' => 'Ukuran berkas maksimal hanya 2 MB.',
         ];
     }
 }

@@ -55,7 +55,19 @@
 
     @php $status = session('gagal'); @endphp
     @isset ($status)
-        @include('components.alert-gagal', ['message' => $status])
+    @include('components.alert-gagal', ['message' => $status])
+    @endisset
+    
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
     @endisset
 
     @php $status = session('status_pembuatan_provinsi'); @endphp

@@ -12,6 +12,7 @@ use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProvinsiController extends Controller
 {
@@ -90,13 +91,39 @@ class ProvinsiController extends Controller
         try {
             if ($request->hasFile('spreadsheet')) {
                 $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
-                Excel::import(new ProvinsiImport, $namaSpreadsheet, 'local');
 
-                return redirect()->back()->with('sukses', 'Berhasil mengimpor data provinsi.');
+                $import = new ProvinsiImport();
+                $import->import($namaSpreadsheet, disk: 'local');
+                
+                $redirectBackResponse = redirect()->back();
+
+                $importErrors = collect($import->failures())
+                    ->map(fn ($failure) => $failure->errors()) // kumpulkan error-error pada satu row
+                    ->filter(fn ($errors) => count($errors) > 0) // filter row yang ada error-nya aja
+                    ->filter(fn ($errors) => $errors[0] != '') // filter row yang error-nya ga kosong
+                    ->map(fn ($errors) => $errors[0]); // kumpulin error pertamanya aja
+
+                if ($importErrors->count() > 0) {
+                    $redirectBackResponse->with('catatan_impor', $importErrors);
+                }
+
+                return $redirectBackResponse->with('sukses', 'Berhasil mengimpor data provinsi.');
             }
 
             return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
-        } catch (Exception $error) {
+        } catch (ValidationException $exception) {
+            $failures = $exception->failures();
+            $redirectBackResponse = redirect()->back();
+
+            dump($failures);
+
+            foreach ($failures as $failure) {
+                dump($failure->errors());
+            }
+
+            dd();
+        } catch (Exception $exception) {
+            dd($exception);
             return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
     }
