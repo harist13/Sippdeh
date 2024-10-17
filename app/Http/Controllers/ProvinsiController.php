@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ProvinsiExport;
+use App\Http\Requests\ImportProvinsiRequest;
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
 use App\Imports\ProvinsiImport;
@@ -84,16 +85,19 @@ class ProvinsiController extends Controller
         }
     }
 
-    public function import(Request $request)
+    public function import(ImportProvinsiRequest $request)
     {
         try {
-            $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
-            Excel::import(new ProvinsiImport, $namaSpreadsheet, 'local');
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+                Excel::import(new ProvinsiImport, $namaSpreadsheet, 'local');
 
-            return redirect()->back()->with('status_impor_provinsi', 'berhasil');
+                return redirect()->back()->with('sukses', 'Berhasil mengimpor data provinsi.');
+            }
+
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
         } catch (Exception $error) {
-            dd($error);
-            return redirect()->back()->with('status_impor_provinsi', 'gagal');
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
     }
 

@@ -5,11 +5,11 @@
             @csrf
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Impor Provinsi</h3>
 
-			{{-- Kabupaten --}}
+			{{-- Spreadsheet --}}
 			<label for="importProvinsi" class="my-2 block">Spreadsheet (.csv)</label>
 			<input type="file" id="provinsiSpreadsheet" name="spreadsheet"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama provinsi" required>
+                placeholder="Nama provinsi">
             <span class="text-red-800">{{ $errors->first('spreadsheet') }}</span>
 
             <hr class="h-1 my-3">
@@ -41,7 +41,7 @@
     document.getElementById('cancelImportProvinsi').addEventListener('click', closeImportProvinsiModal);
 </script>
 
-@error('kabupaten_id')
+@error('spreadsheet')
     <script>
         showImportProvinsiModal();
     </script>
