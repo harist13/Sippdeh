@@ -1,7 +1,7 @@
 @include('admin.layout.header')
 
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
-        <section class="rounded-lg p-6 mb-8">
+        <section class="rounded-lg p-4 mb-8">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <img src="https://d22gwcrfo2de51.cloudfront.net/wp-content/uploads/2021/09/isran1-122e74ac-41bc-4213-91e3-677f58c1eab4_jpg-1024x683-1.jpg" alt="Isran Noor/Hady Mulyadi" class="rounded-full mr-4 w-20 h-20">
@@ -61,76 +61,77 @@
                 </section>
             </div>
 
-            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                <div class="p-4">
-                    <canvas id="voteCountChart" width="800" height="300"></canvas>
-                </div>
-            </section>
-        </div>
-
-            <div class="grid grid-cols-5 gap-4 mb-8">
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Samarinda</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Balikpapan</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Bontang</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Kartanegara</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Timur</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Barat</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Berau</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Paser</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Penajam Paser Utara</button>
-                <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Mahakam Ulu</button>
+                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                    <div class="p-4">
+                        <canvas id="voteCountChart" width="800" height="300"></canvas>
+                    </div>
+                </section>
             </div>
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-5 gap-4 mb-8">
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Samarinda</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Balikpapan</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Bontang</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Kartanegara</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Timur</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Kutai Barat</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Berau</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Paser</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Penajam Paser Utara</button>
+                    <button class="bg-[#3560A0] text-white py-2 px-4 rounded">Mahakam Ulu</button>
+                </div>
 
-            <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
-                <div class="mb-6 rounded-lg">
-                    <div class="flex items-start mb-6">
-                        <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                        <div class="flex-grow pl-10">
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                </div>
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                </div>
-                                <div class="flex justify-between items-center border-b pb-2">
-                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
+                    <div class="mb-6 rounded-lg">
+                        <div class="flex items-start mb-6">
+                            <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                            <div class="flex-grow pl-10">
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                        <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                        <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                        <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                        <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="p-4 text-white bg-blue-900 rounded-lg">
-                    <div class="flex items-center justify-between">
-                        <div class="flex flex-col items-start">
-                            <div class="flex items-center mb-1">
-                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                <span>> 90,00% DPT » Merah</span>
+                    <div class="p-4 text-white bg-blue-900 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col items-start">
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                    <span>> 90,00% DPT » Merah</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                    <span>> 80,00% DPT » Kuning</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                    <span>> 70,00% DPT » Hijau</span>
+                                </div>
                             </div>
-                            <div class="flex items-center mb-1">
-                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                <span>> 80,00% DPT » Kuning</span>
+                            <div class="text-right">
+                                <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                <div class="mt-2 text-4xl font-bold">81.40%</div>
                             </div>
-                            <div class="flex items-center">
-                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                <span>> 70,00% DPT » Hijau</span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                            <div class="mt-2 text-4xl font-bold">81.40%</div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
             <div class="relative overflow-hidden w-[1080px] mx-auto">
             <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 2160px;">
