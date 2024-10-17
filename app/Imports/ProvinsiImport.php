@@ -41,6 +41,7 @@ class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
                     $onFailure('');
                 }
                 
+                // Provinsi yang sudah ada dilewati.
                 if (in_array(strtoupper(trim($value)), $provinsi)) {
                     $onFailure("Provinsi '<b>$value</b>' telah tersedia di database sebelumnya, jadi pengimporan provinsi ini dilewati.");
                 }
