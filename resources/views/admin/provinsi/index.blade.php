@@ -48,6 +48,28 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
+    @php $status = session('sukses'); @endphp
+    @isset ($status)
+        @include('components.alert-berhasil', ['message' => $status])
+    @endisset
+
+    @php $status = session('gagal'); @endphp
+    @isset ($status)
+    @include('components.alert-gagal', ['message' => $status])
+    @endisset
+    
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endisset
+
     @php $status = session('status_pembuatan_provinsi'); @endphp
     @if($status != null)
         @if ($status == 'berhasil')
@@ -76,11 +98,12 @@
     @endif
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
+        <div class="flex items-center space-x-2 w-full-mobile mb-5">
+            <i class="fas fa-map-marker-alt"></i>
+            <span class="text-lg font-bold">Provinsi</span>
+        </div>
+
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <span class="text-lg font-bold"><i class="fas fa-map-marked-alt"></i> Provinsi</span>
-            </div>
-            
             <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'provinsi'])
 
@@ -93,10 +116,19 @@
                         @if (request()->has('kabupaten'))
                             <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
                         @endif
-                    </div>                  
+                    </div>         
                 </form>
-                
-                <button id="addProvinsiBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">
+            </div>
+            <div class="flex flex-col-mobile gap-2 space-y-2-mobile w-full-mobile">
+                <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-file-import me-1"></i>
+                    <span>Impor</span>
+                </button>
+                <button id="exportProvinsiBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-file-export me-1"></i>
+                    <span>Ekspor</span>
+                </button>
+                <button id="addProvinsiBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     + Tambah Provinsi
                 </button>
             </div>
@@ -153,6 +185,8 @@
 @include('admin.provinsi.tambah-modal')
 @include('admin.provinsi.edit-modal')
 @include('admin.provinsi.hapus-modal')
+@include('admin.provinsi.ekspor-modal')
+@include('admin.provinsi.impor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan

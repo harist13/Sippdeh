@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProvinsiExport;
+use App\Http\Requests\ImportProvinsiRequest;
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
+use App\Imports\ProvinsiImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProvinsiController extends Controller
 {
@@ -46,6 +51,15 @@ class ProvinsiController extends Controller
         return view('admin.provinsi.index', compact('kabupaten', 'provinsi'));
     }
 
+    public function export(Request $request)
+    {
+        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
+            return Excel::download(new ProvinsiExport($request->get('kabupaten_id')), 'provinsi.xlsx');
+        }
+        
+        return redirect()->back()->with('status_ekspor_provinsi', 'gagal');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -69,6 +83,48 @@ class ProvinsiController extends Controller
             return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
         } catch (Exception $error) {
             return redirect()->back()->with('status_pembuatan_provinsi', 'gagal');
+        }
+    }
+
+    public function import(ImportProvinsiRequest $request)
+    {
+        try {
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+
+                $import = new ProvinsiImport();
+                $import->import($namaSpreadsheet, disk: 'local');
+                
+                $redirectBackResponse = redirect()->back();
+
+                $importErrors = collect($import->failures())
+                    ->map(fn ($failure) => $failure->errors()) // kumpulkan error-error pada satu row
+                    ->filter(fn ($errors) => count($errors) > 0) // filter row yang ada error-nya aja
+                    ->filter(fn ($errors) => $errors[0] != '') // filter row yang error-nya ga kosong
+                    ->map(fn ($errors) => $errors[0]); // kumpulin error pertamanya aja
+
+                if ($importErrors->count() > 0) {
+                    $redirectBackResponse->with('catatan_impor', $importErrors);
+                }
+
+                return $redirectBackResponse->with('sukses', 'Berhasil mengimpor data provinsi.');
+            }
+
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
+        } catch (ValidationException $exception) {
+            $failures = $exception->failures();
+            $redirectBackResponse = redirect()->back();
+
+            dump($failures);
+
+            foreach ($failures as $failure) {
+                dump($failure->errors());
+            }
+
+            dd();
+        } catch (Exception $exception) {
+            dd($exception);
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
     }
 
