@@ -13,6 +13,8 @@ use App\Http\Controllers\PaslonController;
 use App\Http\Controllers\TPSController;
 use App\Http\Controllers\InputPaslonController;
 use App\Http\Controllers\InputTpsController;
+use App\Http\Controllers\PilgubController;
+use App\Http\Controllers\PilkadaController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -68,11 +70,10 @@ Route::post('/updateProfile', [AdminController::class, 'updateProfile'])->name('
 
 // Middleware untuk operator
 Route::middleware(['auth', 'role:operator'])->group(function () {
-     Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
-    Route::get('/operator/input-paslon', [InputPaslonController::class, 'Index'])->name('input-paslon.index');
-    Route::get('/operator/nama-paslon', [InputPaslonController::class, 'namapaslon'])->name('input-paslon.namapaslon');
-    Route::get('/operator/input-tps', [InputTpsController::class, 'index'])->name('input-tps.index');
-Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
+    Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
+    Route::get('/operator/pilkada', [PilkadaController::class, 'index'])->name('operator.pilkada');
+    Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.pilgub');
+    Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
 
 });
 });

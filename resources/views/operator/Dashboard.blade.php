@@ -1,19 +1,4 @@
 @include('operator.layout.header')
- <style>
-        .participation-button {
-            display: inline-block;
-            width: 100px;
-            padding: 3px 0;
-            font-size: 14px;
-            text-align: center;
-            border-radius: 6px;
-            font-weight: 500;
-            color: white;
-        }
-        .participation-red { background-color: #ff7675; }
-        .participation-yellow { background-color: #feca57; }
-        .participation-green { background-color: #69d788; }
-    </style>
 <body class="bg-[#f9fafc]">
     
 

@@ -1,29 +1,38 @@
- <!-- Footer -->
-<footer class="py-6 text-white bg-[#3560A0]">
+<!-- Footer -->
+<footer class="py-8 text-white bg-[#3560A0]">
     <div class="container px-4 mx-auto">
-        <div class="flex flex-col items-start space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
-            <div class="flex flex-col items-start md:flex-row md:items-center">
-                <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-12 h-12 mb-4 md:mb-0 md:w-15 md:h-16 md:mr-4">
+        <div class="flex flex-col md:flex-row justify-between items-start mb-8">
+            <div class="flex items-start mb-4 md:mb-0">
+                <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-20 h-25 mr-4">
                 <div>
-                    <h3 class="text-lg font-bold">BADAN KESATUAN BANGSA DAN POLITIK</h3>
+                    <h3 class="text-xl font-bold mb-1">BADAN KESATUAN BANGSA DAN POLITIK</h3>
                     <p class="text-sm">Jalan Jenderal Sudirman</p>
-                    <p class="text-sm">Nomor 1, Samarinda</p>
-                    <p class="text-sm">Kalimantan Timur 75117</p>
+                    <p class="text-sm">Nomor 1, Samarinda,</p>
+                    <p class="text-sm">Kalimantan Timur 75121</p>
                 </div>
             </div>
-            <div class="w-full md:w-auto">
-                <h3 class="mb-2 text-lg font-bold">KONTAK</h3>
-                <p class="text-sm"><i class="mr-2 fas fa-phone"></i>+62541-733333</p>
-                <p class="text-sm"><i class="mr-2 fas fa-envelope"></i>kesbangpolkaltim@gmail.com</p>
+            <div class="text-right">
+                <h3 class="text-xl font-bold mb-3">KONTAK</h3>
+                <p class="text-sm flex justify-end items-center mb-2">
+                    <span class="mr-2">(0541) 733333</span>
+                    <i class="fas fa-phone"></i>
+                </p>
+                <p class="text-sm flex justify-end items-center">
+                    <span class="mr-2">Kesbangpolkaltim@Gmail.Com</span>
+                    <i class="fas fa-envelope"></i>
+                </p>
             </div>
         </div>
-        <div class="mt-6 text-center">
-            <p>Kesbangpolkaltim.info</p>
-            <p class="mt-2 text-xs text-gray-200">Copyright © 2023 detikcom, All rights reserved</p>
-            <div class="flex justify-center mt-2 space-x-4">
-                <i class="text-xl fab fa-instagram"></i>
-                <i class="text-xl fab fa-twitter"></i>
-                <i class="text-xl fab fa-facebook"></i>
+        
+        <div class="border-t border-white pt-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <h2 class="text-2xl font-bold mb-4 md:mb-0">Kesbangpolkaltiminfo</h2>
+                <p class="text-sm mb-4 md:mb-0 mr-8">Copyright @ 2023 SIPPDEH, All right reserved</p>
+                <div class="flex space-x-4">
+                    <i class="fab fa-instagram text-2xl"></i>
+                    <i class="fab fa-twitter text-2xl"></i>
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </div>
             </div>
         </div>
     </div>
