@@ -1,288 +1,149 @@
 @include('operator.layout.header')
-<style>
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f9fafc;
-    }
-    .container {
-        max-width: 1199px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .card {
-        background-color: white;
-        border-radius: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-    .filters {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-    .filter-left, .filter-right {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    .filter-item {
-        background-color: #eceff5;
-        border-radius: 8px;
-        padding: 10px 15px;
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        color: #344054;
-        flex-grow: 1;
-    }
-    .filter-item i {
-        margin-right: 8px;
-    }
-    .dropdown {
-        position: relative;
-        display: inline-block;
-        flex-grow: 1;
-    }
-    .dropbtn {
-        background-color: #eceff5;
-        color: #344054;
-        padding: 10px 15px;
-        font-size: 14px;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 8px;
-        width: 100%;
-    }
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 200px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-    .dropdown-content a:hover {
-        background-color: #f1f1f1;
-    }
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-    .dropdown:hover .dropbtn {
-        background-color: #e2e6ef;
-    }
-    .fa-chevron-down {
-        margin-left: 10px;
-    }
-    .search-input {
-        border: none;
-        background: transparent;
-        outline: none;
-        width: 100%;
-    }
-    .table-container {
-        overflow-x: auto;
-    }
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 600px;
-    }
-    .table th {
-        background-color: #3560a0;
-        color: white;
-        text-align: left;
-        padding: 15px;
-        font-weight: 600;
-    }
-    .table td {
-        padding: 15px;
-        border-bottom: 1px solid #e6e6e6;
-    }
-    .btn {
-        background-color: #3560a0;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 6px 12px;
-        cursor: pointer;
-        font-weight: 600;
-        width: 80px;
-        text-align: center;
-    }
-    .pagination {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-    }
-    .pagination-buttons {
-        display: flex;
-        gap: 10px;
-    }
-    .pagination-button {
-        background-color: transparent;
-        border: none;
-        color: #6A6A6A;
-        cursor: pointer;
-        font-size: 13px;
-    }
-    .pagination-button.active {
-        background-color: #0086F9;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-    .action-column {
-        width: 100px;
-        text-align: center;
-    }
-
-    @media (min-width: 768px) {
-        .filters {
-            flex-direction: row;
-            justify-content: space-between;
-        }
-        .filter-right {
-            justify-content: flex-end;
-        }
-        .pagination {
-            flex-direction: row;
-            justify-content: space-between;
-        }
-    }
-</style>
-
-<div class="container">
-    <div class="card">
-        <div class="filters">
-            <div class="filter-left">
-                <div class="">
-                    <i class="fas fa-users"></i>
-                    Pilih Paslon
+<main class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
+        <div class="container mx-auto p-7">
+            <div class="mb-4 flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center">
+                <button class="bg-gray-300 text-gray-700 py-3 px-5 rounded text-sm font-medium w-full sm:w-auto">Pemilihan Pilkada</button>
+                <button class="bg-green-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Simpan Perubahan Data
+                </button>
+                <button class="bg-red-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Batal Ubah Data
+                </button>
+                <button class="bg-blue-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Ubah Data
+                </button>
+                
+                <div class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-2 sm:ml-auto w-full sm:w-auto">
+                    <select class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 rounded text-sm w-full sm:w-auto">
+                        <option>Samarinda</option>
+                    </select>
+                    <div class="relative w-full sm:w-auto">
+                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 pr-8 rounded text-sm w-full">
+                        <svg class="w-4 h-4 text-gray-500 absolute right-2 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <button class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 rounded flex items-center justify-center text-sm w-full sm:w-auto">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                        </svg>
+                        Filter
+                    </button>
                 </div>
             </div>
-            <div class="filter-right">
-                <div class="dropdown">
-                    <button class="dropbtn">Pilih Kab/Kota <i class="fas fa-chevron-down"></i></button>
-                    <div class="dropdown-content">
-                        <a href="#">Samarinda</a>
-                        <a href="#">Balikpapan</a>
-                        <a href="#">Bontang</a>
-                        <a href="#">Kutai Kartanegara</a>
-                        <a href="#">Kutai Timur</a>
-                        <a href="#">Kutai Barat</a>
-                        <a href="#">Berau</a>
-                        <a href="#">Paser</a>
-                        <a href="#">Penajam Paser Utara</a>
-                        <a href="#">Mahakam Ulu</a>
+
+            <div class="overflow-x-auto -mx-4 sm:mx-0">
+                <div class="inline-block min-w-full align-middle">
+                    <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-[#3560A0] text-white">
+                                <tr>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 50px;">NO</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 60px;">
+                                        <input type="checkbox" id="selectAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+                                    </th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">Keterangan</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 120px;">Kelurahan</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 80px;">TPS</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 80px;">DPT</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 160px;">
+                                        Rahmad Mas'ud/<br>Bagus Susetyo
+                                    </th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 180px;">
+                                        Rendi Susiswo Ismail<br>Eddy Sunardi Darmawan
+                                    </th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">Suara Sah</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 120px;">Suara Tidak Sah</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 140px;">Jumlah Pengguna<br>Hak Pilih</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 140px;">Jumlah Pengguna<br>Tidak Pilih</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">Suara Masuk</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">Persentase</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 80px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
+                                <tr class="border-b text-center">
+                                    <td class="py-3 px-4">01</td>
+                                    <td class="py-3 px-4">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="bg-red-100 text-red-800 py-1 px-2 rounded-full text-xs">Belum</span>
+                                    </td>
+                                    <td class="py-3 px-4">Palaran</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
+                                        <svg class="w-5 h-5 text-blue-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                        </svg>
+                                    </td>
+                                </tr>
+                                <tr class="border-b text-center">
+                                    <td class="py-3 px-4">02</td>
+                                    <td class="py-3 px-4">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="bg-blue-100 text-blue-800 py-1 px-2 rounded-full text-xs">Sudah</span>
+                                    </td>
+                                    <td class="py-3 px-4">Palaran</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4">55.345</td>
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
+                                        <svg class="w-5 h-5 text-blue-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                        </svg>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="filter-item">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search" class="search-input">
-                </div>
-                <div class="filter-item">
-                    <i class="fas fa-filter"></i>
-                    Filter
-                </div>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>NO</th>
-                        <th>NAMA PASLON</th>
-                        <th>KABUPATEN/KOTA</th>
-                        <th class="action-column">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-100">
-                    <tr>
-                        <td>01</td>
-                        <td>Andi Harun/Saefuddin Zuhri</td>
-                        <td>Samarinda</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>02</td>
-                        <td>Rahmad Mas'ud/Bagus Susetyo</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>03</td>
-                        <td>Rendi Susiswo Ismail/Eddy Sunardi Darmawan</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>04</td>
-                        <td>Muhammad Sa'bani/Syukri Wahid</td>
-                        <td>Balikpapan</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>05</td>
-                        <td>Neni Moerniaeni/Agus Haris</td>
-                        <td>Bontang</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>06</td>
-                        <td>Basri Rase/Chusnul Dhihin</td>
-                        <td>Bontang</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>07</td>
-                        <td>Najirah/Muhammad Aswar</td>
-                        <td>Bontang</td>
-                        <td class="action-column">
-                            <a href="{{ route('input-paslon.namapaslon') }}" class="btn">Pilih</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="pagination">
-            <span>1 - 10 dari 40 tabel</span>
-            <div class="pagination-buttons">
-                <button class="pagination-button">Previous</button>
-                <button class="pagination-button active">1</button>
-                <button class="pagination-button">2</button>
-                <button class="pagination-button">Next</button>
             </div>
         </div>
     </div>
-</div>
-
+</main>
 @include('operator.layout.footer')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+
+    selectAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    });
+});
+</script>

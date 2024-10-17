@@ -73,7 +73,7 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-8">
         <!-- Table Header -->
         <div class="flex flex-wrap-mobile justify-between items-center mb-4">
             <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile">
