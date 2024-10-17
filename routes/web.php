@@ -32,6 +32,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'index' => 'provinsi'
     ]);
 
+    Route::get('kabupaten/ekspor', [KabupatenController::class, 'export'])->name('kabupaten.export');
+    Route::post('kabupaten/impor', [KabupatenController::class, 'import'])->name('kabupaten.import');
     Route::resource('kabupaten', KabupatenController::class)->names([
         'index' => 'kabupaten'
     ]);
