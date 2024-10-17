@@ -101,7 +101,8 @@
                     <span>Ekspor</span>
                 </button>
                 <button id="addKabupatenBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
-                    + Tambah Kabupaten
+                    <i class="fas fa-plus me-1"></i>
+                    <span>Tambah Kabupaten</span>
                 </button>
             </div>
         </div>
