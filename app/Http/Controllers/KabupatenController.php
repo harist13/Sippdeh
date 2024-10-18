@@ -9,9 +9,9 @@ use App\Http\Requests\UpdateKabupatenRequest;
 use App\Imports\KabupatenImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
-use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class KabupatenController extends Controller
 {
@@ -45,15 +45,7 @@ class KabupatenController extends Controller
             return Excel::download(new KabupatenExport($request->get('provinsi_id')), 'kabupaten.xlsx');
         }
         
-        return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengekspor kabupaten.');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengekspor kabupaten.');
     }
 
     /**
@@ -81,13 +73,13 @@ class KabupatenController extends Controller
             if ($request->hasFile('spreadsheet')) {
                 $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
 
-                $import = new KabupatenImport();
-                $import->import($namaSpreadsheet, disk: 'local');
+                $kabupatenImport = new KabupatenImport();
+                $kabupatenImport->import($namaSpreadsheet, disk: 'local');
                 
                 $redirectBackResponse = redirect()->back();
 
-                if (count($import->catatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $import->catatan());
+                if (count($kabupatenImport->catatan()) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->catatan());
                 }
 
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data provinsi.');
@@ -97,22 +89,6 @@ class KabupatenController extends Controller
         } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
