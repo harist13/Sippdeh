@@ -27,7 +27,7 @@
         <div class="border-t border-white pt-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <h2 class="text-2xl font-bold mb-4 md:mb-0">Kesbangpolkaltiminfo</h2>
-                <p class="text-sm mb-4 md:mb-0 mr-8">Copyright @ 2023 SIPPDEH, All right reserved</p>
+                <p class="text-sm mb-4 md:mb-0 md:mr-8">Copyright @ 2023 SIPPDEH, All right reserved</p>
                 <div class="flex space-x-4">
                     <i class="fab fa-instagram text-2xl"></i>
                     <i class="fab fa-twitter text-2xl"></i>

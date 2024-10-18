@@ -36,6 +36,53 @@
             right: 0;
             z-index: 1000; /* pastikan lebih rendah dari sidebar */
         }
+
+        @media screen and (max-width: 768px) {
+            footer .container {
+                padding: 0 1rem;
+            }
+
+            footer .flex-col {
+                align-items: center;
+            }
+
+            footer .flex-col > div {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            footer .flex.items-start {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            footer .flex.items-start img {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            footer .text-right {
+                text-align: center;
+            }
+
+            footer .flex.justify-end {
+                justify-content: center;
+            }
+
+            footer .border-t .flex-col {
+                text-align: center;
+            }
+
+            footer .border-t .flex-col > * {
+                margin-bottom: 1rem;
+            }
+
+            footer .border-t .flex.space-x-4 {
+                justify-content: center;
+            }
+        }
+
     </style>
 </head>
 <body class="relative flex flex-col h-full bg-gray-100">
