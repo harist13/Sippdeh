@@ -8,8 +8,8 @@
 	<tbody>
 		@foreach($kabupaten as $kab)
 			<tr>
-				<td style="font-size: 16px;">{{ $kab->nama }}</td>
-				<td style="font-size: 16px;">{{ $kab->provinsi->nama }}</td>
+				<td style="font-size: 16px;">{{ strtoupper($kab->nama) }}</td>
+				<td style="font-size: 16px;">{{ strtoupper($kab->provinsi->nama) }}</td>
 			</tr>
 		@endforeach
 	</tbody>
