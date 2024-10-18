@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             UserSeeder::class,
             ProvinsiSeeder::class,
-            // KabupatenSeeder::class,
-            // KecamatanSeeder::class,
-            // KelurahanSeeder::class,
+            KabupatenSeeder::class,
+            KecamatanSeeder::class,
+            KelurahanSeeder::class,
         ]);
     }
 }
