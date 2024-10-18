@@ -4,14 +4,13 @@ namespace App\Imports;
 
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
-use Exception;
 use Illuminate\Support\Model;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Exception;
 
 class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
 {
@@ -36,19 +35,23 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
     */
     public function model(array $row)
     {
-        $namaKabupaten = $row[0];
-        $namaProvinsi = $row[1];
+        try {
+            $namaKabupaten = $row[0];
+            $namaProvinsi = $row[1];
 
-        $provinsi = $this->_ambilProvinsiByNama($namaProvinsi);
-        
-        // Jika provinsi belum ada, buat provinsi baru
-        if ($provinsi == null) {
-            $provinsi = $this->_buatProvinsiBaru($namaProvinsi);
-            $this->_tambahCatatan(namaKabupaten: $namaKabupaten, namaProvinsi: $namaProvinsi);
+            $provinsi = $this->_ambilProvinsiByNama($namaProvinsi);
+            
+            // Jika provinsi belum ada, buat provinsi baru
+            if ($provinsi == null) {
+                $provinsi = $this->_buatProvinsiBaru($namaProvinsi);
+                $this->_tambahCatatan(namaKabupaten: $namaKabupaten, namaProvinsi: $namaProvinsi);
+            }
+
+            // Buat kabupaten dan kaitkan dengan provinsi
+            return $this->_buatKabupatenBaru(namaKabupaten: $namaKabupaten, provinsiId: $provinsi->id);
+        } catch (Exception $exception) {
+            throw $exception;
         }
-
-        // Buat kabupaten dan kaitkan dengan provinsi
-        return $this->_buatKabupatenBaru(namaKabupaten: $namaKabupaten, provinsiId: $provinsi->id);
     }
 
     private function _ambilProvinsiByNama(string $namaProvinsi): Provinsi|null
@@ -56,7 +59,6 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
         try {
             return Provinsi::whereRaw('UPPER(nama) = ?', [strtoupper($namaProvinsi)])->first();
         } catch (Exception $exception) {
-            dd($exception);
             throw $exception;
         }
     }
@@ -66,7 +68,6 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
         try {
             return Provinsi::create(['nama' => $namaProvinsi]);
         } catch (Exception $exception) {
-            dd($exception);
             throw $exception;
         }
     }
@@ -79,7 +80,6 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
                 'provinsi_id' => $provinsiId
             ]);
         } catch (Exception $exception) {
-            dd($exception);
             throw $exception;
         }
     }
@@ -87,36 +87,57 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
     private function _tambahCatatan(string $namaKabupaten, string $namaProvinsi): void
     {
         try {
-            $catatan = "Pada penambahan kabupaten '<b>$namaKabupaten</b>', provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
-            array_push($this->catatan, $catatan);
+            $pesan = "Pada penambahan kabupaten '<b>$namaKabupaten</b>', provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
+            array_push($this->catatan, $pesan);
         } catch (Exception $exception) {
-            dd($exception);
             throw $exception;
         }
     }
 
     public function rules(): array
     {
-        $kabupaten = Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
-        $provinsi = Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
+        try {
+            $kabupaten = $this->_ambilSemuaKabupaten();
+            $provinsi = $this->_ambilSemuaProvinsi();
 
-        return [
-            '0' => function($attribute, $value, $onFailure) use ($kabupaten, $provinsi) {
-                // Header Provinsi dilewati.
-                if (in_array(strtoupper(trim($value)), $provinsi)) {
-                    $onFailure('');
-                }
+            return [
+                '0' => function($attribute, $value, $onFailure) use ($kabupaten, $provinsi) {
+                    // Header Provinsi dilewati.
+                    if (in_array(strtoupper(trim($value)), $provinsi)) {
+                        $onFailure('');
+                    }
 
-                // Header 'KABUPATEN' dilewati.
-                if ($value == 'KABUPATEN') {
-                    $onFailure('');
-                }
-                
-                // Kabupaten yang sudah ada dilewati.
-                if (in_array(strtoupper(trim($value)), $kabupaten)) {
-                    $onFailure("Kabupaten '<b>$value</b>' telah tersedia di database sebelumnya, jadi pengimporan kabupaten ini dilewati.");
-                }
-            },
-        ];
+                    // Header 'KABUPATEN' dilewati.
+                    if ($value == 'KABUPATEN') {
+                        $onFailure('');
+                    }
+                    
+                    // Kabupaten yang sudah ada dilewati.
+                    if (in_array(strtoupper(trim($value)), $kabupaten)) {
+                        $onFailure("Kabupaten '<b>$value</b>' telah tersedia di database sebelumnya, jadi pengimporan kabupaten ini dilewati.");
+                    }
+                },
+            ];
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private function _ambilSemuaKabupaten(): array
+    {
+        try {
+            return Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private function _ambilSemuaProvinsi(): array
+    {
+        try {
+            return Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 }
