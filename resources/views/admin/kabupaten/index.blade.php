@@ -42,32 +42,15 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('status_pembuatan_kabupaten'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kabupaten berhasil ditambahkan.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kabupaten gagal ditambahkan.'])
-        @endif
-    @endif
+    @php $pesanSukses = session('pesan_sukses'); @endphp
+    @isset ($pesanSukses)
+        @include('components.alert-berhasil', ['message' => $pesanSukses])
+    @endisset
 
-    @php $status = session('status_pengeditan_kabupaten'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kabupaten berhasil diedit.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kabupaten gagal diedit.'])
-        @endif
-    @endif
-
-    @php $status = session('status_penghapusan_kabupaten'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kabupaten berhasil dihapus.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kabupaten gagal dihapus.'])
-        @endif
-    @endif
+    @php $pesanGagal = session('pesan_gagal'); @endphp
+    @isset ($pesanGagal)
+        @include('components.alert-berhasil', ['message' => $pesanGagal])
+    @endisset
 
     @php $catatanImpor = session('catatan_impor'); @endphp
     @isset ($catatanImpor)

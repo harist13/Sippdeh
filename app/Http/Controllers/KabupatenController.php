@@ -90,12 +90,12 @@ class KabupatenController extends Controller
                     $redirectBackResponse->with('catatan_impor', $import->catatan());
                 }
 
-                return $redirectBackResponse->with('sukses', 'Berhasil mengimpor data provinsi.');
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data provinsi.');
             }
 
-            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
+            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
     }
 
