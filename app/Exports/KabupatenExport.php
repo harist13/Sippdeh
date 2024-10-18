@@ -4,12 +4,11 @@ namespace App\Exports;
 
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
-use Exception;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Exception;
 
 class KabupatenExport implements FromView, WithStyles {
   private $provinsiId;
@@ -21,16 +20,16 @@ class KabupatenExport implements FromView, WithStyles {
   public function view(): View {
 	try {
 		if ($this->provinsiId == 0) {
-			return $this->_semuaKabupaten();
+			return $this->_eksporSemuaKabupaten();
 		}
 	
-		return $this->_kabupatenProvinsi();
+		return $this->_eksporKabupatenProvinsi();
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _semuaKabupaten(): View
+  private function _eksporSemuaKabupaten(): View
   {
 	  try {
 		$kabupaten = Kabupaten::all();
@@ -40,7 +39,7 @@ class KabupatenExport implements FromView, WithStyles {
 	}
   }
 
-  private function _kabupatenProvinsi(): View
+  private function _eksporKabupatenProvinsi(): View
   {
 	try {
 		$provinsi = Provinsi::find($this->provinsiId);
@@ -50,7 +49,7 @@ class KabupatenExport implements FromView, WithStyles {
 	}
   }
 
-  public function styles(Worksheet $sheet)
+  public function styles(Worksheet $sheet): void
   {
 	$styleArray = [
 		'borders' => [
@@ -64,18 +63,26 @@ class KabupatenExport implements FromView, WithStyles {
 	$index = 1;
 
 	foreach ($sheet->getRowIterator() as $row) {
-		// $namaProvinsi = $sheet->getCell('A1');
-		// $namaProvinsi->getStyle()->getFont()->setBold(true);
-
-		$cellA = $sheet->getCell("A$index");
-		$cellA->getStyle()->applyFromArray($styleArray);
+		$this->_setKabupatenBorder($sheet, $index, $styleArray);
 		
+		// Jika memilih semua provinsi, maka berikan border untuk kolom B
 		if ($this->provinsiId == 0) {
-			$cellB = $sheet->getCell("B$index");
-			$cellB->getStyle()->applyFromArray($styleArray);
+			$this->_setProvinsiBorder($sheet, $index, $styleArray);
 		}
 
 		$index++;
 	}
+  }
+
+  private function _setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
+  {
+	$cellA = $sheet->getCell("A$index");
+	$cellA->getStyle()->applyFromArray($styleArray);
+  }
+
+  private function _setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
+  {
+	$cellB = $sheet->getCell("B$index");
+	$cellB->getStyle()->applyFromArray($styleArray);
   }
 }
