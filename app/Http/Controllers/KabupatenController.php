@@ -82,8 +82,8 @@ class KabupatenController extends Controller
                 
                 $redirectBackResponse = redirect()->back();
 
-                if (count($kabupatenImport->catatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->catatan());
+                if (count($kabupatenImport->getCatatan()) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->getCatatan());
                 }
 
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');

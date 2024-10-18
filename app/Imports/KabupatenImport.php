@@ -8,195 +8,175 @@ use Illuminate\Support\Model;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Exception;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Row;
+use Exception;
 
 class KabupatenImport implements SkipsOnFailure, OnEachRow
 {
     use Importable, SkipsFailures;
 
-    private Provinsi|null $_provinsi = null;
-
+    private ?Provinsi $provinsi = null;
     public array $catatan = [];
 
-    public function catatan()
+    /**
+     * Mengambil catatan dari proses impor.
+     */
+    public function getCatatan(): array
     {
-        $failures = $this->failures()
-            ->map(fn ($failure) => $failure->errors()) // kumpulkan error-error pada satu row
-            ->filter(fn ($errors) => count($errors) > 0) // filter row yang ada error-nya aja
-            ->filter(fn ($errors) => $errors[0] != '') // filter row yang error-nya ga kosong
+        $failureMessages = $this->failures()
+            ->map(fn ($failure) => $failure->errors())
+            ->filter(fn ($errors) => count($errors) > 0 && $errors[0] !== '')
             ->map(fn ($errors) => $errors[0])
-            ->toArray(); // kumpulin error pertamanya aja
-        
-        return array_merge($failures, $this->catatan);
+            ->toArray();
+
+        return array_merge($failureMessages, $this->catatan);
     }
 
-    public function onRow(Row $row)
+    /**
+     * Proses setiap baris data.
+     */
+    public function onRow(Row $row): void
     {
         try {
             if (isset($row[1])) {
-                $this->_imporSemuaKabupaten($row);
+                $this->importSemuaKabupaten($row);
             } else {
-                $this->_imporKabupatenByProvinsi($row);
+                $this->importKabupatenByProvinsi($row);
             }
         } catch (Exception $exception) {
             throw $exception;
         }
     }
 
-    private function _imporSemuaKabupaten(Row $row): void
+    /**
+     * Impor semua kabupaten yang memiliki nama provinsi pada baris yang sama.
+     */
+    private function importSemuaKabupaten(Row $row): void
     {
-        try {
-            $rowIndex = $row->getIndex();
+        $rowIndex = $row->getIndex();
 
-            if ($rowIndex == 1) {
-                return;
+        // Skip header baris pertama
+        if ($rowIndex == 1) {
+            return;
+        }
+
+        $row = $row->toArray();
+        $namaKabupaten = $row[0];
+        $namaProvinsi = $row[1];
+
+        $this->provinsi = $this->getProvinsiByNama($namaProvinsi);
+
+        // Buat provinsi baru jika belum ada
+        if (is_null($this->provinsi)) {
+            $this->provinsi = $this->createProvinsi($namaProvinsi);
+            $this->addCatatanProvinsiBaruDariKabupaten($namaKabupaten, $namaProvinsi);
+        }
+
+        $kabupatenList = $this->getAllKabupaten();
+
+        // Tambahkan catatan jika kabupaten sudah ada, jika belum buat kabupaten baru
+        if (in_array(strtoupper(trim($namaKabupaten)), $kabupatenList)) {
+            $this->addCatatanKabupatenSudahAda($namaKabupaten);
+        } else {
+            $this->createKabupaten($namaKabupaten, $this->provinsi->id);
+        }
+    }
+
+    /**
+     * Impor kabupaten berdasarkan provinsi yang telah ditemukan sebelumnya.
+     */
+    private function importKabupatenByProvinsi(Row $row): void
+    {
+        $rowIndex = $row->getIndex();
+        $row = $row->toArray();
+
+        // Skip header kabupaten
+        if ($rowIndex == 2) {
+            return;
+        }
+
+        // Ambil atau buat provinsi baru pada baris pertama
+        if ($rowIndex == 1) {
+            $this->provinsi = $this->getProvinsiByNama($row[0]);
+
+            if (is_null($this->provinsi)) {
+                $this->provinsi = $this->createProvinsi($row[0]);
+                $this->addCatatanProvinsiBaru($row[0]);
             }
+        }
 
-            $row = $row->toArray();
+        // Tambahkan kabupaten ke provinsi pada baris ke-3 ke atas
+        if ($rowIndex >= 3) {
+            $kabupatenList = $this->getAllKabupaten();
 
-            $namaKabupaten = $row[0];
-            $namaProvinsi = $row[1];
-
-            $this->_provinsi = $this->_ambilProvinsiByNama($namaProvinsi);
-            
-            // Jika provinsi belum ada, buat provinsi baru
-            if ($this->_provinsi == null) {
-                $this->_provinsi = $this->_buatProvinsiBaru($namaProvinsi);
-                $this->_tambahCatatanProvinsiBaruDariKabupaten(
-                    namaKabupaten: $namaKabupaten,
-                    namaProvinsi: $namaProvinsi
-                );
-            }
-
-            $kabupaten = $this->_ambilSemuaKabupaten();
-
-            if (in_array(strtoupper(trim($namaKabupaten)), $kabupaten)) {
-                $this->_tambahCatatanKabupatenBaru(namaKabupaten: $namaKabupaten);
+            if (in_array(strtoupper(trim($row[0])), $kabupatenList)) {
+                $this->addCatatanKabupatenSudahAda($row[0]);
             } else {
-                // Buat kabupaten dan kaitkan dengan provinsi
-                $this->_buatKabupatenBaru(namaKabupaten: $namaKabupaten, provinsiId: $this->_provinsi->id);
+                $this->createKabupaten($row[0], $this->provinsi->id);
             }
-        } catch (Exception $exception) {
-            throw $exception;
         }
     }
 
-    private function _imporKabupatenByProvinsi(Row $row): void
+    /**
+     * Mencari provinsi berdasarkan nama.
+     */
+    private function getProvinsiByNama(string $namaProvinsi): ?Provinsi
     {
-        try {
-            $rowIndex = $row->getIndex();
-            $row = $row->toArray();
-
-            // Skip header 'KABUPATEN'
-            if ($rowIndex == 2) {
-                return;
-            }
-
-            // Nama provinsi
-            if ($rowIndex == 1) {
-                $this->_provinsi = $this->_ambilProvinsiByNama($row[0]);
-            
-                // Jika provinsi belum ada, buat provinsi baru
-                if ($this->_provinsi == null) {
-                    $this->_provinsi = $this->_buatProvinsiBaru($row[0]);
-                    $this->_tambahCatatanProvinsiBaru($row[0]);
-                }
-            }
-            
-            if ($rowIndex >= 3) {
-                $kabupaten = $this->_ambilSemuaKabupaten();
-
-                if (in_array(strtoupper(trim($row[0])), $kabupaten)) {
-                    $this->_tambahCatatanKabupatenBaru(namaKabupaten: $row[0]);
-                } else {
-                    // Buat kabupaten dan kaitkan dengan provinsi
-                    $this->_buatKabupatenBaru(namaKabupaten: $row[0], provinsiId: $this->_provinsi->id);
-                }
-            }
-        } catch (Exception $exception) {
-            // dd($exception);
-            throw $exception;
-        }
+        return Provinsi::whereRaw('UPPER(nama) = ?', [strtoupper($namaProvinsi)])->first();
     }
 
-    private function _ambilProvinsiByNama(string $namaProvinsi): Provinsi|null
+    /**
+     * Membuat provinsi baru.
+     */
+    private function createProvinsi(string $namaProvinsi): Provinsi
     {
-        try {
-            return Provinsi::whereRaw('UPPER(nama) = ?', [strtoupper($namaProvinsi)])->first();
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        return Provinsi::create(['nama' => $namaProvinsi]);
     }
 
-    private function _buatProvinsiBaru(string $namaProvinsi): Provinsi
+    /**
+     * Membuat kabupaten baru.
+     */
+    private function createKabupaten(string $namaKabupaten, int $provinsiId): Kabupaten
     {
-        try {
-            return Provinsi::create(['nama' => $namaProvinsi]);
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        return Kabupaten::create([
+            'nama' => $namaKabupaten,
+            'provinsi_id' => $provinsiId
+        ]);
     }
 
-    private function _buatKabupatenBaru(string $namaKabupaten, int $provinsiId): Kabupaten
+    /**
+     * Menambahkan catatan ketika provinsi baru dibuat dari kabupaten.
+     */
+    private function addCatatanProvinsiBaruDariKabupaten(string $namaKabupaten, string $namaProvinsi): void
     {
-        try {
-            return Kabupaten::create([
-                'nama' => $namaKabupaten,
-                'provinsi_id' => $provinsiId
-            ]);
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        $pesan = "Pada penambahan kabupaten '<b>$namaKabupaten</b>', provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan.";
+        $this->catatan[] = $pesan;
     }
 
-    private function _tambahCatatanProvinsiBaru(string $namaProvinsi): void
+    /**
+     * Menambahkan catatan ketika kabupaten sudah ada.
+     */
+    private function addCatatanKabupatenSudahAda(string $namaKabupaten): void
     {
-        try {
-            $pesan = "Provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
-            array_push($this->catatan, $pesan);
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        $pesan = "Kabupaten '<b>$namaKabupaten</b>' sudah ada di database, jadi dilewati.";
+        $this->catatan[] = $pesan;
     }
 
-    private function _tambahCatatanProvinsiBaruDariKabupaten(string $namaKabupaten, string $namaProvinsi): void
+    /**
+     * Menambahkan catatan ketika provinsi baru dibuat.
+     */
+    private function addCatatanProvinsiBaru(string $namaProvinsi): void
     {
-        try {
-            $pesan = "Pada penambahan kabupaten '<b>$namaKabupaten</b>', provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
-            array_push($this->catatan, $pesan);
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        $pesan = "Provinsi '<b>$namaProvinsi</b>' baru saja ditambahkan ke database.";
+        $this->catatan[] = $pesan;
     }
 
-    private function _tambahCatatanKabupatenBaru(string $namaKabupaten): void
+    /**
+     * Mengambil semua kabupaten dari database.
+     */
+    private function getAllKabupaten(): array
     {
-        try {
-            $pesan = "Kabupaten '<b>$namaKabupaten</b>' sebelumnya sudah ada di database, jadi kabupaten tersebut dilewati saat pengimporan ini.";
-            array_push($this->catatan, $pesan);
-        } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
-    private function _ambilSemuaKabupaten(): array
-    {
-        try {
-            return Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
-        } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
-    private function _ambilSemuaProvinsi(): array
-    {
-        try {
-            return Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        return Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
     }
 }
