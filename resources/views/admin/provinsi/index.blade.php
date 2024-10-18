@@ -55,7 +55,7 @@
 
     @php $status = session('gagal'); @endphp
     @isset ($status)
-    @include('components.alert-gagal', ['message' => $status])
+        @include('components.alert-gagal', ['message' => $status])
     @endisset
     
     @php $catatanImpor = session('catatan_impor'); @endphp
