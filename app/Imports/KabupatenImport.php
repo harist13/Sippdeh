@@ -8,13 +8,16 @@ use Illuminate\Support\Model;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Exception;
+use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Row;
 
-class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
+class KabupatenImport implements SkipsOnFailure, OnEachRow
 {
     use Importable, SkipsFailures;
+
+    private Provinsi|null $_provinsi = null;
 
     public array $catatan = [];
 
@@ -30,26 +33,91 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
         return array_merge($failures, $this->catatan);
     }
 
-    /**
-    * @param Model $collection
-    */
-    public function model(array $row)
+    public function onRow(Row $row)
     {
         try {
+            if (isset($row[1])) {
+                $this->_imporSemuaKabupaten($row);
+            } else {
+                $this->_imporKabupatenByProvinsi($row);
+            }
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private function _imporSemuaKabupaten(Row $row): void
+    {
+        try {
+            $rowIndex = $row->getIndex();
+
+            if ($rowIndex == 1) {
+                return;
+            }
+
+            $row = $row->toArray();
+
             $namaKabupaten = $row[0];
             $namaProvinsi = $row[1];
 
-            $provinsi = $this->_ambilProvinsiByNama($namaProvinsi);
+            $this->_provinsi = $this->_ambilProvinsiByNama($namaProvinsi);
             
             // Jika provinsi belum ada, buat provinsi baru
-            if ($provinsi == null) {
-                $provinsi = $this->_buatProvinsiBaru($namaProvinsi);
-                $this->_tambahCatatan(namaKabupaten: $namaKabupaten, namaProvinsi: $namaProvinsi);
+            if ($this->_provinsi == null) {
+                $this->_provinsi = $this->_buatProvinsiBaru($namaProvinsi);
+                $this->_tambahCatatanProvinsiBaruDariKabupaten(
+                    namaKabupaten: $namaKabupaten,
+                    namaProvinsi: $namaProvinsi
+                );
             }
 
-            // Buat kabupaten dan kaitkan dengan provinsi
-            return $this->_buatKabupatenBaru(namaKabupaten: $namaKabupaten, provinsiId: $provinsi->id);
+            $kabupaten = $this->_ambilSemuaKabupaten();
+
+            if (in_array(strtoupper(trim($namaKabupaten)), $kabupaten)) {
+                $this->_tambahCatatanKabupatenBaru(namaKabupaten: $namaKabupaten);
+            } else {
+                // Buat kabupaten dan kaitkan dengan provinsi
+                $this->_buatKabupatenBaru(namaKabupaten: $namaKabupaten, provinsiId: $this->_provinsi->id);
+            }
         } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private function _imporKabupatenByProvinsi(Row $row): void
+    {
+        try {
+            $rowIndex = $row->getIndex();
+            $row = $row->toArray();
+
+            // Skip header 'KABUPATEN'
+            if ($rowIndex == 2) {
+                return;
+            }
+
+            // Nama provinsi
+            if ($rowIndex == 1) {
+                $this->_provinsi = $this->_ambilProvinsiByNama($row[0]);
+            
+                // Jika provinsi belum ada, buat provinsi baru
+                if ($this->_provinsi == null) {
+                    $this->_provinsi = $this->_buatProvinsiBaru($row[0]);
+                    $this->_tambahCatatanProvinsiBaru($row[0]);
+                }
+            }
+            
+            if ($rowIndex >= 3) {
+                $kabupaten = $this->_ambilSemuaKabupaten();
+
+                if (in_array(strtoupper(trim($row[0])), $kabupaten)) {
+                    $this->_tambahCatatanKabupatenBaru(namaKabupaten: $row[0]);
+                } else {
+                    // Buat kabupaten dan kaitkan dengan provinsi
+                    $this->_buatKabupatenBaru(namaKabupaten: $row[0], provinsiId: $this->_provinsi->id);
+                }
+            }
+        } catch (Exception $exception) {
+            // dd($exception);
             throw $exception;
         }
     }
@@ -75,7 +143,7 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
     private function _buatKabupatenBaru(string $namaKabupaten, int $provinsiId): Kabupaten
     {
         try {
-            return new Kabupaten([
+            return Kabupaten::create([
                 'nama' => $namaKabupaten,
                 'provinsi_id' => $provinsiId
             ]);
@@ -84,7 +152,17 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
         }
     }
 
-    private function _tambahCatatan(string $namaKabupaten, string $namaProvinsi): void
+    private function _tambahCatatanProvinsiBaru(string $namaProvinsi): void
+    {
+        try {
+            $pesan = "Provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
+            array_push($this->catatan, $pesan);
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private function _tambahCatatanProvinsiBaruDariKabupaten(string $namaKabupaten, string $namaProvinsi): void
     {
         try {
             $pesan = "Pada penambahan kabupaten '<b>$namaKabupaten</b>', provinsi '<b>$namaProvinsi</b>' sebelumnya belum ada di database, jadi provinsi tersebut baru saja ditambahkan ke database saat pengimporan ini.";
@@ -94,30 +172,11 @@ class KabupatenImport implements ToModel, WithValidation, SkipsOnFailure
         }
     }
 
-    public function rules(): array
+    private function _tambahCatatanKabupatenBaru(string $namaKabupaten): void
     {
         try {
-            $kabupaten = $this->_ambilSemuaKabupaten();
-            $provinsi = $this->_ambilSemuaProvinsi();
-
-            return [
-                '0' => function($attribute, $value, $onFailure) use ($kabupaten, $provinsi) {
-                    // Header Provinsi dilewati.
-                    if (in_array(strtoupper(trim($value)), $provinsi)) {
-                        $onFailure('');
-                    }
-
-                    // Header 'KABUPATEN' dilewati.
-                    if ($value == 'KABUPATEN') {
-                        $onFailure('');
-                    }
-                    
-                    // Kabupaten yang sudah ada dilewati.
-                    if (in_array(strtoupper(trim($value)), $kabupaten)) {
-                        $onFailure("Kabupaten '<b>$value</b>' telah tersedia di database sebelumnya, jadi pengimporan kabupaten ini dilewati.");
-                    }
-                },
-            ];
+            $pesan = "Kabupaten '<b>$namaKabupaten</b>' sebelumnya sudah ada di database, jadi kabupaten tersebut dilewati saat pengimporan ini.";
+            array_push($this->catatan, $pesan);
         } catch (Exception $exception) {
             throw $exception;
         }
