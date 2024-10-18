@@ -49,7 +49,7 @@
 
     @php $pesanGagal = session('pesan_gagal'); @endphp
     @isset ($pesanGagal)
-        @include('components.alert-berhasil', ['message' => $pesanGagal])
+        @include('components.alert-gagal', ['message' => $pesanGagal])
     @endisset
 
     @php $catatanImpor = session('catatan_impor'); @endphp

@@ -46,9 +46,9 @@ class KabupatenController extends Controller
                 return Excel::download(new KabupatenExport($request->get('provinsi_id')), 'kabupaten.xlsx');
             }
             
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengekspor kabupaten.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengekspor kabupaten.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         }
     }
 
@@ -67,7 +67,7 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Kabupaten berhasil ditambahkan.');
         } catch (Exception $error) {
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal menambahkan kabupaten.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
         }
     }
 
@@ -82,16 +82,17 @@ class KabupatenController extends Controller
                 
                 $redirectBackResponse = redirect()->back();
 
-                if (count($kabupatenImport->catatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->catatan());
+                if (count($kabupatenImport->getCatatan()) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->getCatatan());
                 }
 
-                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data provinsi.');
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');
             }
 
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
+            // dd($exception);
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kabupaten.');
         }
     }
 
@@ -110,7 +111,7 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Kabupaten berhasil diedit.');
         } catch (Exception $error) {
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal mengedit kabupaten.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kabupaten.');
         }
     }
 
@@ -125,7 +126,7 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kabupaten.');
         } catch (Exception $error) {
-            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, gagal menghapus kabupaten.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus kabupaten.');
         }
     }
 }
