@@ -18,7 +18,7 @@
     }
 
     /* Responsive styles */
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .flex-col-mobile {
             flex-direction: column;
         }
@@ -99,12 +99,12 @@
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <i class="fas fa-map-marker-alt"></i>
+            <img src="{{ asset('assets/icon/Building3.png') }}" alt="" class="w-5 h-5 mr-1">
             <span class="text-lg font-bold">Provinsi</span>
         </div>
 
-        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'provinsi'])
 
                 <form action="{{ route('provinsi') }}" method="GET">
@@ -119,17 +119,21 @@
                     </div>         
                 </form>
             </div>
-            <div class="flex flex-col-mobile gap-2 space-y-2-mobile w-full-mobile">
-                <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
-                    <i class="fas fa-file-import me-1"></i>
-                    <span>Impor</span>
-                </button>
-                <button id="exportProvinsiBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
-                    <i class="fas fa-file-export me-1"></i>
-                    <span>Ekspor</span>
-                </button>
+
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
+                <div class="flex gap-2">
+                    <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-import me-1"></i>
+                        <span>Impor</span>
+                    </button>
+                    <button id="exportProvinsiBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-export me-1"></i>
+                        <span>Ekspor</span>
+                    </button>
+                </div>
                 <button id="addProvinsiBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
-                    + Tambah Provinsi
+                    <i class="fas fa-plus me-1"></i>
+                    <span>Tambah Provinsi</span>
                 </button>
             </div>
         </div>
