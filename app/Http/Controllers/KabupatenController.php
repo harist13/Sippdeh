@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KabupatenExport;
 use App\Http\Requests\StoreKabupatenRequest;
 use App\Http\Requests\UpdateKabupatenRequest;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KabupatenController extends Controller
 {
@@ -33,6 +35,15 @@ class KabupatenController extends Controller
         $kabupaten = $kabupatenQuery->orderByDesc('id')->paginate(10);
 
         return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->has('provinsi_id') && is_numeric($request->get('provinsi_id'))) {
+            return Excel::download(new KabupatenExport($request->get('provinsi_id')), 'kabupaten.xlsx');
+        }
+        
+        return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengekspor kabupaten.');
     }
 
     /**

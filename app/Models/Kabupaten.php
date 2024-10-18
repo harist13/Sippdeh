@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Kabupaten extends Model
 {
@@ -28,7 +29,7 @@ class Kabupaten extends Model
         return $id;
     }
 
-    public function provinsi() {
+    public function provinsi(): BelongsTo {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
 }
