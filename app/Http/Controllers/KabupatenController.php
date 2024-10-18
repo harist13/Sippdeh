@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\KabupatenExport;
+use App\Http\Requests\ImportKabupatenRequest;
 use App\Http\Requests\StoreKabupatenRequest;
 use App\Http\Requests\UpdateKabupatenRequest;
+use App\Imports\KabupatenImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
@@ -70,6 +72,30 @@ class KabupatenController extends Controller
             return redirect()->back()->with('status_pembuatan_kabupaten', 'berhasil');
         } catch (Exception $error) {
             return redirect()->back()->with('status_pembuatan_kabupaten', 'gagal');
+        }
+    }
+
+    public function import(ImportKabupatenRequest $request)
+    {
+        try {
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+
+                $import = new KabupatenImport();
+                $import->import($namaSpreadsheet, disk: 'local');
+                
+                $redirectBackResponse = redirect()->back();
+
+                if (count($import->catatan()) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $import->catatan());
+                }
+
+                return $redirectBackResponse->with('sukses', 'Berhasil mengimpor data provinsi.');
+            }
+
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
         }
     }
 

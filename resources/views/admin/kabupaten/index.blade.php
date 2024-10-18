@@ -69,6 +69,18 @@
         @endif
     @endif
 
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endisset
+
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
             <i class="fas fa-map-marker-alt"></i>
