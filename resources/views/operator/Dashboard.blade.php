@@ -1,8 +1,66 @@
 @include('operator.layout.header')
-<body class="bg-[#f9fafc]">
+<style>
+        @media (max-width: 640px) {
+            .overflow-x-auto {
+            -webkit-overflow-scrolling: touch;
+        }
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .text-4xl {
+                font-size: 1.5rem;
+            }
+            .rounded-[20px] {
+                border-radius: 10px;
+            }
+            .p-8 {
+                padding: 1rem;
+            }
+            .mb-8 {
+                margin-bottom: 1rem;
+            }
+            .participation-button {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+            }
+            .flex-col {
+                flex-direction: column;
+            }
+            .w-[32%] {
+                width: 100%;
+            }
+            .space-x-4 {
+                margin-top: 0.5rem;
+            }
+            .space-x-4 > * {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                margin-top: 0.5rem;
+            }
+            .overflow-x-auto {
+                overflow-x: scroll;
+            }
+            table {
+                font-size: 0.75rem;
+            }
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+             #candidateSlider {
+            width: 300% !important;
+            }
+            #candidateSlider > div {
+                width: 100% !important;
+            }
+            #candidateSlider > div > div {
+                width: 100% !important;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
     
-
-   <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-[20px] p-8 mb-8 shadow-lg">
             <h1 class="text-4xl font-bold text-center bg-[#eceff5] rounded-lg p-4 mb-8">
                 Data Perolehan Suara Calon Gubernur dan Wakil Gubernur di Tingkat Provinsi
@@ -11,35 +69,38 @@
             <!-- Chart Section -->
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                 <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                <div class="p-4">
-                    <canvas id="voteCountChart" width="800" height="300"></canvas>
+                <div class="p-4 overflow-x-auto">
+                    <div class="min-w-[800px]">
+                        <canvas id="voteCountChart" height="300"></canvas>
+                    </div>
                 </div>
             </section>
-            
+
+            <hr class="border-t border-gray-300 my-10">
 
             <!-- Data Table Section -->
             <div class="overflow-hidden mb-8">
-                <div class="mb-4 flex justify-between items-center">
-                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
-                        Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-gray-600">Sort by</span>
-                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
-                                <option>Samarinda</option>
-                            </select>
-                        </div>
-                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
-                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                            </svg>
-                            Filter
-                        </button>
-                    </div>
+            <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                    Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                 </div>
-               <div class="overflow-x-auto">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                    <div class="flex items-center w-full sm:w-auto">
+                        <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
+                        <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                            <option>Samarinda</option>
+                        </select>
+                    </div>
+                    <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                    <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+            </div>
+                <div class="overflow-x-auto">
                     <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                         <thead class="bg-[#3560a0] text-white">
                             <tr>
@@ -167,158 +228,154 @@
                     </table>
                 </div>
             </div>
+            
+            <hr class="border-t border-gray-300 my-10">
 
             <!-- Candidate Cards Section -->
-            <div class="mb-8 overflow-hidden">
-    <div class="relative">
-        <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 200%;">
-            <!-- Original set of cards -->
-            <div class="flex justify-between w-1/2 px-4">
-                <!-- Andi Harun / Saefuddin Zuhri -->
-                <div class="w-[32%] flex flex-col">
-                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
+             <div class="mb-8 overflow-hidden">
+                <div class="relative">
+                    <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 200%;">
+                        <!-- Original set of cards -->
+                        <div class="flex justify-between w-1/2 px-4">
+                            <!-- Andi Harun / Saefuddin Zuhri -->
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Muhammad Sabani / Syukri Wahid -->
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate set of cards for smooth transition -->
+                        <div class="flex justify-between w-1/2 px-4">
+                            <!-- Andi Harun / Saefuddin Zuhri -->
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Muhammad Sabani / Syukri Wahid -->
+                            <div class="w-[32%] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kotak Kosong -->
-                <div class="w-[32%] flex flex-col">
-                    <!-- Content for Kotak Kosong -->
-                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Muhammad Sabani / Syukri Wahid -->
-                <div class="w-[32%] flex flex-col">
-                    <!-- Content for Muhammad Sabani / Syukri Wahid -->
-                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
-                        </div>
-                    </div>
+                <div class="flex justify-center mt-4">
+                    <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
+                    <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
                 </div>
             </div>
 
-            <!-- Duplicate set of cards for smooth transition -->
-             <div class="flex justify-between w-1/2 px-4">
-                <!-- Andi Harun / Saefuddin Zuhri -->
-                <div class="w-[32%] flex flex-col">
-                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kotak Kosong -->
-                <div class="w-[32%] flex flex-col">
-                    <!-- Content for Kotak Kosong -->
-                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Muhammad Sabani / Syukri Wahid -->
-                <div class="w-[32%] flex flex-col">
-                    <!-- Content for Muhammad Sabani / Syukri Wahid -->
-                     <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
-                    </div>
-                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                        Samarinda
-                    </div>
-                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                        <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                        <div class="flex justify-center items-center text-[#008bf9]">
-                            <span class="font-medium">21,69%</span>
-                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                            <span class="font-medium">288.131 Suara</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex justify-center mt-4">
-        <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
-        <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
-    </div>
-</div>
+            <hr class="border-t border-gray-300 my-10">
 
             <!-- Paslon Data Table Section -->
             <div class="overflow-hidden mb-8">
-                <div class="mb-4 flex justify-between items-center">
-                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
-                        Daftar 10 Paslon Dengan Perolehan Suara Tertinggi Se-Kalimantan Timur
+                <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                        Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-gray-600">Sort by</span>
-                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                        <div class="flex items-center w-full sm:w-auto">
+                            <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
+                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
                                 <option>Samarinda</option>
                             </select>
                         </div>
-                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
-                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
+                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
                             </svg>
@@ -455,28 +512,30 @@
                     </div>
             </div>
 
-            <!-- TPS Data Table Section -->
-            <div class="overflow-hidden mb-8">
-                <div class="mb-4 flex justify-between items-center">
-                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg">
-                        Daftar 10 TPS Dengan Partisipasi Tertinggi Se-Kalimantan Timur
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center">
-                            <span class="mr-2 text-gray-600">Sort by</span>
-                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
-                                <option>Samarinda</option>
-                            </select>
-                        </div>
-                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1">
-                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                            </svg>
-                            Filter
-                        </button>
-                    </div>
+            <hr class="border-t border-gray-300 my-10">
+
+        <!-- TPS Data Table Section -->
+          <div class="overflow-hidden mb-8">
+            <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                    Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                 </div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                    <div class="flex items-center w-full sm:w-auto">
+                        <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
+                        <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                            <option>Samarinda</option>
+                        </select>
+                    </div>
+                    <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                    <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+            </div>
                 <div class="overflow-x-auto">
                     <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                         <thead class="bg-[#3560a0] text-white">
@@ -633,6 +692,7 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     grid: {

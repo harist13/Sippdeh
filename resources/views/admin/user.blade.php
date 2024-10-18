@@ -93,63 +93,63 @@
             </div>
         </div>
 
-        <!-- Table TPS (initially visible) -->
-<div id="tpsTable" class="overflow-x-auto">
-    <table class="w-full">
-        <thead>
-            <tr class="bg-[#3560A0] text-white">
-                <th class="px-4 py-2 text-left">NO</th>
-                <th class="px-4 py-2 text-left">Username</th>
-                <th class="px-4 py-2 text-left">Email</th>
-                <th class="px-4 py-2 text-left">Wilayah</th>
-                <th class="px-4 py-2 text-left">Role</th>
-                <th class="px-4 py-2 text-left">Limit</th>
-                <th class="px-4 py-2 text-left">Device Aktif</th>
-                <th class="px-4 py-2 text-left">Status</th>
-                <th class="px-4 py-2 text-left">Aksi</th>
-            </tr>
-        </thead>
-       <!-- ... (previous code remains the same) -->
+        <!-- Table USER (initially visible) -->
+        <div id="tpsTable" class="overflow-x-auto">
+            <table class="w-full shadow-md rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-[#3560A0] text-white">
+                        <th class="px-4 py-2 text-left">NO</th>
+                        <th class="px-4 py-2 text-left">Username</th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Wilayah</th>
+                        <th class="px-4 py-2 text-left">Role</th>
+                        <th class="px-4 py-2 text-left">Limit</th>
+                        <th class="px-4 py-2 text-left">Device Aktif</th>
+                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Aksi</th>
+                    </tr>
+                </thead>
+       
 
-<tbody class="bg-gray-100">
-    @foreach($users as $user)
-    <tr class="border-b">
-        <td class="px-4 py-2">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
-        <td class="px-4 py-2">{{ $user->username }}</td>
-        <td class="px-4 py-2">{{ $user->email }}</td>
-        <td class="px-4 py-2">{{ $user->wilayah }}</td>
-        <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
-        <td class="px-4 py-2">{{ $user->limit }}</td>
-        <td class="px-4 py-2">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
-        <td class="px-4 py-2">
-            @if($user->is_forced_logout)
-                <span class="text-red-600">Dikeluarkan</span>
-            @else
-                <span class="text-green-600">Aktif</span>
-            @endif
-        </td>
-        <td class="px-4 py-2">
-            <i class="fas fa-edit text-blue-600 cursor-pointer mr-2 edit-user" data-id="{{ $user->id }}"></i>
-            <form action="{{ route('deleteUser', $user->id) }}" method="POST" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer"></button>
-            </form>
-            @if(!$user->is_forced_logout)
-                <form action="{{ route('forceLogout', $user->id) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer"></button>
-                </form>
-            @else
-                <form action="{{ route('reactivateUser', $user->id) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer"></button>
-                </form>
-            @endif
-        </td>
-    </tr>
-    @endforeach
-</tbody>
+                <tbody class="bg-gray-100">
+                    @foreach($users as $user)
+                    <tr class="border-b">
+                        <td class="px-4 py-2">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $user->username }}</td>
+                        <td class="px-4 py-2">{{ $user->email }}</td>
+                        <td class="px-4 py-2">{{ $user->wilayah }}</td>
+                        <td class="px-4 py-2">{{ $user->roles->first()->name ?? 'No Role' }}</td>
+                        <td class="px-4 py-2">{{ $user->limit }}</td>
+                        <td class="px-4 py-2">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
+                        <td class="px-4 py-2">
+                            @if($user->is_forced_logout)
+                                <span class="text-red-600">Dikeluarkan</span>
+                            @else
+                                <span class="text-green-600">Aktif</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-2">
+                            <i class="fas fa-edit text-blue-600 cursor-pointer mr-2 edit-user" data-id="{{ $user->id }}"></i>
+                            <form action="{{ route('deleteUser', $user->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="fas fa-trash-alt text-red-600 cursor-pointer"></button>
+                            </form>
+                            @if(!$user->is_forced_logout)
+                                <form action="{{ route('forceLogout', $user->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="fas fa-sign-out-alt text-yellow-600 cursor-pointer"></button>
+                                </form>
+                            @else
+                                <form action="{{ route('reactivateUser', $user->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="fas fa-user-check text-green-600 cursor-pointer"></button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
 
             </table>
             <div class="mt-4">
@@ -158,46 +158,46 @@
         </div>
 
       <!-- Table HISTORY (initially hidden) -->
-<div id="suaraTable" class="hidden overflow-x-auto">
-    <table class="w-full">
-        <thead>
-            <tr class="bg-[#3560A0] text-white">
-                <th class="px-4 py-2 text-left">NO</th>
-                <th class="px-4 py-2 text-left">Email</th>
-                <th class="px-4 py-2 text-left">Wilayah</th>
-                <th class="px-4 py-2 text-left">Role</th>
-                <th class="px-4 py-2 text-left">Terakhir Login</th>
-                <th class="px-4 py-2 text-left">Device</th>
-                <th class="px-4 py-2 text-left">IP Address</th>
-                <th class="px-4 py-2 text-left">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="bg-gray-100">
-            @foreach($loginHistories as $history)
-            <tr class="border-b">
-                 <td class="px-4 py-2">{{ ($loginHistories->currentPage() - 1) * $loginHistories->perPage() + $loop->iteration }}</td>
-                <td class="px-4 py-2">{{ $history->user->email }}</td>
-                <td class="px-4 py-2">{{ $history->user->wilayah }}</td>
-                <td class="px-4 py-2">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
-                <td class="px-4 py-2">{{ $history->login_at }}</td>
-                <td class="px-4 py-2">{{ $history->user_agent }}</td>
-                <td class="px-4 py-2">{{ $history->ip_address }}</td>
-                <td class="px-4 py-2">
-                    <form action="{{ route('forceLogoutDevice', ['userId' => $history->user_id, 'loginHistoryId' => $history->id]) }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
-                            Keluarkan
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <div class="mt-4">
-        {{ $loginHistories->links() }}
-    </div>
-</div>
+        <div id="suaraTable" class="hidden overflow-x-auto">
+            <table class="w-full shadow-md rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-[#3560A0] text-white">
+                        <th class="px-4 py-2 text-left">NO</th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Wilayah</th>
+                        <th class="px-4 py-2 text-left">Role</th>
+                        <th class="px-4 py-2 text-left">Terakhir Login</th>
+                        <th class="px-4 py-2 text-left">Device</th>
+                        <th class="px-4 py-2 text-left">IP Address</th>
+                        <th class="px-4 py-2 text-left">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-100">
+                    @foreach($loginHistories as $history)
+                    <tr class="border-b">
+                        <td class="px-4 py-2">{{ ($loginHistories->currentPage() - 1) * $loginHistories->perPage() + $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $history->user->email }}</td>
+                        <td class="px-4 py-2">{{ $history->user->wilayah }}</td>
+                        <td class="px-4 py-2">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
+                        <td class="px-4 py-2">{{ $history->login_at }}</td>
+                        <td class="px-4 py-2">{{ $history->user_agent }}</td>
+                        <td class="px-4 py-2">{{ $history->ip_address }}</td>
+                        <td class="px-4 py-2">
+                            <form action="{{ route('forceLogoutDevice', ['userId' => $history->user_id, 'loginHistoryId' => $history->id]) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                                    Keluarkan
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div class="mt-4">
+                {{ $loginHistories->links() }}
+            </div>
+        </div>
     </div>
 </main>
 

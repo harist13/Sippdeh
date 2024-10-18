@@ -108,7 +108,7 @@
         </div>
 
         <!-- Table TPS (initially visible) -->
-        <div id="tpsTable" class="overflow-x-auto">
+        <div id="tpsTable" class="overflow-x-auto shadow-md rounded-lg">
             <table class="w-full">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Table SUARA (initially hidden) -->
-        <div id="suaraTable" class="hidden overflow-x-auto">
+        <div id="suaraTable" class="hidden overflow-x-auto shadow-md rounded-lg">
             <table class="w-full">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -166,7 +166,7 @@
         </div>
 
         <!-- Table pilgub (initially hidden) -->
-        <div id="pilgubTable" class="hidden overflow-x-auto">
+        <div id="pilgubTable" class="hidden overflow-x-auto shadow-md rounded-lg">
             <table class="w-full">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -205,7 +205,7 @@
 
 
         <!-- Table pilkada (initially hidden) -->
-        <div id="pilkadaTable" class="hidden overflow-x-auto">
+        <div id="pilkadaTable" class="hidden overflow-x-auto shadow-md rounded-lg">
             <table class="w-full">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
