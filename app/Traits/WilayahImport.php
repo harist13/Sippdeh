@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Models\Provinsi;
 use Exception;
 
@@ -82,6 +83,26 @@ trait WilayahImport {
             }
 
             return $kecamatan;
+        } catch (Exception $exception) {
+            throw new Exception("Error in getKecamatan: " . $exception->getMessage(), 0, $exception);
+        }
+    }
+
+    /**
+     * Membuat kecamatan baru.
+     */
+    private function getKelurahan(string $namaKelurahan, string $namaKecamatan, string $namaKabupaten, string $namaProvinsi): Kelurahan
+    {
+        try {
+            $kecamatan = $this->getKecamatan($namaKecamatan, $namaKabupaten, $namaProvinsi);
+            $kelurahan = Kelurahan::where(['nama' => $namaKecamatan, 'kecamatan_id' => $kecamatan->id])->first();
+
+            if ($kelurahan == null) {
+                $kelurahan = Kecamatan::create(['nama' => $namaKelurahan, 'kecamatan_id' => $kecamatan->id]);
+                $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' di Kecamatan '<b>$namaKecamatan</b>' baru saja ditambahkan ke database.";
+            }
+
+            return $kelurahan;
         } catch (Exception $exception) {
             throw new Exception("Error in getKecamatan: " . $exception->getMessage(), 0, $exception);
         }

@@ -45,7 +45,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('kecamatan', KecamatanController::class)->names([
         'index' => 'kecamatan'
     ]);
-
+    
+    Route::get('kelurahan/ekspor', [KelurahanController::class, 'export'])->name('kelurahan.export');
+    Route::post('kelurahan/impor', [KelurahanController::class, 'import'])->name('kelurahan.import');
     Route::resource('kelurahan', KelurahanController::class)->names([
         'index' => 'kelurahan'
     ]);
