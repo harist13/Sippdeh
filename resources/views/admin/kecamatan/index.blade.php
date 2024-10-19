@@ -42,37 +42,27 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('status_pembuatan_kecamatan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kecamatan berhasil ditambahkan.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kecamatan gagal ditambahkan.'])
-        @endif
-    @endif
+    @php $pesanSukses = session('pesan_sukses'); @endphp
+    @isset ($pesanSukses)
+        @include('components.alert-berhasil', ['message' => $pesanSukses])
+    @endisset
 
-    @php $status = session('status_pengeditan_kecamatan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kecamatan berhasil diedit.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kecamatan gagal diedit.'])
-        @endif
-    @endif
+    @php $pesanGagal = session('pesan_gagal'); @endphp
+    @isset ($pesanGagal)
+        @include('components.alert-gagal', ['message' => $pesanGagal])
+    @endisset
 
-    @php $status = session('status_penghapusan_kecamatan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kecamatan berhasil dihapus.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kecamatan gagal dihapus.'])
-        @endif
-    @endif
-
-    @php $status = session('status_ekspor_kecamatan'); @endphp
-    @if($status != null)
-        @include('components.alert-gagal', ['message' => 'Kecamatan gagal diekspor.'])
-    @endif
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endisset
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
