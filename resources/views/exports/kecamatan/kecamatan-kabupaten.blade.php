@@ -1,7 +1,10 @@
 <table style="border: 1px solid black;">
 	<thead>
 		<tr>
-			<th colspan="2" style="font-size: 16px;"><strong>{{ $kabupaten->nama }}</strong></th>
+			<th width="300px" style="font-size: 16px;"><strong>{{ $kabupaten->provinsi->nama }}</strong></th>
+		</tr>
+		<tr>
+			<th width="300px" style="font-size: 16px;"><strong>{{ $kabupaten->nama }}</strong></th>
 		</tr>
 		<tr>
 			<th width="300px" style="font-size: 16px;"><strong>KECAMATAN</strong></th>
