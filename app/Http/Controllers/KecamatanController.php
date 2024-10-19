@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\KecamatanExport;
+use App\Http\Requests\ImportKecamatanRequest;
 use App\Http\Requests\StoreKecamatanRequest;
 use App\Http\Requests\UpdateKecamatanRequest;
+use App\Imports\KecamatanImport;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use Exception;
@@ -62,14 +64,39 @@ class KecamatanController extends Controller
         try {
             $validated = $request->validated();
 
-            $kabupaten = new Kecamatan();
-            $kabupaten->nama = $validated['nama_kecamatan_baru'];
-            $kabupaten->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
-            $kabupaten->save();
+            $kecamatan = new Kecamatan();
+            $kecamatan->nama = $validated['nama_kecamatan_baru'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
+            $kecamatan->save();
 
             return redirect()->back()->with('status_pembuatan_kecamatan', 'berhasil');
         } catch (Exception $error) {
             return redirect()->back()->with('status_pembuatan_kecamatan', 'gagal');
+        }
+    }
+
+    public function import(ImportKecamatanRequest $request)
+    {
+        try {
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+
+                $kecamatanImport = new KecamatanImport();
+                $kecamatanImport->import($namaSpreadsheet, disk: 'local');
+                
+                $redirectBackResponse = redirect()->back();
+
+                if (count($kecamatanImport->getCatatan()) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $kecamatanImport->getCatatan());
+                }
+
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
+            }
+
+            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
+        } catch (Exception $exception) {
+            dd($exception);
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kecamatan.');
         }
     }
 
@@ -106,10 +133,10 @@ class KecamatanController extends Controller
         try {
             $validated = $request->validated();
 
-            $kabupaten = Kecamatan::find($id);
-            $kabupaten->nama = $validated['nama_kecamatan'];
-            $kabupaten->kabupaten_id = $validated['kabupaten_id_kecamatan'];
-            $kabupaten->save();
+            $kecamatan = Kecamatan::find($id);
+            $kecamatan->nama = $validated['nama_kecamatan'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan'];
+            $kecamatan->save();
 
             return redirect()->back()->with('status_pengeditan_kecamatan', 'berhasil');
         } catch (Exception $error) {
@@ -123,8 +150,8 @@ class KecamatanController extends Controller
     public function destroy(string $id)
     {
         try {
-            $kabupaten = Kecamatan::find($id);
-            $kabupaten->delete();
+            $kecamatan = Kecamatan::find($id);
+            $kecamatan->delete();
 
             return redirect()->back()->with('status_penghapusan_kecamatan', 'berhasil');
         } catch (Exception $error) {

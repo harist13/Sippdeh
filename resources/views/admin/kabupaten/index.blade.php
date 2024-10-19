@@ -66,7 +66,7 @@
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <i class="fas fa-map-marker-alt"></i>
+            <img src="{{ asset('assets/icon/Building2.png') }}" alt="" class="w-5 h-5 mr-1">
             <span class="text-lg font-bold">Kabupaten/Kota</span>
         </div>
         

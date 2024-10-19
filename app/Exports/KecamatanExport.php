@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Exception;
 
 class KecamatanExport implements FromView, WithStyles {
   private $kabupatenId;
@@ -17,19 +18,38 @@ class KecamatanExport implements FromView, WithStyles {
   }
   
   public function view(): View {
-	$kabupaten = null;
-
-	if ($this->kabupatenId == 0) {
-		$kecamatan = Kecamatan::selectRaw('id, UPPER(nama) AS nama')->get();
-	} else {
-		$kabupaten = Kabupaten::selectRaw('id, UPPER(nama) AS nama')->find($this->kabupatenId);
-        $kecamatan = Kecamatan::selectRaw('id, UPPER(nama) AS nama')->whereKabupatenId($this->kabupatenId)->get();
-    }
-    
-    return view('exports.kecamatan', compact('kabupaten', 'kecamatan'));
+	try {
+		if ($this->kabupatenId == 0) {
+			return $this->_eksporSemuaKecamatan();
+		}
+	
+		return $this->_eksporKecamatanKabupaten();
+	} catch (Exception $exception) {
+		throw $exception;
+	}
   }
 
-  public function styles(Worksheet $sheet)
+  private function _eksporSemuaKecamatan(): View
+  {
+	  try {
+		$kecamatan = Kecamatan::all();
+		return view('exports.kecamatan.semua-kecamatan', compact('kecamatan'));
+	} catch (Exception $exception) {
+		throw $exception;
+	}
+  }
+
+  private function _eksporKecamatanKabupaten(): View
+  {
+	try {
+		$kabupaten = Kabupaten::find($this->kabupatenId);
+		return view('exports.kecamatan.kecamatan-kabupaten', compact('kabupaten'));
+	} catch (Exception $exception) {
+		throw $exception;
+	}
+  }
+
+  public function styles(Worksheet $sheet): void
   {
 	$styleArray = [
 		'borders' => [
@@ -43,18 +63,40 @@ class KecamatanExport implements FromView, WithStyles {
 	$index = 1;
 
 	foreach ($sheet->getRowIterator() as $row) {
-		$namaKabupaten = $sheet->getCell('A1');
-		$namaKabupaten->getStyle()->getFont()->setBold(true);
-
-		if ($index > 1) {
-			$cellA = $sheet->getCell("A$index");
-			$cellA->getStyle()->applyFromArray($styleArray);
-
-			$cellB = $sheet->getCell("B$index");
-			$cellB->getStyle()->applyFromArray($styleArray);
+		if ($this->kabupatenId != 0) {
+			// Skip border untuk header provinsi (indeks ke-1) dan header kabupaten (indeks ke-2)
+			if ($index >= 3) {
+				$this->_setKecamatanBorder($sheet, $index, $styleArray);
+			}
+		} else {
+			$this->_setKecamatanBorder($sheet, $index, $styleArray);
+		}
+		
+		// Jika memilih semua kabupaten, maka berikan border untuk wilayah-wilayah di atasnya
+		if ($this->kabupatenId == 0) {
+			$this->_setKabupatenBorder($sheet, $index, $styleArray);
+			$this->_setProvinsiBorder($sheet, $index, $styleArray);
 		}
 
 		$index++;
 	}
+  }
+
+  private function _setKecamatanBorder(Worksheet $sheet, int $index, array $styleArray): void
+  {
+	$cell = $sheet->getCell("A$index");
+	$cell->getStyle()->applyFromArray($styleArray);
+  }
+
+  private function _setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
+  {
+	$cell = $sheet->getCell("B$index");
+	$cell->getStyle()->applyFromArray($styleArray);
+  }
+
+  private function _setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
+  {
+	$cell = $sheet->getCell("C$index");
+	$cell->getStyle()->applyFromArray($styleArray);
   }
 }

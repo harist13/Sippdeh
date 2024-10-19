@@ -41,6 +41,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     ]);
 
     Route::get('kecamatan/ekspor', [KecamatanController::class, 'export'])->name('kecamatan.export');
+    Route::post('kecamatan/impor', [KecamatanController::class, 'import'])->name('kecamatan.import');
     Route::resource('kecamatan', KecamatanController::class)->names([
         'index' => 'kecamatan'
     ]);
