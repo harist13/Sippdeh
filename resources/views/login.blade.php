@@ -70,10 +70,11 @@
         <!-- Right side - Image and text overlay -->
         <div class="relative hidden w-1/2 bg-gray-800 lg:block">
             <img src="{{ asset('assets/login.png')}}" alt="Building" class="object-cover w-full h-full opacity-70">
-            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-            <div class="absolute w-full pr-20 text-right text-white bottom-10 left-10">
-                <h3 class="mb-2 text-3xl font-bold">Sistem Informasi</h3>
-                <p class="text-xl">Pemantauan Perkembangan Politik Daerah</p>
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="text-center text-white px-10">
+                    <h3 class="mb-2 text-3xl font-bold">Sistem Informasi</h3>
+                    <p class="text-2xl font-bold">Pemantauan Perkembangan Politik Daerah</p>
+                </div>
             </div>
         </div>
     </div>
