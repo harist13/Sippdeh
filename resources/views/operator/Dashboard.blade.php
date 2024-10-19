@@ -1,9 +1,9 @@
 @include('operator.layout.header')
 <style>
-        @media (max-width: 640px) {
-            .overflow-x-auto {
-            -webkit-overflow-scrolling: touch;
-        }
+            @media (max-width: 640px) {
+                .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
+            }
             .container {
                 padding-left: 1rem;
                 padding-right: 1rem;
@@ -58,7 +58,7 @@
                 margin-bottom: 1rem;
             }
         }
-    </style>
+</style>
     
     <main class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-[20px] p-8 mb-8 shadow-lg">
