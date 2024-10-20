@@ -787,36 +787,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalSlides = 2;
 
     function slideRight() {
-        currentPosition -= slideWidth;
-        if (currentPosition <= -slideWidth * totalSlides) {
-            currentPosition = 0;
-            slider.style.transition = 'none';
-            slider.style.transform = `translateX(${currentPosition}px)`;
-            setTimeout(() => {
-                slider.style.transition = 'transform 500ms ease-in-out';
-                currentPosition -= slideWidth;
-                slider.style.transform = `translateX(${currentPosition}px)`;
-            }, 50);
-        } else {
-            slider.style.transform = `translateX(${currentPosition}px)`;
+        if (currentPosition > -slideWidth * (totalSlides - 1)) {
+            currentPosition -= slideWidth;
+            updateSliderPosition();
         }
-        updateButtons();
     }
 
     function slideLeft() {
-        currentPosition += slideWidth;
-        if (currentPosition > 0) {
-            currentPosition = -slideWidth * (totalSlides - 1);
-            slider.style.transition = 'none';
-            slider.style.transform = `translateX(${currentPosition}px)`;
-            setTimeout(() => {
-                slider.style.transition = 'transform 500ms ease-in-out';
-                currentPosition += slideWidth;
-                slider.style.transform = `translateX(${currentPosition}px)`;
-            }, 50);
-        } else {
-            slider.style.transform = `translateX(${currentPosition}px)`;
+        if (currentPosition < 0) {
+            currentPosition += slideWidth;
+            updateSliderPosition();
         }
+    }
+
+    function updateSliderPosition() {
+        slider.style.transition = 'transform 500ms ease-in-out';
+        slider.style.transform = `translateX(${currentPosition}px)`;
         updateButtons();
     }
 
@@ -847,6 +833,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slideRight();
         autoSlideInterval = setInterval(slideRight, 5000);
     });
+
 });
 
     

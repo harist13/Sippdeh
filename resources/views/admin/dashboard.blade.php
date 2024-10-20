@@ -405,53 +405,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('candidateSlider');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentPosition = 0;
-        const slideWidth = 1080;
-        const totalSlides = 2;
+    const slider = document.getElementById('candidateSlider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentPosition = 0;
+    const slideWidth = slider.clientWidth / 2;
+    const totalSlides = 2;
 
-        function slideRight() {
+    function slideRight() {
+        if (currentPosition > -slideWidth * (totalSlides - 1)) {
             currentPosition -= slideWidth;
-            if (currentPosition < -slideWidth) {
-                currentPosition = 0;
-                slider.style.transition = 'none';
-                slider.style.transform = `translateX(${currentPosition}px)`;
-                setTimeout(() => {
-                    slider.style.transition = 'transform 500ms ease-in-out';
-                    currentPosition -= slideWidth;
-                    slider.style.transform = `translateX(${currentPosition}px)`;
-                }, 50);
-            } else {
-                slider.style.transform = `translateX(${currentPosition}px)`;
-            }
-            updateButtons();
+            updateSliderPosition();
         }
+    }
 
-        function updateButtons() {
-            if (currentPosition === 0) {
-                prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-                prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-                nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-                nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
-            } else {
-                prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-                prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
-                nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-                nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-            }
+    function slideLeft() {
+        if (currentPosition < 0) {
+            currentPosition += slideWidth;
+            updateSliderPosition();
         }
+    }
 
-        setInterval(slideRight, 5000);
+    function updateSliderPosition() {
+        slider.style.transition = 'transform 500ms ease-in-out';
+        slider.style.transform = `translateX(${currentPosition}px)`;
+        updateButtons();
+    }
 
-        prevBtn.addEventListener('click', () => {
-            currentPosition = 0;
-            slider.style.transform = `translateX(${currentPosition}px)`;
-            updateButtons();
-        });
+    function updateButtons() {
+        if (currentPosition === 0) {
+            prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+        } else {
+            prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+        }
+    }
 
-        nextBtn.addEventListener('click', slideRight);
+    let autoSlideInterval = setInterval(slideRight, 5000);
+
+    prevBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideLeft();
+        autoSlideInterval = setInterval(slideRight, 5000);
     });
+
+    nextBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideRight();
+        autoSlideInterval = setInterval(slideRight, 5000);
+    });
+
+});
 
 </script>
