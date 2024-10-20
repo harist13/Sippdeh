@@ -1,5 +1,30 @@
 @include('admin.layout.header')
+<style>
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 3s ease-in-out;
+    }
+    .slide.active {
+        opacity: 1;
+    }
+    #slideContainer {
+        max-width: 1100px;
+        height: 320px;
+        padding-bottom: 2rem;
+    }
 
+    .text-right h2 {
+        font-size: 1.25rem;
+    }
+
+    .text-right .text-4xl {
+        font-size: 2rem;
+    }
+</style>
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
         <section class="rounded-lg p-4 mb-8">
             <div class="flex items-center justify-between mb-4">
@@ -83,51 +108,162 @@
                 </div>
 
                 <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
-                    <div class="mb-6 rounded-lg">
-                        <div class="flex items-start mb-6">
-                            <img src="{{ asset('assets/logo.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                            <div class="flex-grow pl-10">
-                                <div class="space-y-2">
-                                    <div class="flex justify-between items-center border-b pb-2">
-                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                        <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                     <div id="slideContainer" class="relative w-full h-screen">
+                        <div id="slide1" class="slide active">
+                            <div class="mb-6 rounded-lg">
+                                <div class="flex items-start mb-6">
+                                    <img src="{{ asset('assets/smd.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                    <div class="flex-grow pl-10">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="flex justify-between items-center border-b pb-2">
-                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                        <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                </div>
+                            </div>
+                           <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col items-start w-1/3">
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                            <span>> 90,00% DPT » Merah</span>
+                                        </div>
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                            <span>> 80,00% DPT » Kuning</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                            <span>> 70,00% DPT » Hijau</span>
+                                        </div>
                                     </div>
-                                    <div class="flex justify-between items-center border-b pb-2">
-                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                        <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                    <div class="text-center w-1/3">
+                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
                                     </div>
-                                    <div class="flex justify-between items-center">
-                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                        <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                    <div class="text-right w-1/3">
+                                        <div class="text-4xl font-bold color text-green-400">81.40%</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="p-4 text-white bg-blue-900 rounded-lg">
-                        <div class="flex items-center justify-between">
-                            <div class="flex flex-col items-start">
-                                <div class="flex items-center mb-1">
-                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                    <span>> 90,00% DPT » Merah</span>
-                                </div>
-                                <div class="flex items-center mb-1">
-                                    <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                    <span>> 80,00% DPT » Kuning</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                    <span>> 70,00% DPT » Hijau</span>
+                        <div id="slide2" class="slide">
+                            <div class="mb-6 rounded-lg">
+                                <div class="flex items-start mb-6">
+                                    <img src="{{ asset('assets/bpp.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                    
+                                    <div class="flex-grow pl-10">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                <div class="mt-2 text-4xl font-bold">81.40%</div>
+                            <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col items-start w-1/3">
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                            <span>> 90,00% DPT » Merah</span>
+                                        </div>
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                            <span>> 80,00% DPT » Kuning</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                            <span>> 70,00% DPT » Hijau</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center w-1/3">
+                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                    </div>
+                                    <div class="text-right w-1/3">
+                                        <div class="text-4xl font-bold color text-yellow-400">60.40%</div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div id="slide3" class="slide">
+                            <div class="mb-6 rounded-lg">
+                                <div class="flex items-start mb-6">
+                                    <img src="{{ asset('assets/btg.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                    
+                                    <div class="flex-grow pl-10">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b pb-2">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col items-start w-1/3">
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                            <span>> 90,00% DPT » Merah</span>
+                                        </div>
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                            <span>> 80,00% DPT » Kuning</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                            <span>> 70,00% DPT » Hijau</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center w-1/3">
+                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                    </div>
+                                    <div class="text-right w-1/3">
+                                        <div class="text-4xl font-bold color text-red-400">20.40%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </section>
@@ -260,6 +396,7 @@
 
 @include('admin.layout.footer')
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
@@ -460,6 +597,21 @@ document.addEventListener('DOMContentLoaded', function() {
         autoSlideInterval = setInterval(slideRight, 5000);
     });
 
+});
+
+
+ $(document).ready(function() {
+    function transitionSlides() {
+        const $currentSlide = $('.slide.active');
+        const $nextSlide = $currentSlide.next('.slide').length ? $currentSlide.next('.slide') : $('.slide:first');
+
+        $currentSlide.removeClass('active');
+        $nextSlide.addClass('active');
+
+        setTimeout(transitionSlides, 6000); 
+    }
+
+    setTimeout(transitionSlides, 3000); 
 });
 
 </script>
