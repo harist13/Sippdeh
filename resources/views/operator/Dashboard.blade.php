@@ -669,87 +669,113 @@
 
 @include('operator.layout.footer')
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-            datasets: [
-                {
-                    label: 'Suara Masuk',
-                    data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
-                    backgroundColor: '#3560A0',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                },
-                {
-                    label: 'DPT',
-                    data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
-                    backgroundColor: '#99C9FF',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    grid: {
-                        display: false
+    
+    function createChart(isMobile) {
+        return new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                datasets: [
+                    {
+                        label: 'Suara Masuk',
+                        data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
+                        backgroundColor: '#3560A0',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
                     },
-                    ticks: {
-                        font: {
-                            size: 12
+                    {
+                        label: 'DPT',
+                        data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
+                        backgroundColor: '#99C9FF',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
                         },
-                        maxRotation: 0,
-                        minRotation: 0,
-                        autoSkip: false
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    max: 500000,
-                    ticks: {
-                        stepSize: 100000,
-                        callback: function(value) {
-                            return value.toLocaleString();
+                        ticks: {
+                            font: {
+                                size: isMobile ? 8 : 12
+                            },
+                            maxRotation: isMobile ? 0 : 0,
+                            minRotation: isMobile ? 0 : 0,
+                            autoSkip: false
                         }
                     },
-                    grid: {
-                        color: '#E0E0E0'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    align: 'center',
-                    labels: {
-                        boxWidth: 15,
-                        padding: 15,
-                        font: {
-                            size: 12
+                    y: {
+                        beginAtZero: true,
+                        max: 500000,
+                        ticks: {
+                            stepSize: 100000,
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        grid: {
+                            color: '#E0E0E0'
                         }
                     }
                 },
-                title: {
-                    display: false
-                }
-            },
-            layout: {
-                padding: {
-                    left: 10,
-                    right: 10,
-                    top: 10
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        align: 'center',
+                        labels: {
+                            boxWidth: 15,
+                            padding: isMobile ? 10 : 15,
+                            font: {
+                                size: isMobile ? 10 : 12
+                            }
+                        }
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10
+                    }
                 }
             }
+        });
+    }
+
+    let chart;
+    let isMobile = window.innerWidth < 768;
+
+    function updateChart() {
+        if (chart) {
+            chart.destroy();
+        }
+        chart = createChart(isMobile);
+    }
+
+    updateChart();
+
+    window.addEventListener('resize', function() {
+        let newIsMobile = window.innerWidth < 768;
+        if (newIsMobile !== isMobile) {
+            isMobile = newIsMobile;
+            updateChart();
         }
     });
 });
+
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
