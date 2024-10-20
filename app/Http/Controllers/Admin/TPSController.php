@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTPSRequest;
 use App\Http\Requests\UpdateTPSRequest;
 use App\Models\Kabupaten;
@@ -72,7 +73,7 @@ class TPSController extends Controller
             $tps->save();
 
             return redirect()->back()->with('status_pembuatan_tps', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pembuatan_tps', 'gagal');
         }
     }
@@ -107,7 +108,7 @@ class TPSController extends Controller
             $tps->save();
 
             return redirect()->back()->with('status_pengeditan_tps', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pengeditan_tps', 'gagal');
         }
     }
@@ -122,7 +123,7 @@ class TPSController extends Controller
             $tps->delete();
 
             return redirect()->back()->with('status_penghapusan_tps', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_penghapusan_tps', 'gagal');
         }
     }

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\KecamatanExport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportKecamatanRequest;
 use App\Http\Requests\StoreKecamatanRequest;
 use App\Http\Requests\UpdateKecamatanRequest;
@@ -48,12 +49,13 @@ class KecamatanController extends Controller
         return view('admin.kecamatan.index', compact('kabupaten', 'kecamatan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function export(Request $request)
     {
-        //
+        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
+            return Excel::download(new KecamatanExport($request->get('kabupaten_id')), 'kecamatan.xlsx');
+        }
+        
+        return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kecamatan,');
     }
 
     /**
@@ -69,9 +71,9 @@ class KecamatanController extends Controller
             $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
             $kecamatan->save();
 
-            return redirect()->back()->with('status_pembuatan_kecamatan', 'berhasil');
-        } catch (Exception $error) {
-            return redirect()->back()->with('status_pembuatan_kecamatan', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah kecamatan.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambah kecamatan.');
         }
     }
 
@@ -84,45 +86,21 @@ class KecamatanController extends Controller
                 $kecamatanImport = new KecamatanImport();
                 $kecamatanImport->import($namaSpreadsheet, disk: 'local');
                 
+                $catatan = $kecamatanImport->getCatatan();
                 $redirectBackResponse = redirect()->back();
 
-                if (count($kecamatanImport->getCatatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $kecamatanImport->getCatatan());
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
                 }
 
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
             }
 
-            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'Berkas .csv tidak terunggah.');
         } catch (Exception $exception) {
             dd($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kecamatan.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function export(Request $request)
-    {
-        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
-            return Excel::download(new KecamatanExport($request->get('kabupaten_id')), 'kecamatan.xlsx');
-        }
-        
-        return redirect()->back()->with('status_ekspor_kecamatan', 'gagal');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -138,9 +116,9 @@ class KecamatanController extends Controller
             $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan'];
             $kecamatan->save();
 
-            return redirect()->back()->with('status_pengeditan_kecamatan', 'berhasil');
-        } catch (Exception $error) {
-            return redirect()->back()->with('status_pengeditan_kecamatan', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kecamatan.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kecamatan.');
         }
     }
 
@@ -153,9 +131,9 @@ class KecamatanController extends Controller
             $kecamatan = Kecamatan::find($id);
             $kecamatan->delete();
 
-            return redirect()->back()->with('status_penghapusan_kecamatan', 'berhasil');
-        } catch (Exception $error) {
-            return redirect()->back()->with('status_penghapusan_kecamatan', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kecamatan.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus kecamatan.');
         }
     }
 }

@@ -20,16 +20,16 @@ class KabupatenExport implements FromView, WithStyles {
   public function view(): View {
 	try {
 		if ($this->provinsiId == 0) {
-			return $this->_eksporSemuaKabupaten();
+			return $this->exportAllKabupaten();
 		}
 	
-		return $this->_eksporKabupatenProvinsi();
+		return $this->exportKabupatenByProvinsi();
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _eksporSemuaKabupaten(): View
+  private function exportAllKabupaten(): View
   {
 	  try {
 		$kabupaten = Kabupaten::all();
@@ -39,7 +39,7 @@ class KabupatenExport implements FromView, WithStyles {
 	}
   }
 
-  private function _eksporKabupatenProvinsi(): View
+  private function exportKabupatenByProvinsi(): View
   {
 	try {
 		$provinsi = Provinsi::find($this->provinsiId);
@@ -63,24 +63,24 @@ class KabupatenExport implements FromView, WithStyles {
 	$index = 1;
 
 	foreach ($sheet->getRowIterator() as $row) {
-		$this->_setKabupatenBorder($sheet, $index, $styleArray);
+		$this->setKabupatenBorder($sheet, $index, $styleArray);
 		
 		// Jika memilih semua provinsi, maka berikan border untuk kolom B
 		if ($this->provinsiId == 0) {
-			$this->_setProvinsiBorder($sheet, $index, $styleArray);
+			$this->setProvinsiBorder($sheet, $index, $styleArray);
 		}
 
 		$index++;
 	}
   }
 
-  private function _setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
+  private function setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cellA = $sheet->getCell("A$index");
 	$cellA->getStyle()->applyFromArray($styleArray);
   }
 
-  private function _setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
+  private function setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cellB = $sheet->getCell("B$index");
 	$cellB->getStyle()->applyFromArray($styleArray);

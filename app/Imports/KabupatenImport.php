@@ -17,20 +17,15 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
     use Importable, SkipsFailures;
 
     private ?Provinsi $provinsi = null;
-    public array $catatan = [];
+
+    private array $catatan = [];
 
     /**
      * Mengambil catatan dari proses impor.
      */
     public function getCatatan(): array
     {
-        $failureMessages = $this->failures()
-            ->map(fn ($failure) => $failure->errors())
-            ->filter(fn ($errors) => count($errors) > 0 && $errors[0] !== '')
-            ->map(fn ($errors) => $errors[0])
-            ->toArray();
-
-        return array_merge($failureMessages, $this->catatan);
+        return $this->catatan;
     }
 
     /**
@@ -39,7 +34,8 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[1])) {
+            $rowArray = $row->toArray();
+            if (isset($rowArray[1])) {
                 $this->importSemuaKabupaten($row);
             } else {
                 $this->importKabupatenByProvinsi($row);
@@ -73,13 +69,24 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
             $this->addCatatanProvinsiBaruDariKabupaten($namaKabupaten, $namaProvinsi);
         }
 
-        $kabupatenList = $this->getAllKabupaten();
-
         // Tambahkan catatan jika kabupaten sudah ada, jika belum buat kabupaten baru
-        if (in_array(strtoupper(trim($namaKabupaten)), $kabupatenList)) {
+        if ($this->checkKabupatenExistence($namaKabupaten)) {
             $this->addCatatanKabupatenSudahAda($namaKabupaten);
         } else {
             $this->createKabupaten($namaKabupaten, $this->provinsi->id);
+        }
+    }
+
+    /**
+     * Mengecek apakah kabupaten sudah ada atau belum.
+     */
+    private function checkKabupatenExistence(string $namaKabupaten)
+    {
+        try {
+            $kabupatenList = $this->getAllKabupaten();
+            return in_array(strtoupper(trim($namaKabupaten)), $kabupatenList);
+        } catch (Exception $exception) {
+            throw new Exception("Error in checkKabupatenExistence: " . $exception->getMessage(), 0, $exception);
         }
     }
 
@@ -159,7 +166,7 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
      */
     private function addCatatanKabupatenSudahAda(string $namaKabupaten): void
     {
-        $pesan = "Kabupaten '<b>$namaKabupaten</b>' sudah ada di database, jadi dilewati.";
+        $pesan = "Kabupaten '<b>$namaKabupaten</b>' sudah ada di database.";
         $this->catatan[] = $pesan;
     }
 

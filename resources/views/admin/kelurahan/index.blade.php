@@ -15,7 +15,7 @@
     }
     
     /* Responsive styles */
-    @media (max-width: 640px) {
+    @media (max-width: 1024px) {
         .flex-col-mobile {
             flex-direction: column;
         }
@@ -42,39 +42,36 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('status_pembuatan_kelurahan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kelurahan berhasil ditambahkan.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kelurahan gagal ditambahkan.'])
-        @endif
-    @endif
+    @php $pesanSukses = session('pesan_sukses'); @endphp
+    @isset ($pesanSukses)
+        @include('components.alert-berhasil', ['message' => $pesanSukses])
+    @endisset
 
-    @php $status = session('status_pengeditan_kelurahan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kelurahan berhasil diedit.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kelurahan gagal diedit.'])
-        @endif
-    @endif
+    @php $pesanGagal = session('pesan_gagal'); @endphp
+    @isset ($pesanGagal)
+        @include('components.alert-gagal', ['message' => $pesanGagal])
+    @endisset
 
-    @php $status = session('status_penghapusan_kelurahan'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Kelurahan berhasil dihapus.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Kelurahan gagal dihapus.'])
-        @endif
-    @endif
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endisset
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
-        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <span class="text-lg font-bold"><i class="fas fa-city"></i> Kelurahan</span>
-            </div>
-            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+        <div class="flex items-center space-x-2 w-full-mobile mb-5">
+            <img src="{{ asset('assets/icon/kelurahan.svg') }}" class="mr-1" alt="Kelurahan">
+            <span class="font-bold mt-1">Kelurahan</span>
+        </div>
+
+        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'kelurahan'])
 
                 <form action="{{ route('kelurahan') }}" method="GET">
@@ -83,13 +80,28 @@
                           <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                         </svg>
                         <input type="search" placeholder="Cari kelurahan" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
-                        @if (request()->has('kabupaten'))
-                            <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
+                        @if (request()->has('kelurahan'))
+                            <input type="hidden" name="kelurahan" value="{{ request()->get('kelurahan') }}">
                         @endif
-                    </div>                  
+                    </div>         
                 </form>
+            </div>
 
-                <button id="addKelurahanBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah Kelurahan</button>
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
+                <div class="flex gap-2">
+                    <button id="importKelurahanBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-import me-1"></i>
+                        <span>Impor</span>
+                    </button>
+                    <button id="exportKelurahanBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-export me-1"></i>
+                        <span>Ekspor</span>
+                    </button>
+                </div>
+                <button id="addKelurahanBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-plus me-1"></i>
+                    <span>Tambah Kelurahan</span>
+                </button>
             </div>
         </div>
 
@@ -136,6 +148,8 @@
 @include('admin.kelurahan.tambah-modal')
 @include('admin.kelurahan.edit-modal')
 @include('admin.kelurahan.hapus-modal')
+@include('admin.kelurahan.impor-modal')
+@include('admin.kelurahan.ekspor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan

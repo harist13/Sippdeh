@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Exports\KelurahanExport;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportKelurahanRequest;
 use App\Http\Requests\StoreKelurahanRequest;
 use App\Http\Requests\UpdateKelurahanRequest;
+use App\Imports\KelurahanImport;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelurahanController extends Controller
 {
@@ -48,6 +53,15 @@ class KelurahanController extends Controller
         return view('admin.kelurahan.index', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
+    public function export(Request $request)
+    {
+        if ($request->has('kabupaten_id') && is_numeric($request->get('kabupaten_id'))) {
+            return Excel::download(new KelurahanExport($request->get('kabupaten_id')), 'kelurahan.xlsx');
+        }
+        
+        return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kelurahan.');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -70,8 +84,34 @@ class KelurahanController extends Controller
             $kelurahan->save();
 
             return redirect()->back()->with('status_pembuatan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pembuatan_kelurahan', 'gagal');
+        }
+    }
+
+    public function import(ImportKelurahanRequest $request)
+    {
+        try {
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+
+                $kelurahanImport = new KelurahanImport();
+                $kelurahanImport->import($namaSpreadsheet, disk: 'local');
+                
+                $catatan = $kelurahanImport->getCatatan();
+                $redirectBackResponse = redirect()->back();
+
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
+                }
+
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
+            }
+
+            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
+        } catch (Exception $exception) {
+            dd($exception);
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kecamatan.');
         }
     }
 
@@ -105,7 +145,7 @@ class KelurahanController extends Controller
             $kelurahan->save();
 
             return redirect()->back()->with('status_pengeditan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pengeditan_kelurahan', 'gagal');
         }
     }
@@ -120,7 +160,7 @@ class KelurahanController extends Controller
             $kelurahan->delete();
 
             return redirect()->back()->with('status_penghapusan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_penghapusan_kelurahan', 'gagal');
         }
     }

@@ -50,8 +50,8 @@ trait UploadImage {
             $image->save($imagePath);
 
             return $imageName;
-        } catch (RuntimeException $error) {
-            throw $error;
+        } catch (RuntimeException $exception) {
+            throw $exception;
         }
     }
 }

@@ -22,37 +22,37 @@ class ProvinsiExport implements FromView, WithStyles {
   public function view(): View {
 	try {
 		if ($this->kabupatenId == 0) {
-			return $this->_eksporSemuaProvinsi();
+			return $this->exportAllProvinsi();
 		}
 
-		return $this->_eksporProvinsiByKabupaten();
+		return $this->exportProvinsiByKabupaten();
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _eksporSemuaProvinsi(): View
+  private function exportAllProvinsi(): View
   {
 	try {
-		$provinsi = $this->_ambilSemuaProvinsi();
+		$provinsi = $this->getAllProvinsi();
 		return view('exports.provinsi.semua-provinsi', compact('provinsi'));
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _eksporProvinsiByKabupaten(): View
+  private function exportProvinsiByKabupaten(): View
   {
 	try {
-		$kabupaten = $this->_ambilKabupatenById();
-		$provinsi = $this->_ambilProvinsiByKabupatenId();
+		$kabupaten = $this->getKabupatenById();
+		$provinsi = $this->getProvinsiByKabupatenId();
 		return view('exports.provinsi.provinsi', compact('kabupaten', 'provinsi'));
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _ambilSemuaProvinsi(): Collection
+  private function getAllProvinsi(): Collection
   {
 	try {
 		return Provinsi::selectRaw('UPPER(nama) AS nama')->get();
@@ -61,7 +61,7 @@ class ProvinsiExport implements FromView, WithStyles {
 	}
   }
 
-  private function _ambilKabupatenById(): Kabupaten
+  private function getKabupatenById(): Kabupaten
   {
 	try {
 		return Kabupaten::selectRaw('UPPER(nama) AS nama')->find($this->kabupatenId);
@@ -70,7 +70,7 @@ class ProvinsiExport implements FromView, WithStyles {
 	}
   }
 
-  private function _ambilProvinsiByKabupatenId(): Collection
+  private function getProvinsiByKabupatenId(): Collection
   {
 	try {
 		return Provinsi::selectRaw('UPPER(nama) AS nama')
@@ -95,23 +95,23 @@ class ProvinsiExport implements FromView, WithStyles {
 	$index = 1;
 
 	foreach ($sheet->getRowIterator() as $row) {
-		$this->_setBorderNamaKabupaten($sheet, $index, $styleArray);
+		$this->setKabupatenBorder($sheet, $index, $styleArray);
 
 		if ($index > 1) {
-			$this->_setBorderProvinsi($sheet, $index, $styleArray);
+			$this->setProvinsiBorder($sheet, $index, $styleArray);
 		}
 
 		$index++;
 	}
   }
   
-  private function _setBorderNamaKabupaten(Worksheet $sheet, int $index, array $styleArray): void
+  private function setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$namaKabupaten = $sheet->getCell('A1');
 	$namaKabupaten->getStyle()->getFont()->setBold(true);
   }
 
-  private function _setBorderProvinsi(Worksheet $sheet, int $index, array $styleArray): void
+  private function setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cellA = $sheet->getCell("A$index");
 	$cellA->getStyle()->applyFromArray($styleArray);

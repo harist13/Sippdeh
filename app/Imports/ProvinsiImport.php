@@ -2,73 +2,105 @@
 
 namespace App\Imports;
 
-use App\Models\Kabupaten;
 use App\Models\Provinsi;
-use Exception;
+use App\Traits\WilayahImport;
 use Illuminate\Support\Model;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Row;
+use Exception;
 
-class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
+class ProvinsiImport implements SkipsOnFailure, OnEachRow
 {
-    use Importable, SkipsFailures;
+    use WilayahImport, Importable, SkipsFailures;
+
+    private ?string $namaKabupaten = null;
+
+    private array $catatan = [];
 
     /**
-    * @param Model $collection
-    */
-    public function model(array $row)
+     * Mengambil catatan dari proses impor.
+     */
+    public function getCatatan(): array
     {
-        return new Provinsi(['nama' => $row[0]]);
+        return $this->catatan;
     }
 
-    public function rules(): array
+    /**
+     * Proses setiap baris data.
+     */
+    public function onRow(Row $row): void
     {
         try {
-            $kabupaten = $this->_ambilSemuaKabupaten();
-            $provinsi = $this->_ambilSemuaProvinsi();
-
-            return [
-                '0' => function($attribute, $value, $onFailure) use ($kabupaten, $provinsi) {
-                    // Header 'PROVINSI' dilewati.
-                    if ($value == 'PROVINSI') {
-                        $onFailure('');
-                    }
-
-                    // Header Kabupaten/Kota dilewati.
-                    if (in_array(strtoupper(trim($value)), $kabupaten)) {
-                        $onFailure('');
-                    }
-                    
-                    // Provinsi yang sudah ada dilewati.
-                    if (in_array(strtoupper(trim($value)), $provinsi)) {
-                        $onFailure("Provinsi '<b>$value</b>' telah tersedia di database sebelumnya, jadi pengimporan provinsi ini dilewati.");
-                    }
-                },
-            ];
+            $this->importProvinsi($row);
         } catch (Exception $exception) {
             throw $exception;
         }
     }
 
-    private function _ambilSemuaKabupaten(): array
+    /**
+     * Impor provinsi pada setiap baris.
+     */
+    private function importProvinsi(Row $row): void
     {
-        try {
-            return Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
-        } catch (Exception $exception) {
-            throw $exception;
+        $rowIndex = $row->getIndex();
+        $row = $row->toArray();
+
+        // Dapatkan nama kabupaten
+        if ($rowIndex == 1 && $row[0] != 'PROVINSI') {
+            $this->namaKabupaten = $row[0];
+        }
+
+        // Skip header 'PROVINSI' indeks ke-2
+        if ($row[0] == 'PROVINSI') {
+            return;
+        }
+
+        if ($rowIndex >= 2 && $row[0] != 'PROVINSI') {
+            $namaProvinsi = $row[0];
+            
+            // Tambahkan catatan jika provinsi sudah ada, jika belum buat provinsi baru
+            if ($this->checkProvinsiExistence($namaProvinsi)) {
+                $this->addCatatanProvinsiSudahAda($namaProvinsi);
+            } else {
+                if (is_null($this->namaKabupaten)) {
+                    $this->getProvinsi($namaProvinsi);
+                } else {
+                    $this->getKabupaten($this->namaKabupaten, $namaProvinsi);
+                }
+            }
         }
     }
 
-    private function _ambilSemuaProvinsi(): array
+    /**
+     * Mengecek apakah provinsi sudah ada atau belum.
+     */
+    private function checkProvinsiExistence(string $namaProvinsi)
     {
         try {
-            return Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
+            $provinsiList = $this->getAllProvinsi();
+            return in_array(strtoupper(trim($namaProvinsi)), $provinsiList);
         } catch (Exception $exception) {
-            throw $exception;
+            throw new Exception("Error in checkProvinsiExistence: " . $exception->getMessage(), 0, $exception);
         }
+    }
+
+    /**
+     * Menambahkan catatan ketika provinsi sudah ada.
+     */
+    private function addCatatanProvinsiSudahAda(string $namaProvinsi): void
+    {
+        $pesan = "Provinsi '<b>$namaProvinsi</b>' sudah ada di database.";
+        $this->catatan[] = $pesan;
+    }
+
+    /**
+     * Mengambil semua provinsi dari database.
+     */
+    private function getAllProvinsi(): array
+    {
+        return Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
     }
 }

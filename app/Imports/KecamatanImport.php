@@ -26,7 +26,8 @@ class KecamatanImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[1])) {
+            $rowArray = $row->toArray();
+            if (isset($rowArray[1])) {
                 // Impor dari format 'semua-kecamatan.blade.php'
                 $this->importAllKecamatan($row);
             } else {
@@ -59,13 +60,26 @@ class KecamatanImport implements SkipsOnFailure, OnEachRow
             $kacamatanList = $this->getAllKecamatan();
 
             // Tambahkan catatan jika kecamatan sudah ada, jika belum buat kecamatan baru
-            if (in_array(strtoupper(trim($namaKecamatan)), $kacamatanList)) {
+            if ($this->checkKecamatanExistence($namaKecamatan)) {
                 $this->catatan[] = "Kecamatan '<b>$namaKecamatan</b>' sebelumnya sudah ada di database.";
             } else {
                 $this->getKecamatan($namaKecamatan, $namaKabupaten, $namaProvinsi);
             }
         } catch (Exception $exception) {
             throw new Exception("Error in importAllKecamatan: " . $exception->getMessage(), 0, $exception);
+        }
+    }
+
+    /**
+     * Mengecek apakah kecamatan sudah ada atau belum.
+     */
+    private function checkKecamatanExistence(string $namaKecamatan)
+    {
+        try {
+            $kecamatanList = $this->getAllKecamatan();
+            return in_array(strtoupper(trim($namaKecamatan)), $kecamatanList);
+        } catch (Exception $exception) {
+            throw new Exception("Error in checkKecamatanExistence: " . $exception->getMessage(), 0, $exception);
         }
     }
 

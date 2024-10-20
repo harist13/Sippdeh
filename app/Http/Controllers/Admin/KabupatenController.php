@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\KabupatenExport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportKabupatenRequest;
 use App\Http\Requests\StoreKabupatenRequest;
 use App\Http\Requests\UpdateKabupatenRequest;
@@ -65,8 +66,8 @@ class KabupatenController extends Controller
             $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten_baru'];
             $kabupaten->save();
 
-            return redirect()->back()->with('pesan_sukses', 'Kabupaten berhasil ditambahkan.');
-        } catch (Exception $error) {
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
+        } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
         }
     }
@@ -80,10 +81,11 @@ class KabupatenController extends Controller
                 $kabupatenImport = new KabupatenImport();
                 $kabupatenImport->import($namaSpreadsheet, disk: 'local');
                 
+                $catatan = $kabupatenImport->getCatatan();
                 $redirectBackResponse = redirect()->back();
 
-                if (count($kabupatenImport->getCatatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $kabupatenImport->getCatatan());
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
                 }
 
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');
@@ -109,8 +111,8 @@ class KabupatenController extends Controller
             $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten'];
             $kabupaten->save();
 
-            return redirect()->back()->with('pesan_sukses', 'Kabupaten berhasil diedit.');
-        } catch (Exception $error) {
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kabupaten.');
+        } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kabupaten.');
         }
     }
@@ -125,7 +127,7 @@ class KabupatenController extends Controller
             $kabupaten->delete();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kabupaten.');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal menghapus kabupaten.');
         }
     }

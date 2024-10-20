@@ -20,16 +20,16 @@ class KecamatanExport implements FromView, WithStyles {
   public function view(): View {
 	try {
 		if ($this->kabupatenId == 0) {
-			return $this->_eksporSemuaKecamatan();
+			return $this->exportAllKecamatan();
 		}
 	
-		return $this->_eksporKecamatanKabupaten();
+		return $this->exportKecamatanByKabupaten();
 	} catch (Exception $exception) {
 		throw $exception;
 	}
   }
 
-  private function _eksporSemuaKecamatan(): View
+  private function exportAllKecamatan(): View
   {
 	  try {
 		$kecamatan = Kecamatan::all();
@@ -39,7 +39,7 @@ class KecamatanExport implements FromView, WithStyles {
 	}
   }
 
-  private function _eksporKecamatanKabupaten(): View
+  private function exportKecamatanByKabupaten(): View
   {
 	try {
 		$kabupaten = Kabupaten::find($this->kabupatenId);
@@ -66,35 +66,35 @@ class KecamatanExport implements FromView, WithStyles {
 		if ($this->kabupatenId != 0) {
 			// Skip border untuk header provinsi (indeks ke-1) dan header kabupaten (indeks ke-2)
 			if ($index >= 3) {
-				$this->_setKecamatanBorder($sheet, $index, $styleArray);
+				$this->setKecamatanBorder($sheet, $index, $styleArray);
 			}
 		} else {
-			$this->_setKecamatanBorder($sheet, $index, $styleArray);
+			$this->setKecamatanBorder($sheet, $index, $styleArray);
 		}
 		
 		// Jika memilih semua kabupaten, maka berikan border untuk wilayah-wilayah di atasnya
 		if ($this->kabupatenId == 0) {
-			$this->_setKabupatenBorder($sheet, $index, $styleArray);
-			$this->_setProvinsiBorder($sheet, $index, $styleArray);
+			$this->setKabupatenBorder($sheet, $index, $styleArray);
+			$this->setProvinsiBorder($sheet, $index, $styleArray);
 		}
 
 		$index++;
 	}
   }
 
-  private function _setKecamatanBorder(Worksheet $sheet, int $index, array $styleArray): void
+  private function setKecamatanBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cell = $sheet->getCell("A$index");
 	$cell->getStyle()->applyFromArray($styleArray);
   }
 
-  private function _setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
+  private function setKabupatenBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cell = $sheet->getCell("B$index");
 	$cell->getStyle()->applyFromArray($styleArray);
   }
 
-  private function _setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
+  private function setProvinsiBorder(Worksheet $sheet, int $index, array $styleArray): void
   {
 	$cell = $sheet->getCell("C$index");
 	$cell->getStyle()->applyFromArray($styleArray);

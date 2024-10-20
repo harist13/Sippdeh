@@ -66,8 +66,8 @@
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <img src="{{ asset('assets/icon/Building.png') }}" alt="" class="w-5 h-5 mr-1">
-            <span class="font-bold">Kecamatan</span>
+            <img src="{{ asset('assets/icon/kecamatan.svg') }}" class="mr-1" alt="Kecamatan">
+            <span class="font-bold mt-1">Kecamatan</span>
         </div>
 
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
