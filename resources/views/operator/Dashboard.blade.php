@@ -669,7 +669,7 @@
 
 @include('operator.layout.footer')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
@@ -680,13 +680,15 @@
                     label: 'Suara Masuk',
                     data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
                     backgroundColor: '#3560A0',
-                    barPercentage: 0.6,
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.5,
                 },
                 {
                     label: 'DPT',
                     data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
                     backgroundColor: '#99C9FF',
-                    barPercentage: 0.6,
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.5,
                 }
             ]
         },
@@ -697,6 +699,14 @@
                 x: {
                     grid: {
                         display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: false
                     }
                 },
                 y: {
@@ -715,10 +725,26 @@
             },
             plugins: {
                 legend: {
+                    display: true,
                     position: 'bottom',
+                    align: 'center',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
                 },
                 title: {
                     display: false
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10
                 }
             }
         }
