@@ -272,22 +272,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     label: 'Suara Masuk',
                     data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
                     backgroundColor: '#3560A0',
-                    barPercentage: 0.6,
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.5,
                 },
                 {
                     label: 'DPT',
                     data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
                     backgroundColor: '#99C9FF',
-                    barPercentage: 0.6,
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.5,
                 }
             ]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     grid: {
                         display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: false
                     }
                 },
                 y: {
@@ -306,10 +317,26 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             plugins: {
                 legend: {
+                    display: true,
                     position: 'bottom',
+                    align: 'center',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
                 },
                 title: {
                     display: false
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10
                 }
             }
         }
@@ -378,53 +405,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('candidateSlider');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentPosition = 0;
-        const slideWidth = 1080;
-        const totalSlides = 2;
+    const slider = document.getElementById('candidateSlider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentPosition = 0;
+    const slideWidth = slider.clientWidth / 2;
+    const totalSlides = 2;
 
-        function slideRight() {
+    function slideRight() {
+        if (currentPosition > -slideWidth * (totalSlides - 1)) {
             currentPosition -= slideWidth;
-            if (currentPosition < -slideWidth) {
-                currentPosition = 0;
-                slider.style.transition = 'none';
-                slider.style.transform = `translateX(${currentPosition}px)`;
-                setTimeout(() => {
-                    slider.style.transition = 'transform 500ms ease-in-out';
-                    currentPosition -= slideWidth;
-                    slider.style.transform = `translateX(${currentPosition}px)`;
-                }, 50);
-            } else {
-                slider.style.transform = `translateX(${currentPosition}px)`;
-            }
-            updateButtons();
+            updateSliderPosition();
         }
+    }
 
-        function updateButtons() {
-            if (currentPosition === 0) {
-                prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-                prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-                nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-                nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
-            } else {
-                prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-                prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
-                nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-                nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-            }
+    function slideLeft() {
+        if (currentPosition < 0) {
+            currentPosition += slideWidth;
+            updateSliderPosition();
         }
+    }
 
-        setInterval(slideRight, 5000);
+    function updateSliderPosition() {
+        slider.style.transition = 'transform 500ms ease-in-out';
+        slider.style.transform = `translateX(${currentPosition}px)`;
+        updateButtons();
+    }
 
-        prevBtn.addEventListener('click', () => {
-            currentPosition = 0;
-            slider.style.transform = `translateX(${currentPosition}px)`;
-            updateButtons();
-        });
+    function updateButtons() {
+        if (currentPosition === 0) {
+            prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+        } else {
+            prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+            prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
+            nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+        }
+    }
 
-        nextBtn.addEventListener('click', slideRight);
+    let autoSlideInterval = setInterval(slideRight, 5000);
+
+    prevBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideLeft();
+        autoSlideInterval = setInterval(slideRight, 5000);
     });
+
+    nextBtn.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        slideRight();
+        autoSlideInterval = setInterval(slideRight, 5000);
+    });
+
+});
 
 </script>
