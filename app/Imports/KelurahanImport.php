@@ -2,11 +2,10 @@
 
 namespace App\Imports;
 
+use App\Traits\WilayahImport;
 use App\Models\Kabupaten;
-use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Provinsi;
-use App\Traits\WilayahImport;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -20,7 +19,6 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
 
     private ?Provinsi $provinsi = null;
     private ?Kabupaten $kabupaten = null;
-    private ?Kecamatan $kecamatan = null;
 
     /**
      * Proses setiap baris data.
@@ -28,7 +26,7 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[1])) {
+            if (isset($row[2]) && isset($row[3])) {
                 // Impor dari format 'semua-kelurahan.blade.php'
                 $this->importAllKelurahan($row);
             } else {
@@ -62,8 +60,8 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
             $kelurahanList = $this->getAllKelurahan();
 
             // Tambahkan catatan jika kelurahan sudah ada, jika belum buat kelurahan baru
-            if (in_array(strtoupper(trim($namaKecamatan)), $kelurahanList)) {
-                $this->catatan[] = "Kelurahan '<b>$namaKecamatan</b>' sebelumnya sudah ada di database.";
+            if (in_array(strtoupper(trim($namaKelurahan)), $kelurahanList)) {
+                $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' sebelumnya sudah ada di database.";
             } else {
                 $this->getKelurahan($namaKelurahan, $namaKecamatan, $namaKabupaten, $namaProvinsi);
             }
@@ -93,26 +91,21 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
                 $this->kabupaten = $this->getKabupaten($namaKabupaten, $this->provinsi->nama);
             }
 
-            // Ambil atau buat kecamatan baru pada baris ke-3
-            if ($rowIndex == 3 && is_null($this->kecamatan)) {
-                $namaKecamatan = $row[0];
-                $this->kecamatan = $this->getKecamatan($namaKecamatan, $this->kabupaten->nama, $this->provinsi->nama);
-            }
-
-            // Skip header 'KELURAHAN' di baris ke-4
-            if ($rowIndex == 4) {
+            // Skip header 'KELURAHAN' di baris ke-3
+            if ($rowIndex == 3) {
                 return;
             }
 
-            // Tambahkan kelurahan pada baris ke-5 dan seterusnya
-            if ($rowIndex >= 5) {
+            // Tambahkan kelurahan pada baris ke-4 dan seterusnya
+            if ($rowIndex >= 4) {
                 $kelurahanList = $this->getAllKelurahan();
                 $namaKelurahan = $row[0];
+                $namaKecamatan = $row[1];
 
                 if (in_array(strtoupper(trim($namaKelurahan)), $kelurahanList)) {
                     $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' sebelumnya sudah ada di database.";
                 } else {
-                    $this->getKecamatan($namaKelurahan, $this->kabupaten->nama, $this->provinsi->nama);
+                    $this->getKelurahan($namaKelurahan, $namaKecamatan, $this->kabupaten->nama, $this->provinsi->nama);
                 }
             }
         } catch (Exception $exception) {

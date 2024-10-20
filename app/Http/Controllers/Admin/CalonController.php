@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCalonRequest;
 use App\Http\Requests\UpdateCalonRequest;
 use App\Models\Calon;
@@ -90,8 +91,7 @@ class CalonController extends Controller
             $calon->save();
 
             return redirect()->back()->with('status_pembuatan_calon', 'berhasil');
-        } catch (Exception $error) {
-            dd($error);
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pembuatan_calon', 'gagal');
         }
     }
@@ -105,8 +105,8 @@ class CalonController extends Controller
             $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, $this->disk->path(''));
 
             return $namaFoto;
-        } catch (Exception $error) {
-            throw $error;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
@@ -150,7 +150,7 @@ class CalonController extends Controller
             $calon->save();
 
             return redirect()->back()->with('status_pengeditan_calon', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pengeditan_calon', 'gagal');
         }
     }
@@ -169,7 +169,7 @@ class CalonController extends Controller
             $this->disk->delete($namaFoto);
 
             return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_penghapusan_calon', 'gagal');
         }
     }
@@ -185,7 +185,7 @@ class CalonController extends Controller
             $calon->save();
 
             return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_penghapusan_calon', 'gagal');
         }
     }

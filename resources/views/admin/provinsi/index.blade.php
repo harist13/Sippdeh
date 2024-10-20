@@ -48,12 +48,12 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('sukses'); @endphp
+    @php $status = session('pesan_sukses'); @endphp
     @isset ($status)
         @include('components.alert-berhasil', ['message' => $status])
     @endisset
 
-    @php $status = session('gagal'); @endphp
+    @php $status = session('pesan_gagal'); @endphp
     @isset ($status)
         @include('components.alert-gagal', ['message' => $status])
     @endisset
@@ -70,37 +70,10 @@
         </div>
     @endisset
 
-    @php $status = session('status_pembuatan_provinsi'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Provinsi berhasil ditambahkan.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Provinsi gagal ditambahkan.'])
-        @endif
-    @endif
-
-    @php $status = session('status_pengeditan_provinsi'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Provinsi berhasil diedit.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Provinsi gagal diedit.'])
-        @endif
-    @endif
-
-    @php $status = session('status_penghapusan_provinsi'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Provinsi berhasil dihapus.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Provinsi gagal dihapus.'])
-        @endif
-    @endif
-
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <img src="{{ asset('assets/icon/Building3.png') }}" alt="" class="w-5 h-5 mr-1">
-            <span class="text-lg font-bold">Provinsi</span>
+            <img src="{{ asset('assets/icon/provinsi.svg') }}" class="mr-1" alt="Provinsi">
+            <span class="font-bold mt-1">Provinsi</span>
         </div>
 
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Petugas;
 use Spatie\Permission\Models\Role;
@@ -10,43 +11,26 @@ use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
 use App\Models\Kabupaten;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
-    //
     public function Dashboard()
     {
         return view('admin.dashboard');
     }
+
     public function rekapitulasi()
     {
         return view('admin.rekapitulasi');
     }
+
     public function rangkuman()
     {
         return view('admin.rangkuman');
     }
-    public function calon()
-    {
-        return view('admin.calon');
-    }
-    public function tps()
-    {
-        return view('admin.tps');
-    }
-    public function kabupaten()
-    {
-        return view('admin.kabupaten');
-    }
-    public function kecamatan()
-    {
-        return view('admin.kecamatan');
-    }
-    public function kelurahan()
-    {
-        return view('admin.kelurahan');
-    }
-     public function user()
+
+    public function user()
     {
         $users = Petugas::paginate(10);
         $roles = Role::all();
@@ -61,8 +45,8 @@ class AdminController extends Controller
         
         return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
     }
-
-   public function forceLogoutDevice($userId, $loginHistoryId)
+    
+    public function forceLogoutDevice($userId, $loginHistoryId)
     {
         try {
             $loginHistory = LoginHistory::findOrFail($loginHistoryId);
@@ -186,27 +170,26 @@ class AdminController extends Controller
     }
 
     public function updateProfile(Request $request)
-{
-    $user = Auth::user();
-    
-    $validatedData = $request->validate([
-        'email' => 'required|email|unique:petugas,email,'.$user->id,
-        'password' => 'nullable|min:6|confirmed',
-    ]);
+    {
+        $user = Auth::user();
+        
+        if (is_null($user)) {
+            return response()->json(['success' => false]);
+        }
 
-    $user->email = $validatedData['email'];
-    
-    if (!empty($validatedData['password'])) {
-        $user->password = Hash::make($validatedData['password']);
+        $validatedData = $request->validate([
+            'email' => 'required|email|unique:petugas,email,'.$user->id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        $user->email = $validatedData['email'];
+        
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+        $user->save();
+
+        return response()->json(['success' => true]);
     }
-
-    $user->save();
-
-    return response()->json(['success' => true]);
-}
-
-   
-
-   
-
 }

@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Support\Model;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -16,6 +15,17 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
 {
     use Importable, SkipsFailures;
+
+    public function getCatatan()
+    {
+        $failures = collect($this->failures())
+            ->map(fn ($failure) => $failure->errors()) // kumpulkan error-error pada satu row
+            ->filter(fn ($errors) => count($errors) > 0) // filter row yang ada error-nya aja
+            ->filter(fn ($errors) => $errors[0] != '') // filter row yang error-nya ga kosong
+            ->map(fn ($errors) => $errors[0]); // kumpulin error pertamanya aja
+
+        return $failures;
+    }
 
     /**
     * @param Model $collection
@@ -28,8 +38,8 @@ class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
     public function rules(): array
     {
         try {
-            $kabupaten = $this->_ambilSemuaKabupaten();
-            $provinsi = $this->_ambilSemuaProvinsi();
+            $kabupaten = $this->getAllKabupaten();
+            $provinsi = $this->getAllProvinsi();
 
             return [
                 '0' => function($attribute, $value, $onFailure) use ($kabupaten, $provinsi) {
@@ -54,7 +64,7 @@ class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
         }
     }
 
-    private function _ambilSemuaKabupaten(): array
+    private function getAllKabupaten(): array
     {
         try {
             return Kabupaten::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();
@@ -63,7 +73,7 @@ class ProvinsiImport implements ToModel, WithValidation, SkipsOnFailure
         }
     }
 
-    private function _ambilSemuaProvinsi(): array
+    private function getAllProvinsi(): array
     {
         try {
             return Provinsi::selectRaw('UPPER(nama) AS nama')->get()->pluck('nama')->toArray();

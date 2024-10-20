@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\ProvinsiExport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportProvinsiRequest;
 use App\Http\Requests\StoreProvinsiRequest;
 use App\Http\Requests\UpdateProvinsiRequest;
@@ -57,7 +58,7 @@ class ProvinsiController extends Controller
             return Excel::download(new ProvinsiExport($request->get('kabupaten_id')), 'provinsi.xlsx');
         }
         
-        return redirect()->back()->with('status_ekspor_provinsi', 'gagal');
+        return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor provinsi.');
     }
 
     /**
@@ -80,9 +81,9 @@ class ProvinsiController extends Controller
             $provinsi->nama = $validated['nama_provinsi_baru'];
             $provinsi->save();
     
-            return redirect()->back()->with('status_pembuatan_provinsi', 'berhasil');
-        } catch (Exception $error) {
-            return redirect()->back()->with('status_pembuatan_provinsi', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah provinsi.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal manambah provinsi.');
         }
     }
 
@@ -92,39 +93,23 @@ class ProvinsiController extends Controller
             if ($request->hasFile('spreadsheet')) {
                 $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
 
-                $import = new ProvinsiImport();
-                $import->import($namaSpreadsheet, disk: 'local');
+                $provinsiImport = new ProvinsiImport();
+                $provinsiImport->import($namaSpreadsheet, disk: 'local');
                 
+                $catatan = $provinsiImport->getCatatan();
                 $redirectBackResponse = redirect()->back();
 
-                $importErrors = collect($import->failures())
-                    ->map(fn ($failure) => $failure->errors()) // kumpulkan error-error pada satu row
-                    ->filter(fn ($errors) => count($errors) > 0) // filter row yang ada error-nya aja
-                    ->filter(fn ($errors) => $errors[0] != '') // filter row yang error-nya ga kosong
-                    ->map(fn ($errors) => $errors[0]); // kumpulin error pertamanya aja
-
-                if ($importErrors->count() > 0) {
-                    $redirectBackResponse->with('catatan_impor', $importErrors);
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
                 }
 
-                return $redirectBackResponse->with('sukses', 'Berhasil mengimpor data provinsi.');
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data provinsi.');
             }
 
-            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
-        } catch (ValidationException $exception) {
-            $failures = $exception->failures();
-            $redirectBackResponse = redirect()->back();
-
-            dump($failures);
-
-            foreach ($failures as $failure) {
-                dump($failure->errors());
-            }
-
-            dd();
+            return redirect()->back()->with('pesan_gagal', 'Telah terjadi kesalahan, berkas .csv tidak terunggah.');
         } catch (Exception $exception) {
             dd($exception);
-            return redirect()->back()->with('gagal', 'Telah terjadi kesalahan, gagal mengimpor data provinsi.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data provinsi.');
         }
     }
 
@@ -156,10 +141,9 @@ class ProvinsiController extends Controller
             $provinsi->nama = $validated['nama_provinsi'];
             $provinsi->save();
     
-            return redirect()->back()->with('status_pengeditan_provinsi', 'berhasil');
-        } catch (Exception $error) {
-            dd($error);
-            return redirect()->back()->with('status_pengeditan_provinsi', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit provinsi.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit provinsi.');
         }
     }
 
@@ -172,10 +156,9 @@ class ProvinsiController extends Controller
             $provinsi = Provinsi::find($id);
             $provinsi->delete();
     
-            return redirect()->back()->with('status_penghapusan_provinsi', 'berhasil');
-        } catch (Exception $error) {
-            dd($error);
-            return redirect()->back()->with('status_penghapusan_provinsi', 'gagal');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus provinsi.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus provinsi.');
         }
     }
 }

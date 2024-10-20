@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\KelurahanExport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportKelurahanRequest;
 use App\Http\Requests\StoreKelurahanRequest;
 use App\Http\Requests\UpdateKelurahanRequest;
@@ -83,7 +84,7 @@ class KelurahanController extends Controller
             $kelurahan->save();
 
             return redirect()->back()->with('status_pembuatan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pembuatan_kelurahan', 'gagal');
         }
     }
@@ -94,13 +95,14 @@ class KelurahanController extends Controller
             if ($request->hasFile('spreadsheet')) {
                 $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
 
-                $kecamatanImport = new KelurahanImport();
-                $kecamatanImport->import($namaSpreadsheet, disk: 'local');
+                $kelurahanImport = new KelurahanImport();
+                $kelurahanImport->import($namaSpreadsheet, disk: 'local');
                 
+                $catatan = $kelurahanImport->getCatatan();
                 $redirectBackResponse = redirect()->back();
 
-                if (count($kecamatanImport->getCatatan()) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $kecamatanImport->getCatatan());
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
                 }
 
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
@@ -143,7 +145,7 @@ class KelurahanController extends Controller
             $kelurahan->save();
 
             return redirect()->back()->with('status_pengeditan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_pengeditan_kelurahan', 'gagal');
         }
     }
@@ -158,7 +160,7 @@ class KelurahanController extends Controller
             $kelurahan->delete();
 
             return redirect()->back()->with('status_penghapusan_kelurahan', 'berhasil');
-        } catch (Exception $error) {
+        } catch (Exception $exception) {
             return redirect()->back()->with('status_penghapusan_kelurahan', 'gagal');
         }
     }

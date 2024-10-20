@@ -17,20 +17,15 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
     use Importable, SkipsFailures;
 
     private ?Provinsi $provinsi = null;
-    public array $catatan = [];
+
+    private array $catatan = [];
 
     /**
      * Mengambil catatan dari proses impor.
      */
     public function getCatatan(): array
     {
-        $failureMessages = $this->failures()
-            ->map(fn ($failure) => $failure->errors())
-            ->filter(fn ($errors) => count($errors) > 0 && $errors[0] !== '')
-            ->map(fn ($errors) => $errors[0])
-            ->toArray();
-
-        return array_merge($failureMessages, $this->catatan);
+        return $this->catatan;
     }
 
     /**
@@ -159,7 +154,7 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
      */
     private function addCatatanKabupatenSudahAda(string $namaKabupaten): void
     {
-        $pesan = "Kabupaten '<b>$namaKabupaten</b>' sudah ada di database, jadi dilewati.";
+        $pesan = "Kabupaten '<b>$namaKabupaten</b>' sudah ada di database.";
         $this->catatan[] = $pesan;
     }
 
