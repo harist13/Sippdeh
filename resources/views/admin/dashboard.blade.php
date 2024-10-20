@@ -276,9 +276,9 @@
                     <!-- Andi Harun / Saefuddin Zuhri -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
                         </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
                             Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
@@ -295,7 +295,7 @@
                     <!-- Kotak Kosong -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
                             Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
@@ -312,10 +312,10 @@
                     <!-- Muhammad Sabani / Syukri Wahid -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Muhammad Sabani / Syukri Wahid">
+                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
                         </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                            Balikpapan
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                            Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
                             <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
@@ -334,9 +334,9 @@
                     <!-- Andi Harun / Saefuddin Zuhri -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Andi Harun / Saefuddin Zuhri">
+                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
                         </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
                             Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
@@ -353,7 +353,7 @@
                     <!-- Kotak Kosong -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
                             Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
@@ -370,10 +370,10 @@
                     <!-- Muhammad Sabani / Syukri Wahid -->
                     <div class="w-[330px] flex flex-col">
                         <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://via.placeholder.com/330x217" alt="Muhammad Sabani / Syukri Wahid">
+                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
                         </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-9 ml-0 z-10">
-                            Balikpapan
+                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                            Samarinda
                         </div>
                         <div class="bg-white rounded-b-2xl p-4 shadow">
                             <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
