@@ -70,11 +70,13 @@
     @endif
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
-        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <span class="text-lg font-bold"><i class="fas fa-map-marker-alt"></i> TPS</span>
-            </div>
-            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+        <div class="flex items-center space-x-2 w-full-mobile mb-5">
+            <img src="{{ asset('assets/icon/tps.svg') }}" class="mr-1" alt="TPS">
+            <span class="font-bold">TPS</span>
+        </div>
+
+        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'tps'])
 
                 <form action="{{ route('tps') }}" method="GET">
@@ -82,14 +84,29 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                         </svg>
-                        <input type="search" placeholder="Cari tps" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                        <input type="search" placeholder="Cari TPS" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
                         @if (request()->has('kabupaten'))
                             <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
                         @endif
-                    </div>                  
+                    </div>         
                 </form>
+            </div>
 
-                <button id="addTPSBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah TPS</button>
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
+                <div class="flex gap-2">
+                    <button id="importTPSBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-import me-1"></i>
+                        <span>Impor</span>
+                    </button>
+                    <button id="exportTPSBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-export me-1"></i>
+                        <span>Ekspor</span>
+                    </button>
+                </div>
+                <button id="addTPSBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-plus me-1"></i>
+                    <span>Tambah TPS</span>
+                </button>
             </div>
         </div>
 
