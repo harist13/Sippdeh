@@ -211,14 +211,9 @@
                 <!-- Dropdown Menu -->
                 <div id="profileMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
                     <div class="py-1">
-                        <div class="border-t border-gray-100"></div>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">
                             <i class="fas fa-user-circle mr-2"></i> Profile
                         </a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">
-                            <i class="fas fa-cog mr-2"></i> Settings
-                        </a>
-                        <div class="border-t border-gray-100"></div>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-blue-100">
