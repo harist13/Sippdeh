@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\TPS;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateKabupatenRequest extends FormRequest
+class UpdateTPSRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,24 +24,24 @@ class UpdateKabupatenRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama_kabupaten' => [
+            'nama_tps' => [
                 'required',
                 'max:300',
-                Rule::unique('kabupaten', 'nama')->ignore($id)
+                Rule::unique('tps', 'nama')->ignore($id)
             ],
-            'provinsi_id_kabupaten' => 'required|exists:provinsi,id'
+            'kelurahan_id_tps' => 'required|exists:kecamatan,id'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama_kabupaten.required' => 'Mohon isi nama kabupaten.',
-            'nama_kabupaten.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama_kabupaten.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'nama_tps.required' => 'Mohon isi nama TPS.',
+            'nama_tps.unique' => 'Kelurahan tersebut sudah ada.',
+            'nama_tps.max' => 'Nama TPS terlalu panjang, maksimal 300 karakter.',
 
-            'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
-            'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'kelurahan_id_tps.required' => 'Mohon pilih kecamatan untuk kota tersebut.',
+            'kelurahan_id_tps.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',
         ];
     }
 }

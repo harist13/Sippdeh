@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-class Pilkadacontroller extends Controller
+class PilkadaController extends Controller
 {
     //
     public function index()

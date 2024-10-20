@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCalonRequest;
-use App\Http\Requests\UpdateCalonRequest;
+use App\Http\Requests\Admin\Calon\StoreCalonRequest;
+use App\Http\Requests\Admin\Calon\UpdateCalonRequest;
 use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Traits\UploadImage;

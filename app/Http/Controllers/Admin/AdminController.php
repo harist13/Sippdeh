@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
 use App\Models\Kabupaten;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class AdminController extends Controller
 {

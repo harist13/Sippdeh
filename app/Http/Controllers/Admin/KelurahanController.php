@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\KelurahanExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImportKelurahanRequest;
-use App\Http\Requests\StoreKelurahanRequest;
-use App\Http\Requests\UpdateKelurahanRequest;
+use App\Http\Requests\Admin\Kelurahan\ImportKelurahanRequest;
+use App\Http\Requests\Admin\Kelurahan\StoreKelurahanRequest;
+use App\Http\Requests\Admin\Kelurahan\UpdateKelurahanRequest;
 use App\Imports\KelurahanImport;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class pilgubcontroller extends Controller
+class PilgubController extends Controller
 {
     //
     public function index()

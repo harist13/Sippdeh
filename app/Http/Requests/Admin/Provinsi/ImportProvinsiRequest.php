@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Provinsi;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProvinsiRequest extends FormRequest
+class ImportProvinsiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,17 @@ class StoreProvinsiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_provinsi_baru' => 'required|unique:provinsi,nama|max:300'
+            'spreadsheet' => 'required|file|mimes:csv,xlsx|max:2048'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama_provinsi_baru.required' => 'Mohon isi nama provinsi.',
-            'nama_provinsi_baru.unique' => 'Provinsi tersebut sudah ada.',
-            'nama_provinsi_baru.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
+            'spreadsheet.required' => 'Mohon pilih berkas .csv atau .xlsx untuk diimpor.',
+            'spreadsheet.file' => 'Berkas yang didukung hanya yang bertipe .csv atau .xlsx.',
+            'spreadsheet.mimes' => 'Berkas yang didukung hanya yang bertipe .csv atau .xlsx.',
+            'spreadsheet.max' => 'Ukuran berkas maksimal hanya 2 MB.',
         ];
     }
 }

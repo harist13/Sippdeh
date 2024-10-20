@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Provinsi;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCalonRequest extends FormRequest
+class UpdateProvinsiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,24 +24,20 @@ class UpdateCalonRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama_calon' => [
+            'nama_provinsi' => [
                 'required',
                 'max:300',
-                Rule::unique('calon', 'nama')->ignore($id)
-            ],
-            'kabupaten_id_calon' => 'required|exists:kabupaten,id'
+                Rule::unique('provinsi', 'nama')->ignore($id)
+            ]
         ];
     }
 
     public function messages()
     {
         return [
-            'nama_calon.required' => 'Mohon isi nama kabupaten.',
-            'nama_calon.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama_calon.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
-
-            'kabupaten_id_calon.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
-            'kabupaten_id_calon.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
+            'nama_provinsi.required' => 'Mohon isi nama provinsi.',
+            'nama_provinsi.unique' => 'Provinsi tersebut sudah ada.',
+            'nama_provinsi.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
         ];
     }
 }

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\KecamatanExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImportKecamatanRequest;
-use App\Http\Requests\StoreKecamatanRequest;
-use App\Http\Requests\UpdateKecamatanRequest;
+use App\Http\Requests\Admin\Kecamatan\ImportKecamatanRequest;
+use App\Http\Requests\Admin\Kecamatan\StoreKecamatanRequest;
+use App\Http\Requests\Admin\Kecamatan\UpdateKecamatanRequest;
 use App\Imports\KecamatanImport;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;

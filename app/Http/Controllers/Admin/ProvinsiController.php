@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\ProvinsiExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImportProvinsiRequest;
-use App\Http\Requests\StoreProvinsiRequest;
-use App\Http\Requests\UpdateProvinsiRequest;
+use App\Http\Requests\Admin\Provinsi\ImportProvinsiRequest;
+use App\Http\Requests\Admin\Provinsi\StoreProvinsiRequest;
+use App\Http\Requests\Admin\Provinsi\UpdateProvinsiRequest;
 use App\Imports\ProvinsiImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProvinsiController extends Controller
 {

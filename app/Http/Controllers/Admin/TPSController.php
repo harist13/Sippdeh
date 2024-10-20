@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTPSRequest;
-use App\Http\Requests\UpdateTPSRequest;
+use App\Http\Requests\Admin\TPS\StoreTPSRequest;
+use App\Http\Requests\Admin\TPS\UpdateTPSRequest;
 use App\Models\Kabupaten;
 use App\Models\Kelurahan;
 use App\Models\TPS;

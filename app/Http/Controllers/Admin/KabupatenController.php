@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\KabupatenExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImportKabupatenRequest;
-use App\Http\Requests\StoreKabupatenRequest;
-use App\Http\Requests\UpdateKabupatenRequest;
+use App\Http\Requests\Admin\Kabupaten\ImportKabupatenRequest;
+use App\Http\Requests\Admin\Kabupaten\StoreKabupatenRequest;
+use App\Http\Requests\Admin\Kabupaten\UpdateKabupatenRequest;
 use App\Imports\KabupatenImport;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;

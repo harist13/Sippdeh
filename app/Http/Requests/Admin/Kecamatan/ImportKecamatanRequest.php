@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Kecamatan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImportProvinsiRequest extends FormRequest
+class ImportKecamatanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

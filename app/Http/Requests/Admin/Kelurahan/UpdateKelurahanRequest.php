@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Kelurahan;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreKelurahanRequest extends FormRequest
+class UpdateKelurahanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,8 +22,13 @@ class StoreKelurahanRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = last(explode('/', $this->path()));
         return [
-            'nama_kelurahan_baru' => 'required|unique:kelurahan,nama|max:300',
+            'nama_kelurahan' => [
+                'required',
+                'max:300',
+                Rule::unique('kelurahan', 'nama')->ignore($id)
+            ],
             'kecamatan_id' => 'required|exists:kecamatan,id'
         ];
     }
@@ -30,9 +36,9 @@ class StoreKelurahanRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_kelurahan_baru.required' => 'Mohon isi nama kelurahan.',
-            'nama_kelurahan_baru.unique' => 'Kelurahan tersebut sudah ada.',
-            'nama_kelurahan_baru.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
+            'nama_kelurahan.required' => 'Mohon isi nama kelurahan.',
+            'nama_kelurahan.unique' => 'Kelurahan tersebut sudah ada.',
+            'nama_kelurahan.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
 
             'kecamatan_id.required' => 'Mohon pilih kecamatan untuk kota tersebut.',
             'kecamatan_id.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',
