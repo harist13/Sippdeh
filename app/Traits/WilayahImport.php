@@ -98,7 +98,7 @@ trait WilayahImport {
             $kelurahan = Kelurahan::where(['nama' => $namaKecamatan, 'kecamatan_id' => $kecamatan->id])->first();
 
             if ($kelurahan == null) {
-                $kelurahan = Kecamatan::create(['nama' => $namaKelurahan, 'kecamatan_id' => $kecamatan->id]);
+                $kelurahan = Kelurahan::create(['nama' => $namaKelurahan, 'kecamatan_id' => $kecamatan->id]);
                 $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' di Kecamatan '<b>$namaKecamatan</b>' baru saja ditambahkan ke database.";
             }
 

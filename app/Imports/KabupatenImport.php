@@ -34,7 +34,8 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[1])) {
+            $rowArray = $row->toArray();
+            if (isset($rowArray[1])) {
                 $this->importSemuaKabupaten($row);
             } else {
                 $this->importKabupatenByProvinsi($row);
@@ -67,8 +68,6 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
             $this->provinsi = $this->createProvinsi($namaProvinsi);
             $this->addCatatanProvinsiBaruDariKabupaten($namaKabupaten, $namaProvinsi);
         }
-
-        $kabupatenList = $this->getAllKabupaten();
 
         // Tambahkan catatan jika kabupaten sudah ada, jika belum buat kabupaten baru
         if ($this->checkKabupatenExistence($namaKabupaten)) {

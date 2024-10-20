@@ -26,7 +26,8 @@ class KecamatanImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[1])) {
+            $rowArray = $row->toArray();
+            if (isset($rowArray[1])) {
                 // Impor dari format 'semua-kecamatan.blade.php'
                 $this->importAllKecamatan($row);
             } else {

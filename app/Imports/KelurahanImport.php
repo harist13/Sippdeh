@@ -26,7 +26,9 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
     public function onRow(Row $row): void
     {
         try {
-            if (isset($row[2]) && isset($row[3])) {
+            $rowArray = $row->toArray();
+
+            if (isset($rowArray[2]) && isset($rowArray[3])) {
                 // Impor dari format 'semua-kelurahan.blade.php'
                 $this->importAllKelurahan($row);
             } else {
@@ -57,10 +59,8 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
             $namaKabupaten = $row[2];
             $namaProvinsi = $row[3];
 
-            $kelurahanList = $this->getAllKelurahan();
-
             // Tambahkan catatan jika kelurahan sudah ada, jika belum buat kelurahan baru
-            if (in_array(strtoupper(trim($namaKelurahan)), $kelurahanList)) {
+            if ($this->checkKelurahanExistence($namaKelurahan)) {
                 $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' sebelumnya sudah ada di database.";
             } else {
                 $this->getKelurahan($namaKelurahan, $namaKecamatan, $namaKabupaten, $namaProvinsi);
@@ -98,7 +98,6 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
 
             // Tambahkan kelurahan pada baris ke-4 dan seterusnya
             if ($rowIndex >= 4) {
-                $kelurahanList = $this->getAllKelurahan();
                 $namaKelurahan = $row[0];
                 $namaKecamatan = $row[1];
 
