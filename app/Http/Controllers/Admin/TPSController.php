@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TPS\StoreTPSRequest;
 use App\Http\Requests\Admin\TPS\UpdateTPSRequest;
@@ -9,7 +10,6 @@ use App\Models\Kabupaten;
 use App\Models\Kelurahan;
 use App\Models\TPS;
 use Exception;
-use Illuminate\Http\Request;
 
 class TPSController extends Controller
 {
@@ -52,14 +52,6 @@ class TPSController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTPSRequest $request)
@@ -72,26 +64,10 @@ class TPSController extends Controller
             $tps->kelurahan_id = $validated['kelurahan_id_tps_baru'];
             $tps->save();
 
-            return redirect()->back()->with('status_pembuatan_tps', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah TPS.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pembuatan_tps', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambah TPS.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -107,9 +83,9 @@ class TPSController extends Controller
             $tps->kelurahan_id = $validated['kelurahan_id_tps'];
             $tps->save();
 
-            return redirect()->back()->with('status_pengeditan_tps', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit TPS.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pengeditan_tps', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit TPS.');
         }
     }
 
@@ -122,9 +98,9 @@ class TPSController extends Controller
             $tps = TPS::find($id);
             $tps->delete();
 
-            return redirect()->back()->with('status_penghapusan_tps', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus TPS.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_penghapusan_tps', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus TPS.');
         }
     }
 }
