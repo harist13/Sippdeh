@@ -71,10 +71,23 @@ class KabupatenImport implements SkipsOnFailure, OnEachRow
         $kabupatenList = $this->getAllKabupaten();
 
         // Tambahkan catatan jika kabupaten sudah ada, jika belum buat kabupaten baru
-        if (in_array(strtoupper(trim($namaKabupaten)), $kabupatenList)) {
+        if ($this->checkKabupatenExistence($namaKabupaten)) {
             $this->addCatatanKabupatenSudahAda($namaKabupaten);
         } else {
             $this->createKabupaten($namaKabupaten, $this->provinsi->id);
+        }
+    }
+
+    /**
+     * Mengecek apakah kabupaten sudah ada atau belum.
+     */
+    private function checkKabupatenExistence(string $namaKabupaten)
+    {
+        try {
+            $kabupatenList = $this->getAllKabupaten();
+            return in_array(strtoupper(trim($namaKabupaten)), $kabupatenList);
+        } catch (Exception $exception) {
+            throw new Exception("Error in checkKabupatenExistence: " . $exception->getMessage(), 0, $exception);
         }
     }
 

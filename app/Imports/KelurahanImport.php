@@ -102,7 +102,7 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
                 $namaKelurahan = $row[0];
                 $namaKecamatan = $row[1];
 
-                if (in_array(strtoupper(trim($namaKelurahan)), $kelurahanList)) {
+                if ($this->checkKelurahanExistence($namaKelurahan)) {
                     $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' sebelumnya sudah ada di database.";
                 } else {
                     $this->getKelurahan($namaKelurahan, $namaKecamatan, $this->kabupaten->nama, $this->provinsi->nama);
@@ -110,6 +110,19 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
             }
         } catch (Exception $exception) {
             throw new Exception("Error in importKelurahanByAnotherWilayah: " . $exception->getMessage(), 0, $exception);
+        }
+    }
+
+    /**
+     * Mengecek apakah kelurahan sudah ada atau belum.
+     */
+    private function checkKelurahanExistence(string $namaKelurahan)
+    {
+        try {
+            $kelurahanList = $this->getAllKelurahan();
+            return in_array(strtoupper(trim($namaKelurahan)), $kelurahanList);
+        } catch (Exception $exception) {
+            throw new Exception("Error in checkKelurahanExistence: " . $exception->getMessage(), 0, $exception);
         }
     }
 
