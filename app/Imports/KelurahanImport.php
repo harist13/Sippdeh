@@ -30,10 +30,10 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
         try {
             if (isset($row[1])) {
                 // Impor dari format 'semua-kelurahan.blade.php'
-                $this->importAllKecamatan($row);
+                $this->importAllKelurahan($row);
             } else {
                 // Impor dari format 'kelurahan-kabupaten.blade.php'
-                $this->importKelurahanByKecamatan($row);
+                $this->importKelurahanByAnotherWilayah($row);
             }
         } catch (Exception $exception) {
             throw new Exception("Error in onRow: " . $exception->getMessage(), 0, $exception);
@@ -41,9 +41,9 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
     }
 
     /**
-     * Impor semua kecamatan yang memiliki nama kecamatan pada baris yang sama.
+     * Impor semua kelurahan yang memiliki nama kecamatan, kabupaten, dan provinsi pada baris yang sama.
      */
-    private function importAllKecamatan(Row $row): void
+    private function importAllKelurahan(Row $row): void
     {
         try {
             $rowIndex = $row->getIndex();
@@ -68,14 +68,14 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
                 $this->getKelurahan($namaKelurahan, $namaKecamatan, $namaKabupaten, $namaProvinsi);
             }
         } catch (Exception $exception) {
-            throw new Exception("Error in importAllKecamatan: " . $exception->getMessage(), 0, $exception);
+            throw new Exception("Error in importAllKelurahan: " . $exception->getMessage(), 0, $exception);
         }
     }
 
     /**
-     * Impor kecamatan berdasarkan kecamatan yang telah ditemukan sebelumnya.
+     * Impor kelurahan berdasarkan provinsi, kabupaten, dan kecamatan yang tertera di header yang telah ditemukan sebelumnya.
      */
-    private function importKelurahanByKecamatan(Row $row): void
+    private function importKelurahanByAnotherWilayah(Row $row): void
     {
         try {
             $rowIndex = $row->getIndex();
@@ -116,7 +116,7 @@ class KelurahanImport implements SkipsOnFailure, OnEachRow
                 }
             }
         } catch (Exception $exception) {
-            throw new Exception("Error in importKelurahanByKecamatan: " . $exception->getMessage(), 0, $exception);
+            throw new Exception("Error in importKelurahanByAnotherWilayah: " . $exception->getMessage(), 0, $exception);
         }
     }
 
