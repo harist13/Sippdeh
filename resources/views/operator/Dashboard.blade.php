@@ -47,15 +47,14 @@
             th, td {
                 padding: 0.5rem 0.25rem;
             }
-             #candidateSlider {
-            width: 300% !important;
+            #candidateSlider {
+                width: 200% !important;
             }
             #candidateSlider > div {
                 width: 100% !important;
             }
-            #candidateSlider > div > div {
-                width: 100% !important;
-                margin-bottom: 1rem;
+            #candidateSlider .candidate-card {
+                width: calc(50% - 10px) !important;
             }
         }
 </style>
@@ -232,131 +231,130 @@
             <hr class="border-t border-gray-300 my-10">
 
             <!-- Candidate Cards Section -->
-              <div class="relative overflow-hidden w-[1080px] mx-auto">
-            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 2160px;">
-                <!-- First set of cards -->
-                <div class="flex justify-center gap-[45px] w-[1080px]">
-                    <!-- Andi Harun / Saefuddin Zuhri -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
+                <div class="relative overflow-hidden w-full max-w-[1080px] mx-auto">
+                    <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 200%;">
+                        <!-- First set of cards -->
+                        <div class="flex justify-center gap-[45px] md:w-[1080px] w-full">
+                            <!-- Andi Harun / Saefuddin Zuhri -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kotak Kosong -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Muhammad Sabani / Syukri Wahid -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
+
+                        <!-- Duplicate set of cards for continuous sliding -->
+                        <div class="flex justify-center gap-[45px] md:w-[1080px] w-full">
+                            <!-- Andi Harun / Saefuddin Zuhri -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kotak Kosong -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Muhammad Sabani / Syukri Wahid -->
+                            <div class="candidate-card w-[330px] flex flex-col">
+                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
+                                </div>
+                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                    Samarinda
+                                </div>
+                                <div class="bg-white rounded-b-2xl p-4 shadow">
+                                    <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
+                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
+                                    <div class="flex justify-center items-center text-[#008bf9]">
+                                        <span class="font-medium">21,69%</span>
+                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                        <span class="font-medium">288.131 Suara</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Kotak Kosong -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Muhammad Sabani / Syukri Wahid -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
+                    <div class="flex justify-center mt-4">
+                        <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
+                        <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
                     </div>
                 </div>
-
-                <!-- Duplicate set of cards for continuous sliding -->
-                <div class="flex justify-center gap-[45px] w-[1080px]">
-                    <!-- Andi Harun / Saefuddin Zuhri -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kotak Kosong -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Muhammad Sabani / Syukri Wahid -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-                <div class="flex justify-center mt-4">
-                    <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
-                    <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
-                </div>
-            </div>
 
             <hr class="border-t border-gray-300 my-10">
 

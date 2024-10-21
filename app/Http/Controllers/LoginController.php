@@ -54,6 +54,7 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
+            session(['user_wilayah' => $user->wilayah]);
 
             // Simpan riwayat login
             LoginHistory::create([

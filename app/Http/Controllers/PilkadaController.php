@@ -7,6 +7,7 @@ class PilkadaController extends Controller
     //
     public function index()
     {
-        return view('operator.pilkada.index');
+        $userWilayah = session('user_wilayah');
+        return view('operator.pilkada.index', compact('userWilayah'));
     }
 }

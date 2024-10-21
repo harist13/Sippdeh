@@ -9,6 +9,7 @@ class PilgubController extends Controller
     //
     public function index()
     {
-        return view('operator.pilgub.index');
+        $userWilayah = session('user_wilayah');
+        return view('operator.pilgub.index', compact('userWilayah'));
     }
 }
