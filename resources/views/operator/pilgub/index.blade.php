@@ -2,45 +2,32 @@
 <main class="container mx-auto px-4 py-8">
     <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
         <div class="container mx-auto p-7">
-            <div class="mb-4 flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center">
+          <div class="mb-4 flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center">
                 <button class="bg-gray-300 text-gray-700 py-3 px-5 rounded text-sm font-medium w-full sm:w-auto">Pemilihan Gubernur</button>
                 <button class="bg-green-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
+                    <img src="{{ asset('assets/icon/Unread.png') }}" alt="Unread Icon" class="w-4 h-4 mr-2">
                     Simpan Perubahan Data
                 </button>
                 <button class="bg-red-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+                    <img src="{{ asset('assets/icon/close.png') }}" alt="Unread Icon" class="w-4 h-4 mr-2">
                     Batal Ubah Data
                 </button>
                 <button class="bg-blue-500 text-white py-3 px-5 rounded flex items-center justify-center text-sm font-medium w-full sm:w-auto">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
+                    <img src="{{ asset('assets/icon/plus.png') }}" alt="Unread Icon" class="w-4 h-4 mr-2">
                     Ubah Data
                 </button>
-                
-                <div class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-2 sm:ml-auto w-full sm:w-auto">
-                    <select class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 rounded text-sm w-full sm:w-auto">
-                        <option>Samarinda</option>
-                    </select>
-                    <div class="relative w-full sm:w-auto">
-                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 pr-8 rounded text-sm w-full">
-                        <svg class="w-4 h-4 text-gray-500 absolute right-2 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                    <button class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 rounded flex items-center justify-center text-sm w-full sm:w-auto">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                        </svg>
-                        Filter
-                    </button>
-                </div>
             </div>
+            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center">
+                <div class="relative w-full sm:w-auto">
+                    <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 text-gray-700 py-3 px-5 pr-8 rounded text-sm w-full">
+                    <svg class="w-4 h-4 text-gray-500 absolute right-2 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <button class="bg-gray-300 text-gray-700 py-3 px-5 rounded text-sm font-medium w-full sm:w-auto">Balikpapan</button>
+            </div>
+        </div>
 
             <div class="overflow-x-auto -mx-4 sm:mx-0">
                 <div class="inline-block min-w-full align-middle">
@@ -94,9 +81,7 @@
                                         <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
                                     </td>
                                     <td class="py-3 px-4 text-center">
-                                        <svg class="w-5 h-5 text-blue-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                                        </svg>
+                                        <img src="{{ asset('assets/icon/pen.png')}}" class="w-5 h-5 ml-2">
                                     </td>
                                 </tr>
                                 <tr class="border-b text-center">
@@ -121,9 +106,8 @@
                                         <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
                                     </td>
                                     <td class="py-3 px-4 text-center">
-                                        <svg class="w-5 h-5 text-blue-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                                        </svg>
+                                        <img src="{{ asset('assets/icon/pen.png')}}" class="w-5 h-5 ml-2">
+                                        
                                     </td>
                                 </tr>
                             </tbody>
