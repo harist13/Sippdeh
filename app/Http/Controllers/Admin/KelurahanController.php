@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\KelurahanExport;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Http\Requests\Admin\Kelurahan\ImportKelurahanRequest;
 use App\Http\Requests\Admin\Kelurahan\StoreKelurahanRequest;
 use App\Http\Requests\Admin\Kelurahan\UpdateKelurahanRequest;
 use App\Imports\KelurahanImport;
-use App\Models\Kabupaten;
-use App\Models\Kecamatan;
-use App\Models\Kelurahan;
-use Exception;
-use Illuminate\Http\Request;
+use App\Exports\KelurahanExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class KelurahanController extends Controller
 {
@@ -105,13 +105,13 @@ class KelurahanController extends Controller
                     $redirectBackResponse->with('catatan_impor', $catatan);
                 }
 
-                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kelurahan.');
             }
 
             return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
         } catch (Exception $exception) {
             dd($exception);
-            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kecamatan.');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kelurahan.');
         }
     }
 

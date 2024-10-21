@@ -48,7 +48,9 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::resource('kelurahan', KelurahanController::class)->names([
             'index' => 'kelurahan'
         ]);
-
+        
+        Route::get('tps/ekspor', [TPSController::class, 'export'])->name('tps.export');
+        Route::post('tps/impor', [TPSController::class, 'import'])->name('tps.import');
         Route::resource('tps', TPSController::class)->names([
             'index' => 'tps'
         ]);

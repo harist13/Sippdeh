@@ -152,6 +152,8 @@
 @include('admin.tps.tambah-modal')
 @include('admin.tps.edit-modal')
 @include('admin.tps.hapus-modal')
+@include('admin.tps.ekspor-modal')
+@include('admin.tps.impor-modal')
 
 <script>
     // Tutup modal saat tombol esc di tekan

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TPS\ImportTPSRequest;
 use App\Http\Requests\Admin\TPS\StoreTPSRequest;
 use App\Http\Requests\Admin\TPS\UpdateTPSRequest;
+use App\Imports\TPSImport;
 use App\Models\Kabupaten;
 use App\Models\Kelurahan;
 use App\Models\TPS;
@@ -67,6 +69,32 @@ class TPSController extends Controller
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah TPS.');
         } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah TPS.');
+        }
+    }
+
+    public function import(ImportTPSRequest $request)
+    {
+        try {
+            if ($request->hasFile('spreadsheet')) {
+                $namaSpreadsheet = $request->file('spreadsheet')->store(options: 'local');
+
+                $tpsImport = new TPSImport();
+                $tpsImport->import($namaSpreadsheet, disk: 'local');
+                
+                $catatan = $tpsImport->getCatatan();
+                $redirectBackResponse = redirect()->back();
+
+                if (count($catatan) > 0) {
+                    $redirectBackResponse->with('catatan_impor', $catatan);
+                }
+
+                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data TPS.');
+            }
+
+            return redirect()->back()->with('pesan_gagal', 'Berkas .csv tidak terunggah.');
+        } catch (Exception $exception) {
+            dd($exception);
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data TPS.');
         }
     }
 
