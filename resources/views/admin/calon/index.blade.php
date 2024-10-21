@@ -15,7 +15,7 @@
     }
     
     /* Responsive styles */
-    @media (max-width: 640px) {
+    @media (max-width: 1024px) {
         .flex-col-mobile {
             flex-direction: column;
         }
@@ -42,39 +42,36 @@
 </style>
 
 <main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('status_pembuatan_calon'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Calon berhasil ditambahkan.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Calon gagal ditambahkan.'])
-        @endif
-    @endif
+    @php $status = session('pesan_sukses'); @endphp
+    @isset ($status)
+        @include('components.alert-berhasil', ['message' => $status])
+    @endisset
 
-    @php $status = session('status_pengeditan_calon'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Calon berhasil diedit.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Calon gagal diedit.'])
-        @endif
-    @endif
-
-    @php $status = session('status_penghapusan_calon'); @endphp
-    @if($status != null)
-        @if ($status == 'berhasil')
-            @include('components.alert-berhasil', ['message' => 'Calon berhasil dihapus.'])
-        @else
-            @include('components.alert-gagal', ['message' => 'Calon gagal dihapus.'])
-        @endif
-    @endif
+    @php $status = session('pesan_gagal'); @endphp
+    @isset ($status)
+        @include('components.alert-gagal', ['message' => $status])
+    @endisset
+    
+    @php $catatanImpor = session('catatan_impor'); @endphp
+    @isset ($catatanImpor)
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
+            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
+            <ul class="list-disc ms-5">
+                @foreach ($catatanImpor as $catatan)
+                    <li>{!! $catatan !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endisset
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
-        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile">
-            <div class="flex items-center space-x-2 w-full-mobile">
-                <span class="text-lg font-bold"><i class="fas fa-users"></i> Calon</span>
-            </div>
-            <div class="flex flex-col-mobile gap-5 space-y-2-mobile w-full-mobile">
+        <div class="flex items-center space-x-2 w-full-mobile mb-5">
+            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" class="ml-3" alt="Calon">
+            <span class="font-bold">Calon</span>
+        </div>
+
+        <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'calon'])
 
                 <form action="{{ route('calon') }}" method="GET">
@@ -86,10 +83,25 @@
                         @if (request()->has('kabupaten'))
                             <input type="hidden" name="kabupaten" value="{{ request()->get('kabupaten') }}">
                         @endif
-                    </div>                  
+                    </div>         
                 </form>
+            </div>
 
-                <button id="addCalonBtn" class="bg-[#3560A0] text-white py-2 px-4 rounded-lg w-full-mobile">+ Tambah Calon</button>
+            <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
+                <div class="flex gap-2">
+                    <button id="importCalonBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-import me-1"></i>
+                        <span>Impor</span>
+                    </button>
+                    <button id="exportCalonBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+                        <i class="fas fa-file-export me-1"></i>
+                        <span>Ekspor</span>
+                    </button>
+                </div>
+                <button id="addCalonBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+                    <i class="fas fa-plus me-1"></i>
+                    <span>Tambah Calon</span>
+                </button>
             </div>
         </div>
 
@@ -110,10 +122,10 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $cal->getThreeDigitsId() }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}">{{ $cal->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start">
                                 @if ($cal->foto != null)
                                     <img src="{{ $disk->url($cal->foto) }}" class="rounded-md mr-1" width="150" height="75" alt="{{ $cal->nama }}">
-                                    <button id="hapusGambar" class="bg-red-600 text-white py-1 px-2 rounded-lg w-full-mobile text-xs">
+                                    <button class="bg-red-600 text-white py-1 px-2 rounded-lg w-full-mobile text-xs hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
                                         <i class="fas fa-trash text-xs mr-1"></i>
                                         Hapus
                                     </button>

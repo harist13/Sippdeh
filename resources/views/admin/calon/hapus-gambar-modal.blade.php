@@ -3,7 +3,7 @@
 		<form id="deleteGambarCalonForm" action="#" method="POST">
 				@method('DELETE')
 				@csrf
-				<h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Hapus Gambar Calon</h3>
+				<h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Hapus Gambar Calon</h3>
 				<p class="mb-3">Apakah anda yakin ingin menghapus gambar calon ini?</p>
 				<img src="#" id="gambarCalon" class="rounded-md" width="100%" alt="Gambar">
 				<hr class="h-1 my-3">
@@ -18,17 +18,17 @@
 </div>
 
 <script>
-	function tetapkanGambarCalon(url) {
+	function setGambarCalon(url) {
 		const gambarCalon = document.getElementById('gambarCalon');
 		gambarCalon.src = url;
 	}
 
-	function showDeleteCalonModal() {
+	function showDeleteGambarCalonModal() {
 		const deleteGambarCalonModal = document.getElementById('deleteGambarCalonModal');
 		deleteGambarCalonModal.classList.remove('hidden');
 	}
 
-	function closeDeleteCalonModal() {
+	function closeDeleteGambarCalonModal() {
 		const deleteGambarCalonModal = document.getElementById('deleteGambarCalonModal');
 		deleteGambarCalonModal.classList.add('hidden');
 	}
@@ -47,13 +47,13 @@
 
 	document.querySelectorAll('.hapus-gambar-calon-btn').forEach(button => {
 		button.addEventListener('click', function () {
-			tetapkanGambarCalon(this.dataset.url);
-			showDeleteCalonModal();
+			setGambarCalon(this.dataset.url);
+			showDeleteGambarCalonModal();
 
 			const deleteGambarCalonForm = document.getElementById('deleteGambarCalonForm');
 			deleteGambarCalonForm.action = getDestroyGambarCalonUrl.call(this);
 		});
 	});
 
-	document.getElementById('cancelDeleteGambarCalon').addEventListener('click', closeDeleteCalonModal);
+	document.getElementById('cancelDeleteGambarCalon').addEventListener('click', closeDeleteGambarCalonModal);
 </script>

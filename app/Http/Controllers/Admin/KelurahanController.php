@@ -63,14 +63,6 @@ class KelurahanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreKelurahanRequest $request)
@@ -83,9 +75,9 @@ class KelurahanController extends Controller
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
-            return redirect()->back()->with('status_pembuatan_kelurahan', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah kelurahan.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pembuatan_kelurahan', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambah kelurahan.');
         }
     }
 
@@ -108,27 +100,11 @@ class KelurahanController extends Controller
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kelurahan.');
             }
 
-            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'Berkas .csv atau .xlsx tidak terunggah.');
         } catch (Exception $exception) {
             dd($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kelurahan.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -144,9 +120,9 @@ class KelurahanController extends Controller
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
-            return redirect()->back()->with('status_pengeditan_kelurahan', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kelurahan.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pengeditan_kelurahan', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kelurahan.');
         }
     }
 
@@ -159,9 +135,9 @@ class KelurahanController extends Controller
             $kelurahan = Kelurahan::find($id);
             $kelurahan->delete();
 
-            return redirect()->back()->with('status_penghapusan_kelurahan', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kelurahan.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_penghapusan_kelurahan', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus kelurahan.');
         }
     }
 }

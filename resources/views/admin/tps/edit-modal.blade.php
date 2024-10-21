@@ -4,7 +4,7 @@
         <form id="editTPSForm" action="#" method="POST">
             @method('PUT')
             @csrf
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit TPS</h3>
+            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit TPS</h3>
 
 			{{-- Nama TPS --}}
 			<label for="editTPSName" class="mb-1 block">Nama</label>
