@@ -16,7 +16,7 @@
 			{{-- Kelurahan --}}
 			<label for="editTPSKelurahanId" class="my-1 block">Kelurahan</label>
 			<select id="editTPSKelurahanId" name="kelurahan_id_tps" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-				@foreach ($tps as $kel)
+				@foreach ($kelurahan as $kel)
 					<option value="{{ $kel->id }}">{{ $kel->nama }}</option>
 				@endforeach
 			</select>
