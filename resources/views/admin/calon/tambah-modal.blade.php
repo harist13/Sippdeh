@@ -3,7 +3,7 @@
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
         <form action="{{ route('calon.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Tambah Calon</h3>
+            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
 			{{-- Nama calon --}}
 			<label for="addCalonName" class="mb-1 block">Nama</label>

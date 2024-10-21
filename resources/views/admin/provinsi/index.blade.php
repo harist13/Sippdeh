@@ -172,6 +172,8 @@
             closeAddProvinsiModal();
             closeEditProvinsiModal();
             closeDeleteProvinsiModal();
+            closeImportProvinsiModal();
+            closeExportProvinsiModal();
         }
     });
 
@@ -187,6 +189,14 @@
 
         if (event.target == deleteProvinsiModal) {
             closeDeleteProvinsiModal();
+        }
+
+        if (event.target == importProvinsiModal) {
+            closeImportProvinsiModal();
+        }
+
+        if (event.target == exportProvinsiModal) {
+            closeExportProvinsiModal();
         }
     });
 </script>

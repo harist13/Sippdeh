@@ -3,7 +3,7 @@
 		<form id="deleteCalonForm" action="#" method="POST">
 				@method('DELETE')
 				@csrf
-				<h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Hapus Calon</h3>
+				<h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Hapus Calon</h3>
 				<p>Apakah anda yakin ingin menghapus calon ini?</p>
 				<hr class="h-1 my-3">
 				<div class="flex items-center">

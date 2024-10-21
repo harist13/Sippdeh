@@ -40,7 +40,7 @@ class CalonController extends Controller
 
             // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
-                return $this->arahkanKembali($request);
+                return $this->redirectBack($request);
             }
 
             $calonQuery->whereLike('nama', "%$kataKunci%");
@@ -55,21 +55,13 @@ class CalonController extends Controller
         return view('admin.calon.index', [...compact('kabupaten', 'calon'), 'disk' => $this->disk]);
     }
 
-    private function arahkanKembali(Request $request): RedirectResponse {
+    private function redirectBack(Request $request): RedirectResponse {
         if ($request->has('kabupaten')) {
             // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
             return redirect()->route('calon', ['kabupaten' => $request->get('kabupaten')]);
         }
 
         return redirect()->route('calon');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -90,9 +82,9 @@ class CalonController extends Controller
 
             $calon->save();
 
-            return redirect()->back()->with('status_pembuatan_calon', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah pasangan calon.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pembuatan_calon', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambah pasangan calon.');
         }
     }
 
@@ -108,22 +100,6 @@ class CalonController extends Controller
         } catch (Exception $exception) {
             throw $exception;
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -149,9 +125,9 @@ class CalonController extends Controller
 
             $calon->save();
 
-            return redirect()->back()->with('status_pengeditan_calon', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit pasangan calon.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_pengeditan_calon', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit pasangan calon.');
         }
     }
 
@@ -166,11 +142,13 @@ class CalonController extends Controller
 
             $calon->delete();
 
-            $this->disk->delete($namaFoto);
+            if ($namaFoto != null) {
+                $this->disk->delete($namaFoto);
+            }
 
-            return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus pasangan calon.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_penghapusan_calon', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus pasangan calon.');
         }
     }
 
@@ -184,9 +162,9 @@ class CalonController extends Controller
             $calon->foto = null;
             $calon->save();
 
-            return redirect()->back()->with('status_penghapusan_calon', 'berhasil');
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus gambar pasangan calon.');
         } catch (Exception $exception) {
-            return redirect()->back()->with('status_penghapusan_calon', 'gagal');
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus gambar pasangan calon.');
         }
     }
 }

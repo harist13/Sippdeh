@@ -159,6 +159,7 @@
             closeEditKecamatanModal();
             closeDeleteKecamatanModal();
             closeExportKecamatanModal();
+            closeImportKecamatanModal();
         }
     });
 
@@ -177,6 +178,10 @@
 
         if (event.target == exportKecamatanModal) {
             closeExportKecamatanModal();
+        }
+
+        if (event.target == importKecamatanModal) {
+            closeImportKecamatanModal();
         }
     });
 </script>

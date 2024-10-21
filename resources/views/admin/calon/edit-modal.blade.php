@@ -4,7 +4,7 @@
         <form id="editCalonForm" action="#" method="POST" enctype="multipart/form-data">
             @method('PUT')
             @csrf
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Calon</h3>
+            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Calon</h3>
 
 			{{-- Nama calon --}}
 			<label for="editCalonName" class="mb-1 block">Nama</label>

@@ -4,7 +4,7 @@
         <form id="editKelurahanForm" action="#" method="POST">
             @method('PUT')
             @csrf
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Kelurahan</h3>
+            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Kelurahan</h3>
 
 			{{-- Nama kelurahan --}}
 			<label for="editKelurahanName" class="mb-1 block">Nama</label>

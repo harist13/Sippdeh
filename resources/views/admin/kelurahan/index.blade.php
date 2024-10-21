@@ -158,6 +158,8 @@
             closeAddKelurahanModal();
             closeEditKelurahanModal();
             closeDeleteKelurahanModal();
+            closeExportKelurahanModal();
+            closeImportKelurahanModal();
         }
     });
 
@@ -173,6 +175,14 @@
 
         if (event.target == deleteKelurahanModal) {
             closeDeleteKelurahanModal();
+        }
+
+        if (event.target == importKelurahanModal) {
+            closeImportKelurahanModal();
+        }
+
+        if (event.target == exportKelurahanModal) {
+            closeExportKelurahanModal();
         }
     });
 </script>

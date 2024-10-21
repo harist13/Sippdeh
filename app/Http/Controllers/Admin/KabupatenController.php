@@ -91,7 +91,7 @@ class KabupatenController extends Controller
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');
             }
 
-            return redirect()->back()->with('pesan_gagal', 'berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'Berkas .csv atau .xlsx tidak terunggah.');
         } catch (Exception $exception) {
             // dd($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kabupaten.');

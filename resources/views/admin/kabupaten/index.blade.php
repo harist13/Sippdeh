@@ -158,6 +158,8 @@
             closeAddKabupatenModal();
             closeEditKabupatenModal();
             closeDeleteKabupatenModal();
+            closeExportKabupatenModal();
+            closeImportKabupatenModal();
         }
     });
 
@@ -173,6 +175,14 @@
 
         if (event.target == deleteKabupatenModal) {
             closeDeleteKabupatenModal();
+        }
+
+        if (event.target == exportKabupatenModal) {
+            closeExportKabupatenModal();
+        }
+
+        if (event.target == importKabupatenModal) {
+            closeImportKabupatenModal();
         }
     });
 </script>

@@ -4,7 +4,7 @@
         <form id="editKabupatenForm" action="#" method="POST">
             @method('PUT')
             @csrf
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Kabupaten/Kota</h3>
+            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Kabupaten/Kota</h3>
 
 			{{-- Nama kabupaten --}}
 			<label for="editKabupatenName" class="mb-1 block">Nama</label>

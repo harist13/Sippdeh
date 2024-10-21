@@ -162,6 +162,8 @@
             closeAddTPSModal();
             closeEditTPSModal();
             closeDeleteTPSModal();
+            closeImportTPSModal();
+            closeExportTPSModal();
         }
     });
 
@@ -177,6 +179,14 @@
 
         if (event.target == deleteTPSModal) {
             closeDeleteTPSModal();
+        }
+
+        if (event.target == importTPSModal) {
+            closeImportTPSModal();
+        }
+
+        if (event.target == exportTPSModal) {
+            closeExportTPSModal();
         }
     });
 </script>

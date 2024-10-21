@@ -96,7 +96,7 @@ class KecamatanController extends Controller
                 return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kecamatan.');
             }
 
-            return redirect()->back()->with('pesan_gagal', 'Berkas .csv tidak terunggah.');
+            return redirect()->back()->with('pesan_gagal', 'Berkas .csv atau .xlsx tidak terunggah.');
         } catch (Exception $exception) {
             dd($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kecamatan.');
