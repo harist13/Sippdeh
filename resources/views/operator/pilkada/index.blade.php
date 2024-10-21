@@ -25,7 +25,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <button class="bg-gray-300 text-gray-700 py-3 px-5 rounded text-sm font-medium w-full sm:w-auto">Balikpapan</button>
+                <button class="bg-gray-300 text-gray-700 py-3 px-2 rounded text-sm font-medium w-full sm:w-auto">{{ $userWilayah }}</button>
             </div>
         </div>
 
