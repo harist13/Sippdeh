@@ -22,32 +22,67 @@
   path {
     transition: opacity 0.1s;
   }
+   #tooltip {
+    position: absolute;
+    background-color: white;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    display: none; 
+  }
 </style>
 
 <script>
-  const groups = document.querySelectorAll('#map g.region')
+  document.addEventListener('DOMContentLoaded', () => {
+    const mapElement = document.getElementById('map');
+    const tooltip = document.getElementById('tooltip');
+    
+    if (!mapElement || !tooltip) {
+      console.error("Map or tooltip element not found");
+      return; 
+    }
 
-  groups.forEach(group => {
-    group.addEventListener('mouseover', event => onMouseOver({ event, groups, group }))
-    group.addEventListener('mouseout', event => onMouseOut({ event, groups, group }))
-  })
-
-  function onMouseOver({ event, groups, group }) {
-    const paths = group.querySelectorAll('path')
-    paths.forEach(path => path.classList.add('selected-region'))
-
-    const tooltip = document.getElementById('tooltip')
-    tooltip.style.left = `${event.clientX}px`
-    tooltip.style.top = `${event.clientY}px`
-    tooltip.classList.remove('hidden')
-  }
-
-  function onMouseOut({ event, groups }) {
+    const groups = document.querySelectorAll('#map g.region');
     groups.forEach(group => {
-      const paths = group.querySelectorAll('path')
-      paths.forEach(path => path.classList.remove('selected-region'))
-    })
+      group.addEventListener('mouseover', event => onMouseOver({ event, group }));
+      group.addEventListener('mouseout', event => onMouseOut());
+    });
 
-    tooltip.classList.add('hidden')
-  }
+    function onMouseOver({ event, group }) {
+      const paths = group.querySelectorAll('path');
+      paths.forEach(path => path.classList.add('selected-region'));
+
+      const mapRect = mapElement.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+
+      // atur posisi tooltipnya
+      let left = event.clientX - mapRect.left;
+      let top = event.clientY - mapRect.top;
+
+      // cek apakah tooltip keluar dari batas map
+      if (left + tooltipRect.width > mapRect.width) {
+        left = mapRect.width - tooltipRect.width;
+      }
+      if (top + tooltipRect.height > mapRect.height) {
+        top = mapRect.height - tooltipRect.height;
+      }
+      if (left < 0) {
+        left = 0;
+      }
+      if (top < 0) {
+        top = 0;
+      }
+
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+      tooltip.style.display = 'block'; // Make the tooltip visible
+    }
+
+    function onMouseOut() {
+      const paths = document.querySelectorAll('.selected-region');
+      paths.forEach(path => path.classList.remove('selected-region'));
+      tooltip.style.display = 'none'; // Hide the tooltip
+    }
+  });
 </script>

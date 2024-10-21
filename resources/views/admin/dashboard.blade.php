@@ -50,7 +50,7 @@
             <div class="grid grid-cols-2 gap-8 mb-8">
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-                    <div class="p-4 relative">
+                    <div id="map" class="p-4 relative">
                         @include('admin.peta-kaltim.map')
                         <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
                             <p class="mb-2 font-bold">Kutai Kartanegara</p>
