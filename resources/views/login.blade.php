@@ -56,6 +56,9 @@
                                 <i class="text-gray-400 fas fa-lock"></i>
                             </span>
                             <input name="password" class="w-full px-3 py-2 pl-10 leading-tight text-gray-700 border rounded appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" type="password" placeholder="6 Karakter atau lebih">
+                             <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <i class="text-gray-400 fas fa-eye"></i>
+                            </button>
                         </div>
                     </div>
                     <div>
@@ -80,6 +83,21 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
+
+            togglePassword.addEventListener('click', function() {
+                // Toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Toggle the icon
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
