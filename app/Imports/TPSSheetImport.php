@@ -132,18 +132,18 @@ class TPSSheetImport implements ToModel, WithStartRow, WithValidation, SkipsOnFa
     }
 
     /**
-     * Membaca dalam batch.
-     */
-    public function batchSize(): int
-    {
-        return 25; // Menentukan ukuran batch
-    }
-
-    /**
-     * Membaca dalam chunk.
+     * Membaca data dari berkas dalam chunk.
      */
     public function chunkSize(): int
     {
-        return 50; // Menentukan ukuran chunk untuk mencegah penggunaan memori besar
+        return 100;
+    }
+
+    /**
+     * Menambahkan data ke database dalam batch.
+     */
+    public function batchSize(): int
+    {
+        return 50;
     }
 }
