@@ -15,15 +15,15 @@ class TPSImport implements WithMultipleSheets, SkipsUnknownSheets, WithProgressB
 
     private array $importSheets = [];
 
-    private array $catatan = [];
+    // private array $catatan = [];
 
-    /**
-     * Mengambil catatan dari proses impor.
-     */
-    public function getCatatan(): array
-    {
-        return $this->catatan;
-    }
+    // /**
+    //  * Mengambil catatan dari proses impor.
+    //  */
+    // public function getCatatan(): array
+    // {
+    //     return $this->catatan;
+    // }
 
     public function sheets(): array
     {
@@ -48,6 +48,6 @@ class TPSImport implements WithMultipleSheets, SkipsUnknownSheets, WithProgressB
     
     public function onUnknownSheet($sheetName)
     {
-        $this->catatan[] = "Kabupaten/kota '<b>$sheetName</b>' tidak ditemukan pada berkas yang ingin diimpor.";
+        // $this->catatan[] = "Kabupaten/kota '<b>$sheetName</b>' tidak ditemukan pada berkas yang ingin diimpor.";
     }
 }
