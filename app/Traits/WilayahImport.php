@@ -109,26 +109,13 @@ trait WilayahImport {
         }
     }
 
-        /**
+    /**
      * Membuat kecamatan baru.
      */
-    private function getOrCreateTPS(string $namaKelurahan, string $namaTPS, string $alamat): ?Kelurahan
+    private function getTPSModel(string $namaTPS, string $alamat, int $kelurahanId): ?TPS
     {
         try {
-            $kelurahan = Kelurahan::whereNama($namaKelurahan)->first();
-
-            if ($kelurahan == null) {
-                $this->catatan[] = "Kelurahan '<b>$namaKelurahan</b>' dari TPS '<b>$namaTPS</b>' tidak ditemukan, jadi TPS ini dilewati.";
-                return null;
-            }
-
-            $tps = TPS::where(['nama' => $namaTPS, 'alamat' => $alamat, 'kelurahan_id' => $kelurahan->id])->first();
-
-            if ($tps == null) {
-                $tps = TPS::create(['nama' => $namaKelurahan, 'alamat' => $alamat, 'kelurahan_id' => $kelurahan->id]);
-                $this->catatan[] = "TPS '<b>$namaTPS</b>' di Kelurahan '<b>$namaKelurahan</b>' baru saja ditambahkan ke database.";
-            }
-
+            $tps = new TPS(['nama' => $namaTPS, 'alamat' => $alamat, 'kelurahan_id' => $kelurahanId]);
             return $tps;
         } catch (Exception $exception) {
             throw new Exception("Error in getKelurahan: " . $exception->getMessage(), 0, $exception);

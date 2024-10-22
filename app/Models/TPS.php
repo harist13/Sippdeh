@@ -12,7 +12,7 @@ class TPS extends Model
 
     protected $table = 'tps';
 
-    protected $fillable = ['nama', 'kelurahan_id'];
+    protected $fillable = ['nama', 'alamat', 'kelurahan_id'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
