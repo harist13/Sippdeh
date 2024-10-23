@@ -66,7 +66,7 @@
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" class="ml-3" alt="Calon">
+            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" alt="Calon">
             <span class="font-bold">Calon</span>
         </div>
 
