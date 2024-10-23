@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('calon', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nama_wakil');
             $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('cascade');
             $table->string('foto', 300)->nullable();
             $table->timestamps();

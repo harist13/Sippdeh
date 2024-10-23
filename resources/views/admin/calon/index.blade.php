@@ -66,7 +66,7 @@
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
-            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" class="ml-3" alt="Calon">
+            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" alt="Calon">
             <span class="font-bold">Calon</span>
         </div>
 
@@ -120,22 +120,25 @@
                     @forelse ($calon as $cal)
                         <tr class="hover:bg-gray-200">
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $cal->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}">{{ $cal->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}" data-nama-wakil="{{ $cal->nama_wakil }}">{{ $cal->nama }}/{{ $cal->nama_wakil }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start">
                                 @if ($cal->foto != null)
                                     <img src="{{ $disk->url($cal->foto) }}" class="rounded-md mr-1" width="150" height="75" alt="{{ $cal->nama }}">
-                                    <button class="bg-red-600 text-white py-1 px-2 rounded-lg w-full-mobile text-xs hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
-                                        <i class="fas fa-trash text-xs mr-1"></i>
-                                        Hapus
-                                    </button>
                                 @else
                                     Gambar belum diunggah
                                 @endif
                             </td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
-                                <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>
+                                <div class="flex items-center">
+                                    <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="text-red-600 hover:text-red-900 ml-4 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>
+                                    @if ($cal->foto != null)
+                                        <button class="text-red-600 hover:text-red-900 ml-4 pt-1 hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
+                                            <img src="{{ asset('assets/icon/delete_image.svg') }}" alt="Hapus Gambar">
+                                        </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
