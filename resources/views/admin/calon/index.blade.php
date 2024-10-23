@@ -125,17 +125,20 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start">
                                 @if ($cal->foto != null)
                                     <img src="{{ $disk->url($cal->foto) }}" class="rounded-md mr-1" width="150" height="75" alt="{{ $cal->nama }}">
-                                    <button class="bg-red-600 text-white py-1 px-2 rounded-lg w-full-mobile text-xs hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
-                                        <i class="fas fa-trash text-xs mr-1"></i>
-                                        Hapus
-                                    </button>
                                 @else
                                     Gambar belum diunggah
                                 @endif
                             </td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
-                                <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>
+                                <div class="flex items-center">
+                                    <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="text-red-600 hover:text-red-900 ml-4 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>
+                                    @if ($cal->foto != null)
+                                        <button class="text-red-600 hover:text-red-900 ml-4 pt-1 hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
+                                            <img src="{{ asset('assets/icon/delete_image.svg') }}" alt="Hapus Gambar">
+                                        </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
