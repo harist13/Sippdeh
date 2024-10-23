@@ -3,6 +3,36 @@
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
+
+    /* Style untuk dropdown */
+    select#dataLimit {
+        min-width: 100px;
+    }
+
+    /* Style untuk pagination container */
+    .pagination-container {
+        @apply flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6;
+    }
+
+    /* Style untuk pagination info */
+    .pagination-info {
+        @apply text-sm text-gray-700;
+    }
+
+    /* Style untuk pagination links */
+    .pagination {
+        @apply relative z-0 inline-flex rounded-md shadow-sm -space-x-px;
+    }
+
+    /* Style untuk active page */
+    .pagination .active {
+        @apply z-10 bg-[#3560A0] border-[#3560A0] text-white;
+    }
+
+    /* Style untuk disabled page */
+    .pagination .disabled {
+        @apply cursor-not-allowed text-gray-500;
+    }
     
     #tpsBtn, #suaraBtn, #paslonBtn {
         margin-right: 1px;
@@ -86,6 +116,20 @@
                     <i class="fas fa-plus"></i> Tambah User
                 </button>
 
+                <div class="relative">
+                    <select id="dataLimit" class="bg-gray-100 rounded-md px-3 py-2 pr-8 appearance-none cursor-pointer border border-gray-300">
+                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 Data</option>
+                        <option value="20" {{ request('perPage') == 20 ? 'selected' : '' }}>20 Data</option>
+                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 Data</option>
+                        <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100 Data</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                        </svg>
+                    </div>
+                </div>
+
                 <div class="relative w-full-mobile mt-4-mobile">
                     <input type="text" placeholder="Cari User" class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full">
                     <i class="fas fa-search absolute left-2 top-3 text-gray-400"></i>
@@ -153,7 +197,7 @@
 
             </table>
             <div class="mt-4">
-                {{ $users->links() }}
+                {{ $users->appends(['perPage' => request('perPage')])->links() }}
             </div>
         </div>
 
@@ -195,7 +239,7 @@
                 </tbody>
             </table>
             <div class="mt-4">
-                {{ $loginHistories->links() }}
+                {{ $loginHistories->appends(['perPage' => request('perPage')])->links() }}
             </div>
         </div>
     </div>
@@ -611,6 +655,20 @@ document.querySelectorAll('.fa-user-check').forEach(function(activateBtn) {
             }
         );
     });
+});
+
+document.getElementById('dataLimit').addEventListener('change', function() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('perPage', this.value);
+    url.searchParams.set('page', 1); // Reset ke halaman pertama saat mengubah jumlah data
+    window.location.href = url.toString();
+});
+
+// Set selected option berdasarkan URL
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const perPage = urlParams.get('perPage') || '10';
+    document.getElementById('dataLimit').value = perPage;
 });
 
 

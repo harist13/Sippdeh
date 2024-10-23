@@ -55,10 +55,10 @@
                         <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
                             <p class="mb-2 font-bold">Kutai Kartanegara</p>
                             <div class="grid grid-cols-2 gap-1">
-                                <p>Total Suara Sah</p>
-                                <p>: 70.000 orang</p>
-                                <p>Total Suara Tidak Sah</p>
-                                <p>: 18.000 orang</p>
+                                <p>Total Suara 1</p>
+                                <p>: 100%</p>
+                                <p>Total Suara 2</p>
+                                <p>: 90%</p>
                             </div>
                         </div>
                         <div class="absolute bottom-2 right-2 bg-white p-2 rounded-lg shadow">
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Penajam Paser Utara', 'Mahakam Ulu'
             ],
             datasets: [{
-                data: [8.4, 10.1, 6.7, 10.9, 12.9, 13.7, 9.4, 11.2, 7.7, 9],
+                data: [8.4, 10.1, 6.7, 10.9, 12.9, 13.7, 9.4, 11.2, 7.7, 9.0],
                 backgroundColor: [
                     '#E6F3FF', '#C5E3FF', '#A4D3FF', '#83C3FF',
                     '#62B3FF', '#41A3FF', '#2093FF', '#0083FF',
@@ -512,11 +512,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: {
                     display: false,
                 },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.raw}%`;
+                        }
+                    }
+                }
             },
         }
     });
 
-    // Custom legend
+    // Custom legend dengan format persentase
     const chart = Chart.getChart(ctx);
     const legendContainer = document.getElementById('legendContainer');
 
@@ -530,14 +537,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const text = document.createElement('span');
         text.className = 'text-sm';
-        text.textContent = `${label}: ${chart.data.datasets[0].data[index]}%`;
+        // Memastikan nilai persentase ditampilkan dengan 1 angka desimal
+        const percentage = chart.data.datasets[0].data[index].toFixed(1);
+        text.textContent = `${label}: ${percentage}%`;
 
         legendItem.appendChild(colorBox);
         legendItem.appendChild(text);
         legendContainer.appendChild(legendItem);
     });
 });
-
 
 
 
@@ -552,15 +560,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function slideRight() {
         if (currentPosition > -slideWidth * (totalSlides - 1)) {
             currentPosition -= slideWidth;
-            updateSliderPosition();
+        } else {
+            currentPosition = 0; // Kembali ke slide awal
         }
+        updateSliderPosition();
     }
 
     function slideLeft() {
         if (currentPosition < 0) {
             currentPosition += slideWidth;
-            updateSliderPosition();
+        } else {
+            currentPosition = -slideWidth * (totalSlides - 1); // Kembali ke slide terakhir
         }
+        updateSliderPosition();
     }
 
     function updateSliderPosition() {
@@ -596,8 +608,8 @@ document.addEventListener('DOMContentLoaded', function() {
         slideRight();
         autoSlideInterval = setInterval(slideRight, 5000);
     });
-
 });
+
 
 
  $(document).ready(function() {

@@ -29,11 +29,12 @@ class AdminController extends Controller
         return view('admin.rangkuman');
     }
 
-    public function user()
+    public function user(Request $request)
     {
-        $users = Petugas::paginate(10);
+        $perPage = $request->input('perPage', 10);
+        $users = Petugas::paginate($perPage);
         $roles = Role::all();
-        $loginHistories = LoginHistory::with('user')->active()->orderBy('login_at', 'desc')->paginate(10);
+        $loginHistories = LoginHistory::with('user')->active()->orderBy('login_at', 'desc')->paginate($perPage);
         $kabupatens = Kabupaten::all();
         
         // Calculate active devices for each user
@@ -41,8 +42,12 @@ class AdminController extends Controller
         foreach ($users as $user) {
             $activeDevices[$user->id] = LoginHistory::where('user_id', $user->id)->active()->count();
         }
+
+        // Set total data untuk informasi
+        $totalData = Petugas::count();
+        $totalPages = ceil($totalData / $perPage);
         
-        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
+        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens', 'perPage', 'totalData', 'totalPages'));
     }
     
     public function forceLogoutDevice($userId, $loginHistoryId)
