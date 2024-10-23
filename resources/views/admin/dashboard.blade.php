@@ -560,15 +560,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function slideRight() {
         if (currentPosition > -slideWidth * (totalSlides - 1)) {
             currentPosition -= slideWidth;
-            updateSliderPosition();
+        } else {
+            currentPosition = 0; // Kembali ke slide awal
         }
+        updateSliderPosition();
     }
 
     function slideLeft() {
         if (currentPosition < 0) {
             currentPosition += slideWidth;
-            updateSliderPosition();
+        } else {
+            currentPosition = -slideWidth * (totalSlides - 1); // Kembali ke slide terakhir
         }
+        updateSliderPosition();
     }
 
     function updateSliderPosition() {
@@ -604,8 +608,8 @@ document.addEventListener('DOMContentLoaded', function() {
         slideRight();
         autoSlideInterval = setInterval(slideRight, 5000);
     });
-
 });
+
 
 
  $(document).ready(function() {
