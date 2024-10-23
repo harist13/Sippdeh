@@ -6,15 +6,36 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
 			{{-- Nama calon --}}
-			<label for="addCalonName" class="mb-1 block">Nama</label>
-            <input type="text" id="addCalonName" name="nama_calon_baru"
+			<label for="addCalonName" class="mb-2 block">Nama Calon</label>
+            <input
+                type="text"
+                id="addCalonName"
+                name="nama_calon_baru"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama calon" required>
+                placeholder="Nama calon"
+                required
+            >
             <span class="text-red-800">{{ $errors->first('nama_calon_baru') }}</span>
 
+			{{-- Nama calon wakil --}}
+			<label for="addCalonWakilName" class="my-2 block">Nama Calon Wakil</label>
+            <input
+                type="text"
+                id="addCalonWakilName"
+                name="nama_calon_wakil_baru"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nama calon wakil"
+                required
+            >
+            <span class="text-red-800">{{ $errors->first('nama_calon_wakil_baru') }}</span>
+
 			{{-- Kabupaten --}}
-			<label for="addCalonPhoto" class="my-1 block">Kabupaten</label>
-			<select id="addCalonKabupaten" name="kabupaten_id_calon_baru" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+			<label for="addCalonKabupaten" class="my-2 block">Kabupaten</label>
+			<select
+                id="addCalonKabupaten"
+                name="kabupaten_id_calon_baru"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
 				@endforeach
@@ -22,10 +43,14 @@
 			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon_baru') }}</span>
 
             {{-- Foto --}}
-            <label for="addCalonPhoto" class="my-1 block">Foto</label>
-            <input type="file" id="addCalonPhoto" name="foto_calon_baru"
+            <label for="addCalonPhoto" class="mt-2 block">Foto</label>
+            <input
+                type="file"
+                id="addCalonPhoto"
+                name="foto_calon_baru"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Foto calon">
+                placeholder="Foto calon"
+            >
 			<span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
 
             <hr class="h-1 my-3">

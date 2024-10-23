@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Intervention\Image\ImageManager;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\Calon\StoreCalonRequest;
 use App\Http\Requests\Admin\Calon\UpdateCalonRequest;
 use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Traits\UploadImage;
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 
 class CalonController extends Controller
 {
@@ -74,6 +74,7 @@ class CalonController extends Controller
 
             $calon = new Calon();
             $calon->nama = $validated['nama_calon_baru'];
+            $calon->nama_wakil = $validated['nama_calon_wakil_baru'];
             $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
 
             if ($request->hasFile('foto_calon_baru')) {
@@ -112,6 +113,7 @@ class CalonController extends Controller
 
             $calon = Calon::find($id);
             $calon->nama = $validated['nama_calon'];
+            $calon->nama_wakil = $validated['nama_calon_wakil'];
             $calon->kabupaten_id = $validated['kabupaten_id_calon'];
 
             if ($request->hasFile('foto_calon')) {

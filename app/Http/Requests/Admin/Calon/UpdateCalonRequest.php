@@ -29,6 +29,11 @@ class UpdateCalonRequest extends FormRequest
                 'max:300',
                 Rule::unique('calon', 'nama')->ignore($id)
             ],
+            'nama_calon_wakil' => [
+                'required',
+                'max:300',
+                Rule::unique('calon', 'nama_wakil')->ignore($id)
+            ],
             'kabupaten_id_calon' => 'required|exists:kabupaten,id'
         ];
     }
@@ -36,9 +41,13 @@ class UpdateCalonRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_calon.required' => 'Mohon isi nama kabupaten.',
+            'nama_calon.required' => 'Mohon isi nama calon.',
             'nama_calon.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama_calon.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'nama_calon.max' => 'Nama calon terlalu panjang, maksimal 300 karakter.',
+
+            'nama_calon.required' => 'Mohon isi nama calon wakil.',
+            'nama_calon.unique' => 'Calon wakil tersebut sudah ada.',
+            'nama_calon.max' => 'Nama calon wakil terlalu panjang, maksimal 300 karakter.',
 
             'kabupaten_id_calon.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
             'kabupaten_id_calon.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',

@@ -120,7 +120,7 @@
                     @forelse ($calon as $cal)
                         <tr class="hover:bg-gray-200">
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $cal->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}">{{ $cal->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}" data-nama-wakil="{{ $cal->nama_wakil }}">{{ $cal->nama }}/{{ $cal->nama_wakil }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->kabupaten->id }}">{{ $cal->kabupaten->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start">
                                 @if ($cal->foto != null)
