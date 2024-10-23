@@ -54,6 +54,10 @@
             >
             <span class="text-red-800">{{ $errors->first('foto_calon') }}</span>
 
+            <p class="text-xs text-gray-500 my-2">
+                Catatan: Pastikan gambar pasangan calon yang diunggah memiliki ukuran dimensi 300x200.
+            </p>
+
             <hr class="h-1 my-3">
 
             <div class="flex items-center">

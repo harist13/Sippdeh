@@ -43,7 +43,7 @@
 			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon_baru') }}</span>
 
             {{-- Foto --}}
-            <label for="addCalonPhoto" class="mt-2 block">Foto</label>
+            <label for="addCalonPhoto" class="mt-2 mb-1 block">Foto</label>
             <input
                 type="file"
                 id="addCalonPhoto"
@@ -52,6 +52,10 @@
                 placeholder="Foto calon"
             >
 			<span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
+
+            <p class="text-xs text-gray-500 my-2">
+                Catatan: Pastikan gambar pasangan calon yang diunggah memiliki ukuran dimensi 300x200.
+            </p>
 
             <hr class="h-1 my-3">
 
