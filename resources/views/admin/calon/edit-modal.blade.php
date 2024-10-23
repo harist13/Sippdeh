@@ -7,7 +7,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Calon</h3>
 
 			{{-- Nama calon --}}
-			<label for="editCalonName" class="my-1 block">Nama</label>
+			<label for="editCalonName" class="mt-2 mb-1 block">Nama</label>
             <input
                 type="text"
                 id="editCalonName"
@@ -19,7 +19,7 @@
             <span class="text-red-800">{{ $errors->first('nama_calon') }}</span>
 
 			{{-- Nama calon wakil --}}
-			<label for="editCalonWakilName" class="my-1 block">Nama</label>
+			<label for="editCalonWakilName" class="mt-2 mb-1 block">Nama Wakil</label>
             <input
                 type="text"
                 id="editCalonWakilName"
@@ -31,7 +31,7 @@
             <span class="text-red-800">{{ $errors->first('nama_calon') }}</span>
 
 			{{-- Kabupaten --}}
-			<label for="editCalonKabupatenId" class="my-1 block">Kabupaten</label>
+			<label for="editCalonKabupatenId" class="mt-2 mb-1 block">Kabupaten</label>
 			<select
                 id="editCalonKabupatenId"
                 name="kabupaten_id_calon"
@@ -44,7 +44,7 @@
 			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon') }}</span>
 
             {{-- Foto --}}
-            <label for="editCalonPhoto" class="my-1 block">Foto</label>
+            <label for="editCalonPhoto" class="mt-2 mb-1 block">Foto</label>
             <input
                 type="file"
                 id="editCalonPhoto"

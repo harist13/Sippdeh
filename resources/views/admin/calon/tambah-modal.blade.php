@@ -6,7 +6,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
 			{{-- Nama calon --}}
-			<label for="addCalonName" class="mb-2 block">Nama Calon</label>
+			<label for="addCalonName" class="mb-1 block">Nama Calon</label>
             <input
                 type="text"
                 id="addCalonName"
@@ -18,7 +18,7 @@
             <span class="text-red-800">{{ $errors->first('nama_calon_baru') }}</span>
 
 			{{-- Nama calon wakil --}}
-			<label for="addCalonWakilName" class="my-2 block">Nama Calon Wakil</label>
+			<label for="addCalonWakilName" class="mt-2 mb-1 block">Nama Wakil</label>
             <input
                 type="text"
                 id="addCalonWakilName"
@@ -30,7 +30,7 @@
             <span class="text-red-800">{{ $errors->first('nama_calon_wakil_baru') }}</span>
 
 			{{-- Kabupaten --}}
-			<label for="addCalonKabupaten" class="my-2 block">Kabupaten</label>
+			<label for="addCalonKabupaten" class="mt-2 mb-1 block">Kabupaten</label>
 			<select
                 id="addCalonKabupaten"
                 name="kabupaten_id_calon_baru"
