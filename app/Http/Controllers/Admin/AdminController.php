@@ -27,10 +27,7 @@ class AdminController extends Controller
         return view('admin.rekapitulasi');
     }
 
-    public function rangkuman()
-    {
-        return view('admin.rangkuman');
-    }
+    
 
     public function user(Request $request)
     {
