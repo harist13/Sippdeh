@@ -24,6 +24,34 @@
     .text-right .text-4xl {
         font-size: 2rem;
     }
+
+    .slide101 {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    }
+    .slide101.active {
+        display: block;
+        opacity: 1;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in forwards;
+    }
+
+    .fade-out {
+        animation: fadeOut 0.5s ease-out forwards;
+    }
 </style>
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
         <section class="rounded-lg p-4 mb-8">
@@ -108,162 +136,194 @@
                 </div>
 
                 <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
-                     <div id="slideContainer" class="relative w-full h-screen">
-                        <div id="slide1" class="slide active">
-                            <div class="mb-6 rounded-lg">
-                                <div class="flex items-start mb-6">
-                                    <img src="{{ asset('assets/smd.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                                    <div class="flex-grow pl-10">
-                                        <div class="space-y-2">
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                    <div id="slideContainer" class="relative w-full">
+                        <div class="flex flex-col">
+                            <!-- Container untuk slides -->
+                            <div class="flex-grow">
+                                <div id="slide1" class="slide101 active">
+                                    <div class="mb-6 rounded-lg">
+                                        <div class="flex items-start mb-6">
+                                            <img src="{{ asset('assets/smd.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                            <div class="flex-grow pl-10">
+                                                <div class="space-y-2">
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex flex-col items-start w-1/3">
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                    <span>> 90,00% DPT » Merah</span>
+                                                </div>
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                    <span>> 80,00% DPT » Kuning</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                    <span>> 70,00% DPT » Hijau</span>
+                                                </div>
                                             </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                            <div class="text-center w-1/3">
+                                                <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
                                             </div>
-                                            <div class="flex justify-between items-center">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                            <div class="text-right w-1/3">
+                                                <div class="text-4xl font-bold color text-green-400">81.40%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="slide2" class="slide101">
+                                    <!-- Konten slide 2 sama seperti sebelumnya -->
+                                    <div class="mb-6 rounded-lg">
+                                        <div class="flex items-start mb-6">
+                                            <img src="{{ asset('assets/bpp.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                            <div class="flex-grow pl-10">
+                                                <div class="space-y-2">
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex flex-col items-start w-1/3">
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                    <span>> 90,00% DPT » Merah</span>
+                                                </div>
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                    <span>> 80,00% DPT » Kuning</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                    <span>> 70,00% DPT » Hijau</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-center w-1/3">
+                                                <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                            </div>
+                                            <div class="text-right w-1/3">
+                                                <div class="text-4xl font-bold color text-yellow-400">60.40%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="slide3" class="slide101">
+                                    <!-- Konten slide 3 sama seperti sebelumnya -->
+                                    <div class="mb-6 rounded-lg">
+                                        <div class="flex items-start mb-6">
+                                            <img src="{{ asset('assets/btg.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                            <div class="flex-grow pl-10">
+                                                <div class="space-y-2">
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                        <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center border-b pb-2">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                        <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex flex-col items-start w-1/3">
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                    <span>> 90,00% DPT » Merah</span>
+                                                </div>
+                                                <div class="flex items-center mb-1">
+                                                    <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                    <span>> 80,00% DPT » Kuning</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                    <span>> 70,00% DPT » Hijau</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-center w-1/3">
+                                                <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                            </div>
+                                            <div class="text-right w-1/3">
+                                                <div class="text-4xl font-bold color text-red-400">20.40%</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                           <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex flex-col items-start w-1/3">
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                            <span>> 90,00% DPT » Merah</span>
-                                        </div>
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                            <span>> 80,00% DPT » Kuning</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                            <span>> 70,00% DPT » Hijau</span>
-                                        </div>
-                                    </div>
-                                    <div class="text-center w-1/3">
-                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                    </div>
-                                    <div class="text-right w-1/3">
-                                        <div class="text-4xl font-bold color text-green-400">81.40%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="slide2" class="slide">
-                            <div class="mb-6 rounded-lg">
-                                <div class="flex items-start mb-6">
-                                    <img src="{{ asset('assets/bpp.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+
+                            <!-- Navigation Controls - Centered at bottom -->
+                            <div class="flex justify-center items-center w-full mt-6 pb-4">
+                                <div class="flex items-center gap-4">
+                                    <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
                                     
-                                    <div class="flex-grow pl-10">
-                                        <div class="space-y-2">
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                            </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                            </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <button id="playPauseBtn" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 pause-icon">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 play-icon hidden">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        </svg>
+                                    </button>
+
+                                    <button id="nextSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex flex-col items-start w-1/3">
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                            <span>> 90,00% DPT » Merah</span>
-                                        </div>
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                            <span>> 80,00% DPT » Kuning</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                            <span>> 70,00% DPT » Hijau</span>
-                                        </div>
-                                    </div>
-                                    <div class="text-center w-1/3">
-                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                    </div>
-                                    <div class="text-right w-1/3">
-                                        <div class="text-4xl font-bold color text-yellow-400">60.40%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="slide3" class="slide">
-                            <div class="mb-6 rounded-lg">
-                                <div class="flex items-start mb-6">
-                                    <img src="{{ asset('assets/btg.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                                    
-                                    <div class="flex-grow pl-10">
-                                        <div class="space-y-2">
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                            </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                            </div>
-                                            <div class="flex justify-between items-center border-b pb-2">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex flex-col items-start w-1/3">
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                            <span>> 90,00% DPT » Merah</span>
-                                        </div>
-                                        <div class="flex items-center mb-1">
-                                            <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                            <span>> 80,00% DPT » Kuning</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                            <span>> 70,00% DPT » Hijau</span>
-                                        </div>
-                                    </div>
-                                    <div class="text-center w-1/3">
-                                        <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                    </div>
-                                    <div class="text-right w-1/3">
-                                        <div class="text-4xl font-bold color text-red-400">20.40%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 </section>
@@ -403,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
+// diagram pie
 
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('participationChart').getContext('2d');
@@ -469,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
+// slide gambar paslon
 
 document.addEventListener('DOMContentLoaded', function() {
     const slider = document.getElementById('candidateSlider');
@@ -628,18 +688,145 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
- $(document).ready(function() {
-    function transitionSlides() {
-        const $currentSlide = $('.slide.active');
-        const $nextSlide = $currentSlide.next('.slide').length ? $currentSlide.next('.slide') : $('.slide:first');
+//buat animasi sama slide di logo logo
+ document.addEventListener('DOMContentLoaded', function() {
+    const slideContainer = document.getElementById('slideContainer');
+    const slides = document.querySelectorAll('.slide101');
+    const prevBtn = document.getElementById('prevSlide101');
+    const nextBtn = document.getElementById('nextSlide101');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+    const playIcon = playPauseBtn.querySelector('.play-icon');
+    
+    let currentSlide = 0;
+    let isPlaying = true;
+    let slideInterval = null;
 
-        $currentSlide.removeClass('active');
-        $nextSlide.addClass('active');
-
-        setTimeout(transitionSlides, 6000); 
+    // Hide all slides except the first one
+    function hideAllSlides() {
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.classList.add('fade-out');
+        });
     }
 
-    setTimeout(transitionSlides, 3000); 
+    // Show specific slide
+    function showSlide(index) {
+        hideAllSlides();
+        slides[index].classList.remove('fade-out');
+        slides[index].classList.add('active', 'fade-in');
+    }
+
+    // Next slide function
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Previous slide function
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Start auto-sliding
+    function startSlideShow() {
+        if (slideInterval) clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Toggle play/pause
+    function togglePlayPause() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            startSlideShow();
+            pauseIcon.classList.remove('hidden');
+            playIcon.classList.add('hidden');
+        } else {
+            clearInterval(slideInterval);
+            pauseIcon.classList.add('hidden');
+            playIcon.classList.remove('hidden');
+        }
+    }
+
+    // Initialize slider
+    hideAllSlides();
+    showSlide(0);
+    startSlideShow();
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        if (isPlaying) {
+            startSlideShow(); // Reset interval after manual navigation
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        if (isPlaying) {
+            startSlideShow(); // Reset interval after manual navigation
+        }
+    });
+
+    playPauseBtn.addEventListener('click', togglePlayPause);
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            if (isPlaying) startSlideShow();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            if (isPlaying) startSlideShow();
+        } else if (e.key === ' ') {
+            // Space bar to toggle play/pause
+            e.preventDefault(); // Prevent page scrolling
+            togglePlayPause();
+        }
+    });
+
+    // Add swipe support for touch devices
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slideContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slideContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const difference = touchStartX - touchEndX;
+
+        if (Math.abs(difference) > swipeThreshold) {
+            if (difference > 0) {
+                // Swipe left
+                nextSlide();
+            } else {
+                // Swipe right
+                prevSlide();
+            }
+            if (isPlaying) startSlideShow();
+        }
+    }
+
+    // Pause on hover (optional)
+    slideContainer.addEventListener('mouseenter', () => {
+        if (isPlaying) {
+            clearInterval(slideInterval);
+        }
+    });
+
+    slideContainer.addEventListener('mouseleave', () => {
+        if (isPlaying) {
+            startSlideShow();
+        }
+    });
 });
 
 </script>
