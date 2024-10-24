@@ -269,128 +269,50 @@
                 </section>
             </div>
 
+                        
             <div class="relative overflow-hidden w-[1080px] mx-auto">
-            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out" style="width: 2160px;">
-                <!-- First set of cards -->
-                <div class="flex justify-center gap-[45px] w-[1080px]">
-                    <!-- Andi Harun / Saefuddin Zuhri -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
+                <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Wrapper untuk semua slide -->
+                    @php
+                        // Hitung jumlah slide yang dibutuhkan (3 kandidat per slide)
+                        $totalCandidates = count($calon);
+                        $candidatesPerSlide = 3;
+                        $totalSlides = ceil($totalCandidates / $candidatesPerSlide);
+                    @endphp
 
-                    <!-- Kotak Kosong -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
+                    @for ($slide = 0; $slide < $totalSlides; $slide++)
+                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                            @for ($i = $slide * $candidatesPerSlide; $i < min(($slide + 1) * $candidatesPerSlide, $totalCandidates); $i++)
+                                @php $cal = $calon[$i]; @endphp
+                                <div class="w-[330px] flex flex-col">
+                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                        @if ($cal->foto)
+                                            <img class="w-full h-full object-cover" src="{{ Storage::disk('foto_calon_lokal')->url($cal->foto) }}" alt="{{ $cal->nama }} / {{ $cal->nama_wakil }}">
+                                        @else
+                                            <img class="w-full h-full object-cover" src="{{ asset('assets/default.png') }}" alt="Default Image">
+                                        @endif
+                                    </div>
+                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                        {{ $cal->kabupaten->nama }}
+                                    </div>
+                                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                                        <h4 class="text-[#52526c] text-center font-bold mb-1">{{ $cal->nama }} / {{ $cal->nama_wakil }}</h4>
+                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON {{ $i + 1 }}</p>
+                                        <div class="flex justify-center items-center text-[#008bf9]">
+                                            <span class="font-medium">0%</span>
+                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                            <span class="font-medium">0 Suara</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
                         </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Muhammad Sabani / Syukri Wahid -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
+                    @endfor
                 </div>
 
-                <!-- Duplicate set of cards for continuous sliding -->
-                <div class="flex justify-center gap-[45px] w-[1080px]">
-                    <!-- Andi Harun / Saefuddin Zuhri -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Andi Harun / Saefuddin Zuhri">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Andi Harun / Saefuddin Zuhri</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kotak Kosong -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl"></div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Kotak Kosong</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 2</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Muhammad Sabani / Syukri Wahid -->
-                    <div class="w-[330px] flex flex-col">
-                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                            <img class="w-full h-full object-cover" src="{{asset('assets/contoh.png')}}" alt="Muhammad Sabani / Syukri Wahid">
-                        </div>
-                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                            Samarinda
-                        </div>
-                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                            <h4 class="text-[#52526c] text-center font-bold mb-1">Muhammad Sabani / Syukri Wahid</h4>
-                            <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON 1</p>
-                            <div class="flex justify-center items-center text-[#008bf9]">
-                                <span class="font-medium">21,69%</span>
-                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                <span class="font-medium">288.131 Suara</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex justify-center mt-4" id="sliderDots">
+                    <!-- Dots will be generated dynamically via JavaScript -->
                 </div>
-            </div>
-
-            <div class="flex justify-center mt-4">
-                <button id="prevBtn" class="w-[61px] h-[11px] rounded-full bg-[#3560A0] mx-1"></button>
-                <button id="nextBtn" class="w-[11px] h-[11px] rounded-full bg-[#b8bcc2] mx-1"></button>
             </div>
         </main>
 
@@ -551,62 +473,156 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const slider = document.getElementById('candidateSlider');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('sliderDots');
+    
+    // Calculate total slides based on actual slides in DOM
+    const slides = slider.children;
+    const totalSlides = slides.length;
+    const slideWidth = 1080; // Fixed width of each slide
+    
     let currentPosition = 0;
-    const slideWidth = slider.clientWidth / 2;
-    const totalSlides = 2;
+    let currentSlide = 0;
 
-    function slideRight() {
-        if (currentPosition > -slideWidth * (totalSlides - 1)) {
-            currentPosition -= slideWidth;
+    // Set initial width of the slider container
+    slider.style.width = `${slideWidth * totalSlides}px`;
+
+    // Generate dots dynamically
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.classList.add('mx-1', 'rounded-full', 'transition-all', 'duration-300');
+        updateDotStyle(dot, i === 0);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    function updateDotStyle(dot, isActive) {
+        if (isActive) {
+            dot.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            dot.classList.add('bg-[#3560A0]', 'w-[61px]');
         } else {
-            currentPosition = 0; // Kembali ke slide awal
+            dot.classList.remove('bg-[#3560A0]', 'w-[61px]');
+            dot.classList.add('bg-[#b8bcc2]', 'w-[11px]');
         }
+        dot.classList.add('h-[11px]');
+    }
+
+    function updateDots() {
+        const dots = dotsContainer.children;
+        for (let i = 0; i < dots.length; i++) {
+            updateDotStyle(dots[i], i === currentSlide);
+        }
+    }
+
+    function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        currentPosition = -slideWidth * slideIndex;
         updateSliderPosition();
     }
 
-    function slideLeft() {
-        if (currentPosition < 0) {
-            currentPosition += slideWidth;
+    function slideNext() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
         } else {
-            currentPosition = -slideWidth * (totalSlides - 1); // Kembali ke slide terakhir
+            currentSlide = 0;
         }
-        updateSliderPosition();
+        goToSlide(currentSlide);
+    }
+
+    function slidePrev() {
+        if (currentSlide > 0) {
+            currentSlide--;
+        } else {
+            currentSlide = totalSlides - 1;
+        }
+        goToSlide(currentSlide);
     }
 
     function updateSliderPosition() {
         slider.style.transition = 'transform 500ms ease-in-out';
         slider.style.transform = `translateX(${currentPosition}px)`;
-        updateButtons();
+        updateDots();
     }
 
-    function updateButtons() {
-        if (currentPosition === 0) {
-            prevBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-            prevBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-            nextBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-            nextBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
+    // Touch and drag functionality
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+
+    slider.addEventListener('mousedown', dragStart);
+    slider.addEventListener('touchstart', dragStart);
+    slider.addEventListener('mouseup', dragEnd);
+    slider.addEventListener('touchend', dragEnd);
+    slider.addEventListener('mouseleave', dragEnd);
+    slider.addEventListener('mousemove', drag);
+    slider.addEventListener('touchmove', drag);
+
+    function dragStart(event) {
+        isDragging = true;
+        startPos = getPositionX(event);
+        slider.style.transition = 'none';
+    }
+
+    function drag(event) {
+        if (!isDragging) return;
+        event.preventDefault();
+        const currentPosition = getPositionX(event);
+        const diff = currentPosition - startPos;
+        currentTranslate = prevTranslate + diff;
+        
+        // Add boundaries
+        const minTranslate = -slideWidth * (totalSlides - 1);
+        const maxTranslate = 0;
+        currentTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
+        
+        slider.style.transform = `translateX(${currentTranslate}px)`;
+    }
+
+    function dragEnd() {
+        isDragging = false;
+        const movedBy = currentTranslate - prevTranslate;
+        
+        // Determine which slide to snap to
+        if (Math.abs(movedBy) > slideWidth / 4) {
+            if (movedBy > 0) {
+                slidePrev();
+            } else {
+                slideNext();
+            }
         } else {
-            prevBtn.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-            prevBtn.classList.remove('bg-[#3560A0]', 'w-[61px]');
-            nextBtn.classList.add('bg-[#3560A0]', 'w-[61px]');
-            nextBtn.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            goToSlide(currentSlide);
         }
+        
+        prevTranslate = currentTranslate;
     }
 
-    let autoSlideInterval = setInterval(slideRight, 5000);
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
 
-    prevBtn.addEventListener('click', () => {
+    // Auto slide functionality
+    let autoSlideInterval = setInterval(slideNext, 5000);
+
+    // Reset interval on user interaction
+    dotsContainer.addEventListener('click', () => {
         clearInterval(autoSlideInterval);
-        slideLeft();
-        autoSlideInterval = setInterval(slideRight, 5000);
+        autoSlideInterval = setInterval(slideNext, 5000);
     });
 
-    nextBtn.addEventListener('click', () => {
+    slider.addEventListener('mousedown', () => {
         clearInterval(autoSlideInterval);
-        slideRight();
-        autoSlideInterval = setInterval(slideRight, 5000);
+    });
+
+    slider.addEventListener('touchstart', () => {
+        clearInterval(autoSlideInterval);
+    });
+
+    slider.addEventListener('mouseup', () => {
+        autoSlideInterval = setInterval(slideNext, 5000);
+    });
+
+    slider.addEventListener('touchend', () => {
+        autoSlideInterval = setInterval(slideNext, 5000);
     });
 });
 

@@ -10,14 +10,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
 use App\Models\Kabupaten;
+use App\Models\Calon;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function Dashboard()
     {
-        return view('admin.dashboard');
+        $calon = Calon::all();
+        return view('admin.dashboard', ['calon' => $calon]);
     }
+
 
     public function rekapitulasi()
     {
