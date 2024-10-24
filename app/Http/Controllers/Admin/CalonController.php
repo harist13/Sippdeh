@@ -3,27 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Intervention\Image\ImageManager;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\Calon\StoreCalonRequest;
 use App\Http\Requests\Admin\Calon\UpdateCalonRequest;
 use App\Models\Calon;
 use App\Models\Kabupaten;
-use App\Traits\UploadImage;
 use Exception;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class CalonController extends Controller
 {
-    use UploadImage;
-
     private string $diskName = 'foto_calon_lokal';
+
+    private Filesystem $disk;
 
     public function __construct()
     {
-        $this->imageManager = ImageManager::imagick();
         $this->disk = Storage::disk($this->diskName);
     }
 
@@ -78,7 +75,7 @@ class CalonController extends Controller
             $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
 
             if ($request->hasFile('foto_calon_baru')) {
-                $calon->foto = $this->simpanFoto($request->file('foto_calon_baru'));
+                $calon->foto = $request->file('foto_calon_baru')->store(options: $this->diskName);
             }
 
             $calon->save();
@@ -86,20 +83,6 @@ class CalonController extends Controller
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah pasangan calon.');
         } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah pasangan calon.');
-        }
-    }
-
-    private function simpanFoto(UploadedFile $foto): string {
-        try {
-            $namaFoto = $foto->store(options: $this->diskName);
-            $pathFoto = $this->disk->path($namaFoto);
-
-            // Ubah ukuran foto menjadi 300x200
-            $namaFoto = $this->resizeImage($pathFoto, 300, 200, null, $this->disk->path(''));
-
-            return $namaFoto;
-        } catch (Exception $exception) {
-            throw $exception;
         }
     }
 
@@ -122,7 +105,7 @@ class CalonController extends Controller
                     $this->disk->delete($calon->foto);
                 }
 
-                $calon->foto = $this->simpanFoto($request->file('foto_calon'));
+                $calon->foto = $request->file('foto_calon')->store(options: $this->diskName);
             }
 
             $calon->save();
