@@ -20,4 +20,8 @@ class RangkumanController extends Controller
     {
         return view('admin.rangkuman');
     }
+    public function suara()
+    {
+        return view('admin.suara');
+    }
 }
