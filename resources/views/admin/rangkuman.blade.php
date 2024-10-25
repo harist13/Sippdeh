@@ -45,7 +45,6 @@
             <div class="flex items-center space-x-2 w-full-mobile mb-4 sm:mb-0">
                 <div class="flex border border-gray-300 rounded-lg overflow-hidden flex-grow">
                     <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">TPS</button>
-                    <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">SUARA</button>
                     <button id="pilgubBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">PILGUB</button>
                     <button id="pilkadaBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">PILKADA</button>
                 </div>
@@ -53,6 +52,7 @@
                     <img src="{{ asset('assets/icon/download.png')}}">
                     <span>Export</span>
                 </button>
+                
             </div>
 
 
@@ -60,6 +60,19 @@
             
 
             <div class="flex flex-wrap-mobile items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full-mobile sm:w-auto">
+                <div class="relative w-full sm:w-auto">
+                    <select id="dataLimit" class="bg-gray-100 rounded-md px-3 py-2 pr-8 appearance-none cursor-pointer border border-gray-300 w-full sm:w-auto">
+                        <option value="10">10 Data</option>
+                        <option value="20">20 Data</option>
+                        <option value="50">50 Data</option>
+                        <option value="100">100 Data</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                        </svg>
+                    </div>
+                </div>
                 <div class="relative w-full sm:w-auto">
                     <button id="dropdownButton" class="flex items-center justify-between bg-gray-100 rounded-md px-3 py-2 w-full sm:w-auto">
                         <span class="text-gray-700 mr-2">Pilih Kab/Kota</span>
@@ -80,6 +93,7 @@
                         </ul>
                     </div>
                 </div>
+                
                 <div class="relative w-full sm:w-auto">
                     <input type="text" placeholder="Search" class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full">
                     <i class="fas fa-search absolute left-2 top-3 text-gray-400"></i>
@@ -118,52 +132,71 @@
                         <th class="px-4 py-2 text-left">KELURAHAN</th>
                         <th class="px-4 py-2 text-left">TPS</th>
                         <th class="px-4 py-2 text-left">DPT</th>
+                        <th class="px-4 py-2 text-left">Suara Sah</th>
+                        <th class="px-4 py-2 text-left">Suara Tidak Sah</th>
+                        <th class="px-4 py-2 text-left">Jumlah Pengguna Tidak Pilih</th>
+                        <th class="px-4 py-2 text-left">Suara Masuk</th>
                         <th class="px-4 py-2 text-left">PARTISIPASI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
-                    <tr class="border-b">
+                    <tr class="border-b hover:bg-gray-200 transition-colors">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Samarinda</td>
                         <td class="px-4 py-2">Palaran</td>
                         <td class="px-4 py-2">Bantuas</td>
                         <td class="px-4 py-2">TPS 1</td>
                         <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2"><span class="bg-green-400 text-white px-2 py-1 rounded">Hijau</span></td>
+                        <td class="px-4 py-2">48,234</td>
+                        <td class="px-4 py-2">1,245</td>
+                        <td class="px-4 py-2">5,866</td>
+                        <td class="px-4 py-2">49,479</td>
+                        <td class="px-4 py-2"><span class="bg-green-400 text-white px-2 py-1 rounded">89.4%</span></td>
                     </tr>
-                    <!-- Add more rows as needed -->
+                    <tr class="border-b hover:bg-gray-200 transition-colors">
+                        <td class="px-4 py-2">02</td>
+                        <td class="px-4 py-2">Samarinda</td>
+                        <td class="px-4 py-2">Palaran</td>
+                        <td class="px-4 py-2">Bantuas</td>
+                        <td class="px-4 py-2">TPS 2</td>
+                        <td class="px-4 py-2">52,678</td>
+                        <td class="px-4 py-2">45,897</td>
+                        <td class="px-4 py-2">987</td>
+                        <td class="px-4 py-2">5,794</td>
+                        <td class="px-4 py-2">46,884</td>
+                        <td class="px-4 py-2"><span class="bg-green-400 text-white px-2 py-1 rounded">89.0%</span></td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-200 transition-colors">
+                        <td class="px-4 py-2">03</td>
+                        <td class="px-4 py-2">Samarinda</td>
+                        <td class="px-4 py-2">Palaran</td>
+                        <td class="px-4 py-2">Rawa Makmur</td>
+                        <td class="px-4 py-2">TPS 1</td>
+                        <td class="px-4 py-2">48,923</td>
+                        <td class="px-4 py-2">42,567</td>
+                        <td class="px-4 py-2">876</td>
+                        <td class="px-4 py-2">5,480</td>
+                        <td class="px-4 py-2">43,443</td>
+                        <td class="px-4 py-2"><span class="bg-yellow-400 text-white px-2 py-1 rounded">88.8%</span></td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-200 transition-colors">
+                        <td class="px-4 py-2">04</td>
+                        <td class="px-4 py-2">Samarinda</td>
+                        <td class="px-4 py-2">Palaran</td>
+                        <td class="px-4 py-2">Rawa Makmur</td>
+                        <td class="px-4 py-2">TPS 2</td>
+                        <td class="px-4 py-2">51,234</td>
+                        <td class="px-4 py-2">43,987</td>
+                        <td class="px-4 py-2">965</td>
+                        <td class="px-4 py-2">6,282</td>
+                        <td class="px-4 py-2">44,952</td>
+                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">87.7%</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Table SUARA (initially hidden) -->
-        <div id="suaraTable" class="hidden overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full">
-                <thead>
-                    <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-2 text-left">No</th>
-                        <th class="px-4 py-2 text-left">KAB/KOTA</th>
-                        <th class="px-4 py-2 text-left">SUARA SAH</th>
-                        <th class="px-4 py-2 text-left">SUARA TDK SAH</th>
-                        <th class="px-4 py-2 text-left">JML PENG HAK PILIH</th>
-                        <th class="px-4 py-2 text-left">JML PENG TDK PILIH</th>
-                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-100">
-                    <tr class="border-b">
-                        <td class="px-4 py-2">01</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
-                    </tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-        </div>
+        
 
         <!-- Table pilgub (initially hidden) -->
         <div id="pilgubTable" class="hidden overflow-x-auto shadow-md rounded-lg">
@@ -172,6 +205,7 @@
                     <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-2 text-left">No</th>
                         <th class="px-4 py-2 text-left">NAMA PASLON</th>
+                        <th class="px-4 py-2 text-left">CALON</th>
                         <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
                         <th class="px-4 py-2 text-left">TOTAL DPT</th>
                         <th class="px-4 py-2 text-left">SUARA SAH</th>
@@ -183,6 +217,7 @@
                     <tr class="border-b">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
+                        <td class="px-4 py-2">Gubernur/Wakil gubernur</td>
                         <td class="px-4 py-2">Samarinda</td>
                         <td class="px-4 py-2">55,345</td>
                         <td class="px-4 py-2">55,345</td>
@@ -192,6 +227,7 @@
                     <tr class="border-b">
                         <td class="px-4 py-2">02</td>
                         <td class="px-4 py-2">Rahmad Mas'ud, Bagus Susetyo</td>
+                        <td class="px-4 py-2">Gubernur/Wakil gubernur</td>
                         <td class="px-4 py-2">Balikpapan</td>
                         <td class="px-4 py-2">70,324</td>
                         <td class="px-4 py-2">70,324</td>
@@ -211,6 +247,7 @@
                     <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-2 text-left">No</th>
                         <th class="px-4 py-2 text-left">NAMA PASLON</th>
+                        <th class="px-4 py-2 text-left">CALON</th>
                         <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
                         <th class="px-4 py-2 text-left">TOTAL DPT</th>
                         <th class="px-4 py-2 text-left">SUARA SAH</th>
@@ -222,6 +259,7 @@
                     <tr class="border-b">
                         <td class="px-4 py-2">01</td>
                         <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
+                        <td class="px-4 py-2">Walikota/Wakil walikota</td>
                         <td class="px-4 py-2">Samarinda</td>
                         <td class="px-4 py-2">55,345</td>
                         <td class="px-4 py-2">55,345</td>
@@ -231,6 +269,7 @@
                     <tr class="border-b">
                         <td class="px-4 py-2">02</td>
                         <td class="px-4 py-2">Rahmad Mas'ud, Bagus Susetyo</td>
+                        <td class="px-4 py-2">Walikota/Wakil walikota</td>
                         <td class="px-4 py-2">Balikpapan</td>
                         <td class="px-4 py-2">70,324</td>
                         <td class="px-4 py-2">70,324</td>
@@ -259,52 +298,37 @@
     // JavaScript to toggle between TPS, SUARA, and pilgub tables
     document.getElementById('tpsBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.remove('hidden');
-        document.getElementById('suaraTable').classList.add('hidden');
+       
         document.getElementById('pilgubTable').classList.add('hidden');
         document.getElementById('pilkadaTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
         this.classList.add('bg-[#3560A0]', 'text-white');
-        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+       
         document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
         document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
-    document.getElementById('suaraBtn').addEventListener('click', function() {
-        document.getElementById('tpsTable').classList.add('hidden');
-        document.getElementById('suaraTable').classList.remove('hidden');
-        document.getElementById('pilgubTable').classList.add('hidden');
-        document.getElementById('pilkadaTable').classList.add('hidden');
-        this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-[#3560A0]', 'text-white');
-        document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
-    });
+   
 
     document.getElementById('pilgubBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.add('hidden');
-        document.getElementById('suaraTable').classList.add('hidden');
+        
         document.getElementById('pilgubTable').classList.remove('hidden');
         document.getElementById('pilkadaTable').classList.add('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
         this.classList.add('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+       
         document.getElementById('pilkadaBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('pilkadaBtn').classList.add('bg-gray-200', 'text-gray-700');
     });
 
      document.getElementById('pilkadaBtn').addEventListener('click', function() {
         document.getElementById('tpsTable').classList.add('hidden');
-        document.getElementById('suaraTable').classList.add('hidden');
+       
         document.getElementById('pilgubTable').classList.add('hidden');
         document.getElementById('pilkadaTable').classList.remove('hidden');
         this.classList.remove('bg-gray-200', 'text-gray-700');
@@ -313,8 +337,7 @@
         document.getElementById('tpsBtn').classList.add('bg-gray-200', 'text-gray-700');
         document.getElementById('pilgubBtn').classList.remove('bg-[#3560A0]', 'text-white');
         document.getElementById('pilgubBtn').classList.add('bg-gray-200', 'text-gray-700');
-        document.getElementById('suaraBtn').classList.remove('bg-[#3560A0]', 'text-white');
-        document.getElementById('suaraBtn').classList.add('bg-gray-200', 'text-gray-700');
+     
     });
 
             // Dropdown functionality
