@@ -22,13 +22,13 @@
             {{-- Cari dan Filter --}}
             <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
                 <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                     </svg>
                     <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
                 </div>
-                <button class="bg-[#ECEFF5] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto">
-                    <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-6 h-6 mr-2">
+                <button class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full" id="openFilterPilgub">
+                    <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
                     <span class="text-[#344054]">Filter</span>
                 </button>
             </div>
@@ -92,16 +92,36 @@
         </div>
     </div>
 </main>
-@include('operator.layout.footer')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
 
-    selectAllCheckbox.addEventListener('change', function() {
-        rowCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
+@include('operator.layout.footer')
+
+@include('operator.pilgub.filter-modal')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+
+        selectAllCheckbox.addEventListener('change', function() {
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
         });
     });
-});
+</script>
+
+<script>
+    // Tutup modal saat tombol esc di tekan
+    document.addEventListener('keyup', function(event) {
+        if(event.key === "Escape") {
+            closeFilterPilgubModal();
+        }
+    });
+
+    // Tutup modal saat overlay diklik
+    document.addEventListener('click', function(event) {
+        if (event.target == filterPilgubModal) {
+            closeFilterPilgubModal();
+        }
+    });
 </script>
