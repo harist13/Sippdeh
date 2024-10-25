@@ -498,14 +498,14 @@
                     {
                         label: 'Suara Sah',
                         data: [125000, 200567, 120000, 132000, 105000, 150000, 143000, 200000, 150000, 120000],
-                        backgroundColor: '#56A0A0',
+                        backgroundColor: '#67BC7F',
                         barPercentage: 0.98,
                         categoryPercentage: 0.5,
                     },
                     {
                         label: 'Suara Tidak Sah',
                         data: [33000, 56300, 12472, 13392, 7213, 26394, 20091, 45086, 17015, 8826],
-                        backgroundColor: '#FF9999',
+                        backgroundColor: '#F50F00',
                         barPercentage: 0.98,
                         categoryPercentage: 0.5,
                     }
