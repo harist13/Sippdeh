@@ -1,5 +1,39 @@
 @include('admin.layout.header')
 <style>
+    /* slide kusus diagram bar */
+     .slider-blue {
+        -webkit-appearance: none;
+        height: 8px;
+        background: #d3d3d3;
+        border-radius: 5px;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.15s ease-in-out;
+    }
+
+    .slider-blue:hover {
+        opacity: 1;
+    }
+
+    .slider-blue::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3560A0; /* Warna biru */
+        cursor: pointer;
+    }
+
+    .slider-blue::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3560A0; /* Warna biru */
+        cursor: pointer;
+    }
+
+    /* slide kusus paslon */
     .slide {
         position: absolute;
         top: 0;
@@ -114,8 +148,17 @@
                 </section>
             </div>
 
+                <!-- Bagian HTML untuk slider dan canvas -->
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                    
+                    <!-- Slider dengan warna biru -->
+                    <div class="flex justify-center items-center my-4">
+                        <span class="text-gray-600 font-medium">Suara Masuk</span>
+                        <input type="range" id="chartSlider" min="0" max="1" step="1" value="0" class="slider-blue mx-4 w-1/3" />
+                        <span class="text-gray-600 font-medium">Suara Sah & Tidak Sah</span>
+                    </div>
+
                     <div class="p-4">
                         <canvas id="voteCountChart" width="800" height="300"></canvas>
                     </div>
@@ -402,39 +445,61 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
-    new Chart(ctx, {
+    const MAX_VALUE = 500000;
+
+    // Data untuk Suara Masuk
+    const voteCountData = {
+        labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+        datasets: [
+            {
+                label: 'Suara Masuk',
+                data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
+                backgroundColor: '#3560A0',
+                barPercentage: 0.98,
+                categoryPercentage: 0.5,
+            },
+            {
+                label: 'DPT',
+                data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
+                backgroundColor: '#99C9FF',
+                barPercentage: 0.98,
+                categoryPercentage: 0.5,
+            }
+        ]
+    };
+
+    // Data untuk Suara Sah dan Tidak Sah
+    const validInvalidVotesData = {
+        labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+        datasets: [
+            {
+                label: 'Suara Sah',
+                data: [125000, 200567, 120000, 132000, 105000, 150000, 143000, 200000, 150000, 120000],
+                backgroundColor: '#56A0A0',
+                barPercentage: 0.98,
+                categoryPercentage: 0.5,
+            },
+            {
+                label: 'Suara Tidak Sah',
+                data: [33000, 56300, 12472, 13392, 7213, 26394, 20091, 45086, 17015, 8826],
+                backgroundColor: '#FF9999',
+                barPercentage: 0.98,
+                categoryPercentage: 0.5,
+            }
+        ]
+    };
+
+    let chart = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-            datasets: [
-                {
-                    label: 'Suara Masuk',
-                    data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
-                    backgroundColor: '#3560A0',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                },
-                {
-                    label: 'DPT',
-                    data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
-                    backgroundColor: '#99C9FF',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                }
-            ]
-        },
+        data: voteCountData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
                 x: {
-                    grid: {
-                        display: false
-                    },
+                    grid: { display: false },
                     ticks: {
-                        font: {
-                            size: 12
-                        },
+                        font: { size: 12 },
                         maxRotation: 0,
                         minRotation: 0,
                         autoSkip: false
@@ -442,19 +507,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 y: {
                     beginAtZero: true,
-                    max: 500000,
+                    max: MAX_VALUE,
                     ticks: {
                         stepSize: 100000,
                         callback: function(value) {
                             return value.toLocaleString();
                         }
                     },
-                    grid: {
-                        color: '#E0E0E0'
-                    }
+                    grid: { color: '#E0E0E0' }
                 }
             },
             plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = (value / MAX_VALUE * 100).toFixed(1);
+                            return `${context.dataset.label}: ${percentage}%`;
+                        }
+                    }
+                },
                 legend: {
                     display: true,
                     position: 'bottom',
@@ -462,23 +534,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     labels: {
                         boxWidth: 15,
                         padding: 15,
-                        font: {
-                            size: 12
-                        }
+                        font: { size: 12 }
                     }
-                },
-                title: {
-                    display: false
                 }
             },
             layout: {
-                padding: {
-                    left: 10,
-                    right: 10,
-                    top: 10
-                }
+                padding: { left: 10, right: 10, top: 10 }
             }
         }
+    });
+
+    document.getElementById('chartSlider').addEventListener('input', function(event) {
+        const value = event.target.value;
+        if (value == 0) {
+            chart.data = voteCountData;
+        } else {
+            chart.data = validInvalidVotesData;
+        }
+        chart.update();
     });
 });
 
