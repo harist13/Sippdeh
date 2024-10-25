@@ -1,5 +1,50 @@
 @include('admin.layout.header')
 <style>
+    /* slide kusus diagram bar */
+    .chart-container {
+            position: relative;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .nav-button:hover {
+            background-color: #1e40af;
+        }
+        
+        .nav-button-left {
+            left: 10px;
+        }
+        
+        .nav-button-right {
+            right: 10px;
+        }
+
+        .canvas-wrapper {
+            padding: 0 50px;
+        }
+
+        .chart-title {
+            transition: opacity 0.3s ease;
+        }
+
+    /* slide kusus paslon */
     .slide {
         position: absolute;
         top: 0;
@@ -114,10 +159,26 @@
                 </section>
             </div>
 
+                <!-- Bagian HTML untuk slider dan canvas -->
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                    <div class="p-4">
-                        <canvas id="voteCountChart" width="800" height="300"></canvas>
+                    <h3 id="chartTitle" class="bg-[#3560A0] text-white text-center py-2 chart-title">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                    
+                    <div class="chart-container">
+                        <button class="nav-button nav-button-left" id="leftArrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        
+                        <button class="nav-button nav-button-right" id="rightArrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        
+                        <div class="canvas-wrapper">
+                            <canvas id="voteCountChart" width="800" height="300"></canvas>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -398,43 +459,72 @@
 
 @include('admin.layout.footer')
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-            datasets: [
-                {
-                    label: 'Suara Masuk',
-                    data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
-                    backgroundColor: '#3560A0',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                },
-                {
-                    label: 'DPT',
-                    data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
-                    backgroundColor: '#99C9FF',
-                    barPercentage: 0.98,
-                    categoryPercentage: 0.5,
-                }
-            ]
+    const titleElement = document.getElementById('chartTitle');
+    const MAX_VALUE = 500000;
+    let currentView = 0;
+
+    const chartData = [
+        {
+            title: "Jumlah Angka Suara Masuk Kabupaten/Kota",
+            data: {
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                datasets: [
+                    {
+                        label: 'Suara Masuk',
+                        data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
+                        backgroundColor: '#3560A0',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    },
+                    {
+                        label: 'DPT',
+                        data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
+                        backgroundColor: '#99C9FF',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    }
+                ]
+            }
         },
+        {
+            title: "Jumlah Angka Suara Sah dan Tidak Sah Kabupaten/Kota",
+            data: {
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                datasets: [
+                    {
+                        label: 'Suara Sah',
+                        data: [125000, 200567, 120000, 132000, 105000, 150000, 143000, 200000, 150000, 120000],
+                        backgroundColor: '#56A0A0',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    },
+                    {
+                        label: 'Suara Tidak Sah',
+                        data: [33000, 56300, 12472, 13392, 7213, 26394, 20091, 45086, 17015, 8826],
+                        backgroundColor: '#FF9999',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    }
+                ]
+            }
+        }
+    ];
+
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData[0].data,
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
                 x: {
-                    grid: {
-                        display: false
-                    },
+                    grid: { display: false },
                     ticks: {
-                        font: {
-                            size: 12
-                        },
+                        font: { size: 12 },
                         maxRotation: 0,
                         minRotation: 0,
                         autoSkip: false
@@ -442,19 +532,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 y: {
                     beginAtZero: true,
-                    max: 500000,
+                    max: MAX_VALUE,
                     ticks: {
                         stepSize: 100000,
                         callback: function(value) {
                             return value.toLocaleString();
                         }
                     },
-                    grid: {
-                        color: '#E0E0E0'
-                    }
+                    grid: { color: '#E0E0E0' }
                 }
             },
             plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = (value / MAX_VALUE * 100).toFixed(1);
+                            return `${context.dataset.label}: ${percentage}%`;
+                        }
+                    }
+                },
                 legend: {
                     display: true,
                     position: 'bottom',
@@ -462,24 +559,41 @@ document.addEventListener('DOMContentLoaded', function() {
                     labels: {
                         boxWidth: 15,
                         padding: 15,
-                        font: {
-                            size: 12
-                        }
+                        font: { size: 12 }
                     }
-                },
-                title: {
-                    display: false
                 }
             },
             layout: {
-                padding: {
-                    left: 10,
-                    right: 10,
-                    top: 10
-                }
+                padding: { left: 10, right: 10, top: 10, bottom: 10 }
             }
         }
     });
+
+    function updateView(direction = 'right') {
+        // Add fade out effect
+        titleElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            if (direction === 'right') {
+                currentView = (currentView + 1) % chartData.length;
+            } else {
+                currentView = (currentView - 1 + chartData.length) % chartData.length;
+            }
+            
+            titleElement.textContent = chartData[currentView].title;
+            chart.data = chartData[currentView].data;
+            chart.update('active');
+            
+            // Add fade in effect
+            titleElement.style.opacity = '1';
+        }, 300);
+    }
+
+    document.getElementById('leftArrow').addEventListener('click', () => updateView('left'));
+    document.getElementById('rightArrow').addEventListener('click', () => updateView('right'));
+
+    // Initial setup
+    updateView();
 });
 
 
