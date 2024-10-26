@@ -3,7 +3,10 @@
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
         <form action="{{ route('provinsi.export') }}" method="GET">
             @csrf
-            <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Filter</h3>
+			<div class="flex items-center mb-5">
+				<i class="fas fa-arrow-left mr-3 select-none cursor-pointer" id="cancelFilterPilgub"></i>
+				<h3 class="text-lg font-medium text-gray-900">Filter</h3>
+			</div>
 
 			{{-- Jumlah Data --}}
 			<label for="pilihJumlahData" class="mb-3 font-bold block">Jumlah Data</label>
@@ -57,25 +60,25 @@
 			<label for="pilihTingkatPartisipasi" class="mb-3 font-bold mt-5 block">Tingkat Partisipasi</label>
 			<ul class="flex gap-2">
 				<li class="flex items-center gap-2">
-					<button type="button" class="bg-green-400 text-white py-2 px-7 rounded text-sm">Hijau</button>
+					<button type="button" class="bg-green-400 text-white py-2 px-7 rounded text-sm">> 80%</button>
 				</li>
 				<li class="flex items-center gap-2">
-					<button type="button" class="bg-yellow-400 text-white py-2 px-7 rounded text-sm">Kuning</button>
+					<button type="button" class="bg-yellow-400 text-white py-2 px-7 rounded text-sm">> 60%</button>
 				</li>
 				<li class="flex items-center gap-2">
-					<button type="button" class="bg-red-400 text-white py-2 px-7 rounded text-sm">Merah</button>
+					<button type="button" class="bg-red-400 text-white py-2 px-7 rounded text-sm">< 20%</button>
 				</li>
 			</ul>
 			{{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
 
             <hr class="h-1 my-3">
 
-            <div class="flex items-center">
-                <button type="button" id="cancelFilterPilgub" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
-					Batal
+            <div class="flex">
+                <button type="button" class="flex-1 bg-gray-300 hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
+					Reset
 				</button>
-                <button type="submit" id="confirmFilterPilgub" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
-					Simpan
+                <button type="submit" id="confirmFilterPilgub" class="flex-1 bg-[#3560A0] hover:bg-blue-700 text-white rounded-md px-4 py-2">
+					Terapkan
 				</button>
             </div>
         </form>
