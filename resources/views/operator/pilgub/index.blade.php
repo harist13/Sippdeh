@@ -85,6 +85,42 @@
                                     <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
                                 </td>
                             </tr>
+                            <tr class="border-b text-center">
+                                <td class="py-3 px-4">02</td>
+                                <td class="py-3 px-4">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <p>Samarinda Kota</p>
+                                </td>
+                                <td class="py-3 px-4">Palaran</td>
+                                <td class="py-3 px-4">2370750016-TPS 016</td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">Gubernur/<br>Wakil Gubernur</td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="search" placeholder="Jumlah" name="cari" class="bg-[#ECEFF5] border border-gray-600 text-gray-600 rounded-lg ml-2 px-4 py-2 focus:outline-none">
+                                </td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
