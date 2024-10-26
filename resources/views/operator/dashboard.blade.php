@@ -432,126 +432,126 @@
                 </div>
             </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                         <thead class="bg-[#3560a0] text-white">
                             <tr>
-                                <th class="py-3 px-4 text-left">NO</th>
-                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
-                                <th class="py-3 px-4 text-left">SUARA SAH</th>
-                                <th class="py-3 px-4 text-left">SUARA TDK SAH</th>
-                                <th class="py-3 px-4 text-left">JML PENG HAK PILIH</th>
-                                <th class="py-3 px-4 text-left">JML PENG TDK PILIH</th>
-                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                <th class="py-3 px-4 border-r border-white">NO</th>
+                                <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                                <th class="py-3 px-4 border-r border-white">SUARA SAH</th>
+                                <th class="py-3 px-4 border-r border-white">SUARA TDK SAH</th>
+                                <th class="py-3 px-4 border-r border-white">JML PENG HAK PILIH</th>
+                                <th class="py-3 px-4 border-r border-white">JML PENG TDK PILIH</th>
+                                <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-100">
                             <tr class="border-b">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4">Samarinda</td>
-                                <td class="py-3 px-4">455.345</td>
-                                <td class="py-3 px-4">2.123</td>
-                                <td class="py-3 px-4">582.467</td>
-                                <td class="py-3 px-4">124.999</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">01</td>
+                                <td class="py-3 px-4 border-r">Samarinda</td>
+                                <td class="py-3 px-4 border-r">455.345</td>
+                                <td class="py-3 px-4 border-r">2.123</td>
+                                <td class="py-3 px-4 border-r">582.467</td>
+                                <td class="py-3 px-4 border-r">124.999</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">78.5%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">02</td>
-                                <td class="py-3 px-4">Balikpapan</td>
-                                <td class="py-3 px-4">378.912</td>
-                                <td class="py-3 px-4">1.876</td>
-                                <td class="py-3 px-4">498.234</td>
-                                <td class="py-3 px-4">117.446</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">02</td>
+                                <td class="py-3 px-4 border-r">Balikpapan</td>
+                                <td class="py-3 px-4 border-r">378.912</td>
+                                <td class="py-3 px-4 border-r">1.876</td>
+                                <td class="py-3 px-4 border-r">498.234</td>
+                                <td class="py-3 px-4 border-r">117.446</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">76.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">03</td>
-                                <td class="py-3 px-4">Kutai Kartanegara</td>
-                                <td class="py-3 px-4">412.567</td>
-                                <td class="py-3 px-4">2.345</td>
-                                <td class="py-3 px-4">543.210</td>
-                                <td class="py-3 px-4">128.298</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">03</td>
+                                <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                <td class="py-3 px-4 border-r">412.567</td>
+                                <td class="py-3 px-4 border-r">2.345</td>
+                                <td class="py-3 px-4 border-r">543.210</td>
+                                <td class="py-3 px-4 border-r">128.298</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">76.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">04</td>
-                                <td class="py-3 px-4">Bontang</td>
-                                <td class="py-3 px-4">98.765</td>
-                                <td class="py-3 px-4">543</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">33.148</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">04</td>
+                                <td class="py-3 px-4 border-r">Bontang</td>
+                                <td class="py-3 px-4 border-r">98.765</td>
+                                <td class="py-3 px-4 border-r">543</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">33.148</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">75.0%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">05</td>
-                                <td class="py-3 px-4">Berau</td>
-                                <td class="py-3 px-4">145.678</td>
-                                <td class="py-3 px-4">876</td>
-                                <td class="py-3 px-4">198.765</td>
-                                <td class="py-3 px-4">52.211</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">05</td>
+                                <td class="py-3 px-4 border-r">Berau</td>
+                                <td class="py-3 px-4 border-r">145.678</td>
+                                <td class="py-3 px-4 border-r">876</td>
+                                <td class="py-3 px-4 border-r">198.765</td>
+                                <td class="py-3 px-4 border-r">52.211</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">73.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">06</td>
-                                <td class="py-3 px-4">Paser</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">765</td>
-                                <td class="py-3 px-4">187.654</td>
-                                <td class="py-3 px-4">54.433</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">06</td>
+                                <td class="py-3 px-4 border-r">Paser</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">765</td>
+                                <td class="py-3 px-4 border-r">187.654</td>
+                                <td class="py-3 px-4 border-r">54.433</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">71.0%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">07</td>
-                                <td class="py-3 px-4">Kutai Timur</td>
-                                <td class="py-3 px-4">178.901</td>
-                                <td class="py-3 px-4">1.234</td>
-                                <td class="py-3 px-4">256.789</td>
-                                <td class="py-3 px-4">76.654</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">07</td>
+                                <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                <td class="py-3 px-4 border-r">178.901</td>
+                                <td class="py-3 px-4 border-r">1.234</td>
+                                <td class="py-3 px-4 border-r">256.789</td>
+                                <td class="py-3 px-4 border-r">76.654</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">70.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">08</td>
-                                <td class="py-3 px-4">Penajam Paser Utara</td>
-                                <td class="py-3 px-4">87.654</td>
-                                <td class="py-3 px-4">432</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">44.370</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">08</td>
+                                <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                <td class="py-3 px-4 border-r">87.654</td>
+                                <td class="py-3 px-4 border-r">432</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">44.370</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">66.5%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">09</td>
-                                <td class="py-3 px-4">Kutai Barat</td>
-                                <td class="py-3 px-4">76.543</td>
-                                <td class="py-3 px-4">321</td>
-                                <td class="py-3 px-4">121.234</td>
-                                <td class="py-3 px-4">44.370</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">09</td>
+                                <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                <td class="py-3 px-4 border-r">76.543</td>
+                                <td class="py-3 px-4 border-r">321</td>
+                                <td class="py-3 px-4 border-r">121.234</td>
+                                <td class="py-3 px-4 border-r">44.370</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">63.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">10</td>
-                                <td class="py-3 px-4">Mahakam Ulu</td>
-                                <td class="py-3 px-4">23.456</td>
-                                <td class="py-3 px-4">123</td>
-                                <td class="py-3 px-4">43.210</td>
-                                <td class="py-3 px-4">19.631</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">10</td>
+                                <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                <td class="py-3 px-4 border-r">23.456</td>
+                                <td class="py-3 px-4 border-r">123</td>
+                                <td class="py-3 px-4 border-r">43.210</td>
+                                <td class="py-3 px-4 border-r">19.631</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">54.6%</div>
                                 </td>
                             </tr>
@@ -631,126 +631,126 @@
                     </div>
                 </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                             <thead class="bg-[#3560a0] text-white">
                                 <tr>
-                                    <th class="py-3 px-4 text-left">NO</th>
-                                    <th class="py-3 px-4 text-left">NAMA PASLON</th>
-                                    <th class="py-3 px-4 text-left">KABUPATEN/KOTA</th>
-                                    <th class="py-3 px-4 text-left">DPT</th>
-                                    <th class="py-3 px-4 text-left">SUARA SAH</th>
-                                    <th class="py-3 px-4 text-left">SUARA TIDAK SAH</th>
-                                    <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                    <th class="py-3 px-4 border-r border-white">NO</th>
+                                    <th class="py-3 px-4 border-r border-white">NAMA PASLON</th>
+                                    <th class="py-3 px-4 border-r border-white">KABUPATEN/KOTA</th>
+                                    <th class="py-3 px-4 border-r border-white">DPT</th>
+                                    <th class="py-3 px-4 border-r border-white">SUARA SAH</th>
+                                    <th class="py-3 px-4 border-r border-white">SUARA TIDAK SAH</th>
+                                    <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-gray-100">
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">01</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Samarinda</td>
-                                    <td class="py-3 px-4">582.467</td>
-                                    <td class="py-3 px-4">255.345</td>
-                                    <td class="py-3 px-4">2.123</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">01</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Samarinda</td>
+                                    <td class="py-3 px-4 border-r">582.467</td>
+                                    <td class="py-3 px-4 border-r">255.345</td>
+                                    <td class="py-3 px-4 border-r">2.123</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-green">78.5%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">02</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Balikpapan</td>
-                                    <td class="py-3 px-4">498.234</td>
-                                    <td class="py-3 px-4">228.912</td>
-                                    <td class="py-3 px-4">1.876</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">02</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Balikpapan</td>
+                                    <td class="py-3 px-4 border-r">498.234</td>
+                                    <td class="py-3 px-4 border-r">228.912</td>
+                                    <td class="py-3 px-4 border-r">1.876</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">76.4%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">03</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Kartanegara</td>
-                                    <td class="py-3 px-4">543.210</td>
-                                    <td class="py-3 px-4">242.567</td>
-                                    <td class="py-3 px-4">2.345</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">03</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                    <td class="py-3 px-4 border-r">543.210</td>
+                                    <td class="py-3 px-4 border-r">242.567</td>
+                                    <td class="py-3 px-4 border-r">2.345</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-green">77.2%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">04</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Bontang</td>
-                                    <td class="py-3 px-4">132.456</td>
-                                    <td class="py-3 px-4">88.765</td>
-                                    <td class="py-3 px-4">543</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">04</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Bontang</td>
+                                    <td class="py-3 px-4 border-r">132.456</td>
+                                    <td class="py-3 px-4 border-r">88.765</td>
+                                    <td class="py-3 px-4 border-r">543</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">75.0%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">05</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Berau</td>
-                                    <td class="py-3 px-4">198.765</td>
-                                    <td class="py-3 px-4">135.678</td>
-                                    <td class="py-3 px-4">876</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">05</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Berau</td>
+                                    <td class="py-3 px-4 border-r">198.765</td>
+                                    <td class="py-3 px-4 border-r">135.678</td>
+                                    <td class="py-3 px-4 border-r">876</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">73.7%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">06</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Paser</td>
-                                    <td class="py-3 px-4">187.654</td>
-                                    <td class="py-3 px-4">122.456</td>
-                                    <td class="py-3 px-4">765</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">06</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Paser</td>
+                                    <td class="py-3 px-4 border-r">187.654</td>
+                                    <td class="py-3 px-4 border-r">122.456</td>
+                                    <td class="py-3 px-4 border-r">765</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">71.0%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">07</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Timur</td>
-                                    <td class="py-3 px-4">256.789</td>
-                                    <td class="py-3 px-4">168.901</td>
-                                    <td class="py-3 px-4">1.234</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">07</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                    <td class="py-3 px-4 border-r">256.789</td>
+                                    <td class="py-3 px-4 border-r">168.901</td>
+                                    <td class="py-3 px-4 border-r">1.234</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">70.2%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">08</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Penajam Paser Utara</td>
-                                    <td class="py-3 px-4">132.456</td>
-                                    <td class="py-3 px-4">77.654</td>
-                                    <td class="py-3 px-4">432</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">08</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                    <td class="py-3 px-4 border-r">132.456</td>
+                                    <td class="py-3 px-4 border-r">77.654</td>
+                                    <td class="py-3 px-4 border-r">432</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">66.5%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">09</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Barat</td>
-                                    <td class="py-3 px-4">121.234</td>
-                                    <td class="py-3 px-4">66.543</td>
-                                    <td class="py-3 px-4">321</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">09</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                    <td class="py-3 px-4 border-r">121.234</td>
+                                    <td class="py-3 px-4 border-r">66.543</td>
+                                    <td class="py-3 px-4 border-r">321</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">63.4%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">10</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Mahakam Ulu</td>
-                                    <td class="py-3 px-4">43.210</td>
-                                    <td class="py-3 px-4">21.456</td>
-                                    <td class="py-3 px-4">123</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">10</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                    <td class="py-3 px-4 border-r">43.210</td>
+                                    <td class="py-3 px-4 border-r">21.456</td>
+                                    <td class="py-3 px-4 border-r">123</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">54.6%</div>
                                     </td>
                                 </tr>
@@ -782,171 +782,171 @@
                 </div>
             </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                         <thead class="bg-[#3560a0] text-white">
                             <tr>
-                                <th class="py-3 px-4 text-left">NO</th>
-                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
-                                <th class="py-3 px-4 text-left">KECAMATAN</th>
-                                <th class="py-3 px-4 text-left">KELURAHAN</th>
-                                <th class="py-3 px-4 text-left">TPS</th>
-                                <th class="py-3 px-4 text-left">DPT</th>
-                                <th class="py-3 px-4 text-left">Suara Sah</th>
-                                <th class="py-3 px-4 text-left">Suara Tidak Sah</th>
-                                <th class="py-3 px-4 text-left">Jumlah Pengguna Tidak pilih</th>
-                                <th class="py-3 px-4 text-left">Suara Masuk</th>
-                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                <th class="py-3 px-4 border-r border-white">NO</th>
+                                <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                                <th class="py-3 px-4 border-r border-white">KECAMATAN</th>
+                                <th class="py-3 px-4 border-r border-white">KELURAHAN</th>
+                                <th class="py-3 px-4 border-r border-white">TPS</th>
+                                <th class="py-3 px-4 border-r border-white">DPT</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Sah</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Tidak Sah</th>
+                                <th class="py-3 px-4 border-r border-white">Jumlah Pengguna Tidak pilih</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Masuk</th>
+                                <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-100">
                             <tr class="border-b">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4">Samarinda</td>
-                                <td class="py-3 px-4">Samarinda Ulu</td>
-                                <td class="py-3 px-4">Jawa</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">01</td>
+                                <td class="py-3 px-4 border-r">Samarinda</td>
+                                <td class="py-3 px-4 border-r">Samarinda Ulu</td>
+                                <td class="py-3 px-4 border-r">Jawa</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">98.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">02</td>
-                                <td class="py-3 px-4">Balikpapan</td>
-                                <td class="py-3 px-4">Balikpapan Selatan</td>
-                                <td class="py-3 px-4">Sepinggan</td>
-                                <td class="py-3 px-4">TPS 03</td>
-                                <td class="py-3 px-4">285</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
+                                <td class="py-3 px-4 border-r">02</td>
+                                <td class="py-3 px-4 border-r">Balikpapan</td>
+                                <td class="py-3 px-4 border-r">Balikpapan Selatan</td>
+                                <td class="py-3 px-4 border-r">Sepinggan</td>
+                                <td class="py-3 px-4 border-r">TPS 03</td>
+                                <td class="py-3 px-4 border-r">285</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
                                
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">97.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">03</td>
-                                <td class="py-3 px-4">Kutai Kartanegara</td>
-                                <td class="py-3 px-4">Tenggarong</td>
-                                <td class="py-3 px-4">Melayu</td>
-                                <td class="py-3 px-4">TPS 05</td>
-                                <td class="py-3 px-4">310</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">03</td>
+                                <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                <td class="py-3 px-4 border-r">Tenggarong</td>
+                                <td class="py-3 px-4 border-r">Melayu</td>
+                                <td class="py-3 px-4 border-r">TPS 05</td>
+                                <td class="py-3 px-4 border-r">310</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">97.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">04</td>
-                                <td class="py-3 px-4">Bontang</td>
-                                <td class="py-3 px-4">Bontang Utara</td>
-                                <td class="py-3 px-4">Guntung</td>
-                                <td class="py-3 px-4">TPS 02</td>
-                                <td class="py-3 px-4">295</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">04</td>
+                                <td class="py-3 px-4 border-r">Bontang</td>
+                                <td class="py-3 px-4 border-r">Bontang Utara</td>
+                                <td class="py-3 px-4 border-r">Guntung</td>
+                                <td class="py-3 px-4 border-r">TPS 02</td>
+                                <td class="py-3 px-4 border-r">295</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">96.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">05</td>
-                                <td class="py-3 px-4">Berau</td>
-                                <td class="py-3 px-4">Tanjung Redeb</td>
-                                <td class="py-3 px-4">Bugis</td>
-                                <td class="py-3 px-4">TPS 04</td>
-                                <td class="py-3 px-4">280</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">05</td>
+                                <td class="py-3 px-4 border-r">Berau</td>
+                                <td class="py-3 px-4 border-r">Tanjung Redeb</td>
+                                <td class="py-3 px-4 border-r">Bugis</td>
+                                <td class="py-3 px-4 border-r">TPS 04</td>
+                                <td class="py-3 px-4 border-r">280</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">96.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">06</td>
-                                <td class="py-3 px-4">Paser</td>
-                                <td class="py-3 px-4">Tanah Grogot</td>
-                                <td class="py-3 px-4">Tanah Grogot</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">305</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">06</td>
+                                <td class="py-3 px-4 border-r">Paser</td>
+                                <td class="py-3 px-4 border-r">Tanah Grogot</td>
+                                <td class="py-3 px-4 border-r">Tanah Grogot</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">305</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">95.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">07</td>
-                                <td class="py-3 px-4">Kutai Timur</td>
-                                <td class="py-3 px-4">Sangatta Utara</td>
-                                <td class="py-3 px-4">Teluk Lingga</td>
-                                <td class="py-3 px-4">TPS 03</td>
-                                <td class="py-3 px-4">290</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">07</td>
+                                <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                <td class="py-3 px-4 border-r">Sangatta Utara</td>
+                                <td class="py-3 px-4 border-r">Teluk Lingga</td>
+                                <td class="py-3 px-4 border-r">TPS 03</td>
+                                <td class="py-3 px-4 border-r">290</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">95.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">08</td>
-                                <td class="py-3 px-4">Penajam Paser Utara</td>
-                                <td class="py-3 px-4">Penajam</td>
-                                <td class="py-3 px-4">Nipah-nipah</td>
-                                <td class="py-3 px-4">TPS 02</td>
-                                <td class="py-3 px-4">275</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">08</td>
+                                <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                <td class="py-3 px-4 border-r">Penajam</td>
+                                <td class="py-3 px-4 border-r">Nipah-nipah</td>
+                                <td class="py-3 px-4 border-r">TPS 02</td>
+                                <td class="py-3 px-4 border-r">275</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">94.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">09</td>
-                                <td class="py-3 px-4">Kutai Barat</td>
-                                <td class="py-3 px-4">Melak</td>
-                                <td class="py-3 px-4">Melak Ulu</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">270</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">09</td>
+                                <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                <td class="py-3 px-4 border-r">Melak</td>
+                                <td class="py-3 px-4 border-r">Melak Ulu</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">270</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">94.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">10</td>
-                                <td class="py-3 px-4">Mahakam Ulu</td>
-                                <td class="py-3 px-4">Long Bagun</td>
-                                <td class="py-3 px-4">Long Bagun Ilir</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">260</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">10</td>
+                                <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                <td class="py-3 px-4 border-r">Long Bagun</td>
+                                <td class="py-3 px-4 border-r">Long Bagun Ilir</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">260</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">93.8%</div>
                                 </td>
                             </tr>

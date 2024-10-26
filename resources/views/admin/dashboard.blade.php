@@ -125,7 +125,7 @@
             <div class="grid grid-cols-2 gap-8 mb-8">
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-                    <div id="map" class="p-4 relative">
+                    <a href="{{ route('rangkuman') }}"><div id="map" class="p-4 relative">
                         @include('admin.peta-kaltim.map')
                         <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
                             <p class="mb-2 font-bold">Kutai Kartanegara</p>
@@ -134,7 +134,7 @@
                                 <p>: 100%</p>
                                 <p>Total Suara 2</p>
                                 <p>: 90%</p>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="absolute bottom-2 right-2 bg-white p-2 rounded-lg shadow">
                             <div class="flex flex-col">
@@ -152,12 +152,12 @@
                 </section>
                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                    <div class="p-4">
+                    <a href="{{ route('suara') }}"><div class="p-4">
                         <div class="mb-4">
                             <canvas id="participationChart"></canvas>
                         </div>
                         <div id="legendContainer" class="bg-white p-4 rounded-lg grid grid-cols-2 gap-4"></div>
-                    </div>
+                    </div></a>
                 </section>
             </div>
 
@@ -186,34 +186,34 @@
             </div>
             <div class="container mx-auto px-4">
                 <div class="grid grid-cols-5 gap-4 mb-8">
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Samarinda
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Balikpapan
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Bontang
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Kutai Kartanegara
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Kutai Timur
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Kutai Barat
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Berau
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Paser
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Penajam Paser Utara
                     </a>
-                    <a href="{{ route('rangkuman') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                    <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
                         Mahakam Ulu
                     </a>
                 </div>

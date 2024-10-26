@@ -124,27 +124,27 @@
 
         <!-- Table SUARA (initially hidden) -->
         <div id="suaraTable" class="overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full">
+            <table class="w-full border-collapse text-center">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-2 text-left">No</th>
-                        <th class="px-4 py-2 text-left">KAB/KOTA</th>
-                        <th class="px-4 py-2 text-left">SUARA SAH</th>
-                        <th class="px-4 py-2 text-left">SUARA TDK SAH</th>
-                        <th class="px-4 py-2 text-left">JML PENG HAK PILIH</th>
-                        <th class="px-4 py-2 text-left">JML PENG TDK PILIH</th>
-                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
+                        <th class="px-4 py-2 border-r border-white">No</th>
+                        <th class="px-4 py-2 border-r border-white">KAB/KOTA</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA SAH</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA TDK SAH</th>
+                        <th class="px-4 py-2 border-r border-white">JML PENG HAK PILIH</th>
+                        <th class="px-4 py-2 border-r border-white">JML PENG TDK PILIH</th>
+                        <th class="px-4 py-2 border-r border-white">PARTISIPASI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
                     <tr class="border-b">
-                        <td class="px-4 py-2">01</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
+                        <td class="px-4 py-2 border-r">01</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>

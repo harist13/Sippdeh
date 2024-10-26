@@ -123,74 +123,74 @@
 
         <!-- Table TPS (initially visible) -->
         <div id="tpsTable" class="overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full">
+            <table class="w-full border-collapse text-center">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-2 text-left">No</th>
-                        <th class="px-4 py-2 text-left">KAB/KOTA</th>
-                        <th class="px-4 py-2 text-left">KECAMATAN</th>
-                        <th class="px-4 py-2 text-left">KELURAHAN</th>
-                        <th class="px-4 py-2 text-left">TPS</th>
-                        <th class="px-4 py-2 text-left">DPT</th>
-                        <th class="px-4 py-2 text-left">Suara Sah</th>
-                        <th class="px-4 py-2 text-left">Suara Tidak Sah</th>
-                        <th class="px-4 py-2 text-left">Jumlah Pengguna Tidak Pilih</th>
-                        <th class="px-4 py-2 text-left">Suara Masuk</th>
-                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
+                        <th class="px-4 py-2 border-r border-white">No</th>
+                        <th class="px-4 py-2 border-r border-white">KAB/KOTA</th>
+                        <th class="px-4 py-2 border-r border-white">KECAMATAN</th>
+                        <th class="px-4 py-2 border-r border-white">KELURAHAN</th>
+                        <th class="px-4 py-2 border-r border-white">TPS</th>
+                        <th class="px-4 py-2 border-r border-white">DPT</th>
+                        <th class="px-4 py-2 border-r border-white">Suara Sah</th>
+                        <th class="px-4 py-2 border-r border-white">Suara Tidak Sah</th>
+                        <th class="px-4 py-2 border-r border-white">Jumlah Pengguna Tidak Pilih</th>
+                        <th class="px-4 py-2 border-r border-white">Suara Masuk</th>
+                        <th class="px-4 py-2 border-r border-white">PARTISIPASI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
                     <tr class="border-b hover:bg-gray-200 transition-colors">
-                        <td class="px-4 py-2">01</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">Palaran</td>
-                        <td class="px-4 py-2">Bantuas</td>
-                        <td class="px-4 py-2">TPS 1</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">48,234</td>
-                        <td class="px-4 py-2">1,245</td>
-                        <td class="px-4 py-2">5,866</td>
-                        <td class="px-4 py-2">49,479</td>
-                        <td class="px-4 py-2"><span class="bg-green-400 text-white px-2 py-1 rounded">89.4%</span></td>
+                        <td class="px-4 py-2 border-r">01</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">Palaran</td>
+                        <td class="px-4 py-2 border-r">Bantuas</td>
+                        <td class="px-4 py-2 border-r">TPS 1</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">48,234</td>
+                        <td class="px-4 py-2 border-r">1,245</td>
+                        <td class="px-4 py-2 border-r">5,866</td>
+                        <td class="px-4 py-2 border-r">49,479</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-green-400 text-white px-2 py-1 rounded">89.4%</span></td>
                     </tr>
                     <tr class="border-b hover:bg-gray-200 transition-colors">
-                        <td class="px-4 py-2">02</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">Palaran</td>
-                        <td class="px-4 py-2">Bantuas</td>
-                        <td class="px-4 py-2">TPS 2</td>
-                        <td class="px-4 py-2">52,678</td>
-                        <td class="px-4 py-2">45,897</td>
-                        <td class="px-4 py-2">987</td>
-                        <td class="px-4 py-2">5,794</td>
-                        <td class="px-4 py-2">46,884</td>
-                        <td class="px-4 py-2"><span class="bg-green-400 text-white px-2 py-1 rounded">89.0%</span></td>
+                        <td class="px-4 py-2 border-r">02</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">Palaran</td>
+                        <td class="px-4 py-2 border-r">Bantuas</td>
+                        <td class="px-4 py-2 border-r">TPS 2</td>
+                        <td class="px-4 py-2 border-r">52,678</td>
+                        <td class="px-4 py-2 border-r">45,897</td>
+                        <td class="px-4 py-2 border-r">987</td>
+                        <td class="px-4 py-2 border-r">5,794</td>
+                        <td class="px-4 py-2 border-r">46,884</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-green-400 text-white px-2 py-1 rounded">89.0%</span></td>
                     </tr>
                     <tr class="border-b hover:bg-gray-200 transition-colors">
-                        <td class="px-4 py-2">03</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">Palaran</td>
-                        <td class="px-4 py-2">Rawa Makmur</td>
-                        <td class="px-4 py-2">TPS 1</td>
-                        <td class="px-4 py-2">48,923</td>
-                        <td class="px-4 py-2">42,567</td>
-                        <td class="px-4 py-2">876</td>
-                        <td class="px-4 py-2">5,480</td>
-                        <td class="px-4 py-2">43,443</td>
-                        <td class="px-4 py-2"><span class="bg-yellow-400 text-white px-2 py-1 rounded">88.8%</span></td>
+                        <td class="px-4 py-2 border-r">03</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">Palaran</td>
+                        <td class="px-4 py-2 border-r">Rawa Makmur</td>
+                        <td class="px-4 py-2 border-r">TPS 1</td>
+                        <td class="px-4 py-2 border-r">48,923</td>
+                        <td class="px-4 py-2 border-r">42,567</td>
+                        <td class="px-4 py-2 border-r">876</td>
+                        <td class="px-4 py-2 border-r">5,480</td>
+                        <td class="px-4 py-2 border-r">43,443</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-yellow-400 text-white px-2 py-1 rounded">88.8%</span></td>
                     </tr>
                     <tr class="border-b hover:bg-gray-200 transition-colors">
-                        <td class="px-4 py-2">04</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">Palaran</td>
-                        <td class="px-4 py-2">Rawa Makmur</td>
-                        <td class="px-4 py-2">TPS 2</td>
-                        <td class="px-4 py-2">51,234</td>
-                        <td class="px-4 py-2">43,987</td>
-                        <td class="px-4 py-2">965</td>
-                        <td class="px-4 py-2">6,282</td>
-                        <td class="px-4 py-2">44,952</td>
-                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">87.7%</span></td>
+                        <td class="px-4 py-2 border-r">04</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">Palaran</td>
+                        <td class="px-4 py-2 border-r">Rawa Makmur</td>
+                        <td class="px-4 py-2 border-r">TPS 2</td>
+                        <td class="px-4 py-2 border-r">51,234</td>
+                        <td class="px-4 py-2 border-r">43,987</td>
+                        <td class="px-4 py-2 border-r">965</td>
+                        <td class="px-4 py-2 border-r">6,282</td>
+                        <td class="px-4 py-2 border-r">44,952</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-red-400 text-white px-2 py-1 rounded">87.7%</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -200,39 +200,39 @@
 
         <!-- Table pilgub (initially hidden) -->
         <div id="pilgubTable" class="hidden overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full">
+            <table class="w-full border-collapse text-center">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-2 text-left">No</th>
-                        <th class="px-4 py-2 text-left">NAMA PASLON</th>
-                        <th class="px-4 py-2 text-left">CALON</th>
-                        <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
-                        <th class="px-4 py-2 text-left">TOTAL DPT</th>
-                        <th class="px-4 py-2 text-left">SUARA SAH</th>
-                        <th class="px-4 py-2 text-left">SUARA TIDAK SAH</th>
-                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
+                        <th class="px-4 py-2 border-r border-white">No</th>
+                        <th class="px-4 py-2 border-r border-white">NAMA PASLON</th>
+                        <th class="px-4 py-2 border-r border-white">CALON</th>
+                        <th class="px-4 py-2 border-r border-white">KABUPATEN/KOTA</th>
+                        <th class="px-4 py-2 border-r border-white">TOTAL DPT</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA SAH</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA TIDAK SAH</th>
+                        <th class="px-4 py-2 border-r border-white">PARTISIPASI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
                     <tr class="border-b">
-                        <td class="px-4 py-2">01</td>
-                        <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
-                        <td class="px-4 py-2">Gubernur/Wakil gubernur</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
+                        <td class="px-4 py-2 border-r">01</td>
+                        <td class="px-4 py-2 border-r">Andi Harun, Safaruddin Zuhri</td>
+                        <td class="px-4 py-2 border-r">Gubernur/Wakil gubernur</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
                     </tr>
                     <tr class="border-b">
-                        <td class="px-4 py-2">02</td>
-                        <td class="px-4 py-2">Rahmad Mas'ud, Bagus Susetyo</td>
-                        <td class="px-4 py-2">Gubernur/Wakil gubernur</td>
-                        <td class="px-4 py-2">Balikpapan</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2"><span class="bg-yellow-400 text-white px-2 py-1 rounded">60%</span></td>
+                        <td class="px-4 py-2 border-r">02</td>
+                        <td class="px-4 py-2 border-r">Rahmad Mas'ud, Bagus Susetyo</td>
+                        <td class="px-4 py-2 border-r">Gubernur/Wakil gubernur</td>
+                        <td class="px-4 py-2 border-r">Balikpapan</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-yellow-400 text-white px-2 py-1 rounded">60%</span></td>
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>
@@ -242,39 +242,39 @@
 
         <!-- Table pilkada (initially hidden) -->
         <div id="pilkadaTable" class="hidden overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full">
+            <table class="w-full border-collapse text-center">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-2 text-left">No</th>
-                        <th class="px-4 py-2 text-left">NAMA PASLON</th>
-                        <th class="px-4 py-2 text-left">CALON</th>
-                        <th class="px-4 py-2 text-left">KABUPATEN/KOTA</th>
-                        <th class="px-4 py-2 text-left">TOTAL DPT</th>
-                        <th class="px-4 py-2 text-left">SUARA SAH</th>
-                        <th class="px-4 py-2 text-left">SUARA TIDAK SAH</th>
-                        <th class="px-4 py-2 text-left">PARTISIPASI</th>
+                        <th class="px-4 py-2 border-r border-white">No</th>
+                        <th class="px-4 py-2 border-r border-white">NAMA PASLON</th>
+                        <th class="px-4 py-2 border-r border-white">CALON</th>
+                        <th class="px-4 py-2 border-r border-white">KABUPATEN/KOTA</th>
+                        <th class="px-4 py-2 border-r border-white">TOTAL DPT</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA SAH</th>
+                        <th class="px-4 py-2 border-r border-white">SUARA TIDAK SAH</th>
+                        <th class="px-4 py-2 border-r border-white">PARTISIPASI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
                     <tr class="border-b">
-                        <td class="px-4 py-2">01</td>
-                        <td class="px-4 py-2">Andi Harun, Safaruddin Zuhri</td>
-                        <td class="px-4 py-2">Walikota/Wakil walikota</td>
-                        <td class="px-4 py-2">Samarinda</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2">55,345</td>
-                        <td class="px-4 py-2"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
+                        <td class="px-4 py-2 border-r">01</td>
+                        <td class="px-4 py-2 border-r">Andi Harun, Safaruddin Zuhri</td>
+                        <td class="px-4 py-2 border-r">Walikota/Wakil walikota</td>
+                        <td class="px-4 py-2 border-r">Samarinda</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r">55,345</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-red-400 text-white px-2 py-1 rounded">30%</span></td>
                     </tr>
                     <tr class="border-b">
-                        <td class="px-4 py-2">02</td>
-                        <td class="px-4 py-2">Rahmad Mas'ud, Bagus Susetyo</td>
-                        <td class="px-4 py-2">Walikota/Wakil walikota</td>
-                        <td class="px-4 py-2">Balikpapan</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2">70,324</td>
-                        <td class="px-4 py-2"><span class="bg-yellow-400 text-white px-2 py-1 rounded">60%</span></td>
+                        <td class="px-4 py-2 border-r">02</td>
+                        <td class="px-4 py-2 border-r">Rahmad Mas'ud, Bagus Susetyo</td>
+                        <td class="px-4 py-2 border-r">Walikota/Wakil walikota</td>
+                        <td class="px-4 py-2 border-r">Balikpapan</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r">70,324</td>
+                        <td class="px-4 py-2 border-r"><span class="bg-yellow-400 text-white px-2 py-1 rounded">60%</span></td>
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>
