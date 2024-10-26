@@ -46,12 +46,12 @@
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Kelurahan</th>
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">TPS</th>
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">DPT</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 300px;">
-                                Rahmad Mas'ud/<br>Bagus Susetyo
-                            </th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 300px;">
-                                Rendi Susiswo Ismail/<br>Eddy Sunardi Darmawan
-                            </th>
+                            @foreach ($paslon as $calon)
+                                <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 300px;">
+                                    {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
+                                    {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                                </th>
+                            @endforeach
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Calon</th>
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Suara Sah</th>
                             <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Suara Tidak Sah</th>
@@ -73,8 +73,9 @@
                                 <td class="py-3 px-4">Palaran</td>
                                 <td class="py-3 px-4">{{ $t->nama }}</td>
                                 <td class="py-3 px-4">55.345</td>
-                                <td class="py-3 px-4">27.672</td>
-                                <td class="py-3 px-4">27.672</td>
+                                @foreach ($paslon as $calon)
+                                    <td class="py-3 px-4">{{ $calon->nama }}</td>
+                                @endforeach
                                 <td class="py-3 px-4">Gubernur/<br>Wakil Gubernur</td>
                                 <td class="py-3 px-4">55.345</td>
                                 <td class="py-3 px-4">55.345</td>
