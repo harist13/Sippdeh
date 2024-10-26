@@ -182,6 +182,6 @@ saveBtn.onclick = function() {
     }
 });
 </script>
-
+@livewireScripts
 </body>
 </html>

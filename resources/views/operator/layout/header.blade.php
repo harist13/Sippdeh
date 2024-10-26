@@ -112,7 +112,7 @@
             }
         }
     </style>
-    
+    @livewireStyles
 </head>
 <body class="relative flex flex-col h-full bg-gray-100">
 
