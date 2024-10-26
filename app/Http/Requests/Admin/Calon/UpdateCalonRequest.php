@@ -23,7 +23,7 @@ class UpdateCalonRequest extends FormRequest
     public function rules(): array
     {
         $id = last(explode('/', $this->path()));
-        return [
+        $rules = [
             'nama_calon' => [
                 'required',
                 'max:300',
@@ -34,8 +34,20 @@ class UpdateCalonRequest extends FormRequest
                 'max:300',
                 Rule::unique('calon', 'nama_wakil')->ignore($id)
             ],
-            'kabupaten_id_calon' => 'required|exists:kabupaten,id'
+            'posisi' => 'required|in:GUBERNUR,WALIKOTA'
         ];
+
+        $mencalonSebagai = $this->get('posisi');
+
+        if ($mencalonSebagai == 'GUBERNUR') {
+            $rules['provinsi_id_calon_baru'] = 'required|exists:provinsi,id';
+        }
+
+        if ($mencalonSebagai == 'WALIKOTA') {
+            $rules['kabupaten_id_calon_baru'] = 'required|exists:kabupaten,id';
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -48,9 +60,15 @@ class UpdateCalonRequest extends FormRequest
             'nama_calon.required' => 'Mohon isi nama calon wakil.',
             'nama_calon.unique' => 'Calon wakil tersebut sudah ada.',
             'nama_calon.max' => 'Nama calon wakil terlalu panjang, maksimal 300 karakter.',
+            
+            'posisi.required' => 'Mohon pilih posisi pencalonan.',
+            'posisi.in' => 'Posisi pencalonan tidak ditemukan.',
 
-            'kabupaten_id_calon.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
-            'kabupaten_id_calon.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
+            'provinsi_id_calon_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
+            'provinsi_id_calon_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            
+            'kabupaten_id_calon_baru.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
+            'kabupaten_id_calon_baru.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
         ];
     }
 }

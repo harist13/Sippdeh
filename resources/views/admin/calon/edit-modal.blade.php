@@ -86,7 +86,7 @@
     }
 
     function getCalonKabupatenId() {
-        return this.closest('tr').querySelector('td:nth-child(3)').dataset.id;
+        return this.closest('tr').querySelector('td:nth-child(5)').dataset.id;
     }
 
     function showEditCalonModal() {

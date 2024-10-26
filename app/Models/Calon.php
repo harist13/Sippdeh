@@ -12,7 +12,7 @@ class Calon extends Model
 
     protected $table = 'calon';
 
-    protected $fillable = ['nama', 'nama_wakil', 'kabupaten_id', 'foto'];
+    protected $fillable = ['nama', 'nama_wakil', 'posisi', 'provinsi_id', 'kabupaten_id', 'foto'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
@@ -27,6 +27,10 @@ class Calon extends Model
         }
 
         return $id;
+    }
+
+    public function provinsi(): BelongsTo {
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
 
     public function kabupaten(): BelongsTo {

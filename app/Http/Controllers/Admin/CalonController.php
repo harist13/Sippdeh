@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\Calon\StoreCalonRequest;
 use App\Http\Requests\Admin\Calon\UpdateCalonRequest;
 use App\Models\Calon;
 use App\Models\Kabupaten;
+use App\Models\Provinsi;
 use Exception;
-use Illuminate\Contracts\Filesystem\Filesystem;
 
 class CalonController extends Controller
 {
@@ -29,7 +30,9 @@ class CalonController extends Controller
      */
     public function index(Request $request)
     {
+        $provinsi = Provinsi::all();
         $kabupaten = Kabupaten::all();
+
         $calonQuery = Calon::query();
 
         if ($request->has('cari')) {
@@ -49,7 +52,7 @@ class CalonController extends Controller
 
         $calon = $calonQuery->orderByDesc('id')->paginate(10);
         
-        return view('admin.calon.index', [...compact('kabupaten', 'calon'), 'disk' => $this->disk]);
+        return view('admin.calon.index', [...compact('provinsi', 'kabupaten', 'calon'), 'disk' => $this->disk]);
     }
 
     private function redirectBack(Request $request): RedirectResponse {
@@ -72,7 +75,15 @@ class CalonController extends Controller
             $calon = new Calon();
             $calon->nama = $validated['nama_calon_baru'];
             $calon->nama_wakil = $validated['nama_calon_wakil_baru'];
-            $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
+            $calon->posisi = $validated['posisi'];
+
+            if ($calon->posisi == 'GUBERNUR') {
+                $calon->provinsi_id = $validated['provinsi_id_calon_baru'];
+            }
+
+            if ($calon->posisi == 'WALIKOTA') {
+                $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
+            }
 
             if ($request->hasFile('foto_calon_baru')) {
                 $calon->foto = $request->file('foto_calon_baru')->store(options: $this->diskName);
@@ -97,7 +108,19 @@ class CalonController extends Controller
             $calon = Calon::find($id);
             $calon->nama = $validated['nama_calon'];
             $calon->nama_wakil = $validated['nama_calon_wakil'];
-            $calon->kabupaten_id = $validated['kabupaten_id_calon'];
+            $calon->posisi = $validated['posisi'];
+
+            if ($calon->posisi == 'GUBERNUR') {
+                $calon->provinsi_id = $validated['provinsi_id_calon_baru'];
+            }
+
+            if ($calon->posisi == 'WALIKOTA') {
+                $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
+            }
+
+            if ($request->hasFile('foto_calon_baru')) {
+                $calon->foto = $request->file('foto_calon_baru')->store(options: $this->diskName);
+            }
 
             if ($request->hasFile('foto_calon')) {
                 // hapus foto lama
