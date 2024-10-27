@@ -383,7 +383,7 @@
                             </div>
 
                             <!-- Navigation Controls - Centered at bottom -->
-                            <div class="flex justify-center items-center w-full mt-6 pb-4">
+                            <div class="flex justify-center items-center w-full mt-12 pb-4">
                                 <div class="flex items-center gap-4">
                                     <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
@@ -413,7 +413,7 @@
             </div>
 
                         
-            <div class="relative overflow-hidden w-[1080px] mx-auto">
+            <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
                 <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
                     <!-- Wrapper untuk semua slide -->
                     @php
