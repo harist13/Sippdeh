@@ -38,50 +38,50 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-[#3560A0] text-white">
                         <tr>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 50px;">NO</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 50px;">
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">NO</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">
                                 <input type="checkbox" id="selectAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
                             </th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Kecamatan</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Kelurahan</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">TPS</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 100px;">DPT</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kecamatan</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kelurahan</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">TPS</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
                             @foreach ($paslon as $calon)
-                                <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 300px;">
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
                                     {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
                                     {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                                 </th>
                             @endforeach
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Calon</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Suara Sah</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Suara Tidak Sah</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 200px;">Suara Masuk</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm" style="min-width: 50px;">Partisipasi</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Calon</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Sah</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Tidak Sah</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Masuk</th>
+                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">Partisipasi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
                         @foreach ($tps as $t)
                             <tr class="border-b text-center">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">01</td>
+                                <td class="py-3 px-4 border-r">
                                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
                                 </td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">
                                     <p>Samarinda Kota</p>
                                 </td>
-                                <td class="py-3 px-4">Palaran</td>
-                                <td class="py-3 px-4">{{ $t->nama }}</td>
-                                <td class="py-3 px-4">55.345</td>
+                                <td class="py-3 px-4 border-r">Palaran</td>
+                                <td class="py-3 px-4 border-r">{{ $t->nama }}</td>
+                                <td class="py-3 px-4 border-r">55.345</td>
                                 @foreach ($paslon as $calon)
-                                    <td class="py-3 px-4">{{ $calon->nama }}</td>
+                                    <td class="py-3 px-4 border-r">{{ $calon->nama }}</td>
                                 @endforeach
-                                <td class="py-3 px-4">Gubernur/<br>Wakil Gubernur</td>
-                                <td class="py-3 px-4">55.345</td>
-                                <td class="py-3 px-4">55.345</td>
-                                <td class="py-3 px-4">55.345</td>
-                                <td class="py-3 px-4">55.345</td>
-                                <td class="py-3 px-4 text-center">
+                                <td class="py-3 px-4 border-r">Gubernur/<br>Wakil Gubernur</td>
+                                <td class="py-3 px-4 border-r">55.345</td>
+                                <td class="py-3 px-4 border-r">55.345</td>
+                                <td class="py-3 px-4 border-r">55.345</td>
+                                <td class="py-3 px-4 border-r">55.345</td>
+                                <td class="py-3 px-4 border-r text-center">
                                     <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
                                 </td>
                             </tr>
