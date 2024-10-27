@@ -468,6 +468,7 @@
     const titleElement = document.getElementById('chartTitle');
     const MAX_VALUE = 500000;
     let currentView = 0;
+    let isHovering = false; // Add hover state tracker
 
     const chartData = [
         {
@@ -549,8 +550,7 @@
                     callbacks: {
                         label: function(context) {
                             const value = context.raw;
-                            const percentage = (value / MAX_VALUE * 100).toFixed(1);
-                            return `${context.dataset.label}: ${percentage}%`;
+                            return `${context.dataset.label}: ${value.toLocaleString()} suara`;
                         }
                     }
                 },
@@ -567,12 +567,79 @@
             },
             layout: {
                 padding: { left: 10, right: 10, top: 10, bottom: 10 }
+            },
+            onHover: (event, activeElements) => {
+                const previousState = isHovering;
+                isHovering = activeElements.length > 0;
+                
+                // Only update if the hover state has changed
+                if (previousState !== isHovering) {
+                    chart.update('none'); // Update without animation
+                }
+            },
+            animation: {
+                duration: 1,
+                onComplete: function(animation) {
+                    // Don't draw percentages if hovering
+                    if (isHovering) return;
+
+                    const chartInstance = animation.chart;
+                    const ctx = chartInstance.ctx;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = 'bold 14px Arial';
+                    
+                    chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
+                        const meta = chartInstance.getDatasetMeta(datasetIndex);
+                        
+                        meta.data.forEach((bar, index) => {
+                            const data = dataset.data[index];
+                            let percentage;
+                            
+                            if (data >= MAX_VALUE) {
+                                percentage = 100;
+                            } else if (data <= 0) {
+                                percentage = 0;
+                            } else {
+                                if (currentView === 0) {
+                                    percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
+                                } else {
+                                    const totalVotes = chartData[1].data.datasets[0].data[index] + 
+                                                     chartData[1].data.datasets[1].data[index];
+                                    if (totalVotes > 0) {
+                                        percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
+                                    } else {
+                                        percentage = 0;
+                                    }
+                                }
+                            }
+                            
+                            const barWidth = bar.width;
+                            const barHeight = bar.height;
+                            const barX = bar.x;
+                            const barY = bar.y;
+                            
+                            if (barHeight > 30) {
+                                ctx.save();
+                                ctx.translate(barX, barY + barHeight/2);
+                                ctx.rotate(-Math.PI / 2);
+                                ctx.fillStyle = '#000000';
+                                
+                                const percentageText = percentage === 100 ? '100%' : 
+                                                     percentage === 0 ? '0%' : 
+                                                     `${percentage}%`;
+                                
+                                ctx.fillText(percentageText, 0, 0);
+                                ctx.restore();
+                            }
+                        });
+                    });
+                }
             }
         }
     });
 
     function updateView(direction = 'right') {
-        // Add fade out effect
         titleElement.style.opacity = '0';
         
         setTimeout(() => {
@@ -584,9 +651,9 @@
             
             titleElement.textContent = chartData[currentView].title;
             chart.data = chartData[currentView].data;
-            chart.update('active');
+            isHovering = false; // Reset hover state on view change
+            chart.update();
             
-            // Add fade in effect
             titleElement.style.opacity = '1';
         }, 300);
     }

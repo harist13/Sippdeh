@@ -1031,13 +1031,13 @@
     const titleElement = document.getElementById('chartTitle');
     const MAX_VALUE = 500000;
     let currentView = 0;
+    let isHovering = false; // Add hover state tracker
 
     const chartData = [
         {
             title: "Jumlah Angka Suara Masuk Kabupaten/Kota",
             data: {
-                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 
-                        'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
                 datasets: [
                     {
                         label: 'Suara Masuk',
@@ -1059,8 +1059,7 @@
         {
             title: "Jumlah Angka Suara Sah dan Tidak Sah Kabupaten/Kota",
             data: {
-                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 
-                        'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
                 datasets: [
                     {
                         label: 'Suara Sah',
@@ -1081,43 +1080,30 @@
         }
     ];
 
-    function getResponsiveOptions() {
-        const isMobile = window.innerWidth <= 768;
-        const isSmallMobile = window.innerWidth <= 480;
-        
-        return {
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData[0].data,
+        options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
                 x: {
                     grid: { display: false },
                     ticks: {
-                        font: { 
-                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
-                        },
-                        maxRotation: isMobile ? 45 : 0,
-                        minRotation: isMobile ? 45 : 0,
-                        autoSkip: false,
-                        padding: isSmallMobile ? 5 : (isMobile ? 8 : 10)
+                        font: { size: 12 },
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: false
                     }
                 },
                 y: {
                     beginAtZero: true,
                     max: MAX_VALUE,
                     ticks: {
-                        stepSize: isSmallMobile ? 200000 : 100000,
-                        font: { 
-                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
-                        },
+                        stepSize: 100000,
                         callback: function(value) {
-                            if (isSmallMobile && value >= 1000000) {
-                                return (value / 1000000).toFixed(1) + 'M';
-                            } else if (isSmallMobile && value >= 1000) {
-                                return (value / 1000).toFixed(0) + 'K';
-                            }
                             return value.toLocaleString();
-                        },
-                        padding: isSmallMobile ? 5 : (isMobile ? 8 : 10)
+                        }
                     },
                     grid: { color: '#E0E0E0' }
                 }
@@ -1127,49 +1113,93 @@
                     callbacks: {
                         label: function(context) {
                             const value = context.raw;
-                            const percentage = (value / MAX_VALUE * 100).toFixed(1);
-                            return `${context.dataset.label}: ${percentage}%`;
+                            return `${context.dataset.label}: ${value.toLocaleString()} suara`;
                         }
-                    },
-                    titleFont: {
-                        size: isSmallMobile ? 10 : (isMobile ? 12 : 14)
-                    },
-                    bodyFont: {
-                        size: isSmallMobile ? 9 : (isMobile ? 11 : 13)
-                    },
-                    padding: isSmallMobile ? 6 : (isMobile ? 8 : 10)
+                    }
                 },
                 legend: {
                     display: true,
                     position: 'bottom',
                     align: 'center',
                     labels: {
-                        boxWidth: isSmallMobile ? 10 : (isMobile ? 12 : 15),
-                        padding: isSmallMobile ? 8 : (isMobile ? 12 : 15),
-                        font: { 
-                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
-                        }
+                        boxWidth: 15,
+                        padding: 15,
+                        font: { size: 12 }
                     }
                 }
             },
             layout: {
-                padding: {
-                    left: isSmallMobile ? 2 : (isMobile ? 5 : 10),
-                    right: isSmallMobile ? 2 : (isMobile ? 5 : 10),
-                    top: isSmallMobile ? 2 : (isMobile ? 5 : 10),
-                    bottom: isSmallMobile ? 2 : (isMobile ? 5 : 10)
+                padding: { left: 10, right: 10, top: 10, bottom: 10 }
+            },
+            onHover: (event, activeElements) => {
+                const previousState = isHovering;
+                isHovering = activeElements.length > 0;
+                
+                // Only update if the hover state has changed
+                if (previousState !== isHovering) {
+                    chart.update('none'); // Update without animation
                 }
             },
-            barThickness: isSmallMobile ? 'flex' : undefined,
-            categoryPercentage: isSmallMobile ? 0.8 : 0.9,
-            barPercentage: isSmallMobile ? 0.9 : 0.98
-        };
-    }
+            animation: {
+                duration: 1,
+                onComplete: function(animation) {
+                    // Don't draw percentages if hovering
+                    if (isHovering) return;
 
-    let chart = new Chart(ctx, {
-        type: 'bar',
-        data: chartData[0].data,
-        options: getResponsiveOptions()
+                    const chartInstance = animation.chart;
+                    const ctx = chartInstance.ctx;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = 'bold 14px Arial';
+                    
+                    chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
+                        const meta = chartInstance.getDatasetMeta(datasetIndex);
+                        
+                        meta.data.forEach((bar, index) => {
+                            const data = dataset.data[index];
+                            let percentage;
+                            
+                            if (data >= MAX_VALUE) {
+                                percentage = 100;
+                            } else if (data <= 0) {
+                                percentage = 0;
+                            } else {
+                                if (currentView === 0) {
+                                    percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
+                                } else {
+                                    const totalVotes = chartData[1].data.datasets[0].data[index] + 
+                                                     chartData[1].data.datasets[1].data[index];
+                                    if (totalVotes > 0) {
+                                        percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
+                                    } else {
+                                        percentage = 0;
+                                    }
+                                }
+                            }
+                            
+                            const barWidth = bar.width;
+                            const barHeight = bar.height;
+                            const barX = bar.x;
+                            const barY = bar.y;
+                            
+                            if (barHeight > 30) {
+                                ctx.save();
+                                ctx.translate(barX, barY + barHeight/2);
+                                ctx.rotate(-Math.PI / 2);
+                                ctx.fillStyle = '#000000';
+                                
+                                const percentageText = percentage === 100 ? '100%' : 
+                                                     percentage === 0 ? '0%' : 
+                                                     `${percentage}%`;
+                                
+                                ctx.fillText(percentageText, 0, 0);
+                                ctx.restore();
+                            }
+                        });
+                    });
+                }
+            }
+        }
     });
 
     function updateView(direction = 'right') {
@@ -1184,22 +1214,12 @@
             
             titleElement.textContent = chartData[currentView].title;
             chart.data = chartData[currentView].data;
-            chart.options = getResponsiveOptions();
-            chart.update('active');
+            isHovering = false; // Reset hover state on view change
+            chart.update();
             
             titleElement.style.opacity = '1';
         }, 300);
     }
-
-    // Handle window resize with debounce
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            chart.options = getResponsiveOptions();
-            chart.update('active');
-        }, 250);
-    });
 
     document.getElementById('leftArrow').addEventListener('click', () => updateView('left'));
     document.getElementById('rightArrow').addEventListener('click', () => updateView('right'));
