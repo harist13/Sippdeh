@@ -20,6 +20,8 @@ class InputSuaraPilgub extends Component
         $tps = TPS::paginate(10);
         $paslon = Calon::whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah))->get();
 
+        $this->dispatch('tps-fetched');
+
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
     }
 }
