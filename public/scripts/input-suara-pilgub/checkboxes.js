@@ -7,7 +7,7 @@ const syncCheckedCheckboxes = () => {
 
 	document.querySelectorAll('.centang input[type=checkbox]')
 		.forEach(checkbox => {
-			const isChecked = isTPSPresent(checkbox.parentElement.dataset.id);
+			const isChecked = TPS.exists(checkbox.parentElement.dataset.id);
 			checkbox.checked = isChecked;
 
 			if (!isChecked) unchecksCheckAllCheckboxes();
@@ -27,12 +27,5 @@ const onCheckboxChange = event => {
 	const checkbox = event.target;
 	const tpsId = checkbox.parentElement.dataset.id;
 
-	// checkbox.checked ? addTPS({
-	// 	tps: {
-	// 		id: tpsId,
-	// 		nama: ''
-	// 	}
-	// }) : removeTPS(tpsId);
-
 	syncCheckedCheckboxes();
-}
+};

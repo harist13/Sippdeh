@@ -29,8 +29,6 @@ class InputSuaraPilgub extends Component
             ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah))
             ->get();
 
-        $this->dispatch('tps-fetched');
-
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
     }
 }
