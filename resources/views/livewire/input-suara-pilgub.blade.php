@@ -291,18 +291,26 @@
 
         const onCheckboxChange = event => {
             const checkbox = event.target;
+            const tr = checkbox.parentElement.parentElement;
             const tpsId = checkbox.parentElement.dataset.id;
             
             if (checkbox.checked) {
+                const dpt = tr.querySelector('.dpt').dataset.value;
+                // const suaraSah = tr.querySelector('.suara-sah').dataset.value;
+                const suaraTidakSah = tr.querySelector('.suara-tidak-sah').dataset.value;
+                // const jumlahPenggunaTidakPilih = tr.querySelector('.jumlah-pengguna-tidak-pilih').dataset.value;
+                // const suaraMasuk = tr.querySelector('.suara-masuk').dataset.value;
+                // const partisipasi = tr.querySelector('.partisipasi').dataset.value;
+
                 const tps = new TPS(
                     tpsId,
-                    1000,
+                    parseInt(dpt),
                     [],
-                    1000,
-                    1000,
-                    1000,
-                    1000,
-                    1000
+                    0,
+                    parseInt(suaraTidakSah),
+                    0,
+                    0,
+                    0
                 );
     
                 tps.save();
