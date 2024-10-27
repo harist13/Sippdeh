@@ -198,7 +198,7 @@
     <div id="profileModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
     <div class="relative top-20 mx-auto p-6 border w-96 shadow-lg rounded-lg bg-white">
         <div class="text-center">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Profile Information</h3>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Profile</h3>
             <form id="profileForm" class="space-y-4">
                 <div>
                     <label class="block text-gray-700 text-sm font-medium mb-1 text-left" for="username">
@@ -222,21 +222,21 @@
                     <label class="block text-gray-700 text-sm font-medium mb-1 text-left" for="password">
                         New Password
                     </label>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500" id="password" name="password" type="password" placeholder="Leave blank to keep current password">
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500" id="password" name="password" type="password" placeholder="kosongkan jika password tidak di ubah">
                 </div>
                 <div>
                     <label class="block text-gray-700 text-sm font-medium mb-1 text-left" for="password_confirmation">
                         Confirm New Password
                     </label>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500" id="password_confirmation" name="password_confirmation" type="password" placeholder="Confirm new password">
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500" id="password_confirmation" name="password_confirmation" type="password" placeholder="konfirmasi password baru">
                 </div>
             </form>
             <div class="mt-6 flex justify-between">
-                <button id="saveProfile" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    Save Changes
+                <button id="saveProfile" class="px-4 py-2 bg-[#3560a0] text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    Simpan Perubahan
                 </button>
                 <button id="closeModal" class="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Close
+                    Batalkan
                 </button>
             </div>
         </div>

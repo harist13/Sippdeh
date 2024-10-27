@@ -424,7 +424,12 @@
                             <option>Samarinda</option>
                         </select>
                     </div>
-                    <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                    <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                        </svg>
+                        <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                    </div>
                     <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
                         <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
                         Filter
@@ -618,12 +623,16 @@
                     </div>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                         <div class="flex items-center w-full sm:w-auto">
-                            <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
                             <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
                                 <option>Samarinda</option>
                             </select>
                         </div>
-                        <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                        <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                            </svg>
+                            <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="">
+                        </div>
                     <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
                         <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
                         Filter
@@ -768,13 +777,17 @@
                     Daftar 5 TPS Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-                    <div class="flex items-center w-full sm:w-auto">
-                        <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
+                    <div class="flex items-center w-full sm:w-auto"
                         <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
                             <option>Samarinda</option>
                         </select>
                     </div>
-                    <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                    <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                </svg>
+                <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+            </div>
                     <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
                         <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
                         Filter
@@ -955,18 +968,17 @@
                 </div>
             </div>
            <!-- Modal Background -->
-            <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+           <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
                 <!-- Modal Content -->
                 <div class="w-[393px] h-[409px] p-4 bg-white rounded-[30px] shadow-md relative">
-                    <!-- Close Button -->
-                    <button onclick="toggleModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                        &times;
+                    <!-- Close Button - Updated -->
+                    <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold w-8 h-8 flex items-center justify-center">
+                        ×
                     </button>
 
-                    <!-- Filter Form -->
                     <!-- Filter Header -->
                     <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-2 h-2 bg-black rounded-full"></div>
+                        
                         <span class="text-lg font-semibold">Filter</span>
                     </div>
 
