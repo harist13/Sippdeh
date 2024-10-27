@@ -8,19 +8,6 @@
 @include('operator.pilgub.filter-modal')
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-
-        selectAllCheckbox.addEventListener('change', function() {
-            rowCheckboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
-        });
-    });
-</script>
-
-<script>
     // Tutup modal saat tombol esc di tekan
     document.addEventListener('keyup', function(event) {
         if(event.key === "Escape") {
