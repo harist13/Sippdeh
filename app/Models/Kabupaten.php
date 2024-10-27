@@ -37,4 +37,8 @@ class Kabupaten extends Model
     public function kecamatan(): HasMany {
         return $this->hasMany(Kecamatan::class, 'kabupaten_id');
     }
+    
+    public function paslon(): HasMany {
+        return $this->hasMany(Calon::class, 'kabupaten_id');
+    }
 }

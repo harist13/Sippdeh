@@ -12,9 +12,15 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('nama_wakil');
-            $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('cascade');
+            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA']);
             $table->string('foto', 300)->nullable();
             $table->timestamps();
+            
+            $table->foreignId('provinsi_id')->nullable()
+                ->constrained('provinsi')->onDelete('cascade');
+            $table->foreignId('kabupaten_id')->nullable()
+                ->constrained('kabupaten')->onDelete('cascade');
+
         });
     }
 

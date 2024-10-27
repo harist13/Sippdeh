@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\KelurahanController;
 use App\Http\Controllers\Admin\TPSController;
 use App\Http\Controllers\Admin\RangkumanController;
 use App\Http\Controllers\OperatorController;
-use App\Http\Controllers\PilgubController;
+use App\Http\Controllers\Operator\PilgubController;
 use App\Http\Controllers\PilkadaController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
