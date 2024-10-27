@@ -17,8 +17,17 @@ class InputSuaraPilgub extends Component
     {
         $userWilayah = session('user_wilayah');
 
-        $tps = TPS::paginate(10);
-        $paslon = Calon::whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah))->get();
+        $tps = TPS::with(['suara', 'suaraCalon'])
+            ->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+                });
+            })
+            ->paginate(10);
+        
+        $paslon = Calon::wherePosisi('GUBERNUR')
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah))
+            ->get();
 
         $this->dispatch('tps-fetched');
 

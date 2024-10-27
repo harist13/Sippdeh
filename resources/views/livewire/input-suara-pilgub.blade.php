@@ -61,29 +61,53 @@
                         </tr>
                     </thead>
                     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
-                        @foreach ($tps as $t)
+                        @forelse ($tps as $t)
                             <tr class="border-b text-center">
-                                <td class="py-3 px-4 border nomor">{{ $t->getThreeDigitsId() }}</td>
+                                <td class="py-3 px-4 border nomor" data-id="{{ $t->id }}">
+                                    {{ $t->getThreeDigitsId() }}
+                                </td>
                                 <td class="py-3 px-4 border centang" data-id="{{ $t->id }}">
                                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
                                 </td>
-                                <td class="py-3 px-4 border kecamatan">{{ $t->kelurahan->kecamatan->nama }}</td>
-                                <td class="py-3 px-4 border kelurahan">{{ $t->kelurahan->nama }}</td>
+                                <td class="py-3 px-4 border kecamatan" data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}">
+                                    {{ $t->kelurahan->kecamatan->nama }}
+                                </td>
+                                <td class="py-3 px-4 border kelurahan" data-kelurahan-id="{{ $t->kelurahan->id }}">
+                                    {{ $t->kelurahan->nama }}
+                                </td>
                                 <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
-                                <td class="py-3 px-4 border dpt">55.345</td>
+                                <td class="py-3 px-4 border dpt" data-value="{{ $t->suara ? $t->suara->dpt : 0 }}">
+                                    {{ $t->suara ? $t->suara->dpt : 0 }}
+                                </td>
                                 @foreach ($paslon as $calon)
-                                    <td class="py-3 px-4 border paslon">55.345</td>
+                                    <td class="py-3 px-4 border paslon" data-calon-id="{{ $calon->id }}">
+                                        0
+                                    </td>
                                 @endforeach
-                                <td class="py-3 px-4 border posisi">Gubernur/<br>Wakil Gubernur</td>
-                                <td class="py-3 px-4 border suara-sah">55.345</td>
-                                <td class="py-3 px-4 border suara-tidak-sah">55.345</td>
-                                <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih">55.345</td>
-                                <td class="py-3 px-4 border suara-masuk">55.345</td>
+                                <td class="py-3 px-4 border posisi">
+                                    Gubernur/<br>Wakil Gubernur
+                                </td>
+                                <td class="py-3 px-4 border suara-sah">
+                                    0
+                                </td>
+                                <td class="py-3 px-4 border suara-tidak-sah" data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}">
+                                    {{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}
+                                </td>
+                                <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih">
+                                    0
+                                </td>
+                                <td class="py-3 px-4 border suara-masuk">
+                                    0
+                                </td>
                                 <td class="text-center py-3 px-4 border partisipasi">
                                     <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="text-center p-6" colspan="100">Belum ada TPS.</td>
+                            </tr>
+                        @endforelse
                         {{-- <tr class="border-b text-center">
                             <td class="py-3 px-4 border">02</td>
                             <td class="py-3 px-4 border">
@@ -130,70 +154,14 @@
 </div>
 
 @script
+    <script src="{{ asset('scripts/edited-tps.js') }}"></script>
+    <script src="{{ asset('scripts/checkboxes.js') }}"></script>
+    
     <script type="text/javascript">
-        const checkedTPSIds = [];
-
-        // Function to check if TPS ID exists in checked array
-        const isTPSIdPresent = tpsId => checkedTPSIds.includes(tpsId);
-
-        // Function to add TPS ID if not already present
-        const addTPSId = tpsId => {
-            if (!isTPSIdPresent(tpsId)) checkedTPSIds.push(tpsId);
-        };
-
-        // Function to remove TPS ID
-        const removeTPSId = tpsId => {
-            const index = checkedTPSIds.indexOf(tpsId);
-            if (index !== -1) checkedTPSIds.splice(index, 1);
-        };
-
-        // Checks the CheckAll
-        const checksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = true;
-        
-        // Unchecks the CheckAll
-        const unchecksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = false;
-
-        // Sync checkboxes with checked TPS IDs
-        const syncCheckedCheckboxes = () => {
-            // Checks the CheckAll first
-            checksCheckAllCheckboxes();
-            
-            document.querySelectorAll('.centang input[type=checkbox]')
-                .forEach(checkbox => {
-                    const isChecked = isTPSIdPresent(checkbox.parentElement.dataset.id);
-                    checkbox.checked = isChecked;
-                    
-                    // If is there any uncheck checkbox, uncheck the CheckAll
-                    if (!isChecked) unchecksCheckAllCheckboxes();
-                });
-        };
-
-        // Handle "Select All" checkbox change
-        function onCheckAllCheckboxesChange() {
-            const isCheckAll = this.checked;
-            document.querySelectorAll('.centang input[type=checkbox]')
-                .forEach(checkbox => {
-                    checkbox.checked = isCheckAll;
-                    checkbox.dispatchEvent(new Event('change'));
-                });
-        }
-
-        // Handle individual checkbox change
-        function onCheckboxChange(event) {
-            const checkbox = event.target;
-            const tpsId = checkbox.parentElement.dataset.id;
-
-            checkbox.checked ? addTPSId(tpsId) : removeTPSId(tpsId);
-
-            syncCheckedCheckboxes();
-        }
-
-        // Handle page changes by resetting and syncing checkboxes
         const onPageChange = () => {
             syncCheckedCheckboxes();
         };
 
-        // Attach events
         document.getElementById('checkAll')
             .addEventListener('change', onCheckAllCheckboxesChange);
 
