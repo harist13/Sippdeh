@@ -373,7 +373,7 @@
                                         @endif
                                     </div>
                                     <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                        {{ $cal->kabupaten->nama }}
+                                        {{ $cal->posisi == 'GUBERNUR' ? $cal->provinsi->nama : $cal->kabupaten->nama }}
                                     </div>
                                     <div class="bg-white rounded-b-2xl p-4 shadow">
                                         <h4 class="text-[#52526c] text-center font-bold mb-1">{{ $cal->nama }} / {{ $cal->nama_wakil }}</h4>

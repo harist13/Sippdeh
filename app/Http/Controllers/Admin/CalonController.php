@@ -111,15 +111,11 @@ class CalonController extends Controller
             $calon->posisi = $validated['posisi'];
 
             if ($calon->posisi == 'GUBERNUR') {
-                $calon->provinsi_id = $validated['provinsi_id_calon_baru'];
+                $calon->provinsi_id = $validated['provinsi_id_calon'];
             }
 
             if ($calon->posisi == 'WALIKOTA') {
-                $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
-            }
-
-            if ($request->hasFile('foto_calon_baru')) {
-                $calon->foto = $request->file('foto_calon_baru')->store(options: $this->diskName);
+                $calon->kabupaten_id = $validated['kabupaten_id_calon'];
             }
 
             if ($request->hasFile('foto_calon')) {
@@ -135,6 +131,7 @@ class CalonController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit pasangan calon.');
         } catch (Exception $exception) {
+            dd($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit pasangan calon.');
         }
     }

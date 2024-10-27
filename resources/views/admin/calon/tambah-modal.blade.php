@@ -36,7 +36,7 @@
             >
                 <option value="" selected disabled>Pilih</option>
                 <option value="GUBERNUR">Gubernur/Wakil Gubernur</option>
-                <option value="WALIKOTA">WaliKota/Wakil WaliKota</option>
+                <option value="WALIKOTA">Walikota/Wakil Walikota</option>
 			</select>
 			<span class="text-red-800">{{ $errors->first('posisi') }}</span>
 

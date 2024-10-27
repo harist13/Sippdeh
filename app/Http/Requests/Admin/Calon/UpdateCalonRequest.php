@@ -23,28 +23,28 @@ class UpdateCalonRequest extends FormRequest
     public function rules(): array
     {
         $id = last(explode('/', $this->path()));
+        $posisi = $this->get('posisi');
+
         $rules = [
             'nama_calon' => [
                 'required',
                 'max:300',
-                Rule::unique('calon', 'nama')->ignore($id)
+                Rule::unique('calon', 'nama')->ignore($id)->where('posisi', $posisi)
             ],
             'nama_calon_wakil' => [
                 'required',
                 'max:300',
-                Rule::unique('calon', 'nama_wakil')->ignore($id)
+                Rule::unique('calon', 'nama_wakil')->ignore($id)->where('posisi', $posisi)
             ],
             'posisi' => 'required|in:GUBERNUR,WALIKOTA'
         ];
 
-        $mencalonSebagai = $this->get('posisi');
-
-        if ($mencalonSebagai == 'GUBERNUR') {
-            $rules['provinsi_id_calon_baru'] = 'required|exists:provinsi,id';
+        if ($posisi == 'GUBERNUR') {
+            $rules['provinsi_id_calon'] = 'required|exists:provinsi,id';
         }
 
-        if ($mencalonSebagai == 'WALIKOTA') {
-            $rules['kabupaten_id_calon_baru'] = 'required|exists:kabupaten,id';
+        if ($posisi == 'WALIKOTA') {
+            $rules['kabupaten_id_calon'] = 'required|exists:kabupaten,id';
         }
 
         return $rules;
@@ -57,18 +57,18 @@ class UpdateCalonRequest extends FormRequest
             'nama_calon.unique' => 'Kabupaten tersebut sudah ada.',
             'nama_calon.max' => 'Nama calon terlalu panjang, maksimal 300 karakter.',
 
-            'nama_calon.required' => 'Mohon isi nama calon wakil.',
-            'nama_calon.unique' => 'Calon wakil tersebut sudah ada.',
-            'nama_calon.max' => 'Nama calon wakil terlalu panjang, maksimal 300 karakter.',
+            'nama_calon_wakil.required' => 'Mohon isi nama calon wakil.',
+            'nama_calon_wakil.unique' => 'Calon wakil tersebut sudah ada.',
+            'nama_calon_wakil.max' => 'Nama calon wakil terlalu panjang, maksimal 300 karakter.',
             
             'posisi.required' => 'Mohon pilih posisi pencalonan.',
             'posisi.in' => 'Posisi pencalonan tidak ditemukan.',
 
-            'provinsi_id_calon_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
-            'provinsi_id_calon_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'provinsi_id_calon.required' => 'Mohon pilih provinsi untuk kota tersebut.',
+            'provinsi_id_calon.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
             
-            'kabupaten_id_calon_baru.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
-            'kabupaten_id_calon_baru.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
+            'kabupaten_id_calon.required' => 'Mohon pilih kabupaten untuk kota tersebut.',
+            'kabupaten_id_calon.exists' => 'Kabupaten yang anda pilih tidak tersedia di database.',
         ];
     }
 }
