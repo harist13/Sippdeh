@@ -6,7 +6,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
 			{{-- Nama calon --}}
-			<label for="addCalonName" class="mb-3 block">Nama Calon</label>
+            <label for="addCalonName" class="mb-3 block">Nama Calon</label>
             <input
                 type="text"
                 id="addCalonName"
@@ -69,7 +69,9 @@
 			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon_baru') }}</span>
 
             {{-- Foto --}}
-            <label for="addCalonPhoto" class="my-3 mb-1 block">Foto</label>
+            <label for="addCalonPhoto" class="mt-3 mb-1 block">Foto  <span class="text-xs text-gray-500 my-2">
+                Foto (Ukuran foto harus 200X300)
+            </label>
             <input
                 type="file"
                 id="addCalonPhoto"
@@ -79,8 +81,8 @@
             >
 			<span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
 
-            <p class="text-xs text-gray-500 my-3">
-                Catatan: Pastikan gambar pasangan calon yang diunggah memiliki ukuran dimensi 300x200.
+            <p class="text-xs text-gray-500 my-2">
+                Catatan: Foto harus tidak memiliki latar belakang.
             </p>
 
             <hr class="h-1 my-3">

@@ -115,13 +115,13 @@
             <table class="min-w-full leading-normal text-sm-mobile">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             ID
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             Nama
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             Aksi
                         </th>
                     </tr>
@@ -129,9 +129,9 @@
                 <tbody class="bg-gray-100">
                     @forelse ($provinsi as $p)
                         <tr class="hover:bg-gray-200">
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile" data-id="{{ $p->id }}">{{ $p->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">{{ $p->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200  text-sm-mobile">
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $p->id }}">{{ $p->getThreeDigitsId() }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $p->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
                                     <i class="fas fa-edit"></i>
                                 </button>

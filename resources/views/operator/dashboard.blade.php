@@ -1,5 +1,131 @@
 @include('operator.layout.header')
 <style>
+    /* slide kusus diagram bar */
+    .chart-container {
+            position: relative;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        /* Navigation Buttons */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .nav-button:hover {
+            background-color: #1e40af;
+        }
+        
+        .nav-button-left {
+            left: 10px;
+        }
+        
+        .nav-button-right {
+            right: 10px;
+        }
+
+        .canvas-wrapper {
+            padding: 0 50px;
+            height: 400px;
+        }
+
+        .chart-title {
+            transition: opacity 0.3s ease;
+        }
+
+        /* slide partisipasi */
+    
+        .slide101 {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        }
+        .slide101.active {
+            display: block;
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .chart-container {
+                padding: 15px 10px;
+            }
+
+            .canvas-wrapper {
+                padding: 0 35px;
+                height: 350px;
+            }
+
+            .nav-button {
+                padding: 6px;
+            }
+
+            .nav-button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .chart-title {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-container {
+                padding: 10px 5px;
+            }
+
+            .canvas-wrapper {
+                padding: 0 25px;
+                height: 300px;
+            }
+
+            .nav-button {
+                padding: 4px;
+            }
+
+            .nav-button svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .chart-title {
+                font-size: 12px;
+                padding: 6px;
+            }
+        }
             @media (max-width: 640px) {
                 .overflow-x-auto {
                 -webkit-overflow-scrolling: touch;
@@ -67,10 +193,218 @@
 
             <!-- Chart Section -->
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                <div class="p-4 overflow-x-auto">
-                    <div class="min-w-[800px]">
-                        <canvas id="voteCountChart" height="300"></canvas>
+                <h3 id="chartTitle" class="bg-[#3560A0] text-white text-center py-2 chart-title">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
+                
+                <div class="chart-container">
+                    <button class="nav-button nav-button-left" id="leftArrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    
+                    <button class="nav-button nav-button-right" id="rightArrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    
+                    <div class="canvas-wrapper">
+                        <canvas id="voteCountChart" width="800" height="300"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="border-t border-gray-300 my-10">
+
+            <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
+                <div id="slideContainer" class="relative w-full">
+                    <div class="flex flex-col">
+                        <!-- Container untuk slides -->
+                        <div class="flex-grow">
+                            <div id="slide1" class="slide101 active">
+                                <div class="mb-6 rounded-lg">
+                                    <div class="flex items-start mb-6">
+                                        <img src="{{ asset('assets/smd.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                        <div class="flex-grow pl-10">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col items-start w-1/3">
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>> 90,00% DPT » Merah</span>
+                                            </div>
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                <span>> 80,00% DPT » Kuning</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>> 70,00% DPT » Hijau</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-1/3">
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                        </div>
+                                        <div class="text-right w-1/3">
+                                            <div class="text-4xl font-bold color text-green-400">81.40%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="slide2" class="slide101">
+                                <!-- Konten slide 2 sama seperti sebelumnya -->
+                                <div class="mb-6 rounded-lg">
+                                    <div class="flex items-start mb-6">
+                                        <img src="{{ asset('assets/bpp.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                        <div class="flex-grow pl-10">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col items-start w-1/3">
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>> 90,00% DPT » Merah</span>
+                                            </div>
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                <span>> 80,00% DPT » Kuning</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>> 70,00% DPT » Hijau</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-1/3">
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                        </div>
+                                        <div class="text-right w-1/3">
+                                            <div class="text-4xl font-bold color text-yellow-400">60.40%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="slide3" class="slide101">
+                                <!-- Konten slide 3 sama seperti sebelumnya -->
+                                <div class="mb-6 rounded-lg">
+                                    <div class="flex items-start mb-6">
+                                        <img src="{{ asset('assets/btg.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                        <div class="flex-grow pl-10">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
+                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col items-start w-1/3">
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>> 90,00% DPT » Merah</span>
+                                            </div>
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                <span>> 80,00% DPT » Kuning</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>> 70,00% DPT » Hijau</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-1/3">
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                        </div>
+                                        <div class="text-right w-1/3">
+                                            <div class="text-4xl font-bold color text-red-400">20.40%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Controls - Centered at bottom -->
+                        <div class="flex justify-center items-center w-full mt-6 pb-4">
+                            <div class="flex items-center gap-4">
+                                <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                
+                                <button id="playPauseBtn" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 pause-icon">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 play-icon hidden">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    </svg>
+                                </button>
+
+                                <button id="nextSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -80,146 +414,144 @@
             <!-- Data Table Section -->
             <div class="overflow-hidden mb-8">
             <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
-                    Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
+                <div class="text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                    Daftar 5 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                     <div class="flex items-center w-full sm:w-auto">
-                        <span class="mr-2 text-gray-600 whitespace-nowrap">Sort by</span>
+                        
                         <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
                             <option>Samarinda</option>
                         </select>
                     </div>
                     <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
-                    <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                        </svg>
+                    <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
                         Filter
                     </button>
                 </div>
             </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                         <thead class="bg-[#3560a0] text-white">
                             <tr>
-                                <th class="py-3 px-4 text-left">NO</th>
-                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
-                                <th class="py-3 px-4 text-left">SUARA SAH</th>
-                                <th class="py-3 px-4 text-left">SUARA TDK SAH</th>
-                                <th class="py-3 px-4 text-left">JML PENG HAK PILIH</th>
-                                <th class="py-3 px-4 text-left">JML PENG TDK PILIH</th>
-                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                <th class="py-3 px-4 border-r border-white">NO</th>
+                                <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                                <th class="py-3 px-4 border-r border-white">SUARA SAH</th>
+                                <th class="py-3 px-4 border-r border-white">SUARA TDK SAH</th>
+                                <th class="py-3 px-4 border-r border-white">JML PENG HAK PILIH</th>
+                                <th class="py-3 px-4 border-r border-white">JML PENG TDK PILIH</th>
+                                <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-100">
                             <tr class="border-b">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4">Samarinda</td>
-                                <td class="py-3 px-4">455.345</td>
-                                <td class="py-3 px-4">2.123</td>
-                                <td class="py-3 px-4">582.467</td>
-                                <td class="py-3 px-4">124.999</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">01</td>
+                                <td class="py-3 px-4 border-r">Samarinda</td>
+                                <td class="py-3 px-4 border-r">455.345</td>
+                                <td class="py-3 px-4 border-r">2.123</td>
+                                <td class="py-3 px-4 border-r">582.467</td>
+                                <td class="py-3 px-4 border-r">124.999</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">78.5%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">02</td>
-                                <td class="py-3 px-4">Balikpapan</td>
-                                <td class="py-3 px-4">378.912</td>
-                                <td class="py-3 px-4">1.876</td>
-                                <td class="py-3 px-4">498.234</td>
-                                <td class="py-3 px-4">117.446</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">02</td>
+                                <td class="py-3 px-4 border-r">Balikpapan</td>
+                                <td class="py-3 px-4 border-r">378.912</td>
+                                <td class="py-3 px-4 border-r">1.876</td>
+                                <td class="py-3 px-4 border-r">498.234</td>
+                                <td class="py-3 px-4 border-r">117.446</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">76.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">03</td>
-                                <td class="py-3 px-4">Kutai Kartanegara</td>
-                                <td class="py-3 px-4">412.567</td>
-                                <td class="py-3 px-4">2.345</td>
-                                <td class="py-3 px-4">543.210</td>
-                                <td class="py-3 px-4">128.298</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">03</td>
+                                <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                <td class="py-3 px-4 border-r">412.567</td>
+                                <td class="py-3 px-4 border-r">2.345</td>
+                                <td class="py-3 px-4 border-r">543.210</td>
+                                <td class="py-3 px-4 border-r">128.298</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">76.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">04</td>
-                                <td class="py-3 px-4">Bontang</td>
-                                <td class="py-3 px-4">98.765</td>
-                                <td class="py-3 px-4">543</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">33.148</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">04</td>
+                                <td class="py-3 px-4 border-r">Bontang</td>
+                                <td class="py-3 px-4 border-r">98.765</td>
+                                <td class="py-3 px-4 border-r">543</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">33.148</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">75.0%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">05</td>
-                                <td class="py-3 px-4">Berau</td>
-                                <td class="py-3 px-4">145.678</td>
-                                <td class="py-3 px-4">876</td>
-                                <td class="py-3 px-4">198.765</td>
-                                <td class="py-3 px-4">52.211</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">05</td>
+                                <td class="py-3 px-4 border-r">Berau</td>
+                                <td class="py-3 px-4 border-r">145.678</td>
+                                <td class="py-3 px-4 border-r">876</td>
+                                <td class="py-3 px-4 border-r">198.765</td>
+                                <td class="py-3 px-4 border-r">52.211</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">73.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">06</td>
-                                <td class="py-3 px-4">Paser</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">765</td>
-                                <td class="py-3 px-4">187.654</td>
-                                <td class="py-3 px-4">54.433</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">06</td>
+                                <td class="py-3 px-4 border-r">Paser</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">765</td>
+                                <td class="py-3 px-4 border-r">187.654</td>
+                                <td class="py-3 px-4 border-r">54.433</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">71.0%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">07</td>
-                                <td class="py-3 px-4">Kutai Timur</td>
-                                <td class="py-3 px-4">178.901</td>
-                                <td class="py-3 px-4">1.234</td>
-                                <td class="py-3 px-4">256.789</td>
-                                <td class="py-3 px-4">76.654</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">07</td>
+                                <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                <td class="py-3 px-4 border-r">178.901</td>
+                                <td class="py-3 px-4 border-r">1.234</td>
+                                <td class="py-3 px-4 border-r">256.789</td>
+                                <td class="py-3 px-4 border-r">76.654</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-yellow">70.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">08</td>
-                                <td class="py-3 px-4">Penajam Paser Utara</td>
-                                <td class="py-3 px-4">87.654</td>
-                                <td class="py-3 px-4">432</td>
-                                <td class="py-3 px-4">132.456</td>
-                                <td class="py-3 px-4">44.370</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">08</td>
+                                <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                <td class="py-3 px-4 border-r">87.654</td>
+                                <td class="py-3 px-4 border-r">432</td>
+                                <td class="py-3 px-4 border-r">132.456</td>
+                                <td class="py-3 px-4 border-r">44.370</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">66.5%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">09</td>
-                                <td class="py-3 px-4">Kutai Barat</td>
-                                <td class="py-3 px-4">76.543</td>
-                                <td class="py-3 px-4">321</td>
-                                <td class="py-3 px-4">121.234</td>
-                                <td class="py-3 px-4">44.370</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">09</td>
+                                <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                <td class="py-3 px-4 border-r">76.543</td>
+                                <td class="py-3 px-4 border-r">321</td>
+                                <td class="py-3 px-4 border-r">121.234</td>
+                                <td class="py-3 px-4 border-r">44.370</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">63.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">10</td>
-                                <td class="py-3 px-4">Mahakam Ulu</td>
-                                <td class="py-3 px-4">23.456</td>
-                                <td class="py-3 px-4">123</td>
-                                <td class="py-3 px-4">43.210</td>
-                                <td class="py-3 px-4">19.631</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">10</td>
+                                <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                <td class="py-3 px-4 border-r">23.456</td>
+                                <td class="py-3 px-4 border-r">123</td>
+                                <td class="py-3 px-4 border-r">43.210</td>
+                                <td class="py-3 px-4 border-r">19.631</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-red">54.6%</div>
                                 </td>
                             </tr>
@@ -281,8 +613,8 @@
             <!-- Paslon Data Table Section -->
             <div class="overflow-hidden mb-8">
                 <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
-                        Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
+                    <div class=" text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                        Daftar 5 Paslon Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                     </div>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                         <div class="flex items-center w-full sm:w-auto">
@@ -292,135 +624,133 @@
                             </select>
                         </div>
                         <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
-                        <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                            </svg>
-                            Filter
-                        </button>
+                    <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
+                        Filter
+                    </button>
                     </div>
                 </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                             <thead class="bg-[#3560a0] text-white">
                                 <tr>
-                                    <th class="py-3 px-4 text-left">NO</th>
-                                    <th class="py-3 px-4 text-left">NAMA PASLON</th>
-                                    <th class="py-3 px-4 text-left">KABUPATEN/KOTA</th>
-                                    <th class="py-3 px-4 text-left">TOTAL DPT</th>
-                                    <th class="py-3 px-4 text-left">SUARA SAH</th>
-                                    <th class="py-3 px-4 text-left">SUARA TIDAK SAH</th>
-                                    <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                    <th class="py-3 px-4 border-r border-white">NO</th>
+                                    <th class="py-3 px-4 border-r border-white">NAMA PASLON</th>
+                                    <th class="py-3 px-4 border-r border-white">KABUPATEN/KOTA</th>
+                                    <th class="py-3 px-4 border-r border-white">DPT</th>
+                                    <th class="py-3 px-4 border-r border-white">SUARA SAH</th>
+                                    <th class="py-3 px-4 border-r border-white">SUARA TIDAK SAH</th>
+                                    <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-gray-100">
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">01</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Samarinda</td>
-                                    <td class="py-3 px-4">582.467</td>
-                                    <td class="py-3 px-4">255.345</td>
-                                    <td class="py-3 px-4">2.123</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">01</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Samarinda</td>
+                                    <td class="py-3 px-4 border-r">582.467</td>
+                                    <td class="py-3 px-4 border-r">255.345</td>
+                                    <td class="py-3 px-4 border-r">2.123</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-green">78.5%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">02</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Balikpapan</td>
-                                    <td class="py-3 px-4">498.234</td>
-                                    <td class="py-3 px-4">228.912</td>
-                                    <td class="py-3 px-4">1.876</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">02</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Balikpapan</td>
+                                    <td class="py-3 px-4 border-r">498.234</td>
+                                    <td class="py-3 px-4 border-r">228.912</td>
+                                    <td class="py-3 px-4 border-r">1.876</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">76.4%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">03</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Kartanegara</td>
-                                    <td class="py-3 px-4">543.210</td>
-                                    <td class="py-3 px-4">242.567</td>
-                                    <td class="py-3 px-4">2.345</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">03</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                    <td class="py-3 px-4 border-r">543.210</td>
+                                    <td class="py-3 px-4 border-r">242.567</td>
+                                    <td class="py-3 px-4 border-r">2.345</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-green">77.2%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">04</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Bontang</td>
-                                    <td class="py-3 px-4">132.456</td>
-                                    <td class="py-3 px-4">88.765</td>
-                                    <td class="py-3 px-4">543</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">04</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Bontang</td>
+                                    <td class="py-3 px-4 border-r">132.456</td>
+                                    <td class="py-3 px-4 border-r">88.765</td>
+                                    <td class="py-3 px-4 border-r">543</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">75.0%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">05</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Berau</td>
-                                    <td class="py-3 px-4">198.765</td>
-                                    <td class="py-3 px-4">135.678</td>
-                                    <td class="py-3 px-4">876</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">05</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Berau</td>
+                                    <td class="py-3 px-4 border-r">198.765</td>
+                                    <td class="py-3 px-4 border-r">135.678</td>
+                                    <td class="py-3 px-4 border-r">876</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">73.7%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">06</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Paser</td>
-                                    <td class="py-3 px-4">187.654</td>
-                                    <td class="py-3 px-4">122.456</td>
-                                    <td class="py-3 px-4">765</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">06</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Paser</td>
+                                    <td class="py-3 px-4 border-r">187.654</td>
+                                    <td class="py-3 px-4 border-r">122.456</td>
+                                    <td class="py-3 px-4 border-r">765</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">71.0%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">07</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Timur</td>
-                                    <td class="py-3 px-4">256.789</td>
-                                    <td class="py-3 px-4">168.901</td>
-                                    <td class="py-3 px-4">1.234</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">07</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                    <td class="py-3 px-4 border-r">256.789</td>
+                                    <td class="py-3 px-4 border-r">168.901</td>
+                                    <td class="py-3 px-4 border-r">1.234</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-yellow">70.2%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">08</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Penajam Paser Utara</td>
-                                    <td class="py-3 px-4">132.456</td>
-                                    <td class="py-3 px-4">77.654</td>
-                                    <td class="py-3 px-4">432</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">08</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                    <td class="py-3 px-4 border-r">132.456</td>
+                                    <td class="py-3 px-4 border-r">77.654</td>
+                                    <td class="py-3 px-4 border-r">432</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">66.5%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">09</td>
-                                    <td class="py-3 px-4">Andi Harun / Rusmadi</td>
-                                    <td class="py-3 px-4">Kutai Barat</td>
-                                    <td class="py-3 px-4">121.234</td>
-                                    <td class="py-3 px-4">66.543</td>
-                                    <td class="py-3 px-4">321</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">09</td>
+                                    <td class="py-3 px-4 border-r">Andi Harun / Rusmadi</td>
+                                    <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                    <td class="py-3 px-4 border-r">121.234</td>
+                                    <td class="py-3 px-4 border-r">66.543</td>
+                                    <td class="py-3 px-4 border-r">321</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">63.4%</div>
                                     </td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 px-4">10</td>
-                                    <td class="py-3 px-4">Isran Noor / Hadi Mulyadi</td>
-                                    <td class="py-3 px-4">Mahakam Ulu</td>
-                                    <td class="py-3 px-4">43.210</td>
-                                    <td class="py-3 px-4">21.456</td>
-                                    <td class="py-3 px-4">123</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 border-r">10</td>
+                                    <td class="py-3 px-4 border-r">Isran Noor / Hadi Mulyadi</td>
+                                    <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                    <td class="py-3 px-4 border-r">43.210</td>
+                                    <td class="py-3 px-4 border-r">21.456</td>
+                                    <td class="py-3 px-4 border-r">123</td>
+                                    <td class="py-3 px-4 border-r">
                                         <div class="participation-button participation-red">54.6%</div>
                                     </td>
                                 </tr>
@@ -434,8 +764,8 @@
         <!-- TPS Data Table Section -->
           <div class="overflow-hidden mb-8">
             <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
-                    Daftar 10 Kab/Kota Dengan Partisipasi Tertinggi Se-Kalimantan Timur
+                <div class=" text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                    Daftar 5 TPS Dengan Partisipasi Tertinggi Se-Kalimantan Timur
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                     <div class="flex items-center w-full sm:w-auto">
@@ -445,135 +775,178 @@
                         </select>
                     </div>
                     <input type="text" placeholder="Search" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
-                    <button class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                        </svg>
+                    <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
                         Filter
                     </button>
                 </div>
             </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
                         <thead class="bg-[#3560a0] text-white">
                             <tr>
-                                <th class="py-3 px-4 text-left">NO</th>
-                                <th class="py-3 px-4 text-left">KAB/KOTA</th>
-                                <th class="py-3 px-4 text-left">KECAMATAN</th>
-                                <th class="py-3 px-4 text-left">KELURAHAN</th>
-                                <th class="py-3 px-4 text-left">TPS</th>
-                                <th class="py-3 px-4 text-left">DPT</th>
-                                <th class="py-3 px-4 text-left">PARTISIPASI</th>
+                                <th class="py-3 px-4 border-r border-white">NO</th>
+                                <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                                <th class="py-3 px-4 border-r border-white">KECAMATAN</th>
+                                <th class="py-3 px-4 border-r border-white">KELURAHAN</th>
+                                <th class="py-3 px-4 border-r border-white">TPS</th>
+                                <th class="py-3 px-4 border-r border-white">DPT</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Sah</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Tidak Sah</th>
+                                <th class="py-3 px-4 border-r border-white">Jumlah Pengguna Tidak pilih</th>
+                                <th class="py-3 px-4 border-r border-white">Suara Masuk</th>
+                                <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-100">
                             <tr class="border-b">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4">Samarinda</td>
-                                <td class="py-3 px-4">Samarinda Ulu</td>
-                                <td class="py-3 px-4">Jawa</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">300</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">01</td>
+                                <td class="py-3 px-4 border-r">Samarinda</td>
+                                <td class="py-3 px-4 border-r">Samarinda Ulu</td>
+                                <td class="py-3 px-4 border-r">Jawa</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">98.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">02</td>
-                                <td class="py-3 px-4">Balikpapan</td>
-                                <td class="py-3 px-4">Balikpapan Selatan</td>
-                                <td class="py-3 px-4">Sepinggan</td>
-                                <td class="py-3 px-4">TPS 03</td>
-                                <td class="py-3 px-4">285</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">02</td>
+                                <td class="py-3 px-4 border-r">Balikpapan</td>
+                                <td class="py-3 px-4 border-r">Balikpapan Selatan</td>
+                                <td class="py-3 px-4 border-r">Sepinggan</td>
+                                <td class="py-3 px-4 border-r">TPS 03</td>
+                                <td class="py-3 px-4 border-r">285</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                               
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">97.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">03</td>
-                                <td class="py-3 px-4">Kutai Kartanegara</td>
-                                <td class="py-3 px-4">Tenggarong</td>
-                                <td class="py-3 px-4">Melayu</td>
-                                <td class="py-3 px-4">TPS 05</td>
-                                <td class="py-3 px-4">310</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">03</td>
+                                <td class="py-3 px-4 border-r">Kutai Kartanegara</td>
+                                <td class="py-3 px-4 border-r">Tenggarong</td>
+                                <td class="py-3 px-4 border-r">Melayu</td>
+                                <td class="py-3 px-4 border-r">TPS 05</td>
+                                <td class="py-3 px-4 border-r">310</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">97.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">04</td>
-                                <td class="py-3 px-4">Bontang</td>
-                                <td class="py-3 px-4">Bontang Utara</td>
-                                <td class="py-3 px-4">Guntung</td>
-                                <td class="py-3 px-4">TPS 02</td>
-                                <td class="py-3 px-4">295</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">04</td>
+                                <td class="py-3 px-4 border-r">Bontang</td>
+                                <td class="py-3 px-4 border-r">Bontang Utara</td>
+                                <td class="py-3 px-4 border-r">Guntung</td>
+                                <td class="py-3 px-4 border-r">TPS 02</td>
+                                <td class="py-3 px-4 border-r">295</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">96.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">05</td>
-                                <td class="py-3 px-4">Berau</td>
-                                <td class="py-3 px-4">Tanjung Redeb</td>
-                                <td class="py-3 px-4">Bugis</td>
-                                <td class="py-3 px-4">TPS 04</td>
-                                <td class="py-3 px-4">280</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">05</td>
+                                <td class="py-3 px-4 border-r">Berau</td>
+                                <td class="py-3 px-4 border-r">Tanjung Redeb</td>
+                                <td class="py-3 px-4 border-r">Bugis</td>
+                                <td class="py-3 px-4 border-r">TPS 04</td>
+                                <td class="py-3 px-4 border-r">280</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">96.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">06</td>
-                                <td class="py-3 px-4">Paser</td>
-                                <td class="py-3 px-4">Tanah Grogot</td>
-                                <td class="py-3 px-4">Tanah Grogot</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">305</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">06</td>
+                                <td class="py-3 px-4 border-r">Paser</td>
+                                <td class="py-3 px-4 border-r">Tanah Grogot</td>
+                                <td class="py-3 px-4 border-r">Tanah Grogot</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">305</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">95.7%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">07</td>
-                                <td class="py-3 px-4">Kutai Timur</td>
-                                <td class="py-3 px-4">Sangatta Utara</td>
-                                <td class="py-3 px-4">Teluk Lingga</td>
-                                <td class="py-3 px-4">TPS 03</td>
-                                <td class="py-3 px-4">290</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">07</td>
+                                <td class="py-3 px-4 border-r">Kutai Timur</td>
+                                <td class="py-3 px-4 border-r">Sangatta Utara</td>
+                                <td class="py-3 px-4 border-r">Teluk Lingga</td>
+                                <td class="py-3 px-4 border-r">TPS 03</td>
+                                <td class="py-3 px-4 border-r">290</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">95.2%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">08</td>
-                                <td class="py-3 px-4">Penajam Paser Utara</td>
-                                <td class="py-3 px-4">Penajam</td>
-                                <td class="py-3 px-4">Nipah-nipah</td>
-                                <td class="py-3 px-4">TPS 02</td>
-                                <td class="py-3 px-4">275</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">08</td>
+                                <td class="py-3 px-4 border-r">Penajam Paser Utara</td>
+                                <td class="py-3 px-4 border-r">Penajam</td>
+                                <td class="py-3 px-4 border-r">Nipah-nipah</td>
+                                <td class="py-3 px-4 border-r">TPS 02</td>
+                                <td class="py-3 px-4 border-r">275</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">94.9%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">09</td>
-                                <td class="py-3 px-4">Kutai Barat</td>
-                                <td class="py-3 px-4">Melak</td>
-                                <td class="py-3 px-4">Melak Ulu</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">270</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">09</td>
+                                <td class="py-3 px-4 border-r">Kutai Barat</td>
+                                <td class="py-3 px-4 border-r">Melak</td>
+                                <td class="py-3 px-4 border-r">Melak Ulu</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">270</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">94.4%</div>
                                 </td>
                             </tr>
                             <tr class="border-b">
-                                <td class="py-3 px-4">10</td>
-                                <td class="py-3 px-4">Mahakam Ulu</td>
-                                <td class="py-3 px-4">Long Bagun</td>
-                                <td class="py-3 px-4">Long Bagun Ilir</td>
-                                <td class="py-3 px-4">TPS 01</td>
-                                <td class="py-3 px-4">260</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 border-r">10</td>
+                                <td class="py-3 px-4 border-r">Mahakam Ulu</td>
+                                <td class="py-3 px-4 border-r">Long Bagun</td>
+                                <td class="py-3 px-4 border-r">Long Bagun Ilir</td>
+                                <td class="py-3 px-4 border-r">TPS 01</td>
+                                <td class="py-3 px-4 border-r">260</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">300</td>
+                                <td class="py-3 px-4 border-r">
                                     <div class="participation-button participation-green">93.8%</div>
                                 </td>
                             </tr>
@@ -581,20 +954,78 @@
                     </table>
                 </div>
             </div>
+           <!-- Modal Background -->
+            <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <!-- Modal Content -->
+                <div class="w-[393px] h-[409px] p-4 bg-white rounded-[30px] shadow-md relative">
+                    <!-- Close Button -->
+                    <button onclick="toggleModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                        &times;
+                    </button>
+
+                    <!-- Filter Form -->
+                    <!-- Filter Header -->
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-2 h-2 bg-black rounded-full"></div>
+                        <span class="text-lg font-semibold">Filter</span>
+                    </div>
+
+                    <!-- Jumlah Data Section -->
+                    <div class="mb-6">
+                        <p class="text-sm font-semibold mb-2">Jumlah Data</p>
+                        <div class="flex space-x-2">
+                            <button class="w-20 h-9 bg-[#3560a0] text-white font-semibold rounded-lg border border-[#c9c9c9]">10</button>
+                            <button class="w-20 h-9 bg-white text-[#d5d5d5] font-semibold rounded-lg border border-[#c9c9c9]">20</button>
+                            <button class="w-20 h-9 bg-white text-[#d5d5d5] font-semibold rounded-lg border border-[#c9c9c9]">50</button>
+                            <button class="w-20 h-9 bg-white text-[#d5d5d5] font-semibold rounded-lg border border-[#c9c9c9]">100</button>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Section -->
+                    <div class="mb-6">
+                        <p class="text-sm font-semibold mb-2">Kolom</p>
+                        <div class="flex space-x-2">
+                            <button class="w-28 h-9 bg-[#3560a0] text-white font-semibold rounded-lg border border-[#c9c9c9]">Kecamatan</button>
+                            <button class="w-28 h-9 bg-[#3560a0] text-white font-semibold rounded-lg border border-[#c9c9c9]">Kelurahan</button>
+                        </div>
+                    </div>
+
+                    <!-- Tingkat Partisipasi Section -->
+                    <div class="mb-8">
+                        <p class="text-sm font-semibold mb-2">Tingkat Partisipasi</p>
+                        <div class="flex space-x-2">
+                            <button class="w-20 h-9 bg-[#3560a0] text-[#69d788] font-semibold rounded-lg border border-[#c9c9c9]">Hijau</button>
+                            <button class="w-20 h-9 bg-white text-[#ffe608] font-semibold rounded-lg border border-[#c9c9c9]">Kuning</button>
+                            <button class="w-20 h-9 bg-white text-[#fe756c] font-semibold rounded-lg border border-[#c9c9c9]">Merah</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between">
+                        <button class="w-[177px] py-2 bg-[#3560a0] text-white text-lg font-semibold rounded-full">Reset</button>
+                        <button class="w-[177px] py-2 bg-[#3560a0] text-white text-lg font-semibold rounded-full">Simpan</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
 @include('operator.layout.footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('voteCountChart').getContext('2d');
-    
-    function createChart(isMobile) {
-        return new Chart(ctx, {
-            type: 'bar',
+    const titleElement = document.getElementById('chartTitle');
+    const MAX_VALUE = 500000;
+    let currentView = 0;
+
+    const chartData = [
+        {
+            title: "Jumlah Angka Suara Masuk Kabupaten/Kota",
             data: {
-                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 
+                        'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
                 datasets: [
                     {
                         label: 'Suara Masuk',
@@ -611,85 +1042,158 @@ document.addEventListener('DOMContentLoaded', function() {
                         categoryPercentage: 0.5,
                     }
                 ]
+            }
+        },
+        {
+            title: "Jumlah Angka Suara Sah dan Tidak Sah Kabupaten/Kota",
+            data: {
+                labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 
+                        'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                datasets: [
+                    {
+                        label: 'Suara Sah',
+                        data: [125000, 200567, 120000, 132000, 105000, 150000, 143000, 200000, 150000, 120000],
+                        backgroundColor: '#B3E3C1',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    },
+                    {
+                        label: 'Suara Tidak Sah',
+                        data: [33000, 56300, 12472, 13392, 7213, 26394, 20091, 45086, 17015, 8826],
+                        backgroundColor: '#CC6F85',
+                        barPercentage: 0.98,
+                        categoryPercentage: 0.5,
+                    }
+                ]
+            }
+        }
+    ];
+
+    function getResponsiveOptions() {
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        font: { 
+                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
+                        },
+                        maxRotation: isMobile ? 45 : 0,
+                        minRotation: isMobile ? 45 : 0,
+                        autoSkip: false,
+                        padding: isSmallMobile ? 5 : (isMobile ? 8 : 10)
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: MAX_VALUE,
+                    ticks: {
+                        stepSize: isSmallMobile ? 200000 : 100000,
+                        font: { 
+                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
+                        },
+                        callback: function(value) {
+                            if (isSmallMobile && value >= 1000000) {
+                                return (value / 1000000).toFixed(1) + 'M';
+                            } else if (isSmallMobile && value >= 1000) {
+                                return (value / 1000).toFixed(0) + 'K';
+                            }
+                            return value.toLocaleString();
+                        },
+                        padding: isSmallMobile ? 5 : (isMobile ? 8 : 10)
+                    },
+                    grid: { color: '#E0E0E0' }
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: isMobile ? 8 : 12
-                            },
-                            maxRotation: isMobile ? 0 : 0,
-                            minRotation: isMobile ? 0 : 0,
-                            autoSkip: false
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = (value / MAX_VALUE * 100).toFixed(1);
+                            return `${context.dataset.label}: ${percentage}%`;
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        max: 500000,
-                        ticks: {
-                            stepSize: 100000,
-                            callback: function(value) {
-                                return value.toLocaleString();
-                            }
-                        },
-                        grid: {
-                            color: '#E0E0E0'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        align: 'center',
-                        labels: {
-                            boxWidth: 15,
-                            padding: isMobile ? 10 : 15,
-                            font: {
-                                size: isMobile ? 10 : 12
-                            }
-                        }
+                    titleFont: {
+                        size: isSmallMobile ? 10 : (isMobile ? 12 : 14)
                     },
-                    title: {
-                        display: false
-                    }
+                    bodyFont: {
+                        size: isSmallMobile ? 9 : (isMobile ? 11 : 13)
+                    },
+                    padding: isSmallMobile ? 6 : (isMobile ? 8 : 10)
                 },
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 10,
-                        top: 10
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    align: 'center',
+                    labels: {
+                        boxWidth: isSmallMobile ? 10 : (isMobile ? 12 : 15),
+                        padding: isSmallMobile ? 8 : (isMobile ? 12 : 15),
+                        font: { 
+                            size: isSmallMobile ? 8 : (isMobile ? 10 : 12)
+                        }
                     }
                 }
-            }
-        });
+            },
+            layout: {
+                padding: {
+                    left: isSmallMobile ? 2 : (isMobile ? 5 : 10),
+                    right: isSmallMobile ? 2 : (isMobile ? 5 : 10),
+                    top: isSmallMobile ? 2 : (isMobile ? 5 : 10),
+                    bottom: isSmallMobile ? 2 : (isMobile ? 5 : 10)
+                }
+            },
+            barThickness: isSmallMobile ? 'flex' : undefined,
+            categoryPercentage: isSmallMobile ? 0.8 : 0.9,
+            barPercentage: isSmallMobile ? 0.9 : 0.98
+        };
     }
 
-    let chart;
-    let isMobile = window.innerWidth < 768;
-
-    function updateChart() {
-        if (chart) {
-            chart.destroy();
-        }
-        chart = createChart(isMobile);
-    }
-
-    updateChart();
-
-    window.addEventListener('resize', function() {
-        let newIsMobile = window.innerWidth < 768;
-        if (newIsMobile !== isMobile) {
-            isMobile = newIsMobile;
-            updateChart();
-        }
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData[0].data,
+        options: getResponsiveOptions()
     });
+
+    function updateView(direction = 'right') {
+        titleElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            if (direction === 'right') {
+                currentView = (currentView + 1) % chartData.length;
+            } else {
+                currentView = (currentView - 1 + chartData.length) % chartData.length;
+            }
+            
+            titleElement.textContent = chartData[currentView].title;
+            chart.data = chartData[currentView].data;
+            chart.options = getResponsiveOptions();
+            chart.update('active');
+            
+            titleElement.style.opacity = '1';
+        }, 300);
+    }
+
+    // Handle window resize with debounce
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            chart.options = getResponsiveOptions();
+            chart.update('active');
+        }, 250);
+    });
+
+    document.getElementById('leftArrow').addEventListener('click', () => updateView('left'));
+    document.getElementById('rightArrow').addEventListener('click', () => updateView('right'));
+
+    // Initial setup
+    updateView();
 });
 
 
@@ -850,5 +1354,151 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+//buat animasi sama slide di logo logo
+ document.addEventListener('DOMContentLoaded', function() {
+    const slideContainer = document.getElementById('slideContainer');
+    const slides = document.querySelectorAll('.slide101');
+    const prevBtn = document.getElementById('prevSlide101');
+    const nextBtn = document.getElementById('nextSlide101');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+    const playIcon = playPauseBtn.querySelector('.play-icon');
+    
+    let currentSlide = 0;
+    let isPlaying = true;
+    let slideInterval = null;
+
+    // Hide all slides except the first one
+    function hideAllSlides() {
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.classList.add('fade-out');
+        });
+    }
+
+    // Show specific slide
+    function showSlide(index) {
+        hideAllSlides();
+        slides[index].classList.remove('fade-out');
+        slides[index].classList.add('active', 'fade-in');
+    }
+
+    // Next slide function
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Previous slide function
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Start auto-sliding
+    function startSlideShow() {
+        if (slideInterval) clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Toggle play/pause
+    function togglePlayPause() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            startSlideShow();
+            pauseIcon.classList.remove('hidden');
+            playIcon.classList.add('hidden');
+        } else {
+            clearInterval(slideInterval);
+            pauseIcon.classList.add('hidden');
+            playIcon.classList.remove('hidden');
+        }
+    }
+
+    // Initialize slider
+    hideAllSlides();
+    showSlide(0);
+    startSlideShow();
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        if (isPlaying) {
+            startSlideShow(); // Reset interval after manual navigation
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        if (isPlaying) {
+            startSlideShow(); // Reset interval after manual navigation
+        }
+    });
+
+    playPauseBtn.addEventListener('click', togglePlayPause);
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            if (isPlaying) startSlideShow();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            if (isPlaying) startSlideShow();
+        } else if (e.key === ' ') {
+            // Space bar to toggle play/pause
+            e.preventDefault(); // Prevent page scrolling
+            togglePlayPause();
+        }
+    });
+
+    // Add swipe support for touch devices
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slideContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slideContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const difference = touchStartX - touchEndX;
+
+        if (Math.abs(difference) > swipeThreshold) {
+            if (difference > 0) {
+                // Swipe left
+                nextSlide();
+            } else {
+                // Swipe right
+                prevSlide();
+            }
+            if (isPlaying) startSlideShow();
+        }
+    }
+
+    // Pause on hover (optional)
+    slideContainer.addEventListener('mouseenter', () => {
+        if (isPlaying) {
+            clearInterval(slideInterval);
+        }
+    });
+
+    slideContainer.addEventListener('mouseleave', () => {
+        if (isPlaying) {
+            startSlideShow();
+        }
+    });
+});
+
+
+function toggleModal() {
+        const modal = document.getElementById('filterModal');
+        modal.classList.toggle('hidden');
+}
     
 </script>

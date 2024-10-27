@@ -109,19 +109,19 @@
             <table class="min-w-full leading-normal text-sm-mobile">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nama</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Kecamatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">ID</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Nama</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Kecamatan</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-100">
                     @forelse ($kelurahan as $kel)
                         <tr class="hover:bg-gray-200">
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">{{ $kel->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kel->id }}" data-nama="{{ $kel->nama }}">{{ $kel->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $kel->kecamatan->id }}">{{ $kel->kecamatan->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kel->getThreeDigitsId() }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kel->id }}" data-nama="{{ $kel->nama }}">{{ $kel->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kel->kecamatan->id }}">{{ $kel->kecamatan->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 <button class="text-[#3560A0] hover:text-blue-900 edit-kelurahan-btn"><i class="fas fa-edit"></i></button>
                                 <button class="text-red-600 hover:text-red-900 ml-3 hapus-kelurahan-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
