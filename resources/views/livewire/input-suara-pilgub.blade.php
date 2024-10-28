@@ -168,101 +168,116 @@
         }
 
         class TPS {
-            constructor(id, dpt, paslonList, suara_sah, suara_tidak_sah, jumlah_pengguna_tidak_pilih, suara_masuk, partisipasi) {
+            constructor(id, suaraTidakSah) {
                 this.id = id;
-                this.dpt = dpt;
-                this.paslonList = paslonList;
-                this.suara_sah = suara_sah;
-                this.suara_tidak_sah = suara_tidak_sah;
-                this.jumlah_pengguna_tidak_pilih = jumlah_pengguna_tidak_pilih;
-                this.suara_masuk = suara_masuk;
-                this.partisipasi = partisipasi;
+                this.paslonList = [];
+                this.suaraTidakSah = suaraTidakSah;
             }
 
-        addPaslon(paslon) {
-            this.paslonList.push(paslon);
-        }
+            addPaslon(paslon) {
+                this.paslonList.push(paslon);
+            }
 
-        // Convert TPS instance to plain object for saving in localStorage
-        toObject() {
-            return {
-                id: this.id,
-                dpt: this.dpt,
-                paslonList: this.paslonList.map(p => p instanceof Paslon ? p.toObject() : p), // Convert each Paslon to object
-                suara_sah: this.suara_sah,
-                suara_tidak_sah: this.suara_tidak_sah,
-                jumlah_pengguna_tidak_pilih: this.jumlah_pengguna_tidak_pilih,
-                suara_masuk: this.suara_masuk,
-                partisipasi: this.partisipasi
-            };
-        }
+            get dpt() {
+                return 0;
+            }
 
-        // Static method to retrieve all TPS data from localStorage
-        static getAllTPS() {
-            try {
-            const data = JSON.parse(localStorage.getItem('tps_data')) || [];
-            return Array.isArray(data) ? data.map(item => TPS.fromObject(item)) : [];
-            } catch {
-            return [];
+            get suaraSah() {
+                return 0;
+            }
+
+            get jumlahPenggunaTidakPilih() {
+                return 0;
+            }
+
+            get suaraMasuk() {
+                return 0;
+            }
+
+            get partisipasi() {
+                return 0;
+            }
+
+            // Convert TPS instance to plain object for saving in localStorage
+            toObject() {
+                return {
+                    id: this.id,
+                    dpt: this.dpt,
+                    paslonList: this.paslonList.map(p => p instanceof Paslon ? p.toObject() : p), // Convert each Paslon to object
+                    suara_sah: this.suaraSah,
+                    suara_tidak_sah: this.suaraTidakSah,
+                    jumlah_pengguna_tidak_pilih: this.jumlahPenggunaTidakPilih,
+                    suara_masuk: this.suaraMasuk,
+                    partisipasi: this.partisipasi
+                };
+            }
+
+            // Static method to retrieve all TPS data from localStorage
+            static getAllTPS() {
+                try {
+                    const data = JSON.parse(localStorage.getItem('tps_data')) || [];
+                    return Array.isArray(data) ? data.map(item => TPS.fromObject(item)) : [];
+                } catch {
+                    return [];
+                }
+            }
+
+            // Method to save the current TPS instance to localStorage
+            save() {
+                if (TPS.exists(this.id)) {
+                    return;
+                }
+                
+                const data = TPS.getAllTPS();
+                data.push(this);
+                localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
+            }
+
+            // Static method to create a TPS instance from plain object
+            static fromObject(obj) {
+                return new TPS(
+                    obj.id,
+                    obj.dpt,
+                    obj.paslonList,
+                    obj.suara_sah,
+                    obj.suara_tidak_sah,
+                    obj.jumlah_pengguna_tidak_pilih,
+                    obj.suara_masuk,
+                    obj.partisipasi
+                );
+            }
+
+            // Static method to update an existing TPS by `id`
+            static update(id, updatedData) {
+                const data = TPS.getAllTPS();
+                const index = data.findIndex(item => item.id === id);
+
+                if (index !== -1) {
+                    Object.assign(data[index], updatedData);
+                    localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
+                } else {
+                    console.error(`TPS dengan id ${id} tidak ditemukan.`);
+                }
+            }
+
+            // Static method to delete a TPS by `id`
+            static delete(id) {
+                const data = TPS.getAllTPS();
+                const updatedData = data.filter(item => item.id !== id);
+                localStorage.setItem('tps_data', JSON.stringify(updatedData.map(tps => tps.toObject())));
+            }
+
+            // Static method to retrieve a TPS by `id`
+            static getById(id) {
+                const data = TPS.getAllTPS();
+                return data.find(item => item.id === id) || null;
+            }
+
+            // Static method to check if a TPS with the given `id` exists
+            static exists(id) {
+                return TPS.getAllTPS().some(item => item.id === id);
             }
         }
-
-        // Method to save the current TPS instance to localStorage
-        save() {
-            if (TPS.exists(this.id)) {
-            return;
-            }
-            
-            const data = TPS.getAllTPS();
-            data.push(this);
-            localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
-        }
-
-        // Static method to create a TPS instance from plain object
-        static fromObject(obj) {
-            return new TPS(
-            obj.id,
-            obj.dpt,
-            obj.paslonList,
-            obj.suara_sah,
-            obj.suara_tidak_sah,
-            obj.jumlah_pengguna_tidak_pilih,
-            obj.suara_masuk,
-            obj.partisipasi
-            );
-        }
-
-        // Static method to update an existing TPS by `id`
-        static update(id, updatedData) {
-            const data = TPS.getAllTPS();
-            const index = data.findIndex(item => item.id === id);
-
-            if (index !== -1) {
-            Object.assign(data[index], updatedData);
-            localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
-            } else {
-            console.error("TPS with specified ID not found");
-            }
-        }
-
-        // Static method to delete a TPS by `id`
-        static delete(id) {
-            const data = TPS.getAllTPS();
-            const updatedData = data.filter(item => item.id !== id);
-            localStorage.setItem('tps_data', JSON.stringify(updatedData.map(tps => tps.toObject())));
-        }
-
-        // Static method to retrieve a TPS by `id`
-        static getById(id) {
-            const data = TPS.getAllTPS();
-            return data.find(item => item.id === id) || null;
-        }
-
-        // Static method to check if a TPS with the given `id` exists
-        static exists(id) {
-            return TPS.getAllTPS().some(item => item.id === id);
-        }
-    }
 
         const checksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = true;
 
@@ -289,31 +304,20 @@
                 });
         }
 
+        const addTPS = (id, suaraTidakSah) => {
+            const tps = new TPS(id, parseInt(suaraTidakSah));
+            tps.save();
+        };
+
         const onCheckboxChange = event => {
             const checkbox = event.target;
-            const tr = checkbox.parentElement.parentElement;
             const tpsId = checkbox.parentElement.dataset.id;
             
             if (checkbox.checked) {
-                const dpt = tr.querySelector('.dpt').dataset.value;
-                // const suaraSah = tr.querySelector('.suara-sah').dataset.value;
+                const tr = checkbox.parentElement.parentElement;
                 const suaraTidakSah = tr.querySelector('.suara-tidak-sah').dataset.value;
-                // const jumlahPenggunaTidakPilih = tr.querySelector('.jumlah-pengguna-tidak-pilih').dataset.value;
-                // const suaraMasuk = tr.querySelector('.suara-masuk').dataset.value;
-                // const partisipasi = tr.querySelector('.partisipasi').dataset.value;
 
-                const tps = new TPS(
-                    tpsId,
-                    parseInt(dpt),
-                    [],
-                    0,
-                    parseInt(suaraTidakSah),
-                    0,
-                    0,
-                    0
-                );
-    
-                tps.save();
+                addTPS(tpsId, suaraTidakSah);
             } else {
                 TPS.delete(tpsId);
             }
@@ -324,6 +328,8 @@
         const onPageChange = () => {
             syncCheckedCheckboxes();
         };
+
+        syncCheckedCheckboxes();
 
         document.getElementById('checkAll')
             .addEventListener('change', onCheckAllCheckboxesChange);
