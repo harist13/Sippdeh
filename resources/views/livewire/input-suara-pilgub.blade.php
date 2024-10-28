@@ -109,42 +109,6 @@
                                 <td class="text-center p-6" colspan="100">Belum ada TPS.</td>
                             </tr>
                         @endforelse
-                        {{-- <tr class="border-b text-center">
-                            <td class="py-3 px-4 border">02</td>
-                            <td class="py-3 px-4 border">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
-                            </td>
-                            <td class="py-3 px-4 border">
-                                <p>Samarinda Kota</p>
-                            </td>
-                            <td class="py-3 px-4 border">Palaran</td>
-                            <td class="py-3 px-4 border">2370750016-TPS 016</td>
-                            <td class="py-3 px-4 border">
-                                <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none">
-                            </td>
-                            <td class="py-3 px-4 border">
-                                <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none">
-                            </td>
-                            <td class="py-3 px-4 border">
-                                <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none">
-                            </td>
-                            <td class="py-3 px-4 border">Gubernur/<br>Wakil Gubernur</td>
-                            <td class="py-3 px-4 border">
-                                123
-                            </td>
-                            <td class="py-3 px-4 border">
-                                <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none">
-                            </td>
-                            <td class="py-3 px-4 border">
-                                123
-                            </td>
-                            <td class="py-3 px-4 border">
-                                123
-                            </td>
-                            <td class="py-3 px-4 border text-center">
-                                <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
-                            </td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>
