@@ -169,23 +169,23 @@
             }
 
             get dpt() {
-                return 0;
+                return this.suaraTidakSah;
             }
 
             get suaraSah() {
-                return 0;
+                return this.suaraTidakSah;
             }
 
             get jumlahPenggunaTidakPilih() {
-                return 0;
+                return this.suaraTidakSah;
             }
 
             get suaraMasuk() {
-                return 0;
+                return this.suaraTidakSah;
             }
 
             get partisipasi() {
-                return 0;
+                return this.suaraTidakSah;
             }
 
             // Convert TPS instance to plain object for saving in localStorage
@@ -200,6 +200,14 @@
                     suara_masuk: this.suaraMasuk,
                     partisipasi: this.partisipasi
                 };
+            }
+
+            // Static method to create a TPS instance from plain object
+            static fromObject(obj) {
+                return new TPS(
+                    obj.id,
+                    obj.suara_tidak_sah
+                );
             }
 
             // Static method to retrieve all TPS data from localStorage
@@ -221,20 +229,6 @@
                 const data = TPS.getAllTPS();
                 data.push(this);
                 localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
-            }
-
-            // Static method to create a TPS instance from plain object
-            static fromObject(obj) {
-                return new TPS(
-                    obj.id,
-                    obj.dpt,
-                    obj.paslonList,
-                    obj.suara_sah,
-                    obj.suara_tidak_sah,
-                    obj.jumlah_pengguna_tidak_pilih,
-                    obj.suara_masuk,
-                    obj.partisipasi
-                );
             }
 
             // Static method to update an existing TPS by `id`
@@ -264,12 +258,47 @@
             // Static method to retrieve a TPS by `id`
             static getById(id) {
                 const data = TPS.getAllTPS();
-                return data.find(item => item.id === id) || null;
+                const tps = data.find(item => item.id === id) || null;
+
+                if (tps == null) {
+                    return null;
+                }
+
+                return tps;
             }
 
             // Static method to check if a TPS with the given `id` exists
             static exists(id) {
                 return TPS.getAllTPS().some(item => item.id === id);
+            }
+
+            static syncUIWithTPSData() {
+                document.querySelectorAll('tr.tps').forEach(tpsTr => {
+                    const tpsId = tpsTr.querySelector('td.nomor').dataset.id;
+                    const tps = TPS.getById(tpsId);
+
+                    if (tps instanceof TPS) {
+                        const dpt = tpsTr.querySelector('td.dpt');
+                        dpt.dataset.value = tps.dpt;
+                        dpt.textContent = tps.dpt;
+    
+                        const suaraSah = tpsTr.querySelector('td.suara-sah');
+                        suaraSah.dataset.value = tps.suaraSah;
+                        suaraSah.textContent = tps.suaraSah;
+    
+                        const jumlahPenggunaTidakPilih = tpsTr.querySelector('td.jumlah-pengguna-tidak-pilih');
+                        jumlahPenggunaTidakPilih.dataset.value = tps.jumlahPenggunaTidakPilih;
+                        jumlahPenggunaTidakPilih.textContent = tps.jumlahPenggunaTidakPilih;
+
+                        const suaraMasuk = tpsTr.querySelector('td.suara-masuk');
+                        suaraMasuk.dataset.value = tps.suaraMasuk;
+                        suaraMasuk.textContent = tps.suaraMasuk;
+
+                        const partisipasi = tpsTr.querySelector('td.partisipasi span');
+                        partisipasi.dataset.value = tps.partisipasi;
+                        partisipasi.textContent = `${tps.partisipasi}%`;
+                    }
+                });
             }
         }
 
@@ -371,8 +400,14 @@
         const setColumnMode = (tpsTr, columnQuery) => {
             const tpsId = tpsTr.dataset.id;
             const suaraTidakSahTd = tpsTr.querySelector(columnQuery);
-            const value = suaraTidakSahTd.querySelector('span');
+
             const input = suaraTidakSahTd.querySelector('input');
+            input.onchange = event => {
+                TPS.update(tpsId, { suaraTidakSah: event.target.value });
+                TPS.syncUIWithTPSData();
+            };
+
+            const value = suaraTidakSahTd.querySelector('span');
 
             const setColumnToEditMode = () => {
                 value.classList.add('hidden');
@@ -408,6 +443,7 @@
         const onDataLoaded = () => {
             syncCheckedCheckboxes();
             checkTableMode();
+            TPS.syncUIWithTPSData();
         };
 
         const onInitialPageLoad = () => {
@@ -430,7 +466,7 @@
             .addEventListener('click', () => {
                 if (isEditMode()) {
                     if (confirm('Yakin ingin batalkan pengeditan?')) {
-                        disableEditModeState();
+                        onInitialPageLoad();
                         $wire.$refresh();
                     }
                 }
