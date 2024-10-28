@@ -3,15 +3,15 @@
       <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
         {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
         <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
-            <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData">
+            <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
                 <i class="fas fa-check mr-3"></i>
                 Simpan Perubahan Data
             </button>
-            <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData">
+            <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
                 <i class="fas fa-times mr-3"></i>
                 Batal Ubah Data
             </button>
-            <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang">
+            <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
                 <i class="fas fa-plus mr-3"></i>
                 Ubah Data Tercentang
             </button>
@@ -34,7 +34,12 @@
 
     <div class="overflow-x-auto mb-5 -mx-4 sm:mx-0">
         <div class="inline-block min-w-full align-middle">
-            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
+                <!-- Loading Overlay -->
+                <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10">
+                    <div class="text-blue-600 text-lg font-semibold">Loading...</div>
+                </div>
+
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-[#3560A0] text-white">
                         <tr>
@@ -308,6 +313,8 @@
                         unchecksCheckAllCheckboxes();
                     }
                 });
+
+            syncEnterEditModeButtonState();
         };
 
         function onCheckAllCheckboxesChange() {
@@ -338,6 +345,18 @@
             }
 
             syncCheckboxes();
+        }
+
+        function syncEnterEditModeButtonState() {
+            const checkedCheckboxesCount = Array.from(document.querySelectorAll('.centang input[type=checkbox]'))
+                .filter(checkbox => checkbox.checked)
+                .length;
+
+            if (checkedCheckboxesCount >= 1) {
+                enableEnterEditModeButton();
+            } else {
+                disableEnterEditModeButton();
+            }
         }
 
         const enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
@@ -434,12 +453,14 @@
 
         function onLivewireUpdated() {
             syncUI();
+            disableEnterEditModeButton();
         }
 
         function onInitialPageLoad() {
             TPS.deleteAll();
             cancelEditModeState();
             onLivewireUpdated();
+            disableEnterEditModeButton();
         }
 
         function preventReloadPage(event) {
