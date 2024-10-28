@@ -63,45 +63,70 @@
                     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
                         @forelse ($tps as $t)
                             <tr class="border-b text-center tps" data-id="{{ $t->id }}">
+                                {{-- ID TPS --}}
                                 <td class="py-3 px-4 border nomor" data-id="{{ $t->id }}">
                                     {{ $t->getThreeDigitsId() }}
                                 </td>
+
+                                {{-- Checkbox --}}
                                 <td class="py-3 px-4 border centang" data-id="{{ $t->id }}">
                                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
                                 </td>
+
+                                {{-- Kecamatan --}}
                                 <td class="py-3 px-4 border kecamatan" data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}">
                                     {{ $t->kelurahan->kecamatan->nama }}
                                 </td>
+
+                                {{-- Kelurahan --}}
                                 <td class="py-3 px-4 border kelurahan" data-kelurahan-id="{{ $t->kelurahan->id }}">
                                     {{ $t->kelurahan->nama }}
                                 </td>
+
+                                {{-- Nama TPS --}}
                                 <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
-                                <td class="py-3 px-4 border dpt" data-value="{{ $t->suara ? $t->suara->dpt : 0 }}">
+
+                                {{-- DPT --}}
+                                <td class="py-3 px-4 border dpt" data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}">
                                     {{ $t->suara ? $t->suara->dpt : 0 }}
                                 </td>
-                                @foreach ($paslon as $calon)
-                                    <td class="py-3 px-4 border paslon" data-calon-id="{{ $calon->id }}">
-                                        0
+
+                                {{-- Calon-calon --}}
+                                @foreach ($t->suaraCalon as $suaraCalon)
+                                    <td class="py-3 px-4 border paslon" data-id="{{ $suaraCalon->id }}" data-calon-id="{{ $suaraCalon->calon->id }}">
+                                        {{ $suaraCalon->suara }}
                                     </td>
                                 @endforeach
+
+                                {{-- Posisi --}}
                                 <td class="py-3 px-4 border posisi">
                                     Gubernur/<br>Wakil Gubernur
                                 </td>
-                                <td class="py-3 px-4 border suara-sah">
-                                    0
+
+                                {{-- Suara Sah --}}
+                                <td class="py-3 px-4 border suara-sah" data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}">
+                                    {{ $t->suara ? $t->suara->suaraSah() : 0 }}
                                 </td>
+
+                                {{-- Suara Tidak Sah (Editable) --}}
                                 <td class="py-3 px-4 border suara-tidak-sah" data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}">
                                     <span class="hidden">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
                                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden">
                                 </td>
-                                <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih">
-                                    0
+
+                                {{-- Jumlah Pengguna yang Tidak Pilih --}}
+                                <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih" data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}">
+                                    {{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}
                                 </td>
-                                <td class="py-3 px-4 border suara-masuk">
-                                    0
+
+                                {{-- Suara Masuk --}}
+                                <td class="py-3 px-4 border suara-masuk" data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}">
+                                    {{ $t->suara ? $t->suara->suaraMasuk() : 0 }}
                                 </td>
-                                <td class="text-center py-3 px-4 border partisipasi">
-                                    <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">90%</span>
+
+                                {{-- Partisipasi --}}
+                                <td class="text-center py-3 px-4 border partisipasi" data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}">
+                                    <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">{{ $t->suara ? $t->suara->partisipasi() : 0 }}%</span>
                                 </td>
                             </tr>
                         @empty
