@@ -3,15 +3,15 @@
       <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
         {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
         <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
-            <button class="bg-[#58DA91] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+            <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData">
                 <i class="fas fa-check mr-3"></i>
                 Simpan Perubahan Data
             </button>
-            <button class="bg-[#EE3C46] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+            <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData">
                 <i class="fas fa-times mr-3"></i>
                 Batal Ubah Data
             </button>
-            <button class="bg-[#0070FF] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto">
+            <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang">
                 <i class="fas fa-plus mr-3"></i>
                 Ubah Data Tercentang
             </button>
@@ -62,7 +62,7 @@
                     </thead>
                     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
                         @forelse ($tps as $t)
-                            <tr class="border-b text-center">
+                            <tr class="border-b text-center tps" data-id="{{ $t->id }}">
                                 <td class="py-3 px-4 border nomor" data-id="{{ $t->id }}">
                                     {{ $t->getThreeDigitsId() }}
                                 </td>
@@ -91,7 +91,8 @@
                                     0
                                 </td>
                                 <td class="py-3 px-4 border suara-tidak-sah" data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}">
-                                    {{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}
+                                    <span class="hidden">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
+                                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden">
                                 </td>
                                 <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih">
                                     0
@@ -267,6 +268,10 @@
                 localStorage.setItem('tps_data', JSON.stringify(updatedData.map(tps => tps.toObject())));
             }
 
+            static deleteAll() {
+                localStorage.removeItem('tps_data');
+            }
+
             // Static method to retrieve a TPS by `id`
             static getById(id) {
                 const data = TPS.getAllTPS();
@@ -325,18 +330,132 @@
             syncCheckedCheckboxes();
         };
 
-        const onPageChange = () => {
-            syncCheckedCheckboxes();
+        const enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
+        const disableEditModeState = () => localStorage.removeItem('is_edit_mode');
+
+        const isEditMode = () => {
+            const isIt = localStorage.getItem('is_edit_mode') || 0;
+            return isIt == '1';
         };
 
-        syncCheckedCheckboxes();
+        const enableSimpanPerubahanData = () => document.getElementById('simpanPerubahanData').disabled = false;
+        const disableSimpanPerubahanData = () => document.getElementById('simpanPerubahanData').disabled = true;
 
+        const enableBatalUbahData = () => document.getElementById('batalUbahData').disabled = false;
+        const disableBatalUbahData = () => document.getElementById('batalUbahData').disabled = true;
+
+        const enableUbahDataTercentang = () => document.getElementById('ubahDataTercentang').disabled = false;
+        const disableUbahDataTercentang = () => document.getElementById('ubahDataTercentang').disabled = true;
+
+        const enableCheckboxes = () => {
+            document.getElementById('checkAll').disabled = false;
+            document.querySelectorAll('.centang input[type=checkbox]')
+                .forEach(checkbox => checkbox.disabled = false);
+        };
+
+        const disableCheckboxes = () => {
+            document.getElementById('checkAll').disabled = true;
+            document.querySelectorAll('.centang input[type=checkbox]')
+                .forEach(checkbox => checkbox.disabled = true);
+        };
+
+        const setTableUIToEditMode = () => {
+            enableSimpanPerubahanData();
+            enableBatalUbahData();
+            disableUbahDataTercentang();
+
+            disableCheckboxes();
+
+            checkEachRowMode();
+        };
+
+        const setTableUIToReadMode = () => {
+            disableSimpanPerubahanData();
+            disableBatalUbahData();
+            enableUbahDataTercentang();
+
+            enableCheckboxes();
+
+            checkEachRowMode();
+        };
+
+        const setColumnMode = (tr, columnQuery) => {
+            const tpsId = tr.dataset.id;
+            const suaraTidakSahTd = tr.querySelector(columnQuery);
+            const value = suaraTidakSahTd.querySelector('span');
+            const input = suaraTidakSahTd.querySelector('input');
+
+            const setColumnToEditMode = () => {
+                value.classList.add('hidden');
+                input.classList.remove('hidden');
+            };
+
+            const setColumnToReadMode = () => {
+                value.classList.remove('hidden');
+                input.classList.add('hidden');
+            };
+
+            if (isEditMode() && TPS.exists(tpsId)) {
+                setColumnToEditMode();
+            } else {
+                setColumnToReadMode();
+            }
+        }
+
+        const checkEachRowMode = () => {
+            document.querySelectorAll('tr.tps').forEach(tps => {
+                setColumnMode(tps, 'td.suara-tidak-sah');
+            });
+        };
+
+        const checkTableMode = () => {
+            if (isEditMode()) {
+                setTableUIToEditMode();
+            } else {
+                setTableUIToReadMode();
+            }
+        };
+
+        const onDataLoaded = () => {
+            syncCheckedCheckboxes();
+            checkTableMode();
+        };
+
+        const onInitialPageLoad = () => {
+            disableEditModeState();
+            TPS.deleteAll();
+            onDataLoaded();
+        };
+
+        onInitialPageLoad();
+
+        Livewire.hook('morph.updated', onDataLoaded);
+        
         document.getElementById('checkAll')
             .addEventListener('change', onCheckAllCheckboxesChange);
 
         document.querySelectorAll('.centang input[type=checkbox]')
-            .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange))
+            .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
 
-        Livewire.hook('morph.updated', onPageChange);
+        document.getElementById('batalUbahData')
+            .addEventListener('click', () => {
+                disableEditModeState();
+                $wire.$refresh();
+            });
+        
+        document.getElementById('ubahDataTercentang')
+            .addEventListener('click', () => {
+                enableEditModeState();
+                $wire.$refresh();
+            });
+
+        window.addEventListener('beforeunload', (event) => {
+            if (isEditMode()) {
+                // Cancel the event as stated by the standard.
+                event.preventDefault();
+                // Chrome requires returnValue to be set.
+                event.returnValue = '';
+            }
+        });
     </script>
 @endscript
