@@ -379,9 +379,9 @@
             checkEachRowMode();
         };
 
-        const setColumnMode = (tr, columnQuery) => {
-            const tpsId = tr.dataset.id;
-            const suaraTidakSahTd = tr.querySelector(columnQuery);
+        const setColumnMode = (tpsTr, columnQuery) => {
+            const tpsId = tpsTr.dataset.id;
+            const suaraTidakSahTd = tpsTr.querySelector(columnQuery);
             const value = suaraTidakSahTd.querySelector('span');
             const input = suaraTidakSahTd.querySelector('input');
 
@@ -403,8 +403,8 @@
         }
 
         const checkEachRowMode = () => {
-            document.querySelectorAll('tr.tps').forEach(tps => {
-                setColumnMode(tps, 'td.suara-tidak-sah');
+            document.querySelectorAll('tr.tps').forEach(tpsTr => {
+                setColumnMode(tpsTr, 'td.suara-tidak-sah');
             });
         };
 
@@ -439,8 +439,12 @@
 
         document.getElementById('batalUbahData')
             .addEventListener('click', () => {
-                disableEditModeState();
-                $wire.$refresh();
+                if (isEditMode()) {
+                    if (confirm('Yakin ingin batalkan pengeditan?')) {
+                        disableEditModeState();
+                        $wire.$refresh();
+                    }
+                }
             });
         
         document.getElementById('ubahDataTercentang')
@@ -449,7 +453,7 @@
                 $wire.$refresh();
             });
 
-        window.addEventListener('beforeunload', (event) => {
+        window.addEventListener('beforeunload', event => {
             if (isEditMode()) {
                 // Cancel the event as stated by the standard.
                 event.preventDefault();
