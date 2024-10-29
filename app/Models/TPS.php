@@ -42,4 +42,8 @@ class TPS extends Model
     public function suaraCalon(): HasMany {
         return $this->hasMany(SuaraCalon::class, 'tps_id');
     }
+
+    public function suaraCalonByCalonId(int $calonId) {
+        return $this->suaraCalon()->whereCalonId($calonId);
+    }
 }

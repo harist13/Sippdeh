@@ -69,22 +69,34 @@
                         @forelse ($tps as $t)
                             <tr class="border-b text-center tps" data-id="{{ $t->id }}">
                                 {{-- ID TPS --}}
-                                <td class="py-3 px-4 border nomor" data-id="{{ $t->id }}">
+                                <td
+                                    class="py-3 px-4 border nomor"
+                                    data-id="{{ $t->id }}"
+                                >
                                     {{ $t->getThreeDigitsId() }}
                                 </td>
 
                                 {{-- Checkbox --}}
-                                <td class="py-3 px-4 border centang" data-id="{{ $t->id }}">
+                                <td
+                                    class="py-3 px-4 border centang"
+                                    data-id="{{ $t->id }}"
+                                >
                                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
                                 </td>
 
                                 {{-- Kecamatan --}}
-                                <td class="py-3 px-4 border kecamatan" data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}">
+                                <td
+                                    class="py-3 px-4 border kecamatan"
+                                    data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}"
+                                >
                                     {{ $t->kelurahan->kecamatan->nama }}
                                 </td>
 
                                 {{-- Kelurahan --}}
-                                <td class="py-3 px-4 border kelurahan" data-kelurahan-id="{{ $t->kelurahan->id }}">
+                                <td
+                                    class="py-3 px-4 border kelurahan"
+                                    data-kelurahan-id="{{ $t->kelurahan->id }}"
+                                >
                                     {{ $t->kelurahan->nama }}
                                 </td>
 
@@ -92,14 +104,34 @@
                                 <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
 
                                 {{-- DPT --}}
-                                <td class="py-3 px-4 border dpt" data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}">
+                                <td
+                                    class="py-3 px-4 border dpt"
+                                    data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}"
+                                >
                                     {{ $t->suara ? $t->suara->dpt : 0 }}
                                 </td>
 
                                 {{-- Calon-calon --}}
-                                @foreach ($t->suaraCalon as $suaraCalon)
-                                    <td class="py-3 px-4 border paslon" data-id="{{ $suaraCalon->id }}" data-calon-id="{{ $suaraCalon->calon->id }}">
-                                        {{ $suaraCalon->suara }}
+                                @foreach ($paslon as $calon)
+                                    @php
+                                        $suaraCalon = $t->suaraCalonByCalonId($calon->id)->first();
+                                        $suara = $suaraCalon != null ? $suaraCalon->suara : 0;
+                                    @endphp
+
+                                    <td
+                                        class="py-3 px-4 border paslon"
+                                        data-id="{{ $calon->id }}"
+                                        data-suara="{{ $suara }}"
+                                    >
+                                        <span class="value hidden">{{ $suara }}</span>
+                                        <input
+                                            type="number"
+                                            placeholder="Jumlah"
+                                            class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
+                                            value="{{ $suara }}"
+                                            data-default-value="{{ $suara }}"
+                                            autocomplete="off"
+                                        >
                                     </td>
                                 @endforeach
 
@@ -109,28 +141,43 @@
                                 </td>
 
                                 {{-- Suara Sah --}}
-                                <td class="py-3 px-4 border suara-sah" data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}">
+                                <td
+                                    class="py-3 px-4 border suara-sah"
+                                    data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}"
+                                >
                                     {{ $t->suara ? $t->suara->suaraSah() : 0 }}
                                 </td>
 
                                 {{-- Suara Tidak Sah (Editable) --}}
-                                <td class="py-3 px-4 border suara-tidak-sah" data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}">
+                                <td
+                                    class="py-3 px-4 border suara-tidak-sah"
+                                    data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
+                                >
                                     <span class="value hidden">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
                                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden">
                                 </td>
 
                                 {{-- Jumlah Pengguna yang Tidak Pilih --}}
-                                <td class="py-3 px-4 border jumlah-pengguna-tidak-pilih" data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}">
+                                <td
+                                    class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
+                                    data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}"
+                                >
                                     {{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}
                                 </td>
 
                                 {{-- Suara Masuk --}}
-                                <td class="py-3 px-4 border suara-masuk" data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}">
+                                <td
+                                    class="py-3 px-4 border suara-masuk"
+                                    data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}"
+                                >
                                     {{ $t->suara ? $t->suara->suaraMasuk() : 0 }}
                                 </td>
 
                                 {{-- Partisipasi --}}
-                                <td class="text-center py-3 px-4 border partisipasi" data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}">
+                                <td
+                                    class="text-center py-3 px-4 border partisipasi"
+                                    data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}"
+                                >
                                     <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">{{ $t->suara ? $t->suara->partisipasi() : 0 }}%</span>
                                 </td>
                             </tr>
@@ -149,27 +196,44 @@
 </div>
 
 @script
-    <script>
-        class Paslon {
-            constructor(id, suara) {
-                this.id = id;
-                this.suara = suara;
-            }
-
-            toObject() {
-                return { id: this.id, suara: this.suara };
-            }
-        }
+    <script type="text/javascript">
+        class MyClass {}
 
         class TPS {
             constructor(id, suaraTidakSah) {
                 this.id = id;
-                this.paslonList = [];
+                this.suaraCalon = [];
                 this.suaraTidakSah = suaraTidakSah;
             }
 
-            addPaslon(paslon) {
-                this.paslonList.push(paslon);
+            addSuaraCalon(id, suara) {
+                this.suaraCalon.push({ id, suara });
+            }
+
+            static updateSuaraCalon(tpsId, calonId, newSuara) {
+                // Get all TPS data from LocalStorage
+                const data = JSON.parse(localStorage.getItem('tps_data')) || [];
+
+                // Find the TPS object by tpsId
+                const tpsIndex = data.findIndex(tps => tps.id === tpsId);
+                if (tpsIndex === -1) {
+                    console.error(`TPS with id ${tpsId} not found.`);
+                    return;
+                }
+
+                // Find the specific suara_calon within the TPS object
+                const calonIndex = data[tpsIndex].suara_calon.findIndex(calon => calon.id === calonId);
+                if (calonIndex === -1) {
+                    console.error(`Calon with id ${calonId} not found in TPS ${tpsId}.`);
+                    return;
+                }
+
+                // Update the suara value
+                data[tpsIndex].suara_calon[calonIndex].suara = newSuara;
+
+                // Save the updated data back to LocalStorage
+                localStorage.setItem('tps_data', JSON.stringify(data));
+                console.log(`Updated calon id ${calonId} in TPS ${tpsId} with new suara: ${newSuara}`);
             }
 
             get dpt() {
@@ -196,7 +260,7 @@
                 return {
                     id: this.id,
                     dpt: this.dpt,
-                    paslonList: this.paslonList.map(p => p instanceof Paslon ? p.toObject() : p), // Convert each Paslon to object
+                    suara_calon: this.suaraCalon,
                     suara_sah: this.suaraSah,
                     suara_tidak_sah: this.suaraTidakSah,
                     jumlah_pengguna_tidak_pilih: this.jumlahPenggunaTidakPilih,
@@ -206,10 +270,14 @@
             }
 
             static fromObject(obj) {
-                return new TPS(
+                const tps = new TPS(
                     obj.id,
                     obj.suara_tidak_sah
                 );
+
+                obj.suara_calon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+
+                return tps;
             }
 
             static getAllTPS() {
@@ -326,8 +394,13 @@
                 });
         }
 
-        function addTPS(id, suaraTidakSah) {
+        function addTPS(id, suaraCalon, suaraTidakSah) {
             const tps = new TPS(id, parseInt(suaraTidakSah));
+    
+            // Add suaraCalon after the TPS object is instantiated
+            suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+            
+            // Save after all data is added to the TPS instance
             tps.save();
         }
 
@@ -338,8 +411,13 @@
             if (checkbox.checked) {
                 const row = checkbox.parentElement.parentElement;
                 const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
+                const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
+                    .map(suara => ({
+                        id: suara.dataset.id,
+                        suara: suara.dataset.suara
+                    }));
 
-                addTPS(tpsId, suaraTidakSah);
+                addTPS(tpsId, suaraCalon, suaraTidakSah);
             } else {
                 TPS.delete(tpsId);
             }
@@ -410,32 +488,40 @@
             setEachRowMode();
         }
 
-        function setCellMode(tpsRow, cellQuery) {
-            const tpsId = tpsRow.querySelector('td.nomor').dataset.id;
-
-            const cell = tpsRow.querySelector(cellQuery);
-            const value = cell.querySelector('span');
-            const input = cell.querySelector('input');
-
-            input.onchange = function(event) {
-                TPS.update(tpsId, { suaraTidakSah: event.target.value });
-                TPS.syncCalculations();
-            };
-
-            if (isEditMode() && TPS.exists(tpsId)) {
-                // Change to input
-                value.classList.add('hidden');
-                input.classList.remove('hidden');
-            } else {
-                // Change to value
-                value.classList.remove('hidden');
-                input.classList.add('hidden');
-            }
+        function setCellMode(tpsRow, cellQuery, onChange) {
+            const rowDataset = tpsRow.querySelector('td.nomor').dataset;
+            const tpsId = rowDataset.id;
+            
+            tpsRow.querySelectorAll(cellQuery).forEach(function(cell) {
+                const cellDataset = cell.dataset;
+                const value = cell.querySelector('span');
+                const input = cell.querySelector('input');
+    
+                input.onchange = () => onChange(tpsId, cellDataset, event.target.value);
+    
+                if (isEditMode() && TPS.exists(tpsId)) {
+                    // Change to input
+                    value.classList.add('hidden');
+                    input.classList.remove('hidden');
+                } else {
+                    // Change to value
+                    value.classList.remove('hidden');
+                    input.classList.add('hidden');
+                }
+            });
         }
 
         function setEachRowMode() {
             document.querySelectorAll('tr.tps').forEach(tpsRow => {
-                setCellMode(tpsRow, 'td.suara-tidak-sah');
+                setCellMode(tpsRow, 'td.suara-tidak-sah', function(tpsId, cellDataset, value) {
+                    TPS.update(tpsId, { suaraTidakSah: event.target.value });
+                    TPS.syncCalculations();
+                });
+
+                setCellMode(tpsRow, 'td.paslon', function(tpsId, cellDataset, value) {
+                    const calonId = cellDataset.id;
+                    TPS.updateSuaraCalon(tpsId, calonId, value);
+                });
             });
         }
 
@@ -453,8 +539,13 @@
 
         function resetEditableCells() {
             document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
-                tpsRow.querySelectorAll('input').forEach(function(input) {
-                    input.value = '';
+                tpsRow.querySelectorAll('input[type=number]').forEach(function(input) {
+                    if (input.dataset.defaultValue) {
+                        input.value = input.dataset.defaultValue;
+                    } else {
+                        input.value = '';
+                    }
+
                     input.classList.add('hidden');
                 });
 

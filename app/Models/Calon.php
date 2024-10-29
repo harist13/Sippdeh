@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Calon extends Model
 {
@@ -35,5 +36,9 @@ class Calon extends Model
 
     public function kabupaten(): BelongsTo {
         return $this->belongsTo(Kabupaten::class, 'kabupaten_id');
+    }
+
+    public function suaraCalon(): HasMany {
+        return $this->hasMany(SuaraCalon::class, 'calon_id');
     }
 }

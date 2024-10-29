@@ -25,8 +25,11 @@ class InputSuaraPilgub extends Component
             })
             ->paginate(10);
         
-        $paslon = Calon::wherePosisi('GUBERNUR')
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah))
+        $paslon = Calon::with('suaraCalon')
+            ->wherePosisi('GUBERNUR')
+            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            })
             ->get();
 
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
