@@ -19,7 +19,7 @@ class ImportTPSCommand extends Command
      *
      * @var string
      */
-    protected $description = "Mengimpor dari berkas '0kKIrotQFhkdEYDIfsvlysLcBAWQqafbjr3InObT.xlsx' di disk 'local'.";
+    protected $description = "Mengimpor dari berkas 'TPS.xlsx' di disk 'local'.";
 
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class ImportTPSCommand extends Command
     {
         $this->output->title('Memulai impor...');
         $import = new TPSImport();
-        $import->withOutput($this->output)->import('0kKIrotQFhkdEYDIfsvlysLcBAWQqafbjr3InObT.xlsx', 'local');
+        $import->withOutput($this->output)->import('TPS.xlsx', 'local');
         $this->output->success('Impor sukses.');
     }
 }
