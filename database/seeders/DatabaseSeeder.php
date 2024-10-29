@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Petugas;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,8 +21,14 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProvinsiSeeder::class,
             KabupatenSeeder::class,
-            KecamatanSeeder::class,
-            KelurahanSeeder::class,
+            // KecamatanSeeder::class,
+            // KelurahanSeeder::class,
         ]);
+
+        $this->command->info('Sedang mengimpor data Kecamatan, Kelurahan, dan TPS dari berkas CSV...');
+        
+        Artisan::call('import:tps');
+
+        $this->command->info('Seeding selesai.');
     }
 }
