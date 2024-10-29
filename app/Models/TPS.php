@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TPS extends Model
 {
@@ -31,5 +33,17 @@ class TPS extends Model
 
     public function kelurahan(): BelongsTo {
         return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
+    }
+
+    public function suara(): HasOne {
+        return $this->hasOne(SuaraTPS::class, 'tps_id');
+    }
+
+    public function suaraCalon(): HasMany {
+        return $this->hasMany(SuaraCalon::class, 'tps_id');
+    }
+
+    public function suaraCalonByCalonId(int $calonId) {
+        return $this->suaraCalon()->whereCalonId($calonId);
     }
 }
