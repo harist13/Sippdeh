@@ -46,7 +46,6 @@
                 id="addCalonProvinsi"
                 name="provinsi_id_calon_baru"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-                disabled
             >
 				@foreach ($provinsi as $prov)
 					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
@@ -60,7 +59,6 @@
                 id="addCalonKabupaten"
                 name="kabupaten_id_calon_baru"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-                disabled
             >
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
@@ -154,6 +152,7 @@
 
     function changeCalonPosisi(event) {
         const posisi = event.target.value;
+
         if (posisi == 'GUBERNUR') {
             enableProvinsiSelectors();
             disableKabupatenSelectors();
@@ -164,6 +163,9 @@
             enableKabupatenSelectors();
         }
     }
+    
+    disableProvinsiSelectors();
+    disableKabupatenSelectors();
 
     document.getElementById('addCalonAs').addEventListener('change', changeCalonPosisi);
 

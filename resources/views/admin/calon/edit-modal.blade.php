@@ -98,135 +98,65 @@
 </div>
 
 <script>
-    function getCalonId() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.id;
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('editCalonAs').addEventListener('change', handlePosisiCalon);
 
-    function getCalonName() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.nama;
-    }
+        function getProvinsiSelector() {
+            const id = 'editCalonProvinsi';
+            const provinsiSelector = document.getElementById(id);
+            
+            if (!provinsiSelector) {
+                console.error(`Provinsi selector with ID '${id}' not found.`);
+            }
 
-    function getCalonWakilName() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.namaWakil;
-    }
-
-    function getProvinsiSelector() {
-        const id = 'editCalonProvinsi';
-        const provinsiSelector = document.getElementById(id);
-        
-        if (provinsiSelector == null) {
-            throw new Error(`Selector provinsi dengan id '${$id}' tidak ditemukan.`);
+            return provinsiSelector;
         }
 
-        return provinsiSelector;
-    }
+        function getKabupatenSelector() {
+            const id = 'editCalonKabupaten';
+            const kabupatenSelector = document.getElementById(id);
+            
+            if (!kabupatenSelector) {
+                console.error(`Kabupaten selector with ID '${id}' not found.`);
+            }
 
-    function getKabupatenSelector() {
-        const id = 'editCalonKabupaten';
-        const kabupatenSelector = document.getElementById(id);
-        
-        if (kabupatenSelector == null) {
-            throw new Error(`Selector kabupaten dengan id '${$id}' tidak ditemukan.`);
+            return kabupatenSelector;
         }
 
-        return kabupatenSelector;
-    }
-
-    function enableProvinsiSelectors() {
-        const provinsiSelector = getProvinsiSelector();
-        provinsiSelector.disabled = false;
-    }
-
-    function disableProvinsiSelectors() {
-        const provinsiSelector = getProvinsiSelector();
-        provinsiSelector.disabled = true;
-    }
-
-    function enableKabupatenSelectors() {
-        const kabupatenSelector = getKabupatenSelector();
-        kabupatenSelector.disabled = false;
-    }
-
-    function disableKabupatenSelectors() {
-        const kabupatenSelector = getKabupatenSelector();
-        kabupatenSelector.disabled = true;
-    }
-
-    function handlePosisiCalon(event) {
-        changePosisiCalon(event.target.value);
-    }
-
-    function changePosisiCalon(posisi) {
-        if (posisi == 'GUBERNUR') {
-            enableProvinsiSelectors();
-            disableKabupatenSelectors();
+        function enableProvinsiSelectors() {
+            const provinsiSelector = getProvinsiSelector();
+            if (provinsiSelector) provinsiSelector.disabled = false;
         }
 
-        if (posisi == 'WALIKOTA') {
-            disableProvinsiSelectors();
-            enableKabupatenSelectors();
+        function disableProvinsiSelectors() {
+            const provinsiSelector = getProvinsiSelector();
+            if (provinsiSelector) provinsiSelector.disabled = true;
         }
-    }
 
-    function getPosisi() {
-        return this.closest('tr').querySelector('td:nth-child(3)').dataset.posisi;
-    }
+        function enableKabupatenSelectors() {
+            const kabupatenSelector = getKabupatenSelector();
+            if (kabupatenSelector) kabupatenSelector.disabled = false;
+        }
 
-    function getCalonProvinsiId() {
-        return this.closest('tr').querySelector('td:nth-child(4)').dataset.provinsiId;
-    }
+        function disableKabupatenSelectors() {
+            const kabupatenSelector = getKabupatenSelector();
+            if (kabupatenSelector) kabupatenSelector.disabled = true;
+        }
 
-    function getCalonKabupatenId() {
-        return this.closest('tr').querySelector('td:nth-child(4)').dataset.kabupatenId;
-    }
+        function handlePosisiCalon(event) {
+            changePosisiCalon(event.target.value);
+        }
 
-    function showEditCalonModal() {
-		const editCalonModal = document.getElementById('editCalonModal');
-		editCalonModal.classList.remove('hidden');
-	}
-
-	function closeEditCalonModal() {
-		const editCalonModal = document.getElementById('editCalonModal');
-		editCalonModal.classList.add('hidden');
-	}
-
-    function getUpdateCalonUrl() {
-        const calonId = getCalonId.call(this);
-        const calonUpdateRoute = `{{ route('calon.update', ['calon' => '__calon__']) }}`;
-        const calonUpdateUrl = calonUpdateRoute.replace('__calon__', calonId);
-
-        return calonUpdateUrl;
-    }
-
-    document.getElementById('editCalonAs').addEventListener('change', handlePosisiCalon);
-
-    document.querySelectorAll('.edit-calon-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            showEditCalonModal();
-
-            const editCalonName = document.getElementById('editCalonName');
-            editCalonName.value = getCalonName.call(this);
-
-            const editCalonWakilName = document.getElementById('editCalonWakilName');
-            editCalonWakilName.value = getCalonWakilName.call(this);
-
-            const editCalonAs = document.getElementById('editCalonAs');
-            editCalonAs.value = getPosisi.call(this);
-
-            changePosisiCalon(editCalonAs.value);
-
-            const editCalonProvinsi = document.getElementById('editCalonProvinsi');
-            editCalonProvinsi.value = getCalonProvinsiId.call(this);
-
-            const editCalonKabupaten = document.getElementById('editCalonKabupaten');
-            editCalonKabupaten.value = getCalonKabupatenId.call(this);
-
-            const editCalonForm = document.getElementById('editCalonForm');
-            editCalonForm.action = getUpdateCalonUrl.call(this);
-        });
+        function changePosisiCalon(posisi) {
+            if (posisi === 'GUBERNUR') {
+                enableProvinsiSelectors();
+                disableKabupatenSelectors();
+            } else if (posisi === 'WALIKOTA') {
+                disableProvinsiSelectors();
+                enableKabupatenSelectors();
+            }
+        }
     });
-
-    document.getElementById('cancelEditCalon').addEventListener('click', closeEditCalonModal);
 </script>
 
 @error('nama_calon')
