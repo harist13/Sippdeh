@@ -624,6 +624,7 @@
         function onDataStored({ status }) {
             if (status == 'sukses') {
                 resetToInitialState();
+                onLivewireUpdated();
             }
         }
 
