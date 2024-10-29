@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('suara_tps', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dpt')->default(0);
             $table->unsignedBigInteger('suara_tidak_sah')->default(0);
             $table->timestamps();
 
             $table->foreignId('operator_id')->nullable()
-                ->constrained('users')->onDelete('cascade');
+                ->constrained('petugas')->onDelete('cascade');
             $table->foreignId('tps_id')->nullable()
                 ->constrained('tps')->onDelete('cascade');
         });

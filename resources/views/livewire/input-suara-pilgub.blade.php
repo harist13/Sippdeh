@@ -1,198 +1,216 @@
-<div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
-    <div class="container mx-auto p-7">
-      <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
-        {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-        <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
-            <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
-                <i class="fas fa-check mr-3"></i>
-                Simpan Perubahan Data
-            </button>
-            <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
-                <i class="fas fa-times mr-3"></i>
-                Batal Ubah Data
-            </button>
-            <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
-                <i class="fas fa-plus mr-3"></i>
-                Ubah Data Tercentang
-            </button>
-        </div>
+<div>
+    @php $status = session('pesan_sukses'); @endphp
+    @isset ($status)
+        @include('components.alert-berhasil', ['message' => $status])
+    @endisset
 
-        {{-- Cari dan Filter --}}
-        <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-            <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
-                </svg>
-                <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+    @php $status = session('pesan_gagal'); @endphp
+    @isset ($status)
+        @include('components.alert-gagal', ['message' => $status])
+    @endisset
+
+    <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
+        <div class="container mx-auto p-7">
+        <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
+            {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
+            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
+                <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
+                    <i class="fas fa-check mr-3"></i>
+                    Simpan Perubahan Data
+                </button>
+                <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
+                    <i class="fas fa-times mr-3"></i>
+                    Batal Ubah Data
+                </button>
+                <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
+                    <i class="fas fa-plus mr-3"></i>
+                    Ubah Data Tercentang
+                </button>
             </div>
-            <button class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full" id="openFilterPilgub">
-                <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
-                <span class="text-[#344054]">Filter</span>
-            </button>
-        </div>
-    </div>
 
-    <div class="overflow-x-auto mb-5 -mx-4 sm:mx-0">
-        <div class="inline-block min-w-full align-middle">
-            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
-                <!-- Loading Overlay -->
-                <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10">
-                    <div class="text-blue-600 text-lg font-semibold">Loading...</div>
+            {{-- Cari dan Filter --}}
+            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
+                <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                    </svg>
+                    <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
                 </div>
+                <button class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full" id="openFilterPilgub">
+                    <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
+                    <span class="text-[#344054]">Filter</span>
+                </button>
+            </div>
+        </div>
 
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-[#3560A0] text-white">
-                        <tr>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">NO</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">
-                                <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-                            </th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kecamatan</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kelurahan</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">TPS</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
-                            @foreach ($paslon as $calon)
-                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
-                                    {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
-                                    {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+        <div class="overflow-x-auto mb-5 -mx-4 sm:mx-0">
+            <div class="inline-block min-w-full align-middle">
+                <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
+                    <!-- Loading Overlay -->
+                    <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10">
+                        <div class="text-blue-600 text-lg font-semibold">Loading...</div>
+                    </div>
+
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#3560A0] text-white">
+                            <tr>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">NO</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">
+                                    <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
                                 </th>
-                            @endforeach
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Calon</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Sah</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Tidak Sah</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Masuk</th>
-                            <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">Partisipasi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
-                        @forelse ($tps as $t)
-                            <tr class="border-b text-center tps" data-id="{{ $t->id }}">
-                                {{-- ID TPS --}}
-                                <td
-                                    class="py-3 px-4 border nomor"
-                                    data-id="{{ $t->id }}"
-                                >
-                                    {{ $t->getThreeDigitsId() }}
-                                </td>
-
-                                {{-- Checkbox --}}
-                                <td
-                                    class="py-3 px-4 border centang"
-                                    data-id="{{ $t->id }}"
-                                >
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
-                                </td>
-
-                                {{-- Kecamatan --}}
-                                <td
-                                    class="py-3 px-4 border kecamatan"
-                                    data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}"
-                                >
-                                    {{ $t->kelurahan->kecamatan->nama }}
-                                </td>
-
-                                {{-- Kelurahan --}}
-                                <td
-                                    class="py-3 px-4 border kelurahan"
-                                    data-kelurahan-id="{{ $t->kelurahan->id }}"
-                                >
-                                    {{ $t->kelurahan->nama }}
-                                </td>
-
-                                {{-- Nama TPS --}}
-                                <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
-
-                                {{-- DPT --}}
-                                <td
-                                    class="py-3 px-4 border dpt"
-                                    data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}"
-                                >
-                                    {{ $t->suara ? $t->suara->dpt : 0 }}
-                                </td>
-
-                                {{-- Calon-calon --}}
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kecamatan</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kelurahan</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">TPS</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
                                 @foreach ($paslon as $calon)
-                                    @php
-                                        $suaraCalon = $t->suaraCalonByCalonId($calon->id)->first();
-                                        $suara = $suaraCalon != null ? $suaraCalon->suara : 0;
-                                    @endphp
-
+                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
+                                        {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
+                                        {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                                    </th>
+                                @endforeach
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Calon</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Sah</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Tidak Sah</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Masuk</th>
+                                <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">Partisipasi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
+                            @forelse ($tps as $t)
+                                <tr class="border-b text-center tps" data-id="{{ $t->id }}">
+                                    {{-- ID TPS --}}
                                     <td
-                                        class="py-3 px-4 border paslon"
-                                        data-id="{{ $calon->id }}"
-                                        data-suara="{{ $suara }}"
+                                        class="py-3 px-4 border nomor"
+                                        data-id="{{ $t->id }}"
                                     >
-                                        <span class="value hidden">{{ $suara }}</span>
+                                        {{ $t->getThreeDigitsId() }}
+                                    </td>
+
+                                    {{-- Checkbox --}}
+                                    <td
+                                        class="py-3 px-4 border centang"
+                                        data-id="{{ $t->id }}"
+                                    >
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                                    </td>
+
+                                    {{-- Kecamatan --}}
+                                    <td
+                                        class="py-3 px-4 border kecamatan"
+                                        data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}"
+                                    >
+                                        {{ $t->kelurahan->kecamatan->nama }}
+                                    </td>
+
+                                    {{-- Kelurahan --}}
+                                    <td
+                                        class="py-3 px-4 border kelurahan"
+                                        data-kelurahan-id="{{ $t->kelurahan->id }}"
+                                    >
+                                        {{ $t->kelurahan->nama }}
+                                    </td>
+
+                                    {{-- Nama TPS --}}
+                                    <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
+
+                                    {{-- DPT --}}
+                                    <td
+                                        class="py-3 px-4 border dpt"
+                                        data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}"
+                                    >
+                                        {{ $t->suara ? $t->suara->dpt() : 0 }}
+                                    </td>
+
+                                    {{-- Calon-calon --}}
+                                    @foreach ($paslon as $calon)
+                                        @php
+                                            $suaraCalon = $t->suaraCalonByCalonId($calon->id)->first();
+                                            $suara = $suaraCalon != null ? $suaraCalon->suara : 0;
+                                        @endphp
+
+                                        <td
+                                            class="py-3 px-4 border paslon"
+                                            data-id="{{ $calon->id }}"
+                                            data-suara="{{ $suara }}"
+                                        >
+                                            <span class="value hidden">{{ $suara }}</span>
+                                            <input
+                                                type="number"
+                                                placeholder="Jumlah"
+                                                class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
+                                                value="{{ $suara }}"
+                                                data-default-value="{{ $suara }}"
+                                                autocomplete="off"
+                                            >
+                                        </td>
+                                    @endforeach
+
+                                    {{-- Posisi --}}
+                                    <td class="py-3 px-4 border posisi">
+                                        Gubernur/<br>Wakil Gubernur
+                                    </td>
+
+                                    {{-- Suara Sah --}}
+                                    <td
+                                        class="py-3 px-4 border suara-sah"
+                                        data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}"
+                                    >
+                                        {{ $t->suara ? $t->suara->suaraSah() : 0 }}
+                                    </td>
+
+                                    {{-- Suara Tidak Sah (Editable) --}}
+                                    <td
+                                        class="py-3 px-4 border suara-tidak-sah"
+                                        data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
+                                    >
+                                        <span class="value hidden">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
                                         <input
                                             type="number"
                                             placeholder="Jumlah"
                                             class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
-                                            value="{{ $suara }}"
-                                            data-default-value="{{ $suara }}"
-                                            autocomplete="off"
+                                            data-default-value="{{ $t->suara ? $t->suara->suara_tidak_sah : '' }}"
+                                            data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : '' }}"
                                         >
                                     </td>
-                                @endforeach
 
-                                {{-- Posisi --}}
-                                <td class="py-3 px-4 border posisi">
-                                    Gubernur/<br>Wakil Gubernur
-                                </td>
+                                    {{-- Jumlah Pengguna yang Tidak Pilih --}}
+                                    <td
+                                        class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
+                                        data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}"
+                                    >
+                                        {{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}
+                                    </td>
 
-                                {{-- Suara Sah --}}
-                                <td
-                                    class="py-3 px-4 border suara-sah"
-                                    data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}"
-                                >
-                                    {{ $t->suara ? $t->suara->suaraSah() : 0 }}
-                                </td>
+                                    {{-- Suara Masuk --}}
+                                    <td
+                                        class="py-3 px-4 border suara-masuk"
+                                        data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}"
+                                    >
+                                        {{ $t->suara ? $t->suara->suaraMasuk() : 0 }}
+                                    </td>
 
-                                {{-- Suara Tidak Sah (Editable) --}}
-                                <td
-                                    class="py-3 px-4 border suara-tidak-sah"
-                                    data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
-                                >
-                                    <span class="value hidden">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
-                                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden">
-                                </td>
-
-                                {{-- Jumlah Pengguna yang Tidak Pilih --}}
-                                <td
-                                    class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
-                                    data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}"
-                                >
-                                    {{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}
-                                </td>
-
-                                {{-- Suara Masuk --}}
-                                <td
-                                    class="py-3 px-4 border suara-masuk"
-                                    data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}"
-                                >
-                                    {{ $t->suara ? $t->suara->suaraMasuk() : 0 }}
-                                </td>
-
-                                {{-- Partisipasi --}}
-                                <td
-                                    class="text-center py-3 px-4 border partisipasi"
-                                    data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}"
-                                >
-                                    <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">{{ $t->suara ? $t->suara->partisipasi() : 0 }}%</span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="text-center p-6" colspan="100">Belum ada TPS.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                    {{-- Partisipasi --}}
+                                    <td
+                                        class="text-center py-3 px-4 border partisipasi"
+                                        data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}"
+                                    >
+                                        <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">{{ $t->suara ? $t->suara->partisipasi() : 0 }}%</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="text-center p-6" colspan="100">Belum ada TPS.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    {{ $tps->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
+        {{ $tps->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
+    </div>
 </div>
 
 @script
@@ -336,7 +354,7 @@
                 return TPS.getAllTPS().some(item => item.id === id);
             }
 
-            static syncCalculations() {
+            static syncCalculationsWhenEditing() {
                 document.querySelectorAll('tr.tps').forEach(tpsRow => {
                     const tpsId = tpsRow.querySelector('td.nomor').dataset.id;
                     const tps = TPS.getById(tpsId);
@@ -345,10 +363,22 @@
                         const dptCell = tpsRow.querySelector('td.dpt');
                         dptCell.dataset.value = tps.dpt;
                         dptCell.textContent = tps.dpt;
+
+                        tps.suaraCalon.forEach(function(sc) {
+                            const suaraCalonInput = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"] input`);
+                            suaraCalonInput.value = sc.suara;
+                        });
     
                         const suaraSahCell = tpsRow.querySelector('td.suara-sah');
                         suaraSahCell.dataset.value = tps.suaraSah;
                         suaraSahCell.textContent = tps.suaraSah;
+
+                        const suaraTidakSahCell = tpsRow.querySelector('td.suara-tidak-sah');
+                        suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
+                        suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
+                        
+                        const suaraTidakSahInput = suaraTidakSahCell.querySelector('input');
+                        suaraTidakSahInput.value = tps.suaraTidakSah;
     
                         const jumlahPenggunaTidakPilihRow = tpsRow.querySelector('td.jumlah-pengguna-tidak-pilih');
                         jumlahPenggunaTidakPilihRow.dataset.value = tps.jumlahPenggunaTidakPilih;
@@ -369,7 +399,7 @@
         const checksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = true;
         const unchecksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = false;
 
-        function syncCheckboxes() {
+        function syncCheckboxesWithSelectedTPS() {
             checksCheckAllCheckboxes();
 
             document.querySelectorAll('.centang input[type=checkbox]')
@@ -422,7 +452,7 @@
                 TPS.delete(tpsId);
             }
 
-            syncCheckboxes();
+            syncCheckboxesWithSelectedTPS();
         }
 
         function syncEnterEditModeButtonState() {
@@ -445,8 +475,8 @@
             return isIt == '1';
         }
 
-        const enableSaveChangeButton = () => document.getElementById('simpanPerubahanData').disabled = false;
-        const disableSaveChangeButton = () => document.getElementById('simpanPerubahanData').disabled = true;
+        const enableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = false;
+        const disableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = true;
 
         const enableCancelChangeButton = () => document.getElementById('batalUbahData').disabled = false;
         const disableCancelChangeButton = () => document.getElementById('batalUbahData').disabled = true;
@@ -468,27 +498,27 @@
 
         function setUIToEditMode() {
             // Set the action buttons
-            enableSaveChangeButton();
+            enableSubmitButton();
             enableCancelChangeButton();
             disableEnterEditModeButton();
 
             // Set checkboxes and each row
             disableCheckboxes();
-            setEachRowMode();
+            syncRows();
         }
 
         function setUIToReadMode() {
             // Set the action buttons
-            disableSaveChangeButton();
+            disableSubmitButton();
             disableCancelChangeButton();
             enableEnterEditModeButton();
 
             // Set checkboxes and each row
             enableCheckboxes();
-            setEachRowMode();
+            syncRows();
         }
 
-        function setCellMode(tpsRow, cellQuery, onChange) {
+        function syncEditableCell({ tpsRow, cellQuery, onChange }) {
             const rowDataset = tpsRow.querySelector('td.nomor').dataset;
             const tpsId = rowDataset.id;
             
@@ -511,31 +541,28 @@
             });
         }
 
-        function setEachRowMode() {
+        function syncRows() {
             document.querySelectorAll('tr.tps').forEach(tpsRow => {
-                setCellMode(tpsRow, 'td.suara-tidak-sah', function(tpsId, cellDataset, value) {
-                    TPS.update(tpsId, { suaraTidakSah: event.target.value });
-                    TPS.syncCalculations();
+                syncEditableCell({
+                    tpsRow,
+                    cellQuery: 'td.suara-tidak-sah',
+                    onChange: function(tpsId, cellDataset, value) {
+                        TPS.update(tpsId, { suaraTidakSah: event.target.value });
+                        TPS.syncCalculationsWhenEditing();
+                    }
                 });
 
-                setCellMode(tpsRow, 'td.paslon', function(tpsId, cellDataset, value) {
-                    const calonId = cellDataset.id;
-                    TPS.updateSuaraCalon(tpsId, calonId, value);
+                syncEditableCell({
+                    tpsRow,
+                    cellQuery: 'td.paslon',
+                    onChange: function(tpsId, cellDataset, value) {
+                        const calonId = cellDataset.id;
+                        TPS.updateSuaraCalon(tpsId, calonId, value);
+                        TPS.syncCalculationsWhenEditing();
+                    }
                 });
             });
         }
-
-        function syncUI() {
-            syncCheckboxes();
-            
-            if (isEditMode()) {
-                setUIToEditMode();
-            } else {
-                setUIToReadMode();
-            }
-
-            TPS.syncCalculations();
-        };
 
         function resetEditableCells() {
             document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
@@ -555,25 +582,20 @@
             });
         }
 
-        function onLivewireUpdated() {
-            disableEnterEditModeButton();
-            syncUI();
-        }
-
-        function onInitialPageLoad() {
-            TPS.deleteAll();
-            cancelEditModeState();
-            disableEnterEditModeButton();
-            resetEditableCells();
-            onLivewireUpdated();
-        }
-
-        function preventReloadPage(event) {
+        function syncUI() {
+            syncCheckboxesWithSelectedTPS();
+            
             if (isEditMode()) {
-                // Cancel the event as stated by the standard.
-                event.preventDefault();
-                // Chrome requires returnValue to be set.
-                event.returnValue = '';
+                setUIToEditMode();
+            } else {
+                setUIToReadMode();
+            }
+        }
+
+        function onSubmitClick() {
+            if (confirm('Simpan perubahan data?')) {
+                const data = TPS.getAllTPS().map(tps => tps.toObject());
+                $wire.dispatch('submit', { data });
             }
         }
 
@@ -585,13 +607,43 @@
         function onCancelEditModeButtonClick() {
             if (isEditMode()) {
                 if (confirm('Yakin ingin batalkan pengeditan?')) {
-                    onInitialPageLoad();
+                    resetToInitialState();
                     $wire.$refresh();
                 }
             }
         }
 
-        onInitialPageLoad();
+        function onLivewireUpdated() {
+            resetEditableCells();
+            TPS.syncCalculationsWhenEditing();
+            syncUI();
+        }
+
+        function resetToInitialState() {
+            TPS.deleteAll();
+            cancelEditModeState();
+            disableSubmitButton();
+            disableCancelChangeButton();
+            disableEnterEditModeButton();
+            resetEditableCells();
+        }
+
+        function onDataStored({ status }) {
+            if (status == 'sukses') {
+                resetToInitialState();
+            }
+        }
+
+        function preventReloadPage(event) {
+            if (isEditMode()) {
+                // Cancel the event as stated by the standard.
+                event.preventDefault();
+                // Chrome requires returnValue to be set.
+                event.returnValue = '';
+            }
+        }
+
+        $wire.on('data-stored', onDataStored);
 
         Livewire.hook('morph.updated', onLivewireUpdated);
         
@@ -601,6 +653,9 @@
         document.querySelectorAll('.centang input[type=checkbox]')
             .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
 
+        document.getElementById('simpanPerubahanData')
+            .addEventListener('click', onSubmitClick)
+
         document.getElementById('batalUbahData')
             .addEventListener('click', onCancelEditModeButtonClick);
         
@@ -608,5 +663,7 @@
             .addEventListener('click', onEnterEditModeButtonClick);
 
         window.addEventListener('beforeunload', preventReloadPage);
+
+        resetToInitialState();
     </script>
 @endscript

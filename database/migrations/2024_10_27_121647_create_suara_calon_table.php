@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId('operator_id')->nullable()
-                ->constrained('users')->onDelete('cascade');
+                ->constrained('petugas')->onDelete('cascade');
             $table->foreignId('tps_id')->nullable()
                 ->constrained('tps')->onDelete('cascade');
             $table->foreignId('calon_id')->nullable()
