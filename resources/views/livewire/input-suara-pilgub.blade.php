@@ -353,51 +353,170 @@
             static exists(id) {
                 return TPS.getAllTPS().some(item => item.id === id);
             }
-
-            static syncCalculationsWhenEditing() {
-                document.querySelectorAll('tr.tps').forEach(tpsRow => {
-                    const tpsId = tpsRow.querySelector('td.nomor').dataset.id;
-                    const tps = TPS.getById(tpsId);
-
-                    if (tps instanceof TPS) {
-                        const dptCell = tpsRow.querySelector('td.dpt');
-                        dptCell.dataset.value = tps.dpt;
-                        dptCell.textContent = tps.dpt;
-
-                        tps.suaraCalon.forEach(function(sc) {
-                            const suaraCalonInput = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"] input`);
-                            suaraCalonInput.value = sc.suara;
-                        });
-    
-                        const suaraSahCell = tpsRow.querySelector('td.suara-sah');
-                        suaraSahCell.dataset.value = tps.suaraSah;
-                        suaraSahCell.textContent = tps.suaraSah;
-
-                        const suaraTidakSahCell = tpsRow.querySelector('td.suara-tidak-sah');
-                        suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
-                        suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
-                        
-                        const suaraTidakSahInput = suaraTidakSahCell.querySelector('input');
-                        suaraTidakSahInput.value = tps.suaraTidakSah;
-    
-                        const jumlahPenggunaTidakPilihRow = tpsRow.querySelector('td.jumlah-pengguna-tidak-pilih');
-                        jumlahPenggunaTidakPilihRow.dataset.value = tps.jumlahPenggunaTidakPilih;
-                        jumlahPenggunaTidakPilihRow.textContent = tps.jumlahPenggunaTidakPilih;
-
-                        const suaraMasukCell = tpsRow.querySelector('td.suara-masuk');
-                        suaraMasukCell.dataset.value = tps.suaraMasuk;
-                        suaraMasukCell.textContent = tps.suaraMasuk;
-
-                        const partisipasiCell = tpsRow.querySelector('td.partisipasi span');
-                        partisipasiCell.dataset.value = tps.partisipasi;
-                        partisipasiCell.textContent = `${tps.partisipasi}%`;
-                    }
-                });
-            }
         }
 
         const checksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = true;
         const unchecksCheckAllCheckboxes = () => document.getElementById('checkAll').checked = false;
+
+        const enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
+        const cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
+
+        const enableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = false;
+        const disableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = true;
+
+        const enableCancelEditButton = () => document.getElementById('batalUbahData').disabled = false;
+        const disableCancelEditButton = () => document.getElementById('batalUbahData').disabled = true;
+
+        const enableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = false;
+        const disableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = true;
+
+        function isEditMode() {
+            const isIt = localStorage.getItem('is_edit_mode') || 0;
+            return isIt == '1';
+        }
+        
+        function addTPS(id, suaraCalon, suaraTidakSah) {
+            const tps = new TPS(id, parseInt(suaraTidakSah));
+    
+            // Add suaraCalon after the TPS object is instantiated
+            suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+            
+            // Save after all data is added to the TPS instance
+            tps.save();
+        }
+        
+        function enableCheckboxes() {
+            document.getElementById('checkAll').disabled = false;
+            document.querySelectorAll('.centang input[type=checkbox]')
+                .forEach(checkbox => checkbox.disabled = false);
+        }
+
+        function disableCheckboxes() {
+            document.getElementById('checkAll').disabled = true;
+            document.querySelectorAll('.centang input[type=checkbox]')
+                .forEach(checkbox => checkbox.disabled = true);
+        }
+
+        function syncEditableCellMode({ tpsRow, cellQuery, onChange }) {
+            const rowDataset = tpsRow.querySelector('td.nomor').dataset;
+            const tpsId = rowDataset.id;
+            
+            tpsRow.querySelectorAll(cellQuery).forEach(function(cell) {
+                const cellDataset = cell.dataset;
+                const value = cell.querySelector('span');
+                const input = cell.querySelector('input');
+    
+                input.onchange = () => onChange(tpsId, cellDataset, event.target.value);
+    
+                if (isEditMode() && TPS.exists(tpsId)) {
+                    // Change to input
+                    value.classList.add('hidden');
+                    input.classList.remove('hidden');
+                } else {
+                    // Change to value
+                    value.classList.remove('hidden');
+                    input.classList.add('hidden');
+                }
+            });
+        }
+
+        function syncRowsMode() {
+            document.querySelectorAll('tr.tps').forEach(tpsRow => {
+                syncEditableCellMode({
+                    tpsRow,
+                    cellQuery: 'td.suara-tidak-sah',
+                    onChange: function(tpsId, cellDataset, value) {
+                        TPS.update(tpsId, { suaraTidakSah: event.target.value });
+                        syncTableDataWithSelectedTPS();
+                    }
+                });
+
+                syncEditableCellMode({
+                    tpsRow,
+                    cellQuery: 'td.paslon',
+                    onChange: function(tpsId, cellDataset, value) {
+                        const calonId = cellDataset.id;
+                        TPS.updateSuaraCalon(tpsId, calonId, value);
+                        syncTableDataWithSelectedTPS();
+                    }
+                });
+            });
+        }
+
+        function syncActionButtons() {
+            if (isEditMode()) {
+                // Set the action buttons
+                enableSubmitButton();
+                enableCancelEditButton();
+                syncEnterEditModeButtonState();
+            } else {
+                // Set the action buttons
+                disableSubmitButton();
+                disableCancelEditButton();
+                syncEnterEditModeButtonState();
+            }
+        }
+
+        function syncCheckboxesState() {
+            if (isEditMode()) {
+                disableCheckboxes();
+            } else {
+                enableCheckboxes();
+            }
+        }
+
+        function syncTableDataWithSelectedTPS() {
+            document.querySelectorAll('tr.tps').forEach(tpsRow => {
+                const tpsId = tpsRow.querySelector('td.nomor').dataset.id;
+                const tps = TPS.getById(tpsId);
+
+                if (tps instanceof TPS) {
+                    const dptCell = tpsRow.querySelector('td.dpt');
+                    dptCell.dataset.value = tps.dpt;
+                    dptCell.textContent = tps.dpt;
+
+                    tps.suaraCalon.forEach(function(sc) {
+                        const suaraCalonInput = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"] input`);
+                        suaraCalonInput.value = sc.suara;
+                    });
+
+                    const suaraSahCell = tpsRow.querySelector('td.suara-sah');
+                    suaraSahCell.dataset.value = tps.suaraSah;
+                    suaraSahCell.textContent = tps.suaraSah;
+
+                    const suaraTidakSahCell = tpsRow.querySelector('td.suara-tidak-sah');
+                    suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
+                    suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
+                    
+                    const suaraTidakSahInput = suaraTidakSahCell.querySelector('input');
+                    suaraTidakSahInput.value = tps.suaraTidakSah;
+
+                    const jumlahPenggunaTidakPilihRow = tpsRow.querySelector('td.jumlah-pengguna-tidak-pilih');
+                    jumlahPenggunaTidakPilihRow.dataset.value = tps.jumlahPenggunaTidakPilih;
+                    jumlahPenggunaTidakPilihRow.textContent = tps.jumlahPenggunaTidakPilih;
+
+                    const suaraMasukCell = tpsRow.querySelector('td.suara-masuk');
+                    suaraMasukCell.dataset.value = tps.suaraMasuk;
+                    suaraMasukCell.textContent = tps.suaraMasuk;
+
+                    const partisipasiCell = tpsRow.querySelector('td.partisipasi span');
+                    partisipasiCell.dataset.value = tps.partisipasi;
+                    partisipasiCell.textContent = `${tps.partisipasi}%`;
+                }
+            });
+        }
+
+        function syncEnterEditModeButtonState() {
+            const checkedCheckboxesCount = Array.from(document.querySelectorAll('.centang input[type=checkbox]'))
+                .filter(checkbox => checkbox.checked)
+                .length;
+
+            if (checkedCheckboxesCount >= 1 && !isEditMode()) {
+                enableEnterEditModeButton();
+            } else {
+                disableEnterEditModeButton();
+            }
+        }
 
         function syncCheckboxesWithSelectedTPS() {
             checksCheckAllCheckboxes();
@@ -413,7 +532,28 @@
                 });
 
             syncEnterEditModeButtonState();
-        };
+        }
+
+        function onSubmitClick() {
+            if (confirm('Simpan perubahan data?')) {
+                const data = TPS.getAllTPS().map(tps => tps.toObject());
+                $wire.dispatch('submit', { data });
+            }
+        }
+
+        function onCancelEditModeButtonClick() {
+            if (isEditMode()) {
+                if (confirm('Yakin ingin batalkan pengeditan?')) {
+                    resetToInitialState();
+                    $wire.$refresh();
+                }
+            }
+        }
+
+        function onEnterEditModeButtonClick() {
+            enableEditModeState();
+            $wire.$refresh();
+        }
 
         function onCheckAllCheckboxesChange() {
             const isCheckAll = this.checked;
@@ -422,16 +562,6 @@
                     checkbox.checked = isCheckAll;
                     checkbox.dispatchEvent(new Event('change'));
                 });
-        }
-
-        function addTPS(id, suaraCalon, suaraTidakSah) {
-            const tps = new TPS(id, parseInt(suaraTidakSah));
-    
-            // Add suaraCalon after the TPS object is instantiated
-            suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
-            
-            // Save after all data is added to the TPS instance
-            tps.save();
         }
 
         function onCheckboxChange(event) {
@@ -455,115 +585,6 @@
             syncCheckboxesWithSelectedTPS();
         }
 
-        function syncEnterEditModeButtonState() {
-            const checkedCheckboxesCount = Array.from(document.querySelectorAll('.centang input[type=checkbox]'))
-                .filter(checkbox => checkbox.checked)
-                .length;
-
-            if (checkedCheckboxesCount >= 1) {
-                enableEnterEditModeButton();
-            } else {
-                disableEnterEditModeButton();
-            }
-        }
-
-        const enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
-        const cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
-
-        function isEditMode() {
-            const isIt = localStorage.getItem('is_edit_mode') || 0;
-            return isIt == '1';
-        }
-
-        const enableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = false;
-        const disableSubmitButton = () => document.getElementById('simpanPerubahanData').disabled = true;
-
-        const enableCancelChangeButton = () => document.getElementById('batalUbahData').disabled = false;
-        const disableCancelChangeButton = () => document.getElementById('batalUbahData').disabled = true;
-
-        const enableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = false;
-        const disableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = true;
-
-        function enableCheckboxes() {
-            document.getElementById('checkAll').disabled = false;
-            document.querySelectorAll('.centang input[type=checkbox]')
-                .forEach(checkbox => checkbox.disabled = false);
-        }
-
-        function disableCheckboxes() {
-            document.getElementById('checkAll').disabled = true;
-            document.querySelectorAll('.centang input[type=checkbox]')
-                .forEach(checkbox => checkbox.disabled = true);
-        }
-
-        function setUIToEditMode() {
-            // Set the action buttons
-            enableSubmitButton();
-            enableCancelChangeButton();
-            disableEnterEditModeButton();
-
-            // Set checkboxes and each row
-            disableCheckboxes();
-            syncRows();
-        }
-
-        function setUIToReadMode() {
-            // Set the action buttons
-            disableSubmitButton();
-            disableCancelChangeButton();
-            enableEnterEditModeButton();
-
-            // Set checkboxes and each row
-            enableCheckboxes();
-            syncRows();
-        }
-
-        function syncEditableCell({ tpsRow, cellQuery, onChange }) {
-            const rowDataset = tpsRow.querySelector('td.nomor').dataset;
-            const tpsId = rowDataset.id;
-            
-            tpsRow.querySelectorAll(cellQuery).forEach(function(cell) {
-                const cellDataset = cell.dataset;
-                const value = cell.querySelector('span');
-                const input = cell.querySelector('input');
-    
-                input.onchange = () => onChange(tpsId, cellDataset, event.target.value);
-    
-                if (isEditMode() && TPS.exists(tpsId)) {
-                    // Change to input
-                    value.classList.add('hidden');
-                    input.classList.remove('hidden');
-                } else {
-                    // Change to value
-                    value.classList.remove('hidden');
-                    input.classList.add('hidden');
-                }
-            });
-        }
-
-        function syncRows() {
-            document.querySelectorAll('tr.tps').forEach(tpsRow => {
-                syncEditableCell({
-                    tpsRow,
-                    cellQuery: 'td.suara-tidak-sah',
-                    onChange: function(tpsId, cellDataset, value) {
-                        TPS.update(tpsId, { suaraTidakSah: event.target.value });
-                        TPS.syncCalculationsWhenEditing();
-                    }
-                });
-
-                syncEditableCell({
-                    tpsRow,
-                    cellQuery: 'td.paslon',
-                    onChange: function(tpsId, cellDataset, value) {
-                        const calonId = cellDataset.id;
-                        TPS.updateSuaraCalon(tpsId, calonId, value);
-                        TPS.syncCalculationsWhenEditing();
-                    }
-                });
-            });
-        }
-
         function resetEditableCells() {
             document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
                 tpsRow.querySelectorAll('input[type=number]').forEach(function(input) {
@@ -582,50 +603,22 @@
             });
         }
 
-        function syncUI() {
-            syncCheckboxesWithSelectedTPS();
-            
-            if (isEditMode()) {
-                setUIToEditMode();
-            } else {
-                setUIToReadMode();
-            }
-        }
-
-        function onSubmitClick() {
-            if (confirm('Simpan perubahan data?')) {
-                const data = TPS.getAllTPS().map(tps => tps.toObject());
-                $wire.dispatch('submit', { data });
-            }
-        }
-
-        function onEnterEditModeButtonClick() {
-            enableEditModeState();
-            $wire.$refresh();
-        }
-
-        function onCancelEditModeButtonClick() {
-            if (isEditMode()) {
-                if (confirm('Yakin ingin batalkan pengeditan?')) {
-                    resetToInitialState();
-                    $wire.$refresh();
-                }
-            }
-        }
-
-        function onLivewireUpdated() {
-            resetEditableCells();
-            TPS.syncCalculationsWhenEditing();
-            syncUI();
-        }
-
         function resetToInitialState() {
             TPS.deleteAll();
             cancelEditModeState();
             disableSubmitButton();
-            disableCancelChangeButton();
-            disableEnterEditModeButton();
+            disableCancelEditButton();
+            syncEnterEditModeButtonState();
             resetEditableCells();
+        }
+
+        function onLivewireUpdated() {
+            resetEditableCells();
+            syncActionButtons();
+            syncCheckboxesWithSelectedTPS();
+            syncCheckboxesState();
+            syncTableDataWithSelectedTPS();
+            syncRowsMode();
         }
 
         function onDataStored({ status }) {
@@ -634,7 +627,7 @@
             }
         }
 
-        function preventReloadPage(event) {
+        function onUnloadPage(event) {
             if (isEditMode()) {
                 // Cancel the event as stated by the standard.
                 event.preventDefault();
@@ -642,16 +635,6 @@
                 event.returnValue = '';
             }
         }
-
-        $wire.on('data-stored', onDataStored);
-
-        Livewire.hook('morph.updated', onLivewireUpdated);
-        
-        document.getElementById('checkAll')
-            .addEventListener('change', onCheckAllCheckboxesChange);
-
-        document.querySelectorAll('.centang input[type=checkbox]')
-            .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
 
         document.getElementById('simpanPerubahanData')
             .addEventListener('click', onSubmitClick)
@@ -661,8 +644,18 @@
         
         document.getElementById('ubahDataTercentang')
             .addEventListener('click', onEnterEditModeButtonClick);
+        
+        document.getElementById('checkAll')
+            .addEventListener('change', onCheckAllCheckboxesChange);
 
-        window.addEventListener('beforeunload', preventReloadPage);
+        document.querySelectorAll('.centang input[type=checkbox]')
+            .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
+
+        window.addEventListener('beforeunload', onUnloadPage);
+
+        $wire.on('data-stored', onDataStored);
+
+        Livewire.hook('morph.updated', onLivewireUpdated);
 
         resetToInitialState();
     </script>
