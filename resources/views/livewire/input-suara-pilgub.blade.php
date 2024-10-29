@@ -451,16 +451,30 @@
             TPS.syncCalculations();
         };
 
+        function resetEditableCells() {
+            document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
+                tpsRow.querySelectorAll('input').forEach(function(input) {
+                    input.value = '';
+                    input.classList.add('hidden');
+                });
+
+                tpsRow.querySelectorAll('span.value').forEach(function(spanValue) {
+                    spanValue.classList.remove('hidden');
+                });
+            });
+        }
+
         function onLivewireUpdated() {
-            syncUI();
             disableEnterEditModeButton();
+            syncUI();
         }
 
         function onInitialPageLoad() {
             TPS.deleteAll();
             cancelEditModeState();
-            onLivewireUpdated();
             disableEnterEditModeButton();
+            resetEditableCells();
+            onLivewireUpdated();
         }
 
         function preventReloadPage(event) {
@@ -477,24 +491,10 @@
             $wire.$refresh();
         }
 
-        function resetEditableCells() {
-            document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
-                tpsRow.querySelectorAll('input').forEach(function(input) {
-                    input.value = '';
-                    input.classList.add('hidden');
-                });
-
-                tpsRow.querySelectorAll('span.value').forEach(function(spanValue) {
-                    spanValue.classList.remove('hidden');
-                });
-            });
-        }
-
         function onCancelEditModeButtonClick() {
             if (isEditMode()) {
                 if (confirm('Yakin ingin batalkan pengeditan?')) {
                     onInitialPageLoad();
-                    resetEditableCells();
                     $wire.$refresh();
                 }
             }
