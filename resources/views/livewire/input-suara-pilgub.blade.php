@@ -63,7 +63,7 @@
                                 <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">TPS</th>
                                 <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
                                 @foreach ($paslon as $calon)
-                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
+                                    <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
                                         {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
                                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                                     </th>
@@ -78,7 +78,7 @@
                         </thead>
                         <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
                             @forelse ($tps as $t)
-                                <tr class="border-b text-center tps" data-id="{{ $t->id }}">
+                                <tr wire:key="{{ $t->id }}" class="border-b text-center tps" data-id="{{ $t->id }}">
                                     {{-- ID TPS --}}
                                     <td
                                         class="py-3 px-4 border nomor"
@@ -130,6 +130,7 @@
                                         @endphp
 
                                         <td
+                                            wire:key="{{ $t->id }}{{ $calon->id }}"
                                             class="py-3 px-4 border paslon"
                                             data-id="{{ $calon->id }}"
                                             data-suara="{{ $suara }}"
