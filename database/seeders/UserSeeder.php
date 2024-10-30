@@ -34,19 +34,19 @@ class UserSeeder extends Seeder
             $admin->assignRole('admin');
 
             for ($i = 1; $i <= 5; $i++) {
-                // Buat pengguna petugas
-                $petugas = Petugas::create([
-                    'username' => "petugas{$namaKabupaten}$i",
+                // Buat pengguna operator
+                $operator = Petugas::create([
+                    'username' => "operator{$namaKabupaten}$i",
                     'password' => bcrypt('12345678'),
-                    'email' => "petugas{$namaKabupaten}$i@sipppdeh.designforus.id",
+                    'email' => "operator{$namaKabupaten}$i@sipppdeh.designforus.id",
                     'kabupaten_id' => $kabupaten->id,
                     'role' => 'operator',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
         
-                // Berikan role petugas kepada pengguna tersebut
-                $petugas->assignRole('operator');
+                // Berikan role operator kepada pengguna tersebut
+                $operator->assignRole('operator');
             }
         }
     }
