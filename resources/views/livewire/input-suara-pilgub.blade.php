@@ -644,12 +644,6 @@
         function onDataStored({ status }) {
             if (status == 'sukses') {
                 setToInitialState();
-
-                document.getElementById('checkAll')
-                    .addEventListener('change', onCheckAllCheckboxesChange);
-
-                document.querySelectorAll('.centang input[type=checkbox]')
-                    .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
             }
         }
 
