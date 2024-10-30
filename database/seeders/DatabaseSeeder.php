@@ -2,34 +2,56 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Petugas;
+use Illuminate\Console\View\Components\TwoColumnDetail;
 use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
+    public int $startTime;
+
     /**
      * Seed the application's database.
      */
     public function run(): void
    {
-        // User::factory(10)->create();
+        $this->startTime = microtime(true);
 
         $this->call([
             ProvinsiSeeder::class,
             KabupatenSeeder::class,
             // KecamatanSeeder::class,
             // KelurahanSeeder::class,
-
-            RolesAndPermissionsSeeder::class,
-            UserSeeder::class,
         ]);
 
-        $this->command->info('Sedang mengimpor data Kecamatan, Kelurahan, dan TPS dari berkas CSV...');
-        
+        $this->running();
         Artisan::call('import:tps');
+        $this->done();
 
-        $this->command->info('Seeding selesai.');
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            UserSeeder::class,
+            CalonSeeder::class,
+        ]);
+    }
+
+    public function running()
+    {
+        with(new TwoColumnDetail($this->command->getOutput()))->render(
+            'Kecamatan, Kelurahan, dan TPS dari berkas CSV',
+            '<fg=yellow;options=bold>RUNNING</>'
+        );
+    }
+
+    public function done()
+    {
+        $runTime = number_format((microtime(true) - $this->startTime) * 1000);
+        
+        with(new TwoColumnDetail($this->command->getOutput()))->render(
+            'Kecamatan, Kelurahan, dan TPS dari berkas CSV',
+            "<fg=gray>$runTime ms</> <fg=green;options=bold>DONE</>"
+        );
+
+        $this->command->getOutput()->writeln('');
     }
 }

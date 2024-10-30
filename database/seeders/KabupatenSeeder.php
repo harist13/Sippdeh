@@ -15,12 +15,12 @@ class KabupatenSeeder extends Seeder
         $kabupaten = [
             // Sesuaikan 'provinsi_id' dengan ID provinsi Kalimantan Timur
             ['nama' => 'BERAU', 'provinsi_id' => 23],
-            ['nama' => 'KUBAR', 'provinsi_id' => 23],
-            ['nama' => 'KUKAR', 'provinsi_id' => 23],
-            ['nama' => 'KUTIM', 'provinsi_id' => 23],
-            ['nama' => 'MAHULU', 'provinsi_id' => 23],
+            ['nama' => 'KUTAI BARAT', 'provinsi_id' => 23],
+            ['nama' => 'KUTAI KARTANEGARA', 'provinsi_id' => 23],
+            ['nama' => 'KUTAI TIMUR', 'provinsi_id' => 23],
+            ['nama' => 'MAHAKAM ULU', 'provinsi_id' => 23],
             ['nama' => 'PASER', 'provinsi_id' => 23],
-            ['nama' => 'PPU', 'provinsi_id' => 23],
+            ['nama' => 'PENAJEM PASER UTARA', 'provinsi_id' => 23],
             ['nama' => 'BALIKPAPAN', 'provinsi_id' => 23],
             ['nama' => 'BONTANG', 'provinsi_id' => 23],
             ['nama' => 'SAMARINDA', 'provinsi_id' => 23],
