@@ -635,7 +635,7 @@
 
                 syncTableMode();
 
-                initAllInteractableComponents();
+                attachEventToInteractableComponents();
             }, 100);
         }
 
@@ -658,7 +658,7 @@
             }
         }
 
-        function initAllInteractableComponents() {
+        function attachEventToInteractableComponents() {
             document.getElementById('simpanPerubahanData').onclick = onSubmitClick;
 
             document.getElementById('batalUbahData').onclick = onCancelEditModeButtonClick;
