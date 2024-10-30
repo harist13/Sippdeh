@@ -602,36 +602,33 @@
 
         function onDataStored({ status }) {
             if (status == 'sukses') {
+                refreshState();
                 resetToInitialState();
             }
         }
 
         function resetToInitialState() {
-            setTimeout(function() {
-                TPS.deleteAll();
+            TPS.deleteAll();
 
-                cancelEditModeState();
+            cancelEditModeState();
 
-                disableSubmitButton();
-                disableCancelEditButton();
-                syncEnterEditModeButtonState();
+            disableSubmitButton();
+            disableCancelEditButton();
+            syncEnterEditModeButtonState();
 
-                syncRowsMode();
-            }, 200);
+            syncRowsMode();
         }
 
         function refreshState() {
-            setTimeout(function() {
-                resetEditableCellsInput();
+            resetEditableCellsInput();
 
-                syncActionButtons();
+            syncActionButtons();
 
-                syncCheckboxesWithSelectedTPS();
-                syncCheckboxesState();
+            syncCheckboxesWithSelectedTPS();
+            syncCheckboxesState();
 
-                syncTableDataWithSelectedTPS();
-                syncRowsMode();
-            }, 200);
+            syncTableDataWithSelectedTPS();
+            syncRowsMode();
         }
 
         function onLivewireUpdated() {
