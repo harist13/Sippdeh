@@ -596,13 +596,7 @@
                     } else {
                         input.value = '';
                     }
-
-                    // input.classList.add('hidden');
                 });
-
-                // tpsRow.querySelectorAll('span.value').forEach(function(spanValue) {
-                //     spanValue.classList.remove('hidden');
-                // });
             });
         }
 
@@ -623,7 +617,7 @@
                 syncEnterEditModeButtonState();
 
                 syncRowsMode();
-            }, 200);
+            }, 0);
         }
 
         function refreshState() {
@@ -637,7 +631,7 @@
 
                 syncTableDataWithSelectedTPS();
                 syncRowsMode();
-            }, 200);
+            }, 0);
         }
 
         function onLivewireUpdated() {
