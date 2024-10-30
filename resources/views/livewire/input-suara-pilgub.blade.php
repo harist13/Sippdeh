@@ -617,7 +617,7 @@
                 syncEnterEditModeButtonState();
 
                 syncRowsMode();
-            }, 0);
+            }, 200);
         }
 
         function refreshState() {
@@ -631,7 +631,7 @@
 
                 syncTableDataWithSelectedTPS();
                 syncRowsMode();
-            }, 0);
+            }, 200);
         }
 
         function onLivewireUpdated() {
