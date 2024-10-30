@@ -375,7 +375,7 @@
             return isIt == '1';
         }
         
-        function addTPS(id, suaraCalon, suaraTidakSah) {
+        function addTPSToLocalStorage(id, suaraCalon, suaraTidakSah) {
             const tps = new TPS(id, parseInt(suaraTidakSah));
     
             // Add suaraCalon after the TPS object is instantiated
@@ -476,6 +476,9 @@
                     dptCell.textContent = tps.dpt;
 
                     tps.suaraCalon.forEach(function(sc) {
+                        const suaraCalonValue = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"] span`);
+                        suaraCalonValue.value = sc.suara;
+
                         const suaraCalonInput = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"] input`);
                         suaraCalonInput.value = sc.suara;
                     });
@@ -577,7 +580,7 @@
                         suara: suara.dataset.suara
                     }));
 
-                addTPS(tpsId, suaraCalon, suaraTidakSah);
+                addTPSToLocalStorage(tpsId, suaraCalon, suaraTidakSah);
             } else {
                 TPS.delete(tpsId);
             }
@@ -585,7 +588,7 @@
             syncCheckboxesWithSelectedTPS();
         }
 
-        function resetEditableCells() {
+        function resetEditableCellsInput() {
             document.querySelectorAll('tr.tps').forEach(function(tpsRow) {
                 tpsRow.querySelectorAll('input[type=number]').forEach(function(input) {
                     if (input.dataset.defaultValue) {
@@ -594,38 +597,51 @@
                         input.value = '';
                     }
 
-                    input.classList.add('hidden');
+                    // input.classList.add('hidden');
                 });
 
-                tpsRow.querySelectorAll('span.value').forEach(function(spanValue) {
-                    spanValue.classList.remove('hidden');
-                });
+                // tpsRow.querySelectorAll('span.value').forEach(function(spanValue) {
+                //     spanValue.classList.remove('hidden');
+                // });
             });
-        }
-
-        function resetToInitialState() {
-            TPS.deleteAll();
-            cancelEditModeState();
-            disableSubmitButton();
-            disableCancelEditButton();
-            syncEnterEditModeButtonState();
-            resetEditableCells();
-        }
-
-        function onLivewireUpdated() {
-            resetEditableCells();
-            syncActionButtons();
-            syncCheckboxesWithSelectedTPS();
-            syncCheckboxesState();
-            syncTableDataWithSelectedTPS();
-            syncRowsMode();
         }
 
         function onDataStored({ status }) {
             if (status == 'sukses') {
                 resetToInitialState();
-                onLivewireUpdated();
             }
+        }
+
+        function resetToInitialState() {
+            setTimeout(function() {
+                TPS.deleteAll();
+
+                cancelEditModeState();
+
+                disableSubmitButton();
+                disableCancelEditButton();
+                syncEnterEditModeButtonState();
+
+                syncRowsMode();
+            }, 200);
+        }
+
+        function refreshState() {
+            setTimeout(function() {
+                resetEditableCellsInput();
+
+                syncActionButtons();
+
+                syncCheckboxesWithSelectedTPS();
+                syncCheckboxesState();
+
+                syncTableDataWithSelectedTPS();
+                syncRowsMode();
+            }, 200);
+        }
+
+        function onLivewireUpdated() {
+            refreshState();
         }
 
         function onUnloadPage(event) {
