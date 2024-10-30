@@ -635,11 +635,7 @@
 
                 syncTableMode();
 
-                document.getElementById('checkAll')
-                    .addEventListener('change', onCheckAllCheckboxesChange);
-
-                document.querySelectorAll('.centang input[type=checkbox]')
-                    .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
+                initAllInteractableComponents();
             }, 100);
         }
 
@@ -662,22 +658,20 @@
             }
         }
 
-        document.getElementById('simpanPerubahanData')
-            .addEventListener('click', onSubmitClick)
+        function initAllInteractableComponents() {
+            document.getElementById('simpanPerubahanData').onclick = onSubmitClick;
 
-        document.getElementById('batalUbahData')
-            .addEventListener('click', onCancelEditModeButtonClick);
-        
-        document.getElementById('ubahDataTercentang')
-            .addEventListener('click', onEnterEditModeButtonClick);
-        
-        document.getElementById('checkAll')
-            .addEventListener('change', onCheckAllCheckboxesChange);
+            document.getElementById('batalUbahData').onclick = onCancelEditModeButtonClick;
+            
+            document.getElementById('ubahDataTercentang').onclick = onEnterEditModeButtonClick;
+            
+            document.getElementById('checkAll').onchange = onCheckAllCheckboxesChange;
 
-        document.querySelectorAll('.centang input[type=checkbox]')
-            .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
+            document.querySelectorAll('.centang input[type=checkbox]')
+                .forEach(checkbox => checkbox.onchange = onCheckboxChange);
+        }
 
-        window.addEventListener('beforeunload', onUnloadPage);
+        window.onbeforeonload = onUnloadPage;
 
         $wire.on('data-stored', onDataStored);
 
