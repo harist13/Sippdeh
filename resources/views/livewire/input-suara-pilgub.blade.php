@@ -613,15 +613,17 @@
         }
 
         function refreshState() {
-            resetEditableCellsInput();
+            setTimeout(function() {
+                resetEditableCellsInput();
 
-            syncActionButtons();
+                syncActionButtons();
 
-            syncCheckboxesWithSelectedTPS();
-            syncCheckboxesState();
+                syncCheckboxesWithSelectedTPS();
+                syncCheckboxesState();
 
-            syncTableDataWithSelectedTPS();
-            syncRowsMode();
+                syncTableDataWithSelectedTPS();
+                syncRowsMode();
+            }, 100);
         }
 
         function onLivewireUpdated() {
