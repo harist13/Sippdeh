@@ -562,7 +562,8 @@
 
         function onCancelEditModeButtonClick() {
             if (isEditMode() && confirm('Yakin ingin batalkan pengeditan?')) {
-                setToInitialState();
+                cancelEditModeState();
+                refreshState();
                 $wire.$refresh();
             }
         }
