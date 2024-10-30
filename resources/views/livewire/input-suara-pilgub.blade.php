@@ -600,13 +600,6 @@
             });
         }
 
-        function onDataStored({ status }) {
-            if (status == 'sukses') {
-                refreshState();
-                resetToInitialState();
-            }
-        }
-
         function resetToInitialState() {
             TPS.deleteAll();
 
@@ -633,6 +626,12 @@
 
         function onLivewireUpdated() {
             refreshState();
+        }
+
+        function onDataStored({ status }) {
+            if (status == 'sukses') {
+                resetToInitialState();
+            }
         }
 
         function onUnloadPage(event) {
