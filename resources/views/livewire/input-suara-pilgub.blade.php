@@ -411,7 +411,7 @@
                     input.classList.remove('hidden');
 
                     const cellDataset = cell.dataset;
-                    input.onchange = () => onChange(tpsId, cellDataset, event.target.value);
+                    input.addEventListener('keyup', () => onChange(tpsId, cellDataset, event.target.value));
                 } else {
                     // Change to value
                     value.classList.remove('hidden');
