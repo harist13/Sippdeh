@@ -644,7 +644,6 @@
         function onDataStored({ status }) {
             if (status == 'sukses') {
                 setToInitialState();
-                $wire.$refresh();
             }
         }
 
