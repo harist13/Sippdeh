@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
                     'password' => bcrypt('12345678'),
                     'email' => "petugas{$namaKabupaten}$i@sipppdeh.designforus.id",
                     'kabupaten_id' => $kabupaten->id,
-                    'role' => 'petugas',
+                    'role' => 'operator',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
