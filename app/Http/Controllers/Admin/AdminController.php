@@ -117,7 +117,7 @@ class AdminController extends Controller
                 'username' => $validated['username'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'wilayah' => $kabupaten->nama, // Store the kabupaten name instead of ID
+                'kabupaten_id' => $kabupaten->id, // Store the kabupaten name instead of ID
                 'role' => $validated['role'],
                 'is_forced_logout' => false,
             ]);
@@ -147,7 +147,7 @@ class AdminController extends Controller
             $user->update([
                 'username' => $validated['username'],
                 'email' => $validated['email'],
-                'wilayah' => $kabupaten->nama, // Store the kabupaten name instead of ID
+                'kabupaten_id' => $kabupaten->id, // Store the kabupaten name instead of ID
             ]);
 
             if ($request->filled('password')) {

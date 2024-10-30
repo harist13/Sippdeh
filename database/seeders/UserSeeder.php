@@ -14,17 +14,17 @@ class UserSeeder extends Seeder
     {
         // Ensure the roles are created with the correct guard
         Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'petugas', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'operator', 'guard_name' => 'web']);
 
         foreach (Kabupaten::all() as $kabupaten) {
-            $namaKabupaten = strtolower($kabupaten->nama);
+            $namaKabupaten = preg_replace('/\s+/', '', strtolower($kabupaten->nama));
 
             // Buat pengguna admin
             $admin = Petugas::create([
-                'username' => "admin_$namaKabupaten",
+                'username' => "admin$namaKabupaten",
                 'password' => bcrypt('12345678'),
-                'email' => "admin_$namaKabupaten@sipppdeh.designforus.id",
-                'wilayah' => $namaKabupaten,
+                'email' => "admin$namaKabupaten@sipppdeh.designforus.id",
+                'kabupaten_id' => $kabupaten->id,
                 'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -36,17 +36,17 @@ class UserSeeder extends Seeder
             for ($i = 1; $i <= 5; $i++) {
                 // Buat pengguna petugas
                 $petugas = Petugas::create([
-                    'username' => "petugas_{$namaKabupaten}_$i",
+                    'username' => "petugas{$namaKabupaten}$i",
                     'password' => bcrypt('12345678'),
-                    'email' => "petugas_{$namaKabupaten}_$i@sipppdeh.designforus.id",
-                    'wilayah' => $namaKabupaten,
+                    'email' => "petugas{$namaKabupaten}$i@sipppdeh.designforus.id",
+                    'kabupaten_id' => $kabupaten->id,
                     'role' => 'petugas',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
         
                 // Berikan role petugas kepada pengguna tersebut
-                $petugas->assignRole('petugas');
+                $petugas->assignRole('operator');
             }
         }
     }

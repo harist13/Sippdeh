@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email')->unique();
-            $table->string('wilayah');
             $table->string('role');
             $table->boolean('is_forced_logout')->default(false);
             $table->integer('limit')->default(5);
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreignId('kabupaten_id')->nullable()->constrained('kabupaten')->nullOnDelete();
         });
     }
 

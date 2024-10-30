@@ -160,7 +160,7 @@
                         <td class="px-4 py-2 border-r">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
                         <td class="px-4 py-2 border-r">{{ $user->username }}</td>
                         <td class="px-4 py-2 border-r">{{ $user->email }}</td>
-                        <td class="px-4 py-2 border-r">{{ $user->wilayah }}</td>
+                        <td class="px-4 py-2 border-r">{{ $user->wilayah->nama }}</td>
                         <td class="px-4 py-2 border-r">{{ $user->roles->first()->name ?? 'No Role' }}</td>
                         <td class="px-4 py-2 border-r">{{ $activeDevices[$user->id] ?? 0 }} / {{ $user->limit }}</td>
                         <td class="px-4 py-2 border-r">
@@ -219,7 +219,7 @@
                     <tr class="border-b">
                         <td class="px-4 py-2 border-r">{{ ($loginHistories->currentPage() - 1) * $loginHistories->perPage() + $loop->iteration }}</td>
                         <td class="px-4 py-2 border-r">{{ $history->user->email }}</td>
-                        <td class="px-4 py-2 border-r">{{ $history->user->wilayah }}</td>
+                        <td class="px-4 py-2 border-r">{{ $history->user->nama }}</td>
                         <td class="px-4 py-2 border-r">{{ $history->user->roles->first()->name ?? 'No Role' }}</td>
                         <td class="px-4 py-2 border-r">{{ $history->login_at }}</td>
                         <td class="px-4 py-2 border-r">{{ $history->user_agent }}</td>
