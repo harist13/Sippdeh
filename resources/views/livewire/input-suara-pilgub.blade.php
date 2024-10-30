@@ -64,7 +64,6 @@
                                 <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
                                 @foreach ($paslon as $calon)
                                     <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
-                                        {{-- Rahmad Mas'ud/<br>Bagus Susetyo --}}
                                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                                     </th>
                                 @endforeach
@@ -635,6 +634,12 @@
                 syncTableInputWithSelectedTPS();
 
                 syncTableMode();
+
+                document.getElementById('checkAll')
+                    .addEventListener('change', onCheckAllCheckboxesChange);
+
+                document.querySelectorAll('.centang input[type=checkbox]')
+                    .forEach(checkbox => checkbox.addEventListener('change', onCheckboxChange));
             }, 100);
         }
 
