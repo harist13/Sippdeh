@@ -17,12 +17,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            RolesAndPermissionsSeeder::class,
-            UserSeeder::class,
             ProvinsiSeeder::class,
             KabupatenSeeder::class,
             // KecamatanSeeder::class,
             // KelurahanSeeder::class,
+
+            RolesAndPermissionsSeeder::class,
+            UserSeeder::class,
         ]);
 
         $this->command->info('Sedang mengimpor data Kecamatan, Kelurahan, dan TPS dari berkas CSV...');
