@@ -400,18 +400,25 @@
         function syncEditableCellMode({ tpsRow, cellQuery, onChange }) {
             const rowDataset = tpsRow.querySelector('td.nomor').dataset;
             const tpsId = rowDataset.id;
-            
+            let debounceTimeout;
+
             tpsRow.querySelectorAll(cellQuery).forEach(function(cell) {
                 const value = cell.querySelector('span');
                 const input = cell.querySelector('input');
-                
+
                 if (isEditMode() && TPS.exists(tpsId)) {
                     // Change to input
                     value.classList.add('hidden');
                     input.classList.remove('hidden');
 
                     const cellDataset = cell.dataset;
-                    input.addEventListener('keyup', () => onChange(tpsId, cellDataset, event.target.value));
+
+                    input.addEventListener('keyup', event => {
+                        clearTimeout(debounceTimeout);
+                        debounceTimeout = setTimeout(() => {
+                            onChange(tpsId, cellDataset, event.target.value);
+                        }, 200);
+                    });
                 } else {
                     // Change to value
                     value.classList.remove('hidden');
