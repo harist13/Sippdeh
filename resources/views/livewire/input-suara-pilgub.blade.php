@@ -677,6 +677,6 @@
 
         Livewire.hook('morph.updated', onLivewireUpdated);
 
-        document.addEventListener('load', setToInitialState());
+        document.addEventListener('load', setToInitialState);
     </script>
 @endscript
