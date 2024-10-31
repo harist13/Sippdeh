@@ -1,107 +1,58 @@
-@php
-if (! isset($scrollTo)) {
-    $scrollTo = 'body';
-}
+<div class="flex items-center justify-end gap-10 py-2">
+    <!-- Items per page dropdown -->
+    <div class="flex items-center">
+        <label for="perPage" class="text-sm text-gray-700 mr-2">Jumlah data perhalaman:</label>
+        <select wire:model.live="perPage" id="perPage" wire:model="perPage" class="bg-gray-300 border-gray-300 rounded p-1 text-sm">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
 
-$scrollIntoViewJsSnippet = ($scrollTo !== false)
-    ? <<<JS
-       (\$el.closest('{$scrollTo}') || document.querySelector('{$scrollTo}')).scrollIntoView()
-    JS
-    : '';
-@endphp
+    <!-- Pagination summary and controls -->
+    <div class="flex items-center gap-10">
+        <span class="text-sm text-gray-700 dark:text-gray-400 mr-4">
+            {{ $paginator->firstItem() }} - {{ $paginator->lastItem() }} dari {{ $paginator->total() }}
+        </span>
 
-<div>
-    @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
-            <div class="flex justify-between flex-1 sm:hidden">
-                <span>
-                    @if ($paginator->onFirstPage())
-                        <span class="text-gray-500">
-                            {!! __('pagination.previous') !!}
-                        </span>
-                    @else
-                        <a href="javascript:void(0);" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="text-blue-500 hover:underline">
-                            {!! __('pagination.previous') !!}
-                        </a>
-                    @endif
-                </span>
+        <!-- Pagination buttons -->
+        <div class="flex items-center gap-3 space-x-1">
+            <!-- First Page -->
+            @if (!$paginator->onFirstPage())
+                <a href="javascript:void(0);" wire:click="gotoPage(1)" class="text-gray-500 hover:text-blue-500" aria-label="First Page">
+                    &#124;&laquo;
+                </a>
+            @else
+                <span class="text-gray-300">&#124;&laquo;</span>
+            @endif
 
-                <span>
-                    @if ($paginator->hasMorePages())
-                        <a href="javascript:void(0);" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="ml-3 text-blue-500 hover:underline">
-                            {!! __('pagination.next') !!}
-                        </a>
-                    @else
-                        <span class="text-gray-500 ml-3">
-                            {!! __('pagination.next') !!}
-                        </span>
-                    @endif
-                </span>
-            </div>
+            <!-- Previous Page -->
+            @if ($paginator->onFirstPage())
+                <span class="text-gray-300">&laquo;</span>
+            @else
+                <a href="javascript:void(0);" wire:click="previousPage" class="text-gray-500 hover:text-blue-500" aria-label="Previous Page">
+                    &laquo;
+                </a>
+            @endif
 
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700 dark:text-gray-400">
-                        <span>Menampilkan</span>
-                        <span>{{ $paginator->firstItem() }}</span>
-                        <span>sampai</span>
-                        <span>{{ $paginator->lastItem() }}</span>
-                        <span>dari</span>
-                        <span>{{ $paginator->total() }}</span>
-                        <span>data</span>
-                    </p>
-                </div>
+            <!-- Next Page -->
+            @if ($paginator->hasMorePages())
+                <a href="javascript:void(0);" wire:click="nextPage" class="text-gray-500 hover:text-blue-500" aria-label="Next Page">
+                    &raquo;
+                </a>
+            @else
+                <span class="text-gray-300">&raquo;</span>
+            @endif
 
-                <div>
-                    <span class="inline-flex rtl:flex-row-reverse">
-                        <div class="mr-3">
-                            @if ($paginator->onFirstPage())
-                                <span aria-disabled="true" class="text-gray-500">
-                                    &laquo;
-                                </span>
-                            @else
-                                <a href="javascript:void(0);" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.after" class="text-blue-500 hover:underline" aria-label="&laquo;">
-                                    &laquo;
-                                </a>
-                            @endif
-                        </div>
-
-                        @foreach ($elements as $element)
-                            @if (is_string($element))
-                                <span aria-disabled="true" class="text-gray-500 mx-1">
-                                    {{ $element }}
-                                </span>
-                            @endif
-
-                            @if (is_array($element))
-                                @foreach ($element as $page => $url)
-                                    @if ($page == $paginator->currentPage())
-                                        <span aria-current="page" class="text-blue-500 font-bold mx-1">
-                                            {{ $page }}
-                                        </span>
-                                    @else
-                                        <a href="javascript:void(0);" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" class="text-blue-500 hover:underline mx-1" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
-                                            {{ $page }}
-                                        </a>
-                                    @endif
-                                @endforeach
-                            @endif
-                        @endforeach
-
-                        <div class="ml-3">
-                            @if ($paginator->hasMorePages())
-                                <a href="javascript:void(0);" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.after" class="text-blue-500 hover:underline ml-1" aria-label="&raquo;">
-                                    &raquo;
-                                </a>
-                            @else
-                                <span aria-disabled="true" class="text-gray-500 ml-1">
-                                    &raquo;
-                                </span>
-                            @endif
-                        </div>
-                    </span>
-                </div>
-            </div>
-        </nav>
-    @endif
+            <!-- Last Page -->
+            @if ($paginator->hasMorePages())
+                <a href="javascript:void(0);" wire:click="gotoPage({{ $paginator->lastPage() }})" class="text-gray-500 hover:text-blue-500" aria-label="Last Page">
+                    &raquo;&#124;
+                </a>
+            @else
+                <span class="text-gray-300">&raquo;&#124;</span>
+            @endif
+        </div>
+    </div>
 </div>
