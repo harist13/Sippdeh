@@ -20,6 +20,8 @@ class InputSuaraPilgub extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
+    public int $perPage = 10;
+
     public string $keyword = '';
 
     #[On('submit')]
@@ -102,7 +104,7 @@ class InputSuaraPilgub extends Component
             $tps->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         }
 
-        $tps = $tps->paginate(10);
+        $tps = $tps->paginate($this->perPage);
         
         $paslon = Calon::with('suaraCalon')
             ->wherePosisi('GUBERNUR')
