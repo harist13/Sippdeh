@@ -22,14 +22,43 @@
   path {
     transition: opacity 0.1s;
   }
-   #tooltip {
+   
+  #tooltip {
     position: absolute;
     background-color: white;
-    padding: 8px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     z-index: 10;
-    display: none; 
+    display: none;
+    min-width: 200px;
+    pointer-events: none;
+  }
+
+  #tooltip .kabupaten-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+  }
+
+  #tooltip .info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+
+  #tooltip .label {
+    color: #4b5563;
+  }
+
+  #tooltip .value {
+    text-align: right;
+    font-weight: 500;
+    color: #1a1a1a;
   }
 </style>
 
@@ -54,35 +83,62 @@ document.addEventListener('DOMContentLoaded', () => {
     groups.forEach(group => {
         group.addEventListener('mouseover', event => onMouseOver({ event, group }));
         group.addEventListener('mouseout', event => onMouseOut());
+        group.addEventListener('mousemove', event => onMouseMove({ event }));
     });
+
+    function calculateTooltipPosition(event) {
+        const mapRect = mapElement.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        
+        let x = event.clientX - mapRect.left;
+        let y = event.clientY - mapRect.top;
+        
+        const padding = 15;
+        
+        let left = x + padding;
+        let top = y + padding;
+        
+        if (left + tooltipRect.width > mapRect.width) {
+            left = x - tooltipRect.width - padding;
+        }
+        
+        if (top + tooltipRect.height > mapRect.height) {
+            top = y - tooltipRect.height - padding;
+        }
+        
+        left = Math.max(0, Math.min(left, mapRect.width - tooltipRect.width));
+        top = Math.max(0, Math.min(top, mapRect.height - tooltipRect.height));
+        
+        return { left, top };
+    }
+
+    function onMouseMove({ event }) {
+        if (tooltip.style.display === 'block') {
+            const { left, top } = calculateTooltipPosition(event);
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+        }
+    }
 
     function onMouseOver({ event, group }) {
         const paths = group.querySelectorAll('path');
         paths.forEach(path => path.classList.add('selected-region'));
 
-        // Ambil ID kabupaten dari data attribute
         const kabupatenId = group.getAttribute('data-kabupaten-id');
         const kabupaten = kabupatens.find(k => k.id == kabupatenId);
         
         if (kabupaten && suaraPerKabupaten[kabupatenId]) {
             kabupatenName.textContent = kabupaten.nama;
-            suaraPaslon1.textContent = `: ${suaraPerKabupaten[kabupatenId][paslon[0].id].toLocaleString()} suara`;
-            suaraPaslon2.textContent = `: ${suaraPerKabupaten[kabupatenId][paslon[1].id].toLocaleString()} suara`;
+            
+            const suaraPaslon1Value = suaraPerKabupaten[kabupatenId][paslon[0].id];
+            const suaraPaslon2Value = suaraPerKabupaten[kabupatenId][paslon[1].id];
+            
+            // Hanya tampilkan jumlah suara
+            suaraPaslon1.textContent = `${suaraPaslon1Value.toLocaleString()} suara`;
+            suaraPaslon2.textContent = `${suaraPaslon2Value.toLocaleString()} suara`;
         }
 
-        const mapRect = mapElement.getBoundingClientRect();
-        let left = event.clientX - mapRect.left;
-        let top = event.clientY - mapRect.top;
-
-        // Atur posisi tooltip agar tidak keluar dari map
-        const tooltipRect = tooltip.getBoundingClientRect();
-        if (left + tooltipRect.width > mapRect.width) {
-            left = mapRect.width - tooltipRect.width;
-        }
-        if (top + tooltipRect.height > mapRect.height) {
-            top = mapRect.height - tooltipRect.height;
-        }
-        
+        const { left, top } = calculateTooltipPosition(event);
         tooltip.style.left = `${left}px`;
         tooltip.style.top = `${top}px`;
         tooltip.style.display = 'block';
