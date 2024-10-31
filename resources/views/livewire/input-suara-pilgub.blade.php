@@ -623,25 +623,24 @@
         }
 
         function refreshState() {
-            setTimeout(function() {
-                resetTableInput();
+            resetTableInput();
 
-                syncActionButtons();
+            syncActionButtons();
 
-                syncCheckboxesWithSelectedTPS();
-                syncCheckboxesState();
+            syncCheckboxesWithSelectedTPS();
+            syncCheckboxesState();
 
-                syncTableDataWithSelectedTPS();
-                syncTableInputWithSelectedTPS();
+            syncTableDataWithSelectedTPS();
+            syncTableInputWithSelectedTPS();
 
-                syncTableMode();
+            syncTableMode();
 
-                attachEventToInteractableComponents();
-            }, 100);
+            attachEventToInteractableComponents();
         }
 
         function onLivewireUpdated() {
             refreshState();
+            console.log('onLivewireUpdated');
         }
 
         function onDataStored({ status }) {
@@ -676,7 +675,11 @@
 
         $wire.on('data-stored', onDataStored);
 
-        Livewire.hook('morph.updated', onLivewireUpdated);
+        Livewire.hook('request', function({ respond }) {
+            respond(function() {
+                setTimeout(onLivewireUpdated, 100)
+            });
+        });
 
         setToInitialState();
     </script>
