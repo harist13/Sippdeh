@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\On;
-use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Livewire\Component;
+use Livewire\Attributes\On;
+use Sentry\SentrySdk;
+use Exception;
 
 class InputSuaraPilgub extends Component
 {
@@ -64,9 +66,12 @@ class InputSuaraPilgub extends Component
             Session::flash('pesan_sukses', 'Berhasil menyimpan data.');
 
             $this->dispatch('data-stored', status: 'sukses');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
+
             Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             Session::flash('pesan_gagal', 'Gagal menyimpan data.');
 
             $this->dispatch('data-stored', status: 'gagal');
