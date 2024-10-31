@@ -277,19 +277,21 @@
             }
 
             get suaraSah() {
-                return this.suaraTidakSah;
+                return this.suaraCalon.reduce(function(acc, sc) {
+                    return acc + sc.suara;
+                }, 0);
             }
 
             get jumlahPenggunaTidakPilih() {
-                return this.suaraTidakSah;
+                return this.dpt - this.suaraMasuk;
             }
 
             get suaraMasuk() {
-                return this.suaraTidakSah;
+                return this.suaraSah + this.suaraTidakSah;
             }
 
             get partisipasi() {
-                return this.suaraTidakSah;
+                return parseFloat(((this.suaraMasuk / this.dpt) * 100).toFixed(1));
             }
 
             toObject() {
@@ -455,7 +457,7 @@
                     tpsRow,
                     cellQuery: 'td.dpt',
                     onChange: function(tpsId, cellDataset, value) {
-                        TPS.update(tpsId, { dpt: event.target.value });
+                        TPS.update(tpsId, { dpt: parseInt(event.target.value) });
                         syncTableDataWithSelectedTPS();
                     }
                 });
@@ -464,7 +466,7 @@
                     tpsRow,
                     cellQuery: 'td.suara-tidak-sah',
                     onChange: function(tpsId, cellDataset, value) {
-                        TPS.update(tpsId, { suaraTidakSah: event.target.value });
+                        TPS.update(tpsId, { suaraTidakSah: parseInt(event.target.value) });
                         syncTableDataWithSelectedTPS();
                     }
                 });

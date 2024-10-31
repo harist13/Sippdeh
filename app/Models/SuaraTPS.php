@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use DivisionByZeroError;
 
 class SuaraTPS extends Model
 {
@@ -12,20 +13,26 @@ class SuaraTPS extends Model
     protected $fillable = ['dpt', 'suara_tidak_sah', 'operator_id', 'tps_id'];
 
     public function suaraSah() {
-        return 0;
+        return $this->tps->suaraCalon->reduce(function (?int $acc, SuaraCalon $sc) {
+            return $acc + $sc->suara;
+        });
     }
 
     public function jumlahPenggunaTidakPilih() {
-        return 0;
+        return $this->dpt - $this->suaraMasuk();
     }
 
     public function suaraMasuk() {
-        return 0;
+        return $this->suaraSah() + $this->suara_tidak_sah;
     }
 
     public function partisipasi() {
-        return 0;
-    }
+        try {
+            return round(($this->suaraMasuk() / $this->dpt) * 100, 1);
+        } catch (DivisionByZeroError $exception) {
+            return 0;
+        }
+    }    
 
     public function operator(): BelongsTo
     {
