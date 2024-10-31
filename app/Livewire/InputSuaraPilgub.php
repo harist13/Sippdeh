@@ -26,6 +26,8 @@ class InputSuaraPilgub extends Component
 
     public string $keyword = '';
 
+    public string $posisi = 'GUBERNUR';
+
     #[On('submit')]
     public function submit($data)
     {
@@ -79,7 +81,19 @@ class InputSuaraPilgub extends Component
         }
     }
 
-    public function render()
+    private function getCalon()
+    {
+        $userWilayah = session('user_wilayah');
+
+        return Calon::with('suaraCalon')
+            ->wherePosisi($this->posisi)
+            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            })
+            ->get();
+    }
+
+    public function getTPS()
     {
         $userWilayah = session('user_wilayah');
 
@@ -110,14 +124,15 @@ class InputSuaraPilgub extends Component
             $tps->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         }
 
-        $tps = $tps->paginate($this->perPage);
-        
-        $paslon = Calon::with('suaraCalon')
-            ->wherePosisi('GUBERNUR')
-            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-            })
-            ->get();
+        return $tps->paginate($this->perPage);
+    }
+
+    public function render()
+    {
+        $userWilayah = session('user_wilayah');
+
+        $tps = $this->getTPS();
+        $paslon = $this->getCalon();
 
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
     }
