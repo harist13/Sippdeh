@@ -102,24 +102,60 @@
 </style>
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
         <section class="rounded-lg p-4 mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center">
-                    <img src="https://d22gwcrfo2de51.cloudfront.net/wp-content/uploads/2021/09/isran1-122e74ac-41bc-4213-91e3-677f58c1eab4_jpg-1024x683-1.jpg" alt="Isran Noor/Hady Mulyadi" class="rounded-full mr-4 w-20 h-20">
-                    <span class="font-semibold text-lg">Isran Noor/Hady Mulyadi</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="font-semibold text-lg mr-4">Rudy Mas'ud/Seno Aji</span>
-                    <img src="https://d22gwcrfo2de51.cloudfront.net/wp-content/uploads/2021/09/isran1-122e74ac-41bc-4213-91e3-677f58c1eab4_jpg-1024x683-1.jpg" alt="Rudy Mas'ud/Seno Aji" class="rounded-full w-20 h-20">
-                </div>
+            @php
+            // Urutkan paslon berdasarkan total suara tertinggi
+            $paslon_sorted = $calon->sortByDesc('total_suara');
+            $pemenang = $paslon_sorted->first();
+            $runner_up = $paslon_sorted->skip(1)->first();
+            
+            // Jika tidak ada data, berikan nilai default
+            if (!$pemenang) {
+                $pemenang = new stdClass();
+                $pemenang->nama = 'Belum ada data';
+                $pemenang->nama_wakil = '';
+                $pemenang->foto = '/placeholder.jpg';
+                $pemenang->total_suara = 0;
+                $pemenang->persentase = 0;
+            }
+            if (!$runner_up) {
+                $runner_up = new stdClass();
+                $runner_up->nama = 'Belum ada data';
+                $runner_up->nama_wakil = '';
+                $runner_up->foto = '/placeholder.jpg';
+                $runner_up->total_suara = 0;
+                $runner_up->persentase = 0;
+            }
+        @endphp
+
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+                <img src="{{ asset('storage/' . $pemenang->foto) }}" 
+                    alt="{{ $pemenang->nama }}/{{ $pemenang->nama_wakil }}" 
+                    class="rounded-full mr-4 w-20 h-20 object-cover">
+                <span class="font-semibold text-lg">{{ $pemenang->nama }}/{{ $pemenang->nama_wakil }}</span>
             </div>
-            <div class="bg-gray-200 h-10 rounded-full overflow-hidden flex">
-                <div class="bg-[#3560A0] h-full flex-grow flex items-center">
-                    <span class="text-white text-sm font-semibold ml-4">372,987 Suara</span>
-                </div>
-                <div class="bg-yellow-400 h-full w-[32.6%] flex items-center justify-end">
-                    <span class="text-white text-sm font-semibold mr-4">180,181 Suara</span>
-                </div>
+            <div class="flex items-center">
+                <span class="font-semibold text-lg mr-4">{{ $runner_up->nama }}/{{ $runner_up->nama_wakil }}</span>
+                <img src="{{ asset('storage/' . $runner_up->foto) }}" 
+                    alt="{{ $runner_up->nama }}/{{ $runner_up->nama_wakil }}" 
+                    class="rounded-full w-20 h-20 object-cover">
             </div>
+        </div>
+
+        <div class="bg-gray-200 h-10 rounded-full overflow-hidden flex">
+            <div class="bg-[#3560A0] h-full" 
+                style="width: {{ $pemenang->persentase }}%">
+                <span class="text-white text-sm font-semibold ml-4 leading-10">
+                    {{ number_format($pemenang->total_suara, 0, ',', '.') }} Suara
+                </span>
+            </div>
+            <div class="bg-yellow-400 h-full" 
+                style="width: {{ $runner_up->persentase }}%">
+                <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
+                    {{ number_format($runner_up->total_suara, 0, ',', '.') }} Suara
+                </span>
+            </div>
+        </div>
         </section>
          <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 gap-8 mb-8">

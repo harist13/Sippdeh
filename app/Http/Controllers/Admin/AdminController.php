@@ -17,8 +17,24 @@ class AdminController extends Controller
 {
     public function Dashboard()
     {
-        $calon = Calon::all();
-        return view('admin.dashboard', ['calon' => $calon]);
+        // Ambil paslon gubernur (asumsi posisi = 'gubernur')
+        $calon = Calon::where('posisi', 'gubernur')->get();
+        
+        // Hitung total suara untuk masing-masing paslon
+        foreach ($calon as $paslon) {
+            $paslon->total_suara = $paslon->suaraCalon()->sum('suara');
+        }
+        
+        // Hitung total semua suara
+        $total_suara = $calon->sum('total_suara');
+        
+        // Hitung persentase untuk masing-masing paslon
+        foreach ($calon as $paslon) {
+            $paslon->persentase = $total_suara > 0 ? 
+                round(($paslon->total_suara / $total_suara) * 100, 1) : 0;
+        }
+        
+        return view('admin.dashboard', compact('calon', 'total_suara'));
     }
 
 
