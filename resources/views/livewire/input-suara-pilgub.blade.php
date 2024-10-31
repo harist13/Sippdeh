@@ -11,7 +11,7 @@
 
     <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
         <div class="container mx-auto p-7">
-        <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
+            <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
             {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
             <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
                 <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
@@ -26,7 +26,7 @@
                     <i class="fas fa-plus mr-3"></i>
                     Ubah Data Tercentang
                 </button>
-            </div>
+            </div>           
 
             {{-- Cari dan Filter --}}
             <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
@@ -43,13 +43,20 @@
             </div>
         </div>
 
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 mb-3 rounded relative items-center hidden" id="loading" role="alert">
+            <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            <strong class="font-bold">Mohon tunggu:</strong>
+            <span class="block sm:inline ml-2">Sedang menyimpan data...</span>
+        </div>   
+
         <div class="overflow-x-auto mb-5 -mx-4 sm:mx-0">
             <div class="inline-block min-w-full align-middle">
                 <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
                     <!-- Loading Overlay -->
-                    <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10">
-                        <div class="text-blue-600 text-lg font-semibold">Loading...</div>
-                    </div>
+                    <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-[#3560A0] text-white">
@@ -370,6 +377,16 @@
         const enableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = false;
         const disableEnterEditModeButton = () => document.getElementById('ubahDataTercentang').disabled = true;
 
+        function showLoadingMessage() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('loading').classList.add('flex');
+        }
+
+        function hideLoadingMessage() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('loading').classList.remove('flex');
+        }
+        
         function isEditMode() {
             const isIt = localStorage.getItem('is_edit_mode') || 0;
             return isIt == '1';
@@ -555,6 +572,8 @@
 
         function onSubmitClick() {
             if (isEditMode() && confirm('Simpan perubahan data?')) {
+                showLoadingMessage();
+
                 const data = TPS.getAllTPS().map(tps => tps.toObject());
                 $wire.dispatch('submit', { data });
             }
@@ -644,6 +663,7 @@
         function onDataStored({ status }) {
             if (status == 'sukses') {
                 setToInitialState();
+                hideLoadingMessage();
             }
         }
 
