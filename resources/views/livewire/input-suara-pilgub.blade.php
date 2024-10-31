@@ -564,13 +564,12 @@
             if (isEditMode() && confirm('Yakin ingin batalkan pengeditan?')) {
                 cancelEditModeState();
                 refreshState();
-                $wire.$refresh();
             }
         }
 
         function onEnterEditModeButtonClick() {
             enableEditModeState();
-            $wire.$refresh();
+            refreshState();
         }
 
         function onCheckAllCheckboxesChange() {
@@ -674,12 +673,6 @@
 
         function initializeHooks() {
             $wire.on('data-stored', onDataStored);
-    
-            Livewire.hook('request', function({ respond }) {
-                respond(function() {
-                    setTimeout(onLivewireUpdated, 0)
-                });
-            });
     
             let timeoutId = null;
             Livewire.hook('morph.updated', ({ component, el }) => {
