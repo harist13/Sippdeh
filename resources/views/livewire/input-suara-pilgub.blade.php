@@ -1,16 +1,6 @@
 <div>
-    @php $status = session('pesan_sukses'); @endphp
-    @isset ($status)
-        @include('components.alert-berhasil', ['message' => $status])
-    @endisset
-
-    @php $status = session('pesan_gagal'); @endphp
-    @isset ($status)
-        @include('components.alert-gagal', ['message' => $status])
-    @endisset
-
     <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
-        <div class="bg-white sticky top-20 px-3 py-2 z-10 mb-4">
+        <div class="bg-white sticky top-20 py-2 z-10 mb-4">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
@@ -43,6 +33,20 @@
                         </button>
                     </div>
                 </div>
+                
+                @php $status = session('pesan_sukses'); @endphp
+                @isset ($status)
+                    <div class="mt-3">
+                        @include('components.alert-berhasil', ['message' => $status])
+                    </div>
+                @endisset
+
+                @php $status = session('pesan_gagal'); @endphp
+                @isset ($status)
+                    <div class="mt-3">
+                        @include('components.alert-gagal', ['message' => $status])
+                    </div>
+                @endisset
             </div>
         </div>
 
@@ -692,6 +696,12 @@
                 .forEach(checkbox => checkbox.onchange = onCheckboxChange);
 
             window.onbeforeunload = onUnloadPage;
+
+            document.body.onkeydown = function(event) {
+                if(event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+                    onSubmitClick();
+                }
+            };
         }
 
         function initializeHooks() {
