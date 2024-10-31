@@ -623,26 +623,23 @@
         }
 
         function refreshState() {
-            setTimeout(function() {
-                resetTableInput();
+            resetTableInput();
 
-                syncActionButtons();
+            syncActionButtons();
 
-                syncCheckboxesWithSelectedTPS();
-                syncCheckboxesState();
+            syncCheckboxesWithSelectedTPS();
+            syncCheckboxesState();
 
-                syncTableDataWithSelectedTPS();
-                syncTableInputWithSelectedTPS();
+            syncTableDataWithSelectedTPS();
+            syncTableInputWithSelectedTPS();
 
-                syncTableMode();
+            syncTableMode();
 
-                attachEventToInteractableComponents();
-            }, 100);
+            attachEventToInteractableComponents();
         }
 
         function onLivewireUpdated() {
             refreshState();
-            console.log('onLivewireUpdated');
         }
 
         function onDataStored({ status }) {
@@ -675,14 +672,28 @@
             window.onbeforeunload = onUnloadPage;
         }
 
-        $wire.on('data-stored', onDataStored);
-
-        Livewire.hook('request', function({ respond }) {
-            respond(function() {
-                setTimeout(onLivewireUpdated, 100)
+        function initializeHooks() {
+            $wire.on('data-stored', onDataStored);
+    
+            Livewire.hook('request', function({ respond }) {
+                respond(function() {
+                    setTimeout(onLivewireUpdated, 100)
+                });
             });
-        });
+    
+            let timeoutId = null;
+            Livewire.hook('element.init', ({ component, el }) => {
+                clearTimeout(timeoutId);
+    
+                timeoutId = setTimeout(function() {
+                    onLivewireUpdated();
+                    timeoutId = null;
+                }, 500);
+            });
+        }
 
         setToInitialState();
+        
+        initializeHooks();
     </script>
 @endscript
