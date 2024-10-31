@@ -41,6 +41,7 @@ class InputSuaraPilgub extends Component
                         'tps_id' => $datum['id'],
                     ],
                     [
+                        'dpt' => $datum['dpt'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
                         'operator_id' => $operatorId,
                     ]

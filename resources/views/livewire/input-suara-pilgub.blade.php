@@ -1,6 +1,6 @@
 <div>
-    <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
-        <div class="bg-white sticky top-20 py-2 z-10 mb-4">
+    <div class="bg-white rounded-[20px] mb-8 shadow-lg">
+        <div class="bg-white sticky top-20 p-4 z-10 rounded-t-[20px] shadow-lg">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
@@ -37,7 +37,7 @@
                 @php $status = session('pesan_sukses'); @endphp
                 @isset ($status)
                     <div class="mt-3">
-                        @include('components.alert-berhasil', ['message' => $status])
+                        @include('components.alert-berhasil', ['message' => $status, 'withoutMarginBottom' => true])
                     </div>
                 @endisset
 
@@ -47,17 +47,17 @@
                         @include('components.alert-gagal', ['message' => $status])
                     </div>
                 @endisset
+
+                <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative items-center hidden mt-3" id="loading" role="alert">
+                    <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    <strong class="font-bold">Mohon tunggu:</strong>
+                    <span class="block sm:inline ml-2">Sedang menyimpan data...</span>
+                </div>
             </div>
         </div>
-
-        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 mb-3 rounded relative items-center hidden" id="loading" role="alert">
-            <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-            </svg>
-            <strong class="font-bold">Mohon tunggu:</strong>
-            <span class="block sm:inline ml-2">Sedang menyimpan data...</span>
-        </div>   
 
         <div class="overflow-x-auto mb-5 -mx-4 sm:mx-0">
             <div class="inline-block min-w-full align-middle">
@@ -130,9 +130,16 @@
                                     {{-- DPT --}}
                                     <td
                                         class="py-3 px-4 border dpt"
-                                        data-value="{{ $t->suara ? $t->suara->dpt() : 0 }}"
+                                        data-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
                                     >
-                                        {{ $t->suara ? $t->suara->dpt() : 0 }}
+                                        <span class="value">{{ $t->suara ? $t->suara->dpt : 0 }}</span>
+                                        <input
+                                            type="number"
+                                            placeholder="Jumlah"
+                                            class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
+                                            data-default-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
+                                            data-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
+                                        >
                                     </td>
 
                                     {{-- Calon-calon --}}
@@ -183,8 +190,8 @@
                                             type="number"
                                             placeholder="Jumlah"
                                             class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
-                                            data-default-value="{{ $t->suara ? $t->suara->suara_tidak_sah : '' }}"
-                                            data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : '' }}"
+                                            data-default-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
+                                            data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
                                         >
                                     </td>
 
@@ -232,8 +239,9 @@
         class MyClass {}
 
         class TPS {
-            constructor(id, suaraTidakSah) {
+            constructor(id, dpt, suaraTidakSah) {
                 this.id = id;
+                this.dpt = dpt;
                 this.suaraCalon = [];
                 this.suaraTidakSah = suaraTidakSah;
             }
@@ -268,10 +276,6 @@
                 console.log(`Updated calon id ${calonId} in TPS ${tpsId} with new suara: ${newSuara}`);
             }
 
-            get dpt() {
-                return this.suaraTidakSah;
-            }
-
             get suaraSah() {
                 return this.suaraTidakSah;
             }
@@ -304,6 +308,7 @@
             static fromObject(obj) {
                 const tps = new TPS(
                     obj.id,
+                    obj.dpt,
                     obj.suara_tidak_sah
                 );
 
@@ -399,8 +404,8 @@
             return isIt == '1';
         }
         
-        function addTPSToLocalStorage(id, suaraCalon, suaraTidakSah) {
-            const tps = new TPS(id, parseInt(suaraTidakSah));
+        function addTPSToLocalStorage(id, dpt, suaraCalon, suaraTidakSah) {
+            const tps = new TPS(id, parseInt(dpt), parseInt(suaraTidakSah));
     
             // Add suaraCalon after the TPS object is instantiated
             suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
@@ -446,6 +451,15 @@
 
         function syncTableMode() {
             document.querySelectorAll('tr.tps').forEach(tpsRow => {
+                syncEditableCellMode({
+                    tpsRow,
+                    cellQuery: 'td.dpt',
+                    onChange: function(tpsId, cellDataset, value) {
+                        TPS.update(tpsId, { dpt: event.target.value });
+                        syncTableDataWithSelectedTPS();
+                    }
+                });
+
                 syncEditableCellMode({
                     tpsRow,
                     cellQuery: 'td.suara-tidak-sah',
@@ -498,7 +512,7 @@
                     if (tps instanceof TPS) {
                         const dptCell = tpsRow.querySelector('td.dpt');
                         dptCell.dataset.value = tps.dpt;
-                        dptCell.textContent = tps.dpt;
+                        dptCell.querySelector('span').textContent = tps.dpt;
     
                         tps.suaraCalon.forEach(function(sc) {
                             const suaraCalonCell = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"]`);
@@ -537,6 +551,10 @@
                     const tps = TPS.getById(tpsId);
     
                     if (tps instanceof TPS) {
+                        const dptCell = tpsRow.querySelector('td.dpt');
+                        const dptInput = dptCell.querySelector('input');
+                        dptInput.value = tps.dpt;
+
                         tps.suaraCalon.forEach(function(sc) {
                             const suaraCalonCell = tpsRow.querySelector(`td.paslon[data-id="${sc.id}"]`);
                             const suaraCalonInput = suaraCalonCell.querySelector('input');
@@ -613,6 +631,8 @@
             
             if (checkbox.checked) {
                 const row = checkbox.parentElement.parentElement;
+                
+                const dpt = row.querySelector('td.dpt').dataset.value;
                 const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
                 const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
                     .map(suara => ({
@@ -620,13 +640,13 @@
                         suara: suara.dataset.suara
                     }));
 
-                addTPSToLocalStorage(tpsId, suaraCalon, suaraTidakSah);
+                addTPSToLocalStorage(tpsId, dpt, suaraCalon, suaraTidakSah);
             } else {
                 TPS.delete(tpsId);
             }
 
             syncCheckboxesWithSelectedTPS();
-            syncEnterEditModeButtonState();
+            syncActionButtons();
         }
 
         function resetTableInput() {

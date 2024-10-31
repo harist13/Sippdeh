@@ -11,10 +11,6 @@ class SuaraTPS extends Model
 
     protected $fillable = ['dpt', 'suara_tidak_sah', 'operator_id', 'tps_id'];
 
-    public function dpt() {
-        return 0;
-    }
-
     public function suaraSah() {
         return 0;
     }
