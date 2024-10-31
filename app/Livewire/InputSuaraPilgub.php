@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -27,6 +26,10 @@ class InputSuaraPilgub extends Component
     public string $keyword = '';
 
     public string $posisi = 'GUBERNUR';
+
+    public array $ignoredColumns = [];
+
+    public string $partisipasi = '';
 
     #[On('submit')]
     public function submit($data)
@@ -66,7 +69,7 @@ class InputSuaraPilgub extends Component
 
             DB::commit();
 
-            Session::flash('pesan_sukses', 'Berhasil menyimpan data.');
+            session()->flash('pesan_sukses', 'Berhasil menyimpan data.');
 
             $this->dispatch('data-stored', status: 'sukses');
         } catch (Exception $exception) {
@@ -75,7 +78,7 @@ class InputSuaraPilgub extends Component
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
 
-            Session::flash('pesan_gagal', 'Gagal menyimpan data.');
+            session()->flash('pesan_gagal', 'Gagal menyimpan data.');
 
             $this->dispatch('data-stored', status: 'gagal');
         }

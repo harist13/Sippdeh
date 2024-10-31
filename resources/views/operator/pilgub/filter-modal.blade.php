@@ -1,5 +1,12 @@
+<style>
+    /* Add blue border to span when checkbox is checked */
+    input[type="checkbox"]:checked + span {
+        border-color: #3b82f6;
+    }
+</style>
+
 <!-- Filter Pilgub Modal -->
-<div id="filterPilgubModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+<div id="filterPilgubModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20 hidden">
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
         <form action="{{ route('provinsi.export') }}" method="GET">
             @csrf
@@ -7,24 +14,6 @@
 				<i class="fas fa-arrow-left mr-3 select-none cursor-pointer" id="cancelFilterPilgub"></i>
 				<h3 class="text-lg font-medium text-gray-900">Filter</h3>
 			</div>
-
-			{{-- Jumlah Data --}}
-			<label for="pilihJumlahData" class="mb-3 font-bold block">Jumlah Data</label>
-			<ul class="flex gap-2">
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-[#ECEFF5] text-[#344054] py-2 px-7 rounded text-sm">10</button>
-				</li>
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-[#ECEFF5] text-[#344054] py-2 px-7 rounded text-sm">20</button>
-				</li>
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-[#ECEFF5] text-[#344054] py-2 px-7 rounded text-sm">50</button>
-				</li>
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-[#ECEFF5] text-[#344054] py-2 px-7 rounded text-sm">100</button>
-				</li>
-			</ul>
-			{{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
 
 			{{-- Kolom --}}
 			<label for="pilihKolom" class="mb-3 font-bold mt-5 block">Kolom</label>
@@ -58,17 +47,20 @@
 
 			{{-- Tingkat Partisipasi --}}
 			<label for="pilihTingkatPartisipasi" class="mb-3 font-bold mt-5 block">Tingkat Partisipasi</label>
-			<ul class="flex gap-2">
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-green-400 text-white py-2 px-7 rounded text-sm">> 80%</button>
-				</li>
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-yellow-400 text-white py-2 px-7 rounded text-sm">> 60%</button>
-				</li>
-				<li class="flex items-center gap-2">
-					<button type="button" class="bg-red-400 text-white py-2 px-7 rounded text-sm">< 20%</button>
-				</li>
-			</ul>
+			<div class="flex gap-2">
+				<label for="hijau" class="flex items-center gap-2 cursor-pointer">
+					<input type="checkbox" id="hijau" class="hidden" />
+					<span class="bg-green-400 text-white py-2 px-7 rounded text-sm select-none border-2">> 80%</span>
+				</label>
+				<label for="kuning" class="flex items-center gap-2 cursor-pointer">
+					<input type="checkbox" id="kuning" class="hidden" />
+					<span class="bg-yellow-400 text-white py-2 px-7 rounded text-sm select-none border-2">> 60%</span>
+				</label>
+				<label for="merah" class="flex items-center gap-2 cursor-pointer">
+					<input type="checkbox" id="merah" class="hidden" />
+					<span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none border-2">< 20%</span>
+				</label>
+			</div>
 			{{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
 
             <hr class="h-1 my-3">
