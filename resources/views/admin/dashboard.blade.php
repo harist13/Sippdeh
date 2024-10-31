@@ -161,26 +161,26 @@
             <div class="grid grid-cols-2 gap-8 mb-8">
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
-                    <a href="{{ route('rangkuman') }}"><div id="map" class="p-4 relative">
+                    <div id="map" class="p-4 relative">
                         @include('admin.peta-kaltim.map')
                         <div id="tooltip" class="hidden bg-slate-100 p-4 rounded-md absolute shadow">
-                            <p class="mb-2 font-bold">Kutai Kartanegara</p>
+                            <p class="mb-2 font-bold" id="kabupaten-name"></p>
                             <div class="grid grid-cols-2 gap-1">
-                                <p>Total Suara 1</p>
-                                <p>: 100%</p>
-                                <p>Total Suara 2</p>
-                                <p>: 90%</p>
-                            </div></a>
+                                <p>{{ $calon[0]->nama }}</p>
+                                <p id="suara-paslon1">: 0 suara</p>
+                                <p>{{ $calon[1]->nama }}</p>
+                                <p id="suara-paslon2">: 0 suara</p>
+                            </div>
                         </div>
                         <div class="absolute bottom-2 right-2 bg-white p-2 rounded-lg shadow">
                             <div class="flex flex-col">
                                 <div class="flex items-center mb-1">
                                     <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
-                                    <span class="text-sm">Suara Terbanyak 1</span>
+                                    <span class="text-sm">{{ $calon[0]->nama }}/{{ $calon[0]->nama_wakil }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
-                                    <span class="text-sm">Suara Terbanyak 2</span>
+                                    <span class="text-sm">{{ $calon[1]->nama }}/{{ $calon[1]->nama_wakil }}</span>
                                 </div>
                             </div>
                         </div>

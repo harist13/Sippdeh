@@ -34,55 +34,64 @@
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+const suaraPerKabupaten = @json($suaraPerKabupaten);
+const kabupatens = @json($kabupatens);
+const paslon = @json($calon);
+
+document.addEventListener('DOMContentLoaded', () => {
     const mapElement = document.getElementById('map');
     const tooltip = document.getElementById('tooltip');
+    const kabupatenName = document.getElementById('kabupaten-name');
+    const suaraPaslon1 = document.getElementById('suara-paslon1');
+    const suaraPaslon2 = document.getElementById('suara-paslon2');
     
     if (!mapElement || !tooltip) {
-      console.error("Map or tooltip element not found");
-      return; 
+        console.error("Map or tooltip element not found");
+        return;
     }
 
     const groups = document.querySelectorAll('#map g.region');
     groups.forEach(group => {
-      group.addEventListener('mouseover', event => onMouseOver({ event, group }));
-      group.addEventListener('mouseout', event => onMouseOut());
+        group.addEventListener('mouseover', event => onMouseOver({ event, group }));
+        group.addEventListener('mouseout', event => onMouseOut());
     });
 
     function onMouseOver({ event, group }) {
-      const paths = group.querySelectorAll('path');
-      paths.forEach(path => path.classList.add('selected-region'));
+        const paths = group.querySelectorAll('path');
+        paths.forEach(path => path.classList.add('selected-region'));
 
-      const mapRect = mapElement.getBoundingClientRect();
-      const tooltipRect = tooltip.getBoundingClientRect();
+        // Ambil ID kabupaten dari data attribute
+        const kabupatenId = group.getAttribute('data-kabupaten-id');
+        const kabupaten = kabupatens.find(k => k.id == kabupatenId);
+        
+        if (kabupaten && suaraPerKabupaten[kabupatenId]) {
+            kabupatenName.textContent = kabupaten.nama;
+            suaraPaslon1.textContent = `: ${suaraPerKabupaten[kabupatenId][paslon[0].id].toLocaleString()} suara`;
+            suaraPaslon2.textContent = `: ${suaraPerKabupaten[kabupatenId][paslon[1].id].toLocaleString()} suara`;
+        }
 
-      // atur posisi tooltipnya
-      let left = event.clientX - mapRect.left;
-      let top = event.clientY - mapRect.top;
+        const mapRect = mapElement.getBoundingClientRect();
+        let left = event.clientX - mapRect.left;
+        let top = event.clientY - mapRect.top;
 
-      // cek apakah tooltip keluar dari batas map
-      if (left + tooltipRect.width > mapRect.width) {
-        left = mapRect.width - tooltipRect.width;
-      }
-      if (top + tooltipRect.height > mapRect.height) {
-        top = mapRect.height - tooltipRect.height;
-      }
-      if (left < 0) {
-        left = 0;
-      }
-      if (top < 0) {
-        top = 0;
-      }
-
-      tooltip.style.left = `${left}px`;
-      tooltip.style.top = `${top}px`;
-      tooltip.style.display = 'block'; // Make the tooltip visible
+        // Atur posisi tooltip agar tidak keluar dari map
+        const tooltipRect = tooltip.getBoundingClientRect();
+        if (left + tooltipRect.width > mapRect.width) {
+            left = mapRect.width - tooltipRect.width;
+        }
+        if (top + tooltipRect.height > mapRect.height) {
+            top = mapRect.height - tooltipRect.height;
+        }
+        
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+        tooltip.style.display = 'block';
     }
 
     function onMouseOut() {
-      const paths = document.querySelectorAll('.selected-region');
-      paths.forEach(path => path.classList.remove('selected-region'));
-      tooltip.style.display = 'none'; // Hide the tooltip
+        const paths = document.querySelectorAll('.selected-region');
+        paths.forEach(path => path.classList.remove('selected-region'));
+        tooltip.style.display = 'none';
     }
-  });
+});
 </script>

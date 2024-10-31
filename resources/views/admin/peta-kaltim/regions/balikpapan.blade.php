@@ -1,4 +1,4 @@
-<g id="Balikpapan" class="region" data-color="{{ $color }}"
+<g id="Balikpapan" class="region" data-kabupaten-id="{{ $kabupatenId ?? '8' }}" data-color="{{ $color }}"
     transform="matrix(0.10901000350713728, 0, 0, -0.10562700778245925, 284.42047542960154, 382.4249934915451)"
     fill="{{ $color }}" stroke="none" style="">
     <path

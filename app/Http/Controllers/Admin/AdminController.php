@@ -11,16 +11,35 @@ use Illuminate\Validation\Rule;
 use App\Models\LoginHistory;
 use App\Models\Kabupaten;
 use App\Models\Calon;
+use App\Models\SuaraCalon;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function Dashboard()
     {
-        // Ambil paslon gubernur (asumsi posisi = 'gubernur')
+        // Ambil paslon gubernur
         $calon = Calon::where('posisi', 'gubernur')->get();
         
-        // Hitung total suara untuk masing-masing paslon
+        // Ambil semua kabupaten
+        $kabupatens = Kabupaten::all();
+        
+        // Siapkan data suara per kabupaten untuk setiap paslon
+        $suaraPerKabupaten = [];
+        foreach ($kabupatens as $kabupaten) {
+            $suaraPaslon = [];
+            foreach ($calon as $paslon) {
+                // Hitung total suara paslon di kabupaten ini
+                $totalSuara = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($q) use ($kabupaten) {
+                    $q->where('id', $kabupaten->id);
+                })->where('calon_id', $paslon->id)->sum('suara');
+                
+                $suaraPaslon[$paslon->id] = $totalSuara;
+            }
+            $suaraPerKabupaten[$kabupaten->id] = $suaraPaslon;
+        }
+        
+        // Hitung total suara untuk masing-masing paslon (keseluruhan)
         foreach ($calon as $paslon) {
             $paslon->total_suara = $paslon->suaraCalon()->sum('suara');
         }
@@ -34,7 +53,7 @@ class AdminController extends Controller
                 round(($paslon->total_suara / $total_suara) * 100, 1) : 0;
         }
         
-        return view('admin.dashboard', compact('calon', 'total_suara'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens'));
     }
 
 
