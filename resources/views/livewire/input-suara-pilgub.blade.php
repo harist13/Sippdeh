@@ -623,19 +623,21 @@
         }
 
         function refreshState() {
-            resetTableInput();
+            setTimeout(function() {
+                resetTableInput();
 
-            syncActionButtons();
+                syncActionButtons();
 
-            syncCheckboxesWithSelectedTPS();
-            syncCheckboxesState();
+                syncCheckboxesWithSelectedTPS();
+                syncCheckboxesState();
 
-            syncTableDataWithSelectedTPS();
-            syncTableInputWithSelectedTPS();
+                syncTableDataWithSelectedTPS();
+                syncTableInputWithSelectedTPS();
 
-            syncTableMode();
+                syncTableMode();
 
-            attachEventToInteractableComponents();
+                attachEventToInteractableComponents();
+            }, 100);
         }
 
         function onLivewireUpdated() {
