@@ -213,11 +213,30 @@
                                         </td>
     
                                         {{-- Partisipasi --}}
+                                        @php
+                                            $partisipasi = $t->suara ? $t->suara->partisipasi() : 0;
+                                        @endphp
                                         <td
                                             class="text-center py-3 px-4 border partisipasi"
-                                            data-value="{{ $t->suara ? $t->suara->partisipasi() : 0 }}"
+                                            data-value="{{ $partisipasi }}"
                                         >
-                                            <span class="bg-green-400 text-white py-1 px-7 rounded text-xs">{{ $t->suara ? $t->suara->partisipasi() : 0 }}%</span>
+                                            @if ($partisipasi >= 80)
+                                                <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
+                                                    {{ $partisipasi }}%
+                                                </span>
+                                            @endif
+
+                                            @if ($partisipasi < 80 && $partisipasi >= 60)
+                                                <span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
+                                                    {{ $partisipasi }}%
+                                                </span>
+                                            @endif
+
+                                            @if ($partisipasi < 60)
+                                                <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
+                                                    {{ $partisipasi }}%
+                                                </span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
