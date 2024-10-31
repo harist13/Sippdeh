@@ -677,18 +677,18 @@
     
             Livewire.hook('request', function({ respond }) {
                 respond(function() {
-                    setTimeout(onLivewireUpdated, 100)
+                    setTimeout(onLivewireUpdated, 0)
                 });
             });
     
             let timeoutId = null;
-            Livewire.hook('element.init', ({ component, el }) => {
+            Livewire.hook('morph.updated', ({ component, el }) => {
                 clearTimeout(timeoutId);
     
                 timeoutId = setTimeout(function() {
                     onLivewireUpdated();
                     timeoutId = null;
-                }, 500);
+                }, 0);
             });
         }
 
