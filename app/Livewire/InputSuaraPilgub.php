@@ -20,6 +20,8 @@ class InputSuaraPilgub extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
+    public string $keyword = '';
+
     #[On('submit')]
     public function submit($data)
     {
@@ -78,8 +80,29 @@ class InputSuaraPilgub extends Component
                 $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
                     $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
                 });
-            })
-            ->paginate(10);
+            });
+
+        $tps->orWhere(function(Builder $builder) {
+            $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                if ($this->keyword) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                }
+            });
+
+            $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                $builder->whereHas('kecamatan', function (Builder $builder) {
+                    if ($this->keyword) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    }
+                });
+            });
+        });
+
+        if ($this->keyword) {
+            $tps->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        $tps = $tps->paginate(10);
         
         $paslon = Calon::with('suaraCalon')
             ->wherePosisi('GUBERNUR')
