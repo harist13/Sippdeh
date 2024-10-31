@@ -10,36 +10,39 @@
     @endisset
 
     <div class="bg-white rounded-[20px] p-4 mb-8 shadow-lg">
-        <div class="container mx-auto p-7">
-            <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between mb-4">
-            {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
-                <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
-                    <i class="fas fa-check mr-3"></i>
-                    Simpan Perubahan Data
-                </button>
-                <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
-                    <i class="fas fa-times mr-3"></i>
-                    Batal Ubah Data
-                </button>
-                <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
-                    <i class="fas fa-plus mr-3"></i>
-                    Ubah Data Tercentang
-                </button>
-            </div>           
-
-            {{-- Cari dan Filter --}}
-            <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-                <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
-                    </svg>
-                    <input wire:model.live.debounce.250ms="keyword" type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+        <div class="bg-white sticky top-20 px-3 py-2 z-10 mb-4">
+            <div class="container mx-auto">
+                <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
+                    {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
+                    <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
+                        <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
+                            <i class="fas fa-check mr-3"></i>
+                            Simpan Perubahan Data
+                        </button>
+                        <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
+                            <i class="fas fa-times mr-3"></i>
+                            Batal Ubah Data
+                        </button>
+                        <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
+                            <i class="fas fa-plus mr-3"></i>
+                            Ubah Data Tercentang
+                        </button>
+                    </div>           
+    
+                    {{-- Cari dan Filter --}}
+                    <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
+                        <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                            </svg>
+                            <input wire:model.live.debounce.250ms="keyword" type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
+                        </div>
+                        <button class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full" id="openFilterPilgub">
+                            <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
+                            <span class="text-[#344054]">Filter</span>
+                        </button>
+                    </div>
                 </div>
-                <button class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full" id="openFilterPilgub">
-                    <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
-                    <span class="text-[#344054]">Filter</span>
-                </button>
             </div>
         </div>
 
