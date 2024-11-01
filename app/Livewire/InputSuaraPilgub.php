@@ -40,14 +40,10 @@ class InputSuaraPilgub extends Component
     public function render()
     {
         $userWilayah = session('user_wilayah');
-        $paslon = $this->getCalon();
-
-        if (count($this->partisipasi) > 0) {
-            $tps = $this->getTPSBasedOnPartisipasi();
-            return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
-        }
         
+        $paslon = $this->getCalon();
         $tps = $this->getTPS();
+
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
     }
 
@@ -61,7 +57,7 @@ class InputSuaraPilgub extends Component
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
-    private function getTPSBasedOnPartisipasi()
+    private function getTPS()
     {
         $userWilayah = session('user_wilayah');
 
@@ -99,37 +95,6 @@ class InputSuaraPilgub extends Component
             }
         });
 
-        if ($this->keyword) {
-            $builder
-                ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
-                ->orWhere(function(Builder $builder) {
-                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                    });
-    
-                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                        $builder->whereHas('kecamatan', function (Builder $builder) {
-                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                        });
-                    });
-                });
-        }
-
-        return $builder->paginate($this->perPage);
-    }
-
-    private function getTPS()
-    {
-        $userWilayah = session('user_wilayah');
-
-        $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-                });
-            });
-        });
-            
         if ($this->keyword) {
             $builder
                 ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
