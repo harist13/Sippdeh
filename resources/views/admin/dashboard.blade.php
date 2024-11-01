@@ -103,59 +103,79 @@
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
         <section class="rounded-lg p-4 mb-8">
             @php
-            // Urutkan paslon berdasarkan total suara tertinggi
-            $paslon_sorted = $calon->sortByDesc('total_suara');
-            $pemenang = $paslon_sorted->first();
-            $runner_up = $paslon_sorted->skip(1)->first();
-            
-            // Jika tidak ada data, berikan nilai default
-            if (!$pemenang) {
-                $pemenang = new stdClass();
-                $pemenang->nama = 'Belum ada data';
-                $pemenang->nama_wakil = '';
-                $pemenang->foto = '/placeholder.jpg';
-                $pemenang->total_suara = 0;
-                $pemenang->persentase = 0;
-            }
-            if (!$runner_up) {
-                $runner_up = new stdClass();
-                $runner_up->nama = 'Belum ada data';
-                $runner_up->nama_wakil = '';
-                $runner_up->foto = '/placeholder.jpg';
-                $runner_up->total_suara = 0;
-                $runner_up->persentase = 0;
-            }
-        @endphp
+                // Urutkan paslon berdasarkan total suara tertinggi
+                $paslon_sorted = $calon->sortByDesc('total_suara');
+                $paslon1 = $calon->first(); // Selalu ambil paslon pertama
+                $paslon2 = $calon->skip(1)->first(); // Selalu ambil paslon kedua
+                
+                // Jika tidak ada data, berikan nilai default
+                if (!$paslon1) {
+                    $paslon1 = new stdClass();
+                    $paslon1->nama = 'Belum ada data';
+                    $paslon1->nama_wakil = '';
+                    $paslon1->foto = '/placeholder.jpg';
+                    $paslon1->total_suara = 0;
+                    $paslon1->persentase = 0;
+                }
+                if (!$paslon2) {
+                    $paslon2 = new stdClass();
+                    $paslon2->nama = 'Belum ada data';
+                    $paslon2->nama_wakil = '';
+                    $paslon2->foto = '/placeholder.jpg';
+                    $paslon2->total_suara = 0;
+                    $paslon2->persentase = 0;
+                }
 
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center">
-                <img src="{{ asset('storage/' . $pemenang->foto) }}" 
-                    alt="{{ $pemenang->nama }}/{{ $pemenang->nama_wakil }}" 
-                    class="rounded-full mr-4 w-20 h-20 object-cover">
-                <span class="font-semibold text-lg">{{ $pemenang->nama }}/{{ $pemenang->nama_wakil }}</span>
-            </div>
-            <div class="flex items-center">
-                <span class="font-semibold text-lg mr-4">{{ $runner_up->nama }}/{{ $runner_up->nama_wakil }}</span>
-                <img src="{{ asset('storage/' . $runner_up->foto) }}" 
-                    alt="{{ $runner_up->nama }}/{{ $runner_up->nama_wakil }}" 
-                    class="rounded-full w-20 h-20 object-cover">
-            </div>
-        </div>
+                // Tentukan arah scorebar berdasarkan perbandingan suara
+                $paslon1Wins = $paslon1->total_suara >= $paslon2->total_suara;
+            @endphp
 
-        <div class="bg-gray-200 h-10 rounded-full overflow-hidden flex">
-            <div class="bg-[#3560A0] h-full" 
-                style="width: {{ $pemenang->persentase }}%">
-                <span class="text-white text-sm font-semibold ml-4 leading-10">
-                    {{ number_format($pemenang->total_suara, 0, ',', '.') }} Suara
-                </span>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <img src="{{ asset('storage/' . $paslon1->foto) }}" 
+                        alt="{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}" 
+                        class="rounded-full mr-4 w-20 h-20 object-cover">
+                    <span class="font-semibold text-lg">{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="font-semibold text-lg mr-4">{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}</span>
+                    <img src="{{ asset('storage/' . $paslon2->foto) }}" 
+                        alt="{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}" 
+                        class="rounded-full w-20 h-20 object-cover">
+                </div>
             </div>
-            <div class="bg-yellow-400 h-full" 
-                style="width: {{ $runner_up->persentase }}%">
-                <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
-                    {{ number_format($runner_up->total_suara, 0, ',', '.') }} Suara
-                </span>
+
+            <div class="bg-gray-200 h-10 rounded-full overflow-hidden relative">
+                @if($paslon1Wins)
+                    {{-- Jika paslon 1 menang, warna biru mengisi dari kiri --}}
+                    <div class="absolute inset-y-0 left-0 bg-[#3560A0] transition-all duration-500"
+                        style="width: {{ $paslon1->persentase }}%">
+                        <span class="text-white text-sm font-semibold ml-4 leading-10">
+                            {{ number_format($paslon1->total_suara, 0, ',', '.') }} Suara
+                        </span>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 bg-yellow-400 transition-all duration-500"
+                        style="width: {{ $paslon2->persentase }}%">
+                        <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
+                            {{ number_format($paslon2->total_suara, 0, ',', '.') }} Suara
+                        </span>
+                    </div>
+                @else
+                    {{-- Jika paslon 2 menang, warna kuning mengisi dari kanan --}}
+                    <div class="absolute inset-y-0 right-0 bg-yellow-400 transition-all duration-500"
+                        style="width: {{ $paslon2->persentase }}%">
+                        <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
+                            {{ number_format($paslon2->total_suara, 0, ',', '.') }} Suara
+                        </span>
+                    </div>
+                    <div class="absolute inset-y-0 left-0 bg-[#3560A0] transition-all duration-500"
+                        style="width: {{ $paslon1->persentase }}%">
+                        <span class="text-white text-sm font-semibold ml-4 leading-10">
+                            {{ number_format($paslon1->total_suara, 0, ',', '.') }} Suara
+                        </span>
+                    </div>
+                @endif
             </div>
-        </div>
         </section>
          <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 gap-8 mb-8">
