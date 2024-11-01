@@ -73,18 +73,20 @@ class InputSuaraPilgub extends Component
                 });
             });
 
-        $builder->whereHas('suara', function(Builder $builder) {
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79');
-            }
-
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59');
-            }
+        $builder->where(function (Builder $builder) {
+            $builder->whereHas('suara', function (Builder $builder) {
+                if (in_array('HIJAU', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+                }
+        
+                if (in_array('KUNING', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79');
+                }
+        
+                if (in_array('MERAH', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59');
+                }
+            })->orWhereDoesntHave('suara');
         });
 
         if ($this->keyword) {
