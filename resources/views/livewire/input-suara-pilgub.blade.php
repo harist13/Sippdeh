@@ -580,7 +580,7 @@
                     input.classList.remove('hidden');
 
                     const cellDataset = cell.dataset;
-                    input.onchange = () => onChange(tpsId, cellDataset, event.target.value);
+                    input.onkeyup = () => onChange(tpsId, cellDataset, event.target.value);
                 } else {
                     // Change to value
                     value.classList.remove('hidden');
@@ -780,11 +780,11 @@
             document.querySelectorAll('.centang input[type=checkbox]')
                 .forEach(function(checkbox) {
                     checkbox.checked = isCheckAll;
-                    checkbox.dispatchEvent(new Event('change'));
+                    checkbox.dispatchEvent(new Event('click'));
                 });
         }
 
-        function onCheckboxChange(event) {
+        function onCheckboxClick(event) {
             const checkbox = event.target;
             const tpsId = checkbox.parentElement.dataset.id;
             
@@ -872,19 +872,17 @@
             document.getElementById('checkAll').onchange = onCheckAllCheckboxesChange;
 
             document.querySelectorAll('.centang input[type=checkbox]')
-                .forEach(checkbox => checkbox.onchange = onCheckboxChange);
-
-            // document.getElementById('applyFilterPilgub').addEventListener('click', onApplyFilter);
+                .forEach(checkbox => checkbox.onclick = onCheckboxClick);
 
             window.onbeforeunload = onUnloadPage;
 
             document.body.onkeydown = function(event) {
-                if ((event.key === "Enter" || event.key === "s") && (event.metaKey || event.ctrlKey)) {
+                if ((event.key === "Enter" || event.key === "s") && event.ctrlKey) {
                     event.preventDefault();
                     onSubmitClick();
                 }
 
-                if (event.key === "u" && (event.metaKey || event.ctrlKey)) {
+                if (event.key === "u" && event.ctrlKey) {
                     event.preventDefault();
                     onEnterEditModeButtonClick();
                 }
