@@ -32,11 +32,11 @@ class RingkasanSuaraTPS extends Model
     }
 
     public function suara(): HasOne {
-        return $this->hasOne(SuaraTPS::class, 'id');
+        return $this->hasOne(SuaraTPS::class, 'tps_id');
     }
 
     public function suaraCalon(): HasMany {
-        return $this->hasMany(SuaraCalon::class, 'id');
+        return $this->hasMany(SuaraCalon::class, 'tps_id');
     }
 
     public function suaraCalonByCalonId(int $calonId) {

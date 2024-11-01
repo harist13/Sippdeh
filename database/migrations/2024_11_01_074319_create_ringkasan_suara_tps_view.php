@@ -23,7 +23,7 @@ return new class extends Migration
                 (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0)) AS suara_masuk,
                 CASE 
                     WHEN COALESCE(suara_tps.dpt, 0) > 0
-                    THEN ROUND((COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0)) / COALESCE(suara_tps.dpt, 0), 1) * 100 
+                    THEN ROUND((COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0)) / COALESCE(suara_tps.dpt, 0) * 100, 1) 
                     ELSE 0
                 END AS partisipasi
             FROM
@@ -33,7 +33,8 @@ return new class extends Migration
             LEFT JOIN
                 suara_calon ON suara_calon.tps_id = tps.id
             GROUP BY
-                tps.id, tps.nama, suara_tps.dpt, suara_tps.suara_tidak_sah");
+                tps.id, tps.nama, suara_tps.dpt, suara_tps.suara_tidak_sah;
+        ");
     }
 
     /**

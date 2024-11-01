@@ -5,15 +5,15 @@
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
                     <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-2 lg:order-1">
-                        <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled">
+                        <button class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="simpanPerubahanData" wire:loading.attr="disabled" wire:target.except="applyFilter">
                             <i class="fas fa-check mr-3"></i>
                             Simpan Perubahan Data
                         </button>
-                        <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled">
+                        <button class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="batalUbahData" wire:loading.attr="disabled" wire:target.except="applyFilter">
                             <i class="fas fa-times mr-3"></i>
                             Batal Ubah Data
                         </button>
-                        <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled">
+                        <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled" wire:target.except="applyFilter">
                             <i class="fas fa-plus mr-3"></i>
                             Ubah Data Tercentang
                         </button>
@@ -63,7 +63,7 @@
             <div class="inline-block min-w-full align-middle">
                 <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
                     <!-- Loading Overlay -->
-                    <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
+                    <div wire:loading.delay wire:target.except="applyFilter" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -131,15 +131,15 @@
                                         {{-- DPT --}}
                                         <td
                                             class="py-3 px-4 border dpt"
-                                            data-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
+                                            data-value="{{ $t->dpt }}"
                                         >
-                                            <span class="value">{{ $t->suara ? $t->suara->dpt : 0 }}</span>
+                                            <span class="value">{{ $t->dpt }}</span>
                                             <input
                                                 type="number"
                                                 placeholder="Jumlah"
                                                 class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
-                                                data-default-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
-                                                data-value="{{ $t->suara ? $t->suara->dpt : 0 }}"
+                                                data-default-value="{{ $t->dpt }}"
+                                                data-value="{{ $t->dpt }}"
                                             >
                                         </td>
     
@@ -220,7 +220,7 @@
                                             class="text-center py-3 px-4 border partisipasi"
                                             data-value="{{ $partisipasi }}"
                                         >
-                                            @if ($partisipasi >= 80)
+                                            @if ($partisipasi <= 100 && $partisipasi >= 80)
                                                 <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
                                                     {{ $partisipasi }}%
                                                 </span>
@@ -322,10 +322,10 @@
             <hr class="h-1 my-3">
 
             <div class="flex">
-                <button type="button" wire:click="resetFilter" class="flex-1 bg-gray-300 hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
+                <button type="button" wire:loading.attr="disabled" wire:target="resetFilter" wire:click="resetFilter" class="flex-1 bg-gray-300 disabled:bg-[#d1d5d06c] hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
                     Reset
                 </button>
-                <button type="submit" id="applyFilterPilgub" class="flex-1 bg-[#3560A0] hover:bg-blue-700 text-white rounded-md px-4 py-2">
+                <button type="submit" wire:loading.attr="disabled" wire:target="applyFilter" wire:click="applyFilter" id="applyFilterPilgub" class="flex-1 bg-[#3560A0] disabled:bg-[#0070F06c] hover:bg-blue-700 text-white rounded-md px-4 py-2">
                     Terapkan
                 </button>
             </div>
@@ -390,6 +390,10 @@
             }
 
             get partisipasi() {
+                if (this.dpt == 0) {
+                    return 0;
+                }
+
                 return parseFloat(((this.suaraMasuk / this.dpt) * 100).toFixed(1));
             }
 
@@ -636,10 +640,29 @@
                         const suaraMasukCell = tpsRow.querySelector('td.suara-masuk');
                         suaraMasukCell.dataset.value = tps.suaraMasuk;
                         suaraMasukCell.textContent = tps.suaraMasuk;
-    
+
                         const partisipasiCell = tpsRow.querySelector('td.partisipasi span');
+
                         partisipasiCell.dataset.value = tps.partisipasi;
                         partisipasiCell.textContent = `${tps.partisipasi}%`;
+
+                        if (tps.partisipasi <= 100 && tps.partisipasi >= 80) {
+                            partisipasiCell.classList.add('bg-green-400');
+                            partisipasiCell.classList.remove('bg-yellow-400');
+                            partisipasiCell.classList.remove('bg-red-400');
+                        }
+
+                        if (tps.partisipasi < 80 && tps.partisipasi >= 60) {
+                            partisipasiCell.classList.remove('bg-green-400');
+                            partisipasiCell.classList.add('bg-yellow-400');
+                            partisipasiCell.classList.remove('bg-red-400');
+                        }
+
+                        if (tps.partisipasi < 60) {
+                            partisipasiCell.classList.remove('bg-green-400');
+                            partisipasiCell.classList.remove('bg-yellow-400');
+                            partisipasiCell.classList.add('bg-red-400');
+                        }
                     }
                 });
             }
@@ -816,7 +839,7 @@
             document.querySelectorAll('.centang input[type=checkbox]')
                 .forEach(checkbox => checkbox.onchange = onCheckboxChange);
 
-            document.getElementById('applyFilterPilgub').addEventListener('click', onApplyFilter);
+            // document.getElementById('applyFilterPilgub').addEventListener('click', onApplyFilter);
 
             window.onbeforeunload = onUnloadPage;
 
