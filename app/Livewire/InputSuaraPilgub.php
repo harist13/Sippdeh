@@ -74,19 +74,29 @@ class InputSuaraPilgub extends Component
             });
 
         $builder->where(function (Builder $builder) {
-            $builder->whereHas('suara', function (Builder $builder) {
-                if (in_array('HIJAU', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-                }
+            // If 'MERAH' is selected, include records with 'partisipasi' between 0 and 59 or where 'suara' does not exist
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->where(function (Builder $builder) {
+                    $builder
+                        ->whereHas('suara', function (Builder $builder) {
+                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59');
+                        })
+                        ->orWhereDoesntHave('suara');
+                });
+            }
         
-                if (in_array('KUNING', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79');
-                }
-        
-                if (in_array('MERAH', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59');
-                }
-            })->orWhereDoesntHave('suara');
+            // Handle 'HIJAU' and 'KUNING' conditions if they are selected
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereHas('suara', function (Builder $builder) {
+                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79');
+                });
+            }
+            
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereHas('suara', function (Builder $builder) {
+                    $builder->whereRaw('partisipasi BETWEEN 80 AND 100');
+                });
+            }
         });
 
         if ($this->keyword) {
