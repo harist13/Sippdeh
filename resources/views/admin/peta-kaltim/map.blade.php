@@ -151,4 +151,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Konstanta warna
+    const warnaAbuAbu = '#cccccc'; // Warna default jika tidak ada suara
+    const warnaPaslon1 = '#3560A0'; // Warna untuk paslon 1
+    const warnaPaslon2 = '#F9D926'; // Warna untuk paslon 2
+
+    // Fungsi untuk menentukan warna wilayah berdasarkan jumlah suara
+    function setWarnaWilayah(group, kabupatenId) {
+        const suaraPaslon1 = suaraPerKabupaten[kabupatenId]?.[paslon[0].id] || 0;
+        const suaraPaslon2 = suaraPerKabupaten[kabupatenId]?.[paslon[1].id] || 0;
+
+        let color;
+        if (suaraPaslon1 === 0 && suaraPaslon2 === 0) {
+            color = warnaAbuAbu; // Tidak ada suara, gunakan warna abu-abu
+        } else if (suaraPaslon1 > suaraPaslon2) {
+            color = warnaPaslon1; // Paslon 1 unggul, warna biru
+        } else if (suaraPaslon2 > suaraPaslon1) {
+            color = warnaPaslon2; // Paslon 2 unggul, warna kuning
+        } else {
+            color = warnaAbuAbu; // Jika suara sama, tetap abu-abu
+        }
+
+        // Set warna pada elemen SVG
+        group.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
+    }
+
+    // Ambil semua grup wilayah dan atur warna berdasarkan suara
+    const groups = document.querySelectorAll('#map g.region');
+    groups.forEach(group => {
+        const kabupatenId = group.getAttribute('data-kabupaten-id');
+        setWarnaWilayah(group, kabupatenId);
+    });
+
+    // Event listener yang ada tetap seperti pada kode awal
+    groups.forEach(group => {
+        group.addEventListener('mouseover', event => onMouseOver({ event, group }));
+        group.addEventListener('mouseout', event => onMouseOut());
+        group.addEventListener('mousemove', event => onMouseMove({ event }));
+    });
+});
+
+
+
 </script>
