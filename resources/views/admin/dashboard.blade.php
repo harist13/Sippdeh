@@ -135,13 +135,19 @@
                     <img src="{{ asset('storage/' . $paslon1->foto) }}" 
                         alt="{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}" 
                         class="rounded-full mr-4 w-20 h-20 object-cover">
-                    <span class="font-semibold text-lg">{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}</span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-lg">{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}</span>
+                        <span class="text-sm text-gray-600">{{ number_format($paslon1->persentase, 1) }}%</span>
+                    </div>
                 </div>
                 <div class="flex items-center">
-                    <span class="font-semibold text-lg mr-4">{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}</span>
+                    <div class="flex flex-col items-end">
+                        <span class="font-semibold text-lg">{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}</span>
+                        <span class="text-sm text-gray-600">{{ number_format($paslon2->persentase, 1) }}%</span>
+                    </div>
                     <img src="{{ asset('storage/' . $paslon2->foto) }}" 
                         alt="{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}" 
-                        class="rounded-full w-20 h-20 object-cover">
+                        class="rounded-full ml-4 w-20 h-20 object-cover">
                 </div>
             </div>
 
