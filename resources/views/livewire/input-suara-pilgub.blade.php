@@ -42,7 +42,7 @@
                         <!-- Edit Selected Button -->
                         <div class="flex items-center">
                             <button class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto" id="ubahDataTercentang" wire:loading.attr="disabled" wire:target.except="applyFilter">
-                                <i class="fas fa-plus mr-3"></i>
+                                <i class="fas fa-edit mr-3"></i>
                                 Ubah Data Tercentang
                             </button>
                             <span class="tooltip relative cursor-pointer text-sm text-gray-500 ml-3">
