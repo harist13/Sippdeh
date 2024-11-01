@@ -882,9 +882,17 @@
                     onSubmitClick();
                 }
 
+                
                 if (event.key === "u" && event.ctrlKey) {
                     event.preventDefault();
-                    onEnterEditModeButtonClick();
+
+                    const checkedCheckboxesCount = Array.from(document.querySelectorAll('.centang input[type=checkbox]'))
+                        .filter(checkbox => checkbox.checked)
+                        .length;
+                    
+                    if (checkedCheckboxesCount > 0) {
+                        onEnterEditModeButtonClick();
+                    }
                 }
 
                 if (event.key === "Escape") {

@@ -26,11 +26,16 @@ class InputSuaraPilgub extends Component
 
     public string $keyword = '';
 
-    public string $posisi = 'GUBERNUR';
+    public string $posisi;
 
     public array $ignoredColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
 
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+
+    public function mount($posisi)
+    {
+        $this->posisi = $posisi;
+    }
 
     public function render()
     {
@@ -135,13 +140,27 @@ class InputSuaraPilgub extends Component
     private function getCalon()
     {
         $userWilayah = session('user_wilayah');
+        $builder = Calon::with('suaraCalon');
 
-        return Calon::with('suaraCalon')
-            ->wherePosisi($this->posisi)
-            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+        // TODO: Pakai yang ini kalau mau menampilkan semua calon
+        // $builder->orWhereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+        //     $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        // });
+
+        // $builder->orWhereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+
+        // TODO: Pakai yang ini kalau mau menampilkan calon berdasarkan posisi
+        if ($this->posisi == 'GUBERNUR') {
+            $builder->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
                 $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-            })
-            ->get();
+            });
+        }
+
+        if ($this->posisi == 'WALIKOTA') {
+            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        }
+
+        return $builder->get();
     }
 
     #[On('submit-tps')]
