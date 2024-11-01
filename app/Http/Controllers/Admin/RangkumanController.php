@@ -8,6 +8,8 @@ use App\Models\RingkasanSuaraTPS;
 use App\Models\Kabupaten;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\RangkumanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RangkumanController extends Controller
 {
@@ -38,5 +40,10 @@ class RangkumanController extends Controller
         $kabupatens = Kabupaten::all();
 
         return view('admin.rangkuman', compact('paslon', 'summaryData', 'kabupatens'));
+    }
+     public function export(Request $request)
+    {
+        $filename = 'rangkuman-suara-' . date('Y-m-d-His') . '.xlsx';
+        return Excel::download(new RangkumanExport($request), $filename);
     }
 }

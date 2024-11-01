@@ -25,6 +25,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
         Route::get('/rangkuman', [RangkumanController::class, 'rangkuman'])->name('rangkuman');
+        Route::get('admin/rangkuman/export', [RangkumanController::class, 'export'])->name('admin.rangkuman.export');
         Route::get('/suara', [RangkumanController::class, 'suara'])->name('suara');
         
         Route::get('provinsi/ekspor', [ProvinsiController::class, 'export'])->name('provinsi.export');

@@ -212,64 +212,6 @@
 </main>
 
 <script>
-    // JavaScript to toggle between TPS, SUARA, and pilgub tables
- 
-
-   
-
-  
-
-            // Dropdown functionality
-        const dropdownButton = document.getElementById('dropdownButton');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-
-        dropdownButton.addEventListener('click', function() {
-            dropdownMenu.classList.toggle('hidden');
-        });
-
-        // Close the dropdown when clicking outside of it
-        document.addEventListener('click', function(event) {
-            if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.add('hidden');
-            }
-        });
-
-        // Optional: Update button text when an option is selected
-        const dropdownItems = dropdownMenu.querySelectorAll('li');
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function() {
-                dropdownButton.querySelector('span').textContent = this.textContent;
-                dropdownMenu.classList.add('hidden');
-            });
-        });
-            
-            // Filter dropdown functionality
-        const filterButton = document.getElementById('filterButton');
-        const filterMenu = document.getElementById('filterMenu');
-
-        filterButton.addEventListener('click', function() {
-            filterMenu.classList.toggle('hidden');
-        });
-
-        // Close the filter dropdown when clicking outside of it
-        document.addEventListener('click', function(event) {
-            if (!filterButton.contains(event.target) && !filterMenu.contains(event.target)) {
-                filterMenu.classList.add('hidden');
-            }
-        });
-
-        // Update filter button text when an option is selected
-        const filterItems = filterMenu.querySelectorAll('li');
-        filterItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const colorName = this.textContent.trim();
-                filterButton.querySelector('span').textContent = colorName;
-                filterButton.querySelector('span').className = this.querySelector('span').className;
-                filterMenu.classList.add('hidden');
-                // You can add filtering logic here based on the selected color
-            });
-        });
-
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const kabupatenFilter = document.getElementById('kabupatenFilter');
@@ -336,6 +278,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value === '') {
             performSearch();
         }
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        const searchTerm = document.getElementById('searchInput').value;
+        const selectedKabupaten = document.getElementById('kabupatenFilter').value;
+        
+        // Build the export URL with current filters
+        let exportUrl = new URL('/admin/rangkuman/export', window.location.origin);
+        let params = new URLSearchParams();
+        
+        if (searchTerm) {
+            params.append('search', searchTerm);
+        }
+        if (selectedKabupaten) {
+            params.append('kabupaten', selectedKabupaten);
+        }
+        
+        exportUrl.search = params.toString();
+        
+        // Redirect to export URL
+        window.location.href = exportUrl.toString();
     });
 });
 </script>
