@@ -60,67 +60,83 @@
       <!-- Paslon Data Table Section -->
             <div class="overflow-hidden mb-8">
                 <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                    <div class=" text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
-                        Daftar 5 Paslon Dengan Partisipasi Tertinggi Se-Kalimantan Timur
+                    <div class="text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                        Daftar Paslon Gubernur Dengan Partisipasi Se-Kalimantan Timur
                     </div>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                         <div class="flex items-center w-full sm:w-auto">
-                            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
-                                <option>Samarinda</option>
+                            <select id="kabupatenFilter" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
+                                <option value="">Semua Kabupaten</option>
+                                @foreach($kabupatens as $kabupaten)
+                                    <option value="{{ $kabupaten->nama }}">{{ $kabupaten->nama }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                             </svg>
-                            <input type="search" placeholder="Cari" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="">
+                            <input type="search" id="searchInput" placeholder="Cari..." name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600">
                         </div>
-                    <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
-                        Filter
-                    </button>
-                     <button id="exportBtn" class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
-                    <img src="{{ asset('assets/icon/download.png')}}">
-                    <span>Export</span>
-                </button>
-
+                        <button onclick="toggleModal()" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                            <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
+                            Filter
+                        </button>
+                        <button id="exportBtn" class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
+                            <img src="{{ asset('assets/icon/download.png')}}">
+                            <span>Export</span>
+                        </button>
                     </div>
-                    
                 </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
-                            <thead class="bg-[#3560a0] text-white">
-                                <tr>
-                                    <th class="py-3 px-4 border-r border-white">No</th>
-                                    <th class="py-3 px-4 border-r border-white">Kab/Kota</th>
-                                    <th class="py-3 px-4 border-r border-white">Kec.</th>
-                                    <th class="py-3 px-4 border-r border-white">Kel.</th>
-                                    <th class="py-3 px-4 border-r border-white">DPT</th>
-                                    <th class="py-3 px-4 border-r border-white">Paslon 1</th>
-                                    <th class="py-3 px-4 border-r border-white">Paslon 2</th>
-                                    <th class="py-3 px-4 border-r border-white">Abstai</th>
-                                    <th class="py-3 px-4 border-r border-white">Tingkat Partisipasi (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-gray-100">
-                                <tr class="border-b">
-                                    <td class="py-3 px-4 border-r">01</td>
-                                    <td class="py-3 px-4 border-r">Samarinda</td>
-                                    <td class="py-3 px-4 border-r">Kecamatan 1</td> <!-- Replace with actual district -->
-                                    <td class="py-3 px-4 border-r">Kelurahan 1</td> <!-- Replace with actual village -->
-                                    <td class="py-3 px-4 border-r">582.467</td>
-                                    <td class="py-3 px-4 border-r">255.345</td>
-                                    <td class="py-3 px-4 border-r">228.912</td>
-                                    <td class="py-3 px-4 border-r">2.123</td>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center" id="dataTable">
+                        <thead class="bg-[#3560a0] text-white">
+                            <tr>
+                                <th class="py-3 px-4 border-r border-white">No</th>
+                                <th class="py-3 px-4 border-r border-white">Kab/Kota</th>
+                                <th class="py-3 px-4 border-r border-white">Kec.</th>
+                                <th class="py-3 px-4 border-r border-white">Kel.</th>
+                                <th class="py-3 px-4 border-r border-white">DPT</th>
+                                @foreach($paslon as $calon)
+                                    <th class="py-3 px-4 border-r border-white">
+                                        {{ $calon->nama }}/{{ $calon->nama_wakil }}
+                                    </th>
+                                @endforeach
+                                <th class="py-3 px-4 border-r border-white">Abstain</th>
+                                <th class="py-3 px-4 border-r border-white">Tingkat Partisipasi (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-100">
+                            @foreach($summaryData as $index => $data)
+                                <tr class="border-b search-row">
+                                    <td class="py-3 px-4 border-r">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="py-3 px-4 border-r kabupaten-cell">{{ $data->kabupaten_nama }}</td>
+                                    <td class="py-3 px-4 border-r kecamatan-cell">{{ $data->kecamatan_nama }}</td>
+                                    <td class="py-3 px-4 border-r kelurahan-cell">{{ $data->kelurahan_nama }}</td>
+                                    <td class="py-3 px-4 border-r">{{ $data->suara->dpt ?? 0 }}</td>
+                                    
+                                    @foreach($paslon as $calon)
+                                        <td class="py-3 px-4 border-r">
+                                            {{ $data->suaraCalon->where('calon_id', $calon->id)->first()->suara ?? 0 }}
+                                        </td>
+                                    @endforeach
+
+                                    <td class="py-3 px-4 border-r">{{ $data->jumlah_pengguna_tidak_pilih ?? 0 }}</td>
                                     <td class="py-3 px-4 border-r">
-                                        <div class="participation-button participation-green">78.5%</div>
+                                        @php
+                                            $partisipasi = $data->partisipasi ?? 0;
+                                            $colorClass = $partisipasi >= 80 ? 'bg-green-400' : ($partisipasi >= 60 ? 'bg-yellow-400' : 'bg-red-400');
+                                        @endphp
+                                        <div class="participation-button {{ $colorClass }} text-white py-1 px-7 rounded text-xs">
+                                            {{ number_format($partisipasi, 1) }}%
+                                        </div>
                                     </td>
                                 </tr>
-                                <!-- Add more rows here in the same format, updating with the specific district (Kec.) and village (Kel.) as needed -->
-                            </tbody>
-                        </table>
-                    </div>
-
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <hr class="border-t border-gray-300 my-10">
@@ -253,6 +269,75 @@
                 // You can add filtering logic here based on the selected color
             });
         });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const kabupatenFilter = document.getElementById('kabupatenFilter');
+    const dataTable = document.getElementById('dataTable');
+    let searchTimeout;
+
+    // Function untuk melakukan pencarian
+    function performSearch() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedKabupaten = kabupatenFilter.value.toLowerCase();
+        const rows = document.querySelectorAll('.search-row');
+
+        rows.forEach(row => {
+            const kabupaten = row.querySelector('.kabupaten-cell').textContent.toLowerCase();
+            const kecamatan = row.querySelector('.kecamatan-cell').textContent.toLowerCase();
+            const kelurahan = row.querySelector('.kelurahan-cell').textContent.toLowerCase();
+
+            // Filter berdasarkan kabupaten yang dipilih
+            const matchesKabupaten = selectedKabupaten === '' || kabupaten === selectedKabupaten;
+
+            // Filter berdasarkan pencarian
+            const matchesSearch = 
+                kabupaten.includes(searchTerm) || 
+                kecamatan.includes(searchTerm) || 
+                kelurahan.includes(searchTerm);
+
+            // Tampilkan baris jika memenuhi kriteria filter
+            if (matchesKabupaten && matchesSearch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Update nomor urut yang ditampilkan
+        updateRowNumbers();
+    }
+
+    // Function untuk update nomor urut
+    function updateRowNumbers() {
+        let visibleIndex = 1;
+        const rows = document.querySelectorAll('.search-row');
+        
+        rows.forEach(row => {
+            if (row.style.display !== 'none') {
+                const numberCell = row.querySelector('td:first-child');
+                numberCell.textContent = String(visibleIndex).padStart(2, '0');
+                visibleIndex++;
+            }
+        });
+    }
+
+    // Event listener untuk input pencarian dengan debounce
+    searchInput.addEventListener('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    // Event listener untuk filter kabupaten
+    kabupatenFilter.addEventListener('change', performSearch);
+
+    // Event listener untuk reset pencarian
+    searchInput.addEventListener('search', function() {
+        if (this.value === '') {
+            performSearch();
+        }
+    });
+});
 </script>
 
 @include('admin.layout.footer')
