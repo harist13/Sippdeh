@@ -40,7 +40,7 @@ class InputSuaraPilgub extends Component
     public function render()
     {
         $userWilayah = session('user_wilayah');
-        
+
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
@@ -96,19 +96,19 @@ class InputSuaraPilgub extends Component
         });
 
         if ($this->keyword) {
-            $builder
-                ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
-                ->orWhere(function(Builder $builder) {
-                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+            $builder->whereHas('tps', function(Builder $builder) {
+                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                
+                $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                });
+
+                $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function (Builder $builder) {
                         $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
                     });
-    
-                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                        $builder->whereHas('kecamatan', function (Builder $builder) {
-                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                        });
-                    });
                 });
+            });
         }
 
         return $builder->paginate($this->perPage);
