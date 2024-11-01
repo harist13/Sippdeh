@@ -28,14 +28,24 @@ class AdminController extends Controller
         $suaraPerKabupaten = [];
         foreach ($kabupatens as $kabupaten) {
             $suaraPaslon = [];
+            $totalSuaraKabupaten = 0;
+
+            // Hitung total suara semua paslon di kabupaten ini
             foreach ($calon as $paslon) {
-                // Hitung total suara paslon di kabupaten ini
                 $totalSuara = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($q) use ($kabupaten) {
                     $q->where('id', $kabupaten->id);
                 })->where('calon_id', $paslon->id)->sum('suara');
                 
                 $suaraPaslon[$paslon->id] = $totalSuara;
+                $totalSuaraKabupaten += $totalSuara;
             }
+
+            // Hitung persentase suara untuk setiap paslon di kabupaten ini
+            foreach ($suaraPaslon as $paslonId => $suara) {
+                $suaraPaslon[$paslonId] = $totalSuaraKabupaten > 0 ? 
+                    round(($suara / $totalSuaraKabupaten) * 100, 1) : 0;
+            }
+
             $suaraPerKabupaten[$kabupaten->id] = $suaraPaslon;
         }
         
@@ -55,6 +65,7 @@ class AdminController extends Controller
         
         return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens'));
     }
+
 
 
     public function rekapitulasi()

@@ -133,9 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const suaraPaslon1Value = suaraPerKabupaten[kabupatenId][paslon[0].id];
             const suaraPaslon2Value = suaraPerKabupaten[kabupatenId][paslon[1].id];
             
-            // Hanya tampilkan jumlah suara
-            suaraPaslon1.textContent = `${suaraPaslon1Value.toLocaleString()} suara`;
-            suaraPaslon2.textContent = `${suaraPaslon2Value.toLocaleString()} suara`;
+            // Tampilkan persentase suara
+            suaraPaslon1.textContent = `${suaraPaslon1Value}%`;
+            suaraPaslon2.textContent = `${suaraPaslon2Value}%`;
         }
 
         const { left, top } = calculateTooltipPosition(event);
@@ -150,4 +150,5 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.display = 'none';
     }
 });
+
 </script>
