@@ -73,16 +73,16 @@
                                     <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">
                                         <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
                                     </th>
-                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kecamatan</th>
-                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Kelurahan</th>
-                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">TPS</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('KECAMATAN', $ignoredColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kecamatan</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('KELURAHAN', $ignoredColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kelurahan</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('TPS', $ignoredColumns) ? 'hidden' : '' }}" style="min-width: 200px;">TPS</th>
                                     <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
                                     @foreach ($paslon as $calon)
-                                        <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 300px;">
+                                        <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('CALON', $ignoredColumns) ? 'hidden' : '' }}" style="min-width: 300px;">
                                             {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                                         </th>
                                     @endforeach
-                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Calon</th>
+                                    <th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('CALON', $ignoredColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Calon</th>
                                     <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Sah</th>
                                     <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Tidak Sah</th>
                                     <th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
@@ -111,22 +111,22 @@
     
                                         {{-- Kecamatan --}}
                                         <td
-                                            class="py-3 px-4 border kecamatan"
-                                            data-kecamatan-id="{{ $t->kelurahan->kecamatan->id }}"
+                                            class="py-3 px-4 border kecamatan {{ !in_array('KECAMATAN', $ignoredColumns) ? 'hidden' : '' }}"
+                                            data-kecamatan-id="{{ $t->tps->kelurahan->kecamatan->id }}"
                                         >
-                                            {{ $t->kelurahan->kecamatan->nama }}
+                                            {{ $t->tps->kelurahan->kecamatan->nama }}
                                         </td>
     
                                         {{-- Kelurahan --}}
                                         <td
-                                            class="py-3 px-4 border kelurahan"
-                                            data-kelurahan-id="{{ $t->kelurahan->id }}"
+                                            class="py-3 px-4 border kelurahan {{ !in_array('KELURAHAN', $ignoredColumns) ? 'hidden' : '' }}"
+                                            data-kelurahan-id="{{ $t->tps->kelurahan->id }}"
                                         >
-                                            {{ $t->kelurahan->nama }}
+                                            {{ $t->tps->kelurahan->nama }}
                                         </td>
     
                                         {{-- Nama TPS --}}
-                                        <td class="py-3 px-4 border tps">{{ $t->nama }}</td>
+                                        <td class="py-3 px-4 border tps {{ !in_array('TPS', $ignoredColumns) ? 'hidden' : '' }}">{{ $t->nama }}</td>
     
                                         {{-- DPT --}}
                                         <td
@@ -152,7 +152,7 @@
     
                                             <td
                                                 wire:key="{{ $t->id }}{{ $calon->id }}"
-                                                class="py-3 px-4 border paslon"
+                                                class="py-3 px-4 border paslon {{ !in_array('CALON', $ignoredColumns) ? 'hidden' : '' }}"
                                                 data-id="{{ $calon->id }}"
                                                 data-suara="{{ $suara }}"
                                             >
@@ -169,52 +169,52 @@
                                         @endforeach
     
                                         {{-- Posisi --}}
-                                        <td class="py-3 px-4 border posisi">
+                                        <td class="py-3 px-4 border posisi {{ !in_array('CALON', $ignoredColumns) ? 'hidden' : '' }}">
                                             Gubernur/<br>Wakil Gubernur
                                         </td>
     
                                         {{-- Suara Sah --}}
                                         <td
                                             class="py-3 px-4 border suara-sah"
-                                            data-value="{{ $t->suara ? $t->suara->suaraSah() : 0 }}"
+                                            data-value="{{ $t->suara_sah }}"
                                         >
-                                            {{ $t->suara ? $t->suara->suaraSah() : 0 }}
+                                            {{ $t->suara_sah }}
                                         </td>
     
                                         {{-- Suara Tidak Sah (Editable) --}}
                                         <td
                                             class="py-3 px-4 border suara-tidak-sah"
-                                            data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
+                                            data-value="{{ $t->suara_tidak_sah }}"
                                         >
-                                            <span class="value">{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}</span>
+                                            <span class="value">{{ $t->suara_tidak_sah }}</span>
                                             <input
                                                 type="number"
                                                 placeholder="Jumlah"
                                                 class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-28 focus:outline-none hidden"
-                                                data-default-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
-                                                data-value="{{ $t->suara ? $t->suara->suara_tidak_sah : 0 }}"
+                                                data-default-value="{{ $t->suara_tidak_sah }}"
+                                                data-value="{{ $t->suara_tidak_sah }}"
                                             >
                                         </td>
     
                                         {{-- Jumlah Pengguna yang Tidak Pilih --}}
                                         <td
                                             class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
-                                            data-value="{{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}"
+                                            data-value="{{ $t->jumlah_pengguna_tidak_pilih }}"
                                         >
-                                            {{ $t->suara ? $t->suara->jumlahPenggunaTidakPilih() : 0 }}
+                                            {{ $t->jumlah_pengguna_tidak_pilih }}
                                         </td>
     
                                         {{-- Suara Masuk --}}
                                         <td
                                             class="py-3 px-4 border suara-masuk"
-                                            data-value="{{ $t->suara ? $t->suara->suaraMasuk() : 0 }}"
+                                            data-value="{{ $t->suara_masuk }}"
                                         >
-                                            {{ $t->suara ? $t->suara->suaraMasuk() : 0 }}
+                                            {{ $t->suara_masuk }}
                                         </td>
     
                                         {{-- Partisipasi --}}
                                         @php
-                                            $partisipasi = $t->suara ? $t->suara->partisipasi() : 0;
+                                            $partisipasi = $t->partisipasi;
                                         @endphp
                                         <td
                                             class="text-center py-3 px-4 border partisipasi"
@@ -255,11 +255,87 @@
             {{ $tps->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
         </div>
     </div>
+
+    <!-- Filter Pilgub Modal -->
+    <div id="filterPilgubModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20 hidden">
+        <style>
+            /* Add blue border to span when checkbox is checked */
+            input[type="checkbox"]:checked + span {
+                border-color: #3b82f6;
+            }
+        </style>
+
+        <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="flex items-center mb-5">
+                <i class="fas fa-arrow-left mr-3 select-none cursor-pointer" id="cancelFilterPilgub"></i>
+                <h3 class="text-lg font-medium text-gray-900">Filter</h3>
+            </div>
+
+            {{-- Kolom --}}
+            <label for="pilihKolom" class="mb-3 font-bold mt-5 block">Kolom</label>
+            <ul class="flex flex-col gap-2">
+                <li class="flex items-center gap-2 w-full">
+                    <label class="flex items-center gap-3" for="pilihKecamatan">
+                        <input type="checkbox" id="pilihKecamatan" value="KECAMATAN" wire:model="ignoredColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
+                        <span class="cursor-pointer select-none">Kecamatan</span>
+                    </label>
+                </li>
+                <li class="flex items-center gap-2 w-full">
+                    <label class="flex items-center gap-3" for="pilihKelurahan">
+                        <input type="checkbox" id="pilihKelurahan" value="KELURAHAN" wire:model="ignoredColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
+                        <span class="cursor-pointer select-none">Kelurahan</span>
+                    </label>
+                </li>
+                <li class="flex items-center gap-2 w-full">
+                    <label class="flex items-center gap-3" for="pilihTPS">
+                        <input type="checkbox" id="pilihTPS" value="TPS" wire:model="ignoredColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
+                        <span class="cursor-pointer select-none">TPS</span>
+                    </label>
+                </li>
+                <li class="flex items-center gap-2 w-full">
+                    <label class="flex items-center gap-3" for="pilihCalon">
+                        <input type="checkbox" id="pilihCalon" value="CALON" wire:model="ignoredColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
+                        <span class="cursor-pointer select-none">Calon</span>
+                    </label>
+                </li>
+            </ul>
+            {{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
+
+            {{-- Tingkat Partisipasi --}}
+            <label for="pilihTingkatPartisipasi" class="mb-3 font-bold mt-5 block">Tingkat Partisipasi</label>
+            <div class="flex gap-2">
+                <label for="hijau" class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="hidden" id="hijau" value="HIJAU" wire:model="partisipasi" />
+                    <span class="bg-green-400 text-white py-2 px-7 rounded text-sm select-none border-2">> 80%</span>
+                </label>
+                <label for="kuning" class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="hidden" id="kuning" value="KUNING" wire:model="partisipasi" />
+                    <span class="bg-yellow-400 text-white py-2 px-7 rounded text-sm select-none border-2">> 60%</span>
+                </label>
+                <label for="merah" class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="hidden" id="merah" value="MERAH" wire:model="partisipasi" />
+                    <span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none border-2">< 20%</span>
+                </label>
+            </div>
+            {{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
+
+            <hr class="h-1 my-3">
+
+            <div class="flex">
+                <button type="button" wire:click="resetFilter" class="flex-1 bg-gray-300 hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
+                    Reset
+                </button>
+                <button type="submit" id="applyFilterPilgub" class="flex-1 bg-[#3560A0] hover:bg-blue-700 text-white rounded-md px-4 py-2">
+                    Terapkan
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @script
     <script type="text/javascript">
-        class MyClass {}
+        class A {}
 
         class TPS {
             constructor(id, dpt, suaraTidakSah) {
@@ -625,7 +701,7 @@
                 showLoadingMessage();
 
                 const data = TPS.getAllTPS().map(tps => tps.toObject());
-                $wire.dispatch('submit', { data });
+                $wire.dispatch('submit-tps', { data });
             }
         }
 
@@ -740,6 +816,8 @@
             document.querySelectorAll('.centang input[type=checkbox]')
                 .forEach(checkbox => checkbox.onchange = onCheckboxChange);
 
+            document.getElementById('applyFilterPilgub').addEventListener('click', onApplyFilter);
+
             window.onbeforeunload = onUnloadPage;
 
             document.body.onkeydown = function(event) {
@@ -751,7 +829,7 @@
 
         function initializeHooks() {
             $wire.on('data-stored', onDataStored);
-    
+
             let timeoutId = null;
             Livewire.hook('morph.updated', ({ component, el }) => {
                 clearTimeout(timeoutId);
@@ -763,8 +841,39 @@
             });
         }
 
+        function initializeFilter() {
+            document.getElementById('openFilterPilgub').addEventListener('click', showFilterPilgubModal);
+            document.getElementById('cancelFilterPilgub').addEventListener('click', closeFilterPilgubModal);
+
+            document.addEventListener('keyup', function(event) {
+                if (event.key === "Escape") {
+                    closeFilterPilgubModal();
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (event.target == filterPilgubModal) {
+                    closeFilterPilgubModal();
+                }
+            });
+        }
+
+        function showFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.remove('hidden');
+        }
+
+        function closeFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.add('hidden');
+        }
+
+        function onApplyFilter() {
+            $wire.$refresh();
+        }
+
         setToInitialState();
-        
         initializeHooks();
+        initializeFilter();
     </script>
 @endscript

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Calon;
+use App\Models\RingkasanSuaraTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use App\Models\TPS;
@@ -27,11 +28,119 @@ class InputSuaraPilgub extends Component
 
     public string $posisi = 'GUBERNUR';
 
-    public array $ignoredColumns = [];
+    public array $ignoredColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
 
-    public string $partisipasi = '';
+    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-    #[On('submit')]
+    public function render()
+    {
+        $userWilayah = session('user_wilayah');
+        $paslon = $this->getCalon();
+
+        if (count($this->partisipasi) > 0) {
+            $tps = $this->getTPSBasedOnPartisipasi();
+            return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
+        }
+        
+        $tps = $this->getTPS();
+        return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
+    }
+
+    public function resetFilter()
+    {
+        $this->ignoredColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    }
+
+    private function getTPSBasedOnPartisipasi()
+    {
+        $userWilayah = session('user_wilayah');
+
+        $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                    $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+                    });
+                });
+            });
+
+        $builder->whereHas('suara', function(Builder $builder) {
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi > 80');
+            }
+
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 80');
+            }
+
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi < 20');
+            }
+        });
+
+        if ($this->keyword) {
+            $builder
+                ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
+                ->orWhere(function(Builder $builder) {
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    });
+    
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+                    });
+                });
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getTPS()
+    {
+        $userWilayah = session('user_wilayah');
+
+        $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+                });
+            });
+        });
+            
+        if ($this->keyword) {
+            $builder
+                ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
+                ->orWhere(function(Builder $builder) {
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    });
+    
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+                    });
+                });
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getCalon()
+    {
+        $userWilayah = session('user_wilayah');
+
+        return Calon::with('suaraCalon')
+            ->wherePosisi($this->posisi)
+            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            })
+            ->get();
+    }
+
+    #[On('submit-tps')]
     public function submit($data)
     {
         try {
@@ -82,61 +191,5 @@ class InputSuaraPilgub extends Component
 
             $this->dispatch('data-stored', status: 'gagal');
         }
-    }
-
-    private function getCalon()
-    {
-        $userWilayah = session('user_wilayah');
-
-        return Calon::with('suaraCalon')
-            ->wherePosisi($this->posisi)
-            ->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-            })
-            ->get();
-    }
-
-    public function getTPS()
-    {
-        $userWilayah = session('user_wilayah');
-
-        $tps = TPS::with(['suara', 'suaraCalon'])
-            ->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-                });
-            });
-
-        $tps->orWhere(function(Builder $builder) {
-            $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                if ($this->keyword) {
-                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                }
-            });
-
-            $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                $builder->whereHas('kecamatan', function (Builder $builder) {
-                    if ($this->keyword) {
-                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                    }
-                });
-            });
-        });
-
-        if ($this->keyword) {
-            $tps->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
-
-        return $tps->paginate($this->perPage);
-    }
-
-    public function render()
-    {
-        $userWilayah = session('user_wilayah');
-
-        $tps = $this->getTPS();
-        $paslon = $this->getCalon();
-
-        return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
     }
 }
