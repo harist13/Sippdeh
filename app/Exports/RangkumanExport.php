@@ -3,23 +3,28 @@
 namespace App\Exports;
 
 use App\Models\RingkasanSuaraTPS;
+use App\Models\Kabupaten;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use App\Models\Calon;
 
 class RangkumanExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
 {
     protected $paslon;
     protected $request;
+    protected $kabupatenId;
+    protected $rowNumber = 0;
 
     public function __construct($request)
     {
         $this->paslon = Calon::where('posisi', 'Gubernur')->get();
         $this->request = $request;
+        $this->kabupatenId = $request->kabupaten_id;
     }
 
     public function collection()
@@ -40,19 +45,9 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
         ->join('kabupaten', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
         ->with(['suara', 'suaraCalon']);
 
-        // Apply search filter if exists
-        if ($this->request->has('search') && !empty($this->request->search)) {
-            $search = $this->request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('kabupaten.nama', 'like', "%{$search}%")
-                  ->orWhere('kecamatan.nama', 'like', "%{$search}%")
-                  ->orWhere('kelurahan.nama', 'like', "%{$search}%");
-            });
-        }
-
-        // Apply kabupaten filter if exists
-        if ($this->request->has('kabupaten') && !empty($this->request->kabupaten)) {
-            $query->where('kabupaten.nama', $this->request->kabupaten);
+        // Filter by kabupaten if specified
+        if ($this->kabupatenId) {
+            $query->where('kabupaten.id', $this->kabupatenId);
         }
 
         return $query->get();
@@ -60,52 +55,87 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function headings(): array
     {
-        $headers = [
-            'No',
-            'Kabupaten/Kota',
-            'Kecamatan',
-            'Kelurahan',
-            'DPT',
+        // Get kabupaten name for title if filtered
+        $title = $this->kabupatenId ? 
+            'Resume Pilgub - ' . Kabupaten::find($this->kabupatenId)->nama :
+            'Resume Pilgub - Semua Kabupaten';
+
+        return [
+            [$title],
+            [],  // Empty row for spacing
+            [
+                'No',
+                'Kabupaten/Kota',
+                'Kecamatan',
+                'Kelurahan',
+                'DPT',
+                ...$this->paslon->map(fn($calon) => $calon->nama . '/' . $calon->nama_wakil),
+                'Abstain',
+                'Tingkat Partisipasi (%)'
+            ]
         ];
-
-        // Add paslon names to headers
-        foreach ($this->paslon as $calon) {
-            $headers[] = $calon->nama . '/' . $calon->nama_wakil;
-        }
-
-        // Add remaining headers
-        $headers = array_merge($headers, [
-            'Abstain',
-            'Tingkat Partisipasi (%)'
-        ]);
-
-        return $headers;
     }
 
     public function map($row): array
     {
+        $this->rowNumber++;
+
+        // Initialize suara array for all paslon
         $suaraData = [];
         foreach ($this->paslon as $calon) {
             $suaraCalon = $row->suaraCalon->where('calon_id', $calon->id)->first();
-            $suaraData[] = $suaraCalon ? $suaraCalon->suara : 0;
+            $suaraData[] = $suaraCalon ? (int)$suaraCalon->suara : 0;
         }
 
+        // Calculate total suara sah
+        $totalSuaraSah = array_sum($suaraData);
+
+        // Get DPT from suara relationship
+        $dpt = $row->suara ? (int)$row->suara->dpt : 0;
+
+        // Calculate participation rate
+        $partisipasi = $dpt > 0 ? 
+            round(($totalSuaraSah / $dpt) * 100, 1) : 
+            0;
+
+        // Calculate abstain
+        $abstain = $dpt - $totalSuaraSah;
+        $abstain = $abstain < 0 ? 0 : $abstain;
+
+        // Build and return the row data array
         return [
-            $row->getThreeDigitsId(),
-            $row->kabupaten_nama,
-            $row->kecamatan_nama,
-            $row->kelurahan_nama,
-            $row->suara->dpt ?? 0,
-            ...$suaraData,
-            $row->jumlah_pengguna_tidak_pilih ?? 0,
-            number_format($row->partisipasi ?? 0, 1)
+            $this->rowNumber,                    // No
+            $row->kabupaten_nama ?? '-',         // Kabupaten/Kota
+            $row->kecamatan_nama ?? '-',         // Kecamatan
+            $row->kelurahan_nama ?? '-',         // Kelurahan
+            $dpt,                                // DPT
+            ...$suaraData,                       // Suara untuk setiap paslon
+            $abstain,                            // Abstain
+            number_format($partisipasi, 1)       // Tingkat Partisipasi (%)
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Style for header
-        $sheet->getStyle('1')->applyFromArray([
+        // Get the highest column letter
+        $highestColumn = $sheet->getHighestColumn();
+        
+        // Merge cells for title
+        $sheet->mergeCells('A1:' . $highestColumn . '1');
+        
+        // Style for title
+        $sheet->getStyle('A1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 14,
+            ],
+            'alignment' => [
+                'horizontal' => 'center',
+            ],
+        ]);
+
+        // Style for data headers (row 3)
+        $sheet->getStyle('A3:' . $highestColumn . '3')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -114,25 +144,39 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'startColor' => ['rgb' => '3560A0'],
             ],
+            'alignment' => [
+                'horizontal' => 'center',
+                'vertical' => 'center',
+            ],
         ]);
 
-        // Get the last row number
-        $lastRow = $sheet->getHighestRow();
-
-        // Add borders to all cells
-        $sheet->getStyle('A1:' . $sheet->getHighestColumn() . $lastRow)->applyFromArray([
+        // Add borders and center alignment to all data cells
+        $dataRange = 'A3:' . $highestColumn . $sheet->getHighestRow();
+        $sheet->getStyle($dataRange)->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ],
             ],
+            'alignment' => [
+                'horizontal' => 'center',
+                'vertical' => 'center',
+            ],
         ]);
 
-        // Center align all cells
-        $sheet->getStyle('A1:' . $sheet->getHighestColumn() . $lastRow)->getAlignment()->setHorizontal('center');
+        // Set column width for better readability
+        foreach (range('A', $highestColumn) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
 
-        return [
-            1 => ['font' => ['bold' => true]],
-        ];
+        // Add some basic styling for data rows
+        $contentRange = 'A4:' . $highestColumn . $sheet->getHighestRow();
+        $sheet->getStyle($contentRange)->applyFromArray([
+            'font' => [
+                'size' => 11,
+            ],
+        ]);
+
+        return $sheet;
     }
 }

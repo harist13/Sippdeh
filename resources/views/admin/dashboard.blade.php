@@ -192,9 +192,9 @@
                         <div id="tooltip" class="hidden">
                             <div class="kabupaten-title" id="kabupaten-name"></div>
                             <div class="info-grid">
-                                <div class="label">{{ $calon[0]->nama }} / {{ $calon[0]->nama_wakil }}</div>
+                                <div class="label">{{ $calon[0]->nama }} / {{ $calon[0]->nama_wakil }} :</div>
                                 <div class="value" id="suara-paslon1">0 suara</div>
-                                <div class="label">{{ $calon[1]->nama }} / {{ $calon[0]->nama_wakil }}</div>
+                                <div class="label">{{ $calon[1]->nama }} / {{ $calon[1]->nama_wakil }} :</div>
                                 <div class="value" id="suara-paslon2">0 suara</div>
                             </div>
                         </div>

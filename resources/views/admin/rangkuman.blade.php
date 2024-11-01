@@ -58,6 +58,34 @@
        
 
       <!-- Paslon Data Table Section -->
+       <!-- Export Modal -->
+            <div id="exportModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20 hidden">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <div class="mt-3 text-center">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-5">Ekspor Resume Pilgub</h3>
+                        
+                        <div class="mb-4">
+                            <div class="text-left mb-2">Kabupaten/Kota</div>
+                            <select id="exportKabupatenSelect" class="w-full p-2 border rounded">
+                                <option value="">Semua</option>
+                                @foreach($kabupatens as $kabupaten)
+                                    <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mt-4 flex justify-center gap-4">
+                            <button id="cancelExport" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-28 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                                Batalkan
+                            </button>
+                            <button id="confirmExport" class="px-4 py-2 bg-[#3560A0] text-white text-base font-medium rounded-md w-28 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                Ekspor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="overflow-hidden mb-8">
                 <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                     <div class="text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
@@ -301,6 +329,61 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = exportUrl.toString();
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const exportModal = document.getElementById('exportModal');
+    const exportBtn = document.getElementById('exportBtn');
+    const cancelExport = document.getElementById('cancelExport');
+    const confirmExport = document.getElementById('confirmExport');
+    const exportKabupatenSelect = document.getElementById('exportKabupatenSelect');
+
+    // Show modal when export button is clicked
+    exportBtn.addEventListener('click', function() {
+        exportModal.classList.remove('hidden');
+    });
+
+    // Hide modal when cancel button is clicked
+    cancelExport.addEventListener('click', function() {
+        exportModal.classList.add('hidden');
+    });
+
+    // Hide modal when clicking outside
+    exportModal.addEventListener('click', function(e) {
+        if (e.target === exportModal) {
+            exportModal.classList.add('hidden');
+        }
+    });
+
+    // Handle export confirmation
+    confirmExport.addEventListener('click', function() {
+        const selectedKabupaten = exportKabupatenSelect.value;
+        
+        // Build export URL with selected kabupaten
+        let exportUrl = new URL('/admin/rangkuman/export', window.location.origin);
+        let params = new URLSearchParams();
+        
+        if (selectedKabupaten) {
+            params.append('kabupaten_id', selectedKabupaten);
+        }
+        
+        exportUrl.search = params.toString();
+        
+        // Start download
+        window.location.href = exportUrl.toString();
+        
+        // Hide modal after export starts
+        exportModal.classList.add('hidden');
+    });
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !exportModal.classList.contains('hidden')) {
+            exportModal.classList.add('hidden');
+        }
+    });
+});
 </script>
+
+
 
 @include('admin.layout.footer')
