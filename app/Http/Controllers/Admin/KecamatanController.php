@@ -19,8 +19,11 @@ class KecamatanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+     public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $kabupaten = Kabupaten::all();
         $kecamatanQuery = Kecamatan::query();
 
@@ -31,10 +34,13 @@ class KecamatanController extends Controller
             if ($kataKunci == '') {
                 // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
                 if ($request->has('kabupaten')) {
-                    return redirect()->route('kecamatan', ['kabupaten' => $request->get('kabupaten')]);
+                    return redirect()->route('kecamatan', [
+                        'kabupaten' => $request->get('kabupaten'),
+                        'itemsPerPage' => $itemsPerPage
+                    ]);
                 }
 
-                return redirect()->route('kecamatan');
+                return redirect()->route('kecamatan', ['itemsPerPage' => $itemsPerPage]);
             }
 
             $kecamatanQuery->whereLike('nama', "%$kataKunci%");
@@ -44,7 +50,9 @@ class KecamatanController extends Controller
             $kecamatanQuery->where('kabupaten_id', $request->get('kabupaten'));
         }
 
-        $kecamatan = $kecamatanQuery->orderByDesc('id')->paginate(10);
+        $kecamatan = $kecamatanQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString();
         
         return view('admin.kecamatan.index', compact('kabupaten', 'kecamatan'));
     }

@@ -20,6 +20,9 @@ class TPSController extends Controller
      */
     public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $kabupaten = Kabupaten::all();
         $kelurahan = Kelurahan::all();
         $tpsQuery = TPS::query();
@@ -27,14 +30,17 @@ class TPSController extends Controller
         if ($request->has('cari')) {
             $kataKunci = $request->get('cari');
 
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            // kembalikan lagi ke halaman Daftar TPS kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
                 // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
                 if ($request->has('kabupaten')) {
-                    return redirect()->route('tps', ['kabupaten' => $request->get('kabupaten')]);
+                    return redirect()->route('tps', [
+                        'kabupaten' => $request->get('kabupaten'),
+                        'itemsPerPage' => $itemsPerPage
+                    ]);
                 }
 
-                return redirect()->route('tps');
+                return redirect()->route('tps', ['itemsPerPage' => $itemsPerPage]);
             }
 
             $tpsQuery->whereLike('nama', "%$kataKunci%");
@@ -48,7 +54,9 @@ class TPSController extends Controller
             });
         }
 
-        $tps = $tpsQuery->orderByDesc('id')->paginate(10);
+        $tps = $tpsQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString();
         
         return view('admin.tps.index', compact('tps', 'kelurahan', 'kabupaten'));
     }

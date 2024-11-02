@@ -19,8 +19,11 @@ class ProvinsiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+   public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $kabupaten = Kabupaten::all();
         $provinsiQuery = Provinsi::query();
 
@@ -31,10 +34,13 @@ class ProvinsiController extends Controller
             if ($kataKunci == '') {
                 // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
                 if ($request->has('kabupaten')) {
-                    return redirect()->route('provinsi', ['kabupaten' => $request->get('kabupaten')]);
+                    return redirect()->route('provinsi', [
+                        'kabupaten' => $request->get('kabupaten'),
+                        'itemsPerPage' => $itemsPerPage
+                    ]);
                 }
 
-                return redirect()->route('provinsi');
+                return redirect()->route('provinsi', ['itemsPerPage' => $itemsPerPage]);
             }
 
             $provinsiQuery->whereLike('nama', "%$kataKunci%");
@@ -46,7 +52,9 @@ class ProvinsiController extends Controller
             });
         }
 
-        $provinsi = $provinsiQuery->orderByDesc('id')->paginate(10);
+        $provinsi = $provinsiQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString(); // Ini penting untuk mempertahankan parameter URL saat paginasi
         
         return view('admin.provinsi.index', compact('kabupaten', 'provinsi'));
     }

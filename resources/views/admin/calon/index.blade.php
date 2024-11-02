@@ -145,7 +145,7 @@
                         </tr>
                     @empty
                         <tr class="hover:bg-gray-200 text-center">
-                            <td class="py-5" colspan="5">
+                            <td class="py-5" colspan="6">
                                 @if (request()->has('cari'))
                                     <p>Tidak ada data calon dengan kata kunci "{{ request()->get('cari') }}"</p>
                                 @else
@@ -158,7 +158,10 @@
             </table>
         </div>
 
-        {{ $calon->links('vendor.pagination.tailwind', ['namaModel' => 'calon']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $calon->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 

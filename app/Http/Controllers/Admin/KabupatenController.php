@@ -21,21 +21,26 @@ class KabupatenController extends Controller
      */
     public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $provinsi = Provinsi::all();
         $kabupatenQuery = Kabupaten::query();
 
         if ($request->has('cari')) {
             $kataKunci = $request->get('cari');
 
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            // kembalikan lagi ke halaman Daftar Kabupaten kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
-                return redirect()->route('kabupaten');
+                return redirect()->route('kabupaten', ['itemsPerPage' => $itemsPerPage]);
             }
 
             $kabupatenQuery->whereLike('nama', "%$kataKunci%");
         }
 
-        $kabupaten = $kabupatenQuery->orderByDesc('id')->paginate(10);
+        $kabupaten = $kabupatenQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString(); // Mempertahankan parameter URL saat paginasi
 
         return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
     }

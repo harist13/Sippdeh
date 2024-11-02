@@ -30,6 +30,9 @@ class CalonController extends Controller
      */
     public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $provinsi = Provinsi::all();
         $kabupaten = Kabupaten::all();
 
@@ -38,7 +41,7 @@ class CalonController extends Controller
         if ($request->has('cari')) {
             $kataKunci = $request->get('cari');
 
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            // kembalikan lagi ke halaman Daftar Calon kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
                 return $this->redirectBack($request);
             }
@@ -50,7 +53,9 @@ class CalonController extends Controller
             $calonQuery->where('kabupaten_id', $request->get('kabupaten'));
         }
 
-        $calon = $calonQuery->orderByDesc('id')->paginate(10);
+        $calon = $calonQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString();
         
         return view('admin.calon.index', [...compact('provinsi', 'kabupaten', 'calon'), 'disk' => $this->disk]);
     }

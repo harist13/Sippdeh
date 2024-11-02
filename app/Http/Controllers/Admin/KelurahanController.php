@@ -22,6 +22,9 @@ class KelurahanController extends Controller
      */
     public function index(Request $request)
     {
+        // Get items per page from request, default to 10
+        $itemsPerPage = $request->input('itemsPerPage', 10);
+        
         $kabupaten = Kabupaten::all();
         $kecamatan = Kecamatan::all();
         $kelurahanQuery = Kelurahan::query();
@@ -29,14 +32,17 @@ class KelurahanController extends Controller
         if ($request->has('cari')) {
             $kataKunci = $request->get('cari');
 
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
+            // kembalikan lagi ke halaman Daftar Kelurahan kalau query 'cari'-nya ternyata kosong.
             if ($kataKunci == '') {
                 // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
                 if ($request->has('kabupaten')) {
-                    return redirect()->route('kelurahan', ['kabupaten' => $request->get('kabupaten')]);
+                    return redirect()->route('kelurahan', [
+                        'kabupaten' => $request->get('kabupaten'),
+                        'itemsPerPage' => $itemsPerPage
+                    ]);
                 }
 
-                return redirect()->route('kelurahan');
+                return redirect()->route('kelurahan', ['itemsPerPage' => $itemsPerPage]);
             }
 
             $kelurahanQuery->whereLike('nama', "%$kataKunci%");
@@ -48,7 +54,9 @@ class KelurahanController extends Controller
             });
         }
 
-        $kelurahan = $kelurahanQuery->orderByDesc('id')->paginate(10);
+        $kelurahan = $kelurahanQuery->orderByDesc('id')
+            ->paginate($itemsPerPage)
+            ->withQueryString();
         
         return view('admin.kelurahan.index', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }

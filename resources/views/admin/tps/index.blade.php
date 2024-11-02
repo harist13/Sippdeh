@@ -145,7 +145,10 @@
             </table>
         </div>
 
-        {{ $tps->links('vendor.pagination.tailwind', ['namaModel' => 'tps']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $tps->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 

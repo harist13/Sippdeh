@@ -141,7 +141,10 @@
             </table>
         </div>
 
-        {{ $kecamatan->links('vendor.pagination.tailwind', ['namaModel' => 'kecamatan']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $kecamatan->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 

@@ -141,7 +141,10 @@
             </table>
         </div>
 
-        {{ $kabupaten->links('vendor.pagination.tailwind', ['namaModel' => 'kabupaten']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $kabupaten->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 

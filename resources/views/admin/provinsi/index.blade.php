@@ -155,7 +155,10 @@
             </table>
         </div>
 
-        {{ $provinsi->links('vendor.pagination.tailwind', ['namaModel' => 'provinsi']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $provinsi->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 

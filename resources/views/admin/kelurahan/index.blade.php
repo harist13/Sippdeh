@@ -141,7 +141,10 @@
             </table>
         </div>
 
-        {{ $kelurahan->links('vendor.pagination.tailwind', ['namaModel' => 'kelurahan']) }}
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $kelurahan->links('vendor.pagination.custom') }}
+        </div>
     </div>
 </main>
 
