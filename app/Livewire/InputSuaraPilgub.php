@@ -28,7 +28,7 @@ class InputSuaraPilgub extends Component
 
     public string $posisi;
 
-    public array $ignoredColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
 
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
@@ -53,7 +53,7 @@ class InputSuaraPilgub extends Component
 
     public function resetFilter()
     {
-        $this->ignoredColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
