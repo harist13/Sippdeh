@@ -116,19 +116,7 @@
                     <i class="fas fa-plus"></i> Tambah User
                 </button>
 
-                <div class="relative">
-                    <select id="dataLimit" class="bg-gray-100 rounded-md px-3 py-2 pr-8 appearance-none cursor-pointer border border-gray-300">
-                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 Data</option>
-                        <option value="20" {{ request('perPage') == 20 ? 'selected' : '' }}>20 Data</option>
-                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 Data</option>
-                        <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100 Data</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
-                    </div>
-                </div>
+               
 
                 <div class="relative w-full-mobile mt-4-mobile">
                     <input type="text" placeholder="Cari User" class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full">
@@ -195,7 +183,7 @@
 
             </table>
             <div class="mt-4">
-                {{ $users->appends(['perPage' => request('perPage')])->links() }}
+                {{ $users->links('vendor.pagination.custom') }}
             </div>
         </div>
 
@@ -237,7 +225,7 @@
                 </tbody>
             </table>
             <div class="mt-4">
-                {{ $loginHistories->appends(['perPage' => request('perPage')])->links() }}
+                {{ $loginHistories->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>
