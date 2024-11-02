@@ -45,7 +45,7 @@
 					class="py-3 px-4 border centang"
 					data-id="{{ $tpsDatum->id }}"
 				>
-					<input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+					<input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
 				</td>
 
 				{{-- Kecamatan --}}

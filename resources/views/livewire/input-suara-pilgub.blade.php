@@ -499,6 +499,8 @@
         }
 
         function onCheckboxClick(event) {
+            event.stopPropagation();
+            
             const checkbox = event.target;
             const tpsId = checkbox.parentElement.dataset.id;
             
