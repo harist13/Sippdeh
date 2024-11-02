@@ -498,24 +498,39 @@
                 });
         }
 
+        let lastChecked;
+
         function onCheckboxClick(event) {
             event.stopPropagation();
-            
+
             const checkbox = event.target;
             const tpsId = checkbox.parentElement.dataset.id;
             
             if (checkbox.checked) {
-                const row = checkbox.parentElement.parentElement;
-                
-                const dpt = row.querySelector('td.dpt').dataset.value;
-                const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
-                const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
-                    .map(suara => ({
-                        id: suara.dataset.id,
-                        suara: suara.dataset.suara
-                    }));
+                if (event.shiftKey && lastChecked != null) {
+                    const checkboxes = Array.from(document.querySelectorAll('.centang input[type=checkbox]'));
+                    const start = checkboxes.indexOf(lastChecked);
+                    const end = checkboxes.indexOf(event.target);
 
-                addTPSToLocalStorage(tpsId, dpt, suaraCalon, suaraTidakSah);
+                    checkboxes.slice(Math.min(start,end), Math.max(start,end) + 1).forEach(function(checkbox) {
+                        checkbox.checked = true;
+                        checkbox.dispatchEvent(new Event('click'));
+                    });
+                } else {
+                    const row = checkbox.parentElement.parentElement;
+                    
+                    const dpt = row.querySelector('td.dpt').dataset.value;
+                    const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
+                    const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
+                        .map(suara => ({
+                            id: suara.dataset.id,
+                            suara: suara.dataset.suara
+                        }));
+    
+                    addTPSToLocalStorage(tpsId, dpt, suaraCalon, suaraTidakSah);
+                }
+
+                lastChecked = event.target;
             } else {
                 TPS.delete(tpsId);
             }
@@ -601,10 +616,24 @@
             document.querySelectorAll('tr.tps').forEach(function(row) {
                 row.onclick = function(event) {
                     event.stopPropagation();
-                    
+
                     const checkbox = row.querySelector('.centang input[type=checkbox]');
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event('click'));
+
+                    if (event.shiftKey && lastChecked != null) {
+                        const checkboxes = Array.from(document.querySelectorAll('.centang input[type=checkbox]'));
+                        const start = checkboxes.indexOf(lastChecked);
+                        const end = checkboxes.indexOf(checkbox);
+
+                        checkboxes.slice(Math.min(start,end), Math.max(start,end) + 1).forEach(function(checkbox) {
+                            checkbox.checked = true;
+                            checkbox.dispatchEvent(new Event('click'));
+                        });
+                    } else {
+                        checkbox.checked = !checkbox.checked;
+                        checkbox.dispatchEvent(new Event('click'));
+                    }
+
+                    lastChecked = checkbox;
                 }
             });
 
