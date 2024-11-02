@@ -596,6 +596,16 @@
             
             document.getElementById('checkAll').onchange = onCheckAllCheckboxesChange;
 
+            document.querySelectorAll('tr.tps').forEach(function(row) {
+                row.onclick = function(event) {
+                    event.stopPropagation();
+                    
+                    const checkbox = row.querySelector('.centang input[type=checkbox]');
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('click'));
+                }
+            });
+
             document.querySelectorAll('.centang input[type=checkbox]')
                 .forEach(checkbox => checkbox.onclick = onCheckboxClick);
 
