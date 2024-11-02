@@ -1,6 +1,6 @@
 <div>
     <div class="bg-white rounded-[20px] mb-8 shadow-lg">
-        <div class="bg-white sticky top-20 p-4 z-10 rounded-t-[20px] shadow-lg">
+        <div class="bg-white sticky top-20 p-4 z-20 rounded-t-[20px] shadow-lg">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
