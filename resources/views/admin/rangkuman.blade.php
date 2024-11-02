@@ -163,6 +163,13 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr id="noDataRow" class="hidden">
+                                    <td colspan="100%" class="py-8 text-center text-gray-500">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <p class="text-lg">Data yang dicari tidak ditemukan</p>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -258,6 +265,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedKabupaten = kabupatenFilter.value.toLowerCase();
         const rows = document.querySelectorAll('.search-row');
+        const noDataRow = document.getElementById('noDataRow');
+        let visibleRows = 0;
 
         rows.forEach(row => {
             const kabupaten = row.querySelector('.kabupaten-cell').textContent.toLowerCase();
@@ -276,10 +285,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Tampilkan baris jika memenuhi kriteria filter
             if (matchesKabupaten && matchesSearch) {
                 row.style.display = '';
+                visibleRows++;
             } else {
                 row.style.display = 'none';
             }
         });
+
+        // Show or hide the "no data" message
+        if (visibleRows === 0) {
+            noDataRow.classList.remove('hidden');
+        } else {
+            noDataRow.classList.add('hidden');
+        }
 
         // Update nomor urut yang ditampilkan
         updateRowNumbers();

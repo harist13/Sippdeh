@@ -178,6 +178,13 @@
                             @endif
                         </td>
                     </tr>
+                    <tr id="noDataTPS" class="hidden">
+                        <td colspan="8" class="py-8 text-center text-gray-500">
+                            <div class="flex flex-col items-center justify-center">
+                                <p class="text-lg">Data yang dicari tidak ditemukan</p>
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
 
@@ -219,6 +226,13 @@
                                     Keluarkan
                                 </button>
                             </form>
+                        </td>
+                    </tr>
+                     <tr id="noDataSuara" class="hidden">
+                        <td colspan="8" class="py-8 text-center text-gray-500">
+                            <div class="flex flex-col items-center justify-center">
+                                <p class="text-lg">Data yang dicari tidak ditemukan</p>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -529,15 +543,66 @@ document.querySelectorAll('.fa-trash-alt').forEach(function(deleteBtn) {
 
 
 
-// Search functionality
-document.querySelector('input[placeholder="Cari User"]').addEventListener('input', function(e) {
+document.querySelector('input[placeholder="Cari User"]').addEventListener('keyup', function(e) {
     const searchTerm = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#tpsTable tbody tr, #suaraTable tbody tr');
-
-    rows.forEach(row => {
+    let visibleRowsTPSCount = 0;
+    let visibleRowsSuaraCount = 0;
+    
+    // Search in TPS table
+    const tpsRows = document.querySelectorAll('#tpsTable tbody tr:not(#noDataTPS)');
+    const noDataTPS = document.getElementById('noDataTPS');
+    
+    tpsRows.forEach(row => {
         const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchTerm) ? '' : 'none';
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+            visibleRowsTPSCount++;
+        } else {
+            row.style.display = 'none';
+        }
     });
+    
+    // Toggle no data message for TPS table
+    if (visibleRowsTPSCount === 0) {
+        noDataTPS.classList.remove('hidden');
+    } else {
+        noDataTPS.classList.add('hidden');
+    }
+    
+    // Search in Suara table
+    const suaraRows = document.querySelectorAll('#suaraTable tbody tr:not(#noDataSuara)');
+    const noDataSuara = document.getElementById('noDataSuara');
+    
+    suaraRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+            visibleRowsSuaraCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    // Toggle no data message for Suara table
+    if (visibleRowsSuaraCount === 0) {
+        noDataSuara.classList.remove('hidden');
+    } else {
+        noDataSuara.classList.add('hidden');
+    }
+});
+
+// Clear search and reset display when input is cleared
+document.querySelector('input[placeholder="Cari User"]').addEventListener('search', function(e) {
+    if (this.value === '') {
+        const allRows = document.querySelectorAll('#tpsTable tbody tr, #suaraTable tbody tr');
+        allRows.forEach(row => {
+            if (!row.id.includes('noData')) {
+                row.style.display = '';
+            }
+        });
+        document.getElementById('noDataTPS').classList.add('hidden');
+        document.getElementById('noDataSuara').classList.add('hidden');
+    }
 });
 
 
