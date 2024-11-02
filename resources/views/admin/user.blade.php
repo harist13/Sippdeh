@@ -108,7 +108,7 @@
         <div class="flex flex-wrap-mobile justify-between items-center mb-4">
             <div class="flex border border-gray-300 rounded-lg overflow-hidden w-full-mobile">
                 <button id="tpsBtn" class="px-4 py-2 bg-[#3560A0] text-white rounded-l-lg border-r border-gray-300 flex-grow">LIST USER</button>
-                <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 border-r border-gray-300 flex-grow">HISTORY</button>
+                <button id="suaraBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg flex-grow">HISTORY</button>
             </div>
 
             <div class="flex flex-wrap-mobile items-center space-x-4 mt-4-mobile w-full-mobile">
