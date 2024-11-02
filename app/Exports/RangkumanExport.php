@@ -80,38 +80,23 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
     {
         $this->rowNumber++;
 
-        // Initialize suara array for all paslon
+        // Get suara data for each paslon
         $suaraData = [];
         foreach ($this->paslon as $calon) {
             $suaraCalon = $row->suaraCalon->where('calon_id', $calon->id)->first();
-            $suaraData[] = $suaraCalon ? (int)$suaraCalon->suara : 0;
+            $suaraData[] = $suaraCalon ? $suaraCalon->suara : 0;
         }
 
-        // Calculate total suara sah
-        $totalSuaraSah = array_sum($suaraData);
-
-        // Get DPT from suara relationship
-        $dpt = $row->suara ? (int)$row->suara->dpt : 0;
-
-        // Calculate participation rate
-        $partisipasi = $dpt > 0 ? 
-            round(($totalSuaraSah / $dpt) * 100, 1) : 
-            0;
-
-        // Calculate abstain
-        $abstain = $dpt - $totalSuaraSah;
-        $abstain = $abstain < 0 ? 0 : $abstain;
-
-        // Build and return the row data array
+        // Return data directly from database without calculations
         return [
             $this->rowNumber,                    // No
             $row->kabupaten_nama ?? '-',         // Kabupaten/Kota
             $row->kecamatan_nama ?? '-',         // Kecamatan
             $row->kelurahan_nama ?? '-',         // Kelurahan
-            $dpt,                                // DPT
+            $row->suara->dpt ?? 0,               // DPT
             ...$suaraData,                       // Suara untuk setiap paslon
-            $abstain,                            // Abstain
-            number_format($partisipasi, 1)       // Tingkat Partisipasi (%)
+            $row->jumlah_pengguna_tidak_pilih ?? 0,  // Abstain dari database
+            number_format($row->partisipasi ?? 0, 1)  // Tingkat Partisipasi dari database
         ];
     }
 
