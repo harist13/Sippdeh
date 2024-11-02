@@ -8,30 +8,30 @@
 <table class="min-w-full divide-y divide-gray-200">
 	<thead class="bg-[#3560A0] text-white">
 		<tr>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">NO</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">
-				<input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">NO</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+				<input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
 			</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('KECAMATAN', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kecamatan</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('KELURAHAN', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kelurahan</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('TPS', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">TPS</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 100px;">DPT</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('KECAMATAN', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kecamatan</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('KELURAHAN', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Kelurahan</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('TPS', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">TPS</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 100px;">DPT</th>
 			@foreach ($paslon as $calon)
-				<th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('CALON', $includedColumns) ? 'hidden' : '' }}" style="min-width: 300px;">
+				<th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('CALON', $includedColumns) ? 'hidden' : '' }}" style="min-width: 300px;">
 					{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
 				</th>
 			@endforeach
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white {{ !in_array('CALON', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Calon</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Sah</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Tidak Sah</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 200px;">Suara Masuk</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white" style="min-width: 50px;">Partisipasi</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('CALON', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Calon</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Sah</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Tidak Sah</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Masuk</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">Partisipasi</th>
 		</tr>
 	</thead>
 	<tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
 		@forelse ($tps as $tpsDatum)
-			<tr wire:key="{{ $tpsDatum->id }}" class="border-b text-center tps" data-id="{{ $tpsDatum->id }}">
+			<tr wire:key="{{ $tpsDatum->id }}" class="border-b text-center select-none cursor-pointer hover:bg-gray-200 tps" data-id="{{ $tpsDatum->id }}">
 				{{-- ID TPS --}}
 				<td
 					class="py-3 px-4 border nomor"

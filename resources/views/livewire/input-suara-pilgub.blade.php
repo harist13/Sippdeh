@@ -293,6 +293,16 @@
             });
         }
 
+        function syncSelectedRowsBackgroundColor() {
+            document.querySelectorAll('tr.tps').forEach(function(row) {
+                if (TPS.exists(row.dataset.id)) {
+                    row.classList.add('bg-gray-200');
+                } else {
+                    row.classList.remove('bg-gray-200');
+                }
+            });
+        }
+
         function syncTableMode() {
             document.querySelectorAll('tr.tps').forEach(tpsRow => {
                 syncEditableCellMode({
@@ -508,8 +518,7 @@
                 TPS.delete(tpsId);
             }
 
-            syncCheckboxesWithSelectedTPS();
-            syncActionButtons();
+            refreshState();
         }
 
         function focusToFirstEditableCellInput() {
@@ -550,6 +559,7 @@
 
             syncTableDataWithSelectedTPS();
             syncTableInputWithSelectedTPS();
+            syncSelectedRowsBackgroundColor();
 
             syncTableMode();
             focusToFirstEditableCellInput();
@@ -596,7 +606,6 @@
                     event.preventDefault();
                     onSubmitClick();
                 }
-
                 
                 if (event.key === "u" && event.ctrlKey) {
                     event.preventDefault();
@@ -613,6 +622,23 @@
                 if (event.key === "Escape") {
                     if (isEditMode()) {
                         onCancelEditModeButtonClick();
+                    } else {
+                        document.querySelectorAll('.centang input[type=checkbox]')
+                            .forEach(function(checkbox) {
+                                checkbox.checked = false;
+                                checkbox.dispatchEvent(new Event('click'));
+                            });
+                    }
+                }
+
+                if (event.key === "a") {
+                    if (!isEditMode()) {
+                        event.preventDefault();
+                        document.querySelectorAll('.centang input[type=checkbox]')
+                            .forEach(function(checkbox) {
+                                checkbox.checked = true;
+                                checkbox.dispatchEvent(new Event('click'));
+                            });
                     }
                 }
             };
