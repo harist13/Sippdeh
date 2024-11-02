@@ -138,7 +138,9 @@
                         <tbody class="bg-gray-100">
                             @foreach($summaryData as $index => $data)
                                 <tr class="border-b search-row">
-                                    <td class="py-3 px-4 border-r">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="py-3 px-4 border-r">
+                                        {{ str_pad(($summaryData->currentPage() - 1) * $summaryData->perPage() + $index + 1, 2, '0', STR_PAD_LEFT) }}
+                                    </td>
                                     <td class="py-3 px-4 border-r kabupaten-cell">{{ $data->kabupaten_nama }}</td>
                                     <td class="py-3 px-4 border-r kecamatan-cell">{{ $data->kecamatan_nama }}</td>
                                     <td class="py-3 px-4 border-r kelurahan-cell">{{ $data->kelurahan_nama }}</td>
@@ -164,6 +166,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div class="mt-4">
+                    {{ $summaryData->links('vendor.pagination.custom') }}
                 </div>
             </div>
 
