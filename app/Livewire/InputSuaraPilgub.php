@@ -75,7 +75,7 @@ class InputSuaraPilgub extends Component
                 $builder->where(function (Builder $builder) {
                     $builder
                         ->whereHas('suara', function (Builder $builder) {
-                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59');
+                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59.9');
                         })
                         ->orWhereDoesntHave('suara');
                 });
@@ -84,7 +84,7 @@ class InputSuaraPilgub extends Component
             // Handle 'HIJAU' and 'KUNING' conditions if they are selected
             if (in_array('KUNING', $this->partisipasi)) {
                 $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79');
+                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79.9');
                 });
             }
             
