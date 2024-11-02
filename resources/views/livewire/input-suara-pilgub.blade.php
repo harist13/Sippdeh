@@ -349,7 +349,7 @@
                 </label>
                 <label for="merah" class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" class="hidden" id="merah" value="MERAH" wire:model="partisipasi" />
-                    <span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none border-2">< 20%</span>
+                    <span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none border-2">< 60%</span>
                 </label>
             </div>
             {{-- <span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
