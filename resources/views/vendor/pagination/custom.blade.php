@@ -1,16 +1,20 @@
-@if ($paginator->hasPages())
+@if ($paginator->total() > min([10, 20, 50, 100]))
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex justify-end">
         <div class="flex items-center space-x-6">
             {{-- Items Per Page Dropdown --}}
+            @if ($paginator->total() > 10)
             <div class="flex items-center">
                 <select id="itemsPerPage" name="itemsPerPage" class="border border-gray-300 rounded-md p-1 text-sm">
                     @foreach ([10, 20, 50, 100] as $perPage)
-                        <option value="{{ $perPage }}" {{ request('itemsPerPage') == $perPage ? 'selected' : '' }}>
-                            {{ $perPage }}
-                        </option>
+                        @if ($paginator->total() >= $perPage)
+                            <option value="{{ $perPage }}" {{ request('itemsPerPage') == $perPage ? 'selected' : '' }}>
+                                {{ $perPage }}
+                            </option>
+                        @endif
                     @endforeach
                 </select>
             </div>
+            @endif
 
             {{-- Pagination Summary --}}
             <div class="text-sm text-gray-700">
@@ -18,6 +22,7 @@
             </div>
 
             {{-- Pagination Controls --}}
+            @if ($paginator->total() > request('itemsPerPage', 10))
             <div class="flex items-center space-x-1">
                 {{-- First Page Link --}}
                 @if (!$paginator->onFirstPage())
@@ -47,10 +52,11 @@
                     <span class="p-1 text-gray-300">&gt;|</span>
                 @endif
             </div>
+            @endif
         </div>
     </nav>
     <script>
-        document.getElementById('itemsPerPage').addEventListener('change', function () {
+        document.getElementById('itemsPerPage')?.addEventListener('change', function () {
             const url = new URL(window.location.href);
             url.searchParams.set('itemsPerPage', this.value);
             window.location.href = url;

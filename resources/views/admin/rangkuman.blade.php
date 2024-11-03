@@ -3,7 +3,37 @@
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
-    
+    /* Style tambahan untuk select disabled */
+select:disabled {
+    @apply bg-gray-100 cursor-not-allowed;
+}
+
+/* Style untuk partisipasi labels */
+.partisipasi-label {
+    @apply transition-all duration-200 ease-in-out;
+}
+
+/* Loading spinner untuk select */
+.select-loading::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3560a0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+
     #tpsBtn, #suaraBtn, #pilgubBtn {
         margin-right: 1px;
     }
@@ -247,13 +277,243 @@
 
             </div>
 
-        
+        <!-- modal filter -->
+         <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+            <div class="w-[393px] p-4 bg-white rounded-[30px] shadow-md relative">
+                <!-- Close Button -->
+                <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold w-8 h-8 flex items-center justify-center">
+                    ×
+                </button>
+
+                <!-- Filter Header -->
+                <div class="flex items-center space-x-2 mb-6">
+                    <span class="text-lg font-semibold">Filter</span>
+                </div>
+
+                <!-- Filter Form -->
+                <div class="space-y-4">
+                    <!-- Dropdown Wilayah -->
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1">Kab/Kota</label>
+                        <select id="filterKabupaten" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white">
+                            <option value="">Pilih Kab/Kota</option>
+                            @foreach($kabupatens as $kabupaten)
+                                <option value="{{ $kabupaten->id }}" {{ request('kabupaten_id') == $kabupaten->id ? 'selected' : '' }}>
+                                    {{ $kabupaten->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1">Kecamatan</label>
+                        <select id="filterKecamatan" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white" {{ !request('kabupaten_id') ? 'disabled' : '' }}>
+                            <option value="">Pilih Kecamatan</option>
+                            @foreach($kecamatans as $kecamatan)
+                                <option value="{{ $kecamatan->id }}" {{ request('kecamatan_id') == $kecamatan->id ? 'selected' : '' }}>
+                                    {{ $kecamatan->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1">Kelurahan</label>
+                        <select id="filterKelurahan" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white" {{ !request('kecamatan_id') ? 'disabled' : '' }}>
+                            <option value="">Pilih Kelurahan</option>
+                            @foreach($kelurahans as $kelurahan)
+                                <option value="{{ $kelurahan->id }}" {{ request('kelurahan_id') == $kelurahan->id ? 'selected' : '' }}>
+                                    {{ $kelurahan->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Tingkat Partisipasi Multiselect -->
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1">Tingkat Partisipasi</label>
+                        <div class="flex flex-wrap gap-2">
+                            @php
+                                $selectedPartisipasi = explode(',', request('partisipasi', ''));
+                            @endphp
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" 
+                                    class="hidden partisipasi-checkbox" 
+                                    value="hijau" 
+                                    {{ in_array('hijau', $selectedPartisipasi) ? 'checked' : '' }}>
+                                <span class="px-3 py-1 rounded-full border text-sm font-medium partisipasi-label {{ in_array('hijau', $selectedPartisipasi) ? 'bg-[#3560a0] text-[#69d788]' : 'text-gray-600' }}">
+                                    Hijau
+                                </span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" 
+                                    class="hidden partisipasi-checkbox" 
+                                    value="kuning" 
+                                    {{ in_array('kuning', $selectedPartisipasi) ? 'checked' : '' }}>
+                                <span class="px-3 py-1 rounded-full border text-sm font-medium partisipasi-label {{ in_array('kuning', $selectedPartisipasi) ? 'bg-[#3560a0] text-[#ffe608]' : 'text-gray-600' }}">
+                                    Kuning
+                                </span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" 
+                                    class="hidden partisipasi-checkbox" 
+                                    value="merah" 
+                                    {{ in_array('merah', $selectedPartisipasi) ? 'checked' : '' }}>
+                                <span class="px-3 py-1 rounded-full border text-sm font-medium partisipasi-label {{ in_array('merah', $selectedPartisipasi) ? 'bg-[#3560a0] text-[#fe756c]' : 'text-gray-600' }}">
+                                    Merah
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-between mt-6">
+                    <button onclick="resetFilter()" class="w-[177px] h-10 bg-white border border-[#3560a0] text-[#3560a0] text-sm font-semibold rounded-full hover:bg-gray-50 transition-colors">
+                        Reset
+                    </button>
+                    <button onclick="applyFilter()" class="w-[177px] h-10 bg-[#3560a0] text-white text-sm font-semibold rounded-full hover:bg-[#2d5288] transition-colors">
+                        Terapkan Filter
+                    </button>
+                </div>
+            </div>
+        </div>
 
     
     </div>
 </main>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterKabupaten = document.getElementById('filterKabupaten');
+    const filterKecamatan = document.getElementById('filterKecamatan');
+    const filterKelurahan = document.getElementById('filterKelurahan');
+    const partisipasiCheckboxes = document.querySelectorAll('.partisipasi-checkbox');
+
+    // Handle partisipasi checkbox changes
+    partisipasiCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const label = this.nextElementSibling;
+            if (this.checked) {
+                label.classList.add('bg-[#3560a0]');
+                switch(this.value) {
+                    case 'hijau':
+                        label.classList.add('text-[#69d788]');
+                        break;
+                    case 'kuning':
+                        label.classList.add('text-[#ffe608]');
+                        break;
+                    case 'merah':
+                        label.classList.add('text-[#fe756c]');
+                        break;
+                }
+            } else {
+                label.classList.remove('bg-[#3560a0]', 'text-[#69d788]', 'text-[#ffe608]', 'text-[#fe756c]');
+                label.classList.add('text-gray-600');
+            }
+        });
+    });
+
+    // Kabupaten change handler
+    filterKabupaten.addEventListener('change', async function() {
+        const kabupatenId = this.value;
+        filterKecamatan.disabled = !kabupatenId;
+        filterKelurahan.disabled = true;
+
+        // Reset dropdowns
+        filterKecamatan.innerHTML = '<option value="">Pilih Kecamatan</option>';
+        filterKelurahan.innerHTML = '<option value="">Pilih Kelurahan</option>';
+
+        if (kabupatenId) {
+            try {
+                filterKecamatan.parentElement.classList.add('select-loading');
+                const response = await fetch(`/api/kecamatan/${kabupatenId}`);
+                const kecamatans = await response.json();
+                
+                kecamatans.forEach(kecamatan => {
+                    const option = new Option(kecamatan.nama, kecamatan.id);
+                    filterKecamatan.add(option);
+                });
+            } catch (error) {
+                console.error('Error fetching kecamatan:', error);
+            } finally {
+                filterKecamatan.parentElement.classList.remove('select-loading');
+            }
+        }
+    });
+
+    // Kecamatan change handler
+    filterKecamatan.addEventListener('change', async function() {
+        const kecamatanId = this.value;
+        filterKelurahan.disabled = !kecamatanId;
+        filterKelurahan.innerHTML = '<option value="">Pilih Kelurahan</option>';
+
+        if (kecamatanId) {
+            try {
+                filterKelurahan.parentElement.classList.add('select-loading');
+                const response = await fetch(`/api/kelurahan/${kecamatanId}`);
+                const kelurahans = await response.json();
+                
+                kelurahans.forEach(kelurahan => {
+                    const option = new Option(kelurahan.nama, kelurahan.id);
+                    filterKelurahan.add(option);
+                });
+            } catch (error) {
+                console.error('Error fetching kelurahan:', error);
+            } finally {
+                filterKelurahan.parentElement.classList.remove('select-loading');
+            }
+        }
+    });
+
+    // Reset filter
+    window.resetFilter = function() {
+        filterKabupaten.value = '';
+        filterKecamatan.value = '';
+        filterKelurahan.value = '';
+        filterKecamatan.disabled = true;
+        filterKelurahan.disabled = true;
+
+        partisipasiCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+            const label = checkbox.nextElementSibling;
+            label.classList.remove('bg-[#3560a0]', 'text-[#69d788]', 'text-[#ffe608]', 'text-[#fe756c]');
+            label.classList.add('text-gray-600');
+        });
+    };
+
+    // Apply filter
+    window.applyFilter = function() {
+        const filters = {
+            kabupaten_id: filterKabupaten.value,
+            kecamatan_id: filterKecamatan.value,
+            kelurahan_id: filterKelurahan.value,
+            partisipasi: Array.from(partisipasiCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value)
+                .join(',')
+        };
+
+        const url = new URL(window.location.href);
+        Object.keys(filters).forEach(key => {
+            if (filters[key]) {
+                url.searchParams.set(key, filters[key]);
+            } else {
+                url.searchParams.delete(key);
+            }
+        });
+
+        window.location.href = url.toString();
+    };
+});
+
+function toggleModal() {
+        const modal = document.getElementById('filterModal');
+        modal.classList.toggle('hidden');
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const kabupatenFilter = document.getElementById('kabupatenFilter');
