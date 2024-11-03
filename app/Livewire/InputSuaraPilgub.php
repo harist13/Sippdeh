@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Traits\InputSuara;
 use App\Models\Calon;
 use App\Models\RingkasanSuaraTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
-use App\Models\TPS;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,22 +20,9 @@ use Exception;
 
 class InputSuaraPilgub extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, InputSuara;
 
-    public int $perPage = 10;
-
-    public string $keyword = '';
-
-    public string $posisi;
-
-    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
-
-    public function mount($posisi)
-    {
-        $this->posisi = $posisi;
-    }
+    public string $posisi = 'GUBERNUR';
 
     public function render()
     {
@@ -45,16 +32,6 @@ class InputSuaraPilgub extends Component
         $tps = $this->getTPS();
 
         return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
-    }
-
-    public function applyFilter() {
-        // TODO: Nothing
-    }
-
-    public function resetFilter()
-    {
-        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
     private function getTPS()

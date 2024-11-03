@@ -1,11 +1,13 @@
-<div id="filterPilgubModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20 hidden">
-  <style>
-      /* Add blue border to span when checkbox is checked */
-      input[type="checkbox"]:checked + span {
-          border-color: #3b82f6;
-      }
-  </style>
+@push('styles')
+    <style>
+        /* Add blue border to span when checkbox is checked */
+        input[type="checkbox"]:checked + span {
+            border-color: #3b82f6;
+        }
+    </style>
+@endpush
 
+<div id="filterPilgubModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20 hidden">
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="flex items-center mb-5">
             <i class="fas fa-arrow-left mr-3 select-none cursor-pointer" id="cancelFilterPilgub"></i>
