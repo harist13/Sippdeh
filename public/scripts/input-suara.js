@@ -395,6 +395,20 @@ class InputSuaraUIManager {
                     this.checkAllCheckboxes(true);
                 }
             }
+
+            if (event.shiftKey && event.key == 'ArrowRight') {
+                const nextPageButton = document.getElementById('nextPage');
+                if (nextPageButton) {
+                    nextPageButton.dispatchEvent(new Event('click'));
+                }
+            }
+
+            if (event.shiftKey && event.key == 'ArrowLeft') {
+                const prevPageButton = document.getElementById('prevPage');
+                if (prevPageButton) {
+                    prevPageButton.dispatchEvent(new Event('click'));
+                }
+            }
         };
     }
 

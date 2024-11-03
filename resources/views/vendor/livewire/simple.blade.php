@@ -31,14 +31,14 @@
             @if ($paginator->onFirstPage())
                 <span class="text-gray-300">&laquo;</span>
             @else
-                <a href="javascript:void(0);" wire:click="previousPage" class="text-gray-500 hover:text-blue-500" aria-label="Previous Page">
+                <a href="javascript:void(0);" wire:click="previousPage" class="text-gray-500 hover:text-blue-500" aria-label="Previous Page" id="prevPage">
                     &laquo;
                 </a>
             @endif
 
             <!-- Next Page -->
             @if ($paginator->hasMorePages())
-                <a href="javascript:void(0);" wire:click="nextPage" class="text-gray-500 hover:text-blue-500" aria-label="Next Page">
+                <a href="javascript:void(0);" wire:click="nextPage" class="text-gray-500 hover:text-blue-500" aria-label="Next Page" id="nextPage">
                     &raquo;
                 </a>
             @else
@@ -55,4 +55,11 @@
             @endif
         </div>
     </div>
+
+    <span class="tooltip relative cursor-pointer text-sm text-gray-500 mt-1">
+        <i class="fas fa-question-circle"></i>
+        <span class="absolute top-full -right-full mt-1 w-max px-2 py-1 bg-gray-800 text-white rounded shadow-md text-xs hidden group-hover:block">
+            Untuk berganti ke halaman lain, bisa juga dengan menekan "Shift + <" atau "Shift + >"
+        </span>
+    </span>
 </div>
