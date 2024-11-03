@@ -11,51 +11,45 @@ class TPS {
     }
 
     static updateSuaraCalon(tpsId, calonId, newSuara) {
-        // Get all TPS data from LocalStorage
         const data = JSON.parse(localStorage.getItem('tps_data')) || [];
 
-        // Find the TPS object by tpsId
         const tpsIndex = data.findIndex(tps => tps.id === tpsId);
         if (tpsIndex === -1) {
             console.error(`TPS with id ${tpsId} not found.`);
             return;
         }
 
-        // Find the specific suara_calon within the TPS object
         const calonIndex = data[tpsIndex].suara_calon.findIndex(calon => calon.id === calonId);
         if (calonIndex === -1) {
             console.error(`Calon with id ${calonId} not found in TPS ${tpsId}.`);
             return;
         }
 
-        // Update the suara value
         data[tpsIndex].suara_calon[calonIndex].suara = newSuara;
 
-        // Save the updated data back to LocalStorage
         localStorage.setItem('tps_data', JSON.stringify(data));
-        console.log(`Updated calon id ${calonId} in TPS ${tpsId} with new suara: ${newSuara}`);
     }
 
     get suaraSah() {
-        return this.suaraCalon.reduce(function(acc, sc) {
+        return this.suaraCalon.reduce(function (acc, sc) {
             return acc + sc.suara;
         }, 0);
     }
 
     get jumlahPenggunaTidakPilih() {
-        return this.dpt - this.suaraMasuk;
+		return this.dpt - this.suaraMasuk;
     }
 
     get suaraMasuk() {
-        return this.suaraSah + this.suaraTidakSah;
+		return this.suaraSah + (this.suaraTidakSah || 0);
     }
 
     get partisipasi() {
-        if (this.dpt == 0) {
+        if (this.dpt == 0 || this.dpt == '') {
             return 0;
         }
-
-        return parseFloat(((this.suaraMasuk / this.dpt) * 100).toFixed(1));
+		
+		return parseFloat(((this.suaraMasuk / this.dpt) * 100).toFixed(1));
     }
 
     toObject() {
@@ -96,7 +90,7 @@ class TPS {
         if (TPS.exists(this.id)) {
             return;
         }
-        
+
         const data = TPS.getAllTPS();
         data.push(this);
         localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
@@ -141,7 +135,11 @@ class TPS {
 }
 
 class InputSuaraUIManager {
-    caches = {
+	constructor($wire) {
+		this.$wire = $wire;
+	}
+
+	caches = {
         components: {
             saveButton: null,
             cancelEditButton: null,
@@ -305,11 +303,15 @@ class InputSuaraUIManager {
             this.showSaveLoadingMessage();
 
             const data = TPS.getAllTPS().map(tps => tps.toObject());
-            $wire.dispatch('submit-tps', { data });
+            this.$wire.dispatch('submit-tps', {
+                data
+            });
         }
     }
 
-    onDataStored({ status }) {
+    onDataStored({
+        status
+    }) {
         if (status == 'sukses') {
             this.initialize();
             this.hideSaveLoadingMessage();
@@ -595,7 +597,9 @@ class InputSuaraUIManager {
                 row,
                 cellQuery: 'td.dpt',
                 onChange: (tpsId, _, value) => {
-                    TPS.update(tpsId, { dpt: parseInt(value) });
+                    TPS.update(tpsId, {
+                        dpt: parseInt(value)
+                    });
                     this.syncTableDataWithSelectedTPS();
                 }
             });
@@ -604,7 +608,9 @@ class InputSuaraUIManager {
                 row,
                 cellQuery: 'td.suara-tidak-sah',
                 onChange: (tpsId, _, value) => {
-                    TPS.update(tpsId, { suaraTidakSah: parseInt(value) });
+                    TPS.update(tpsId, {
+                        suaraTidakSah: parseInt(value)
+                    });
                     this.syncTableDataWithSelectedTPS();
                 }
             });
@@ -653,7 +659,7 @@ class InputSuaraUIManager {
     }
 
     initializeHooks() {
-        $wire.on('data-stored', this.onDataStored.bind(this));
+        this.$wire.on('data-stored', this.onDataStored.bind(this));
 
         let timeoutId = null;
 
