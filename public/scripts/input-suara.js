@@ -503,7 +503,7 @@ class InputSuaraUIManager {
                     // suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
                     suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
 
-                    const abstainRow = row.querySelector('td.jumlah-pengguna-tidak-pilih');
+                    const abstainRow = row.querySelector('td.abstain');
                     // abstainRow.dataset.value = tps.abstain;
                     abstainRow.textContent = tps.abstain;
 

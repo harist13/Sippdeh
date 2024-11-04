@@ -137,7 +137,7 @@
 
 				{{-- Jumlah Pengguna yang Tidak Pilih --}}
 				<td
-					class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
+					class="py-3 px-4 border abstain"
 					data-value="{{ $tpsDatum->abstain }}"
 				>
 					{{ $tpsDatum->abstain }}
