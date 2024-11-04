@@ -99,7 +99,7 @@ class AdminController extends Controller
             $activeDevices[$user->id] = LoginHistory::where('user_id', $user->id)->active()->count();
         }
 
-        return view('admin.user', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
+        return view('admin.user.index', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
     }
     
     public function forceLogoutDevice($userId, $loginHistoryId)

@@ -28,7 +28,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::get('/api/kecamatan/{kabupatenId}', [RangkumanController::class, 'getKecamatan']);
         Route::get('/api/kelurahan/{kecamatanId}', [RangkumanController::class, 'getKelurahan']);
         Route::get('admin/rangkuman/export', [RangkumanController::class, 'export'])->name('admin.rangkuman.export');
-        Route::get('/suara', [RangkumanController::class, 'suara'])->name('suara');
+        Route::get('/suara', [RangkumanController::class, 'rangkuman'])->name('suara');
         
         Route::get('provinsi/ekspor', [ProvinsiController::class, 'export'])->name('provinsi.export');
         Route::post('provinsi/impor', [ProvinsiController::class, 'import'])->name('provinsi.import');
