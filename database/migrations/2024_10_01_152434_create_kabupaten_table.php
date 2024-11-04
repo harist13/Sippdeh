@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('kabupaten', function (Blueprint $table) {
             $table->id();
+            $table->string('logo', 300)->nullable();
             $table->string('nama');
             $table->foreignId('provinsi_id')->constrained('provinsi')->onDelete('cascade');
             $table->timestamps();

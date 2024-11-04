@@ -12,6 +12,7 @@ use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class KabupatenController extends Controller
@@ -61,7 +62,7 @@ class KabupatenController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreKabupatenRequest $request)
+     public function store(StoreKabupatenRequest $request)
     {
         try {
             $validated = $request->validated();
@@ -69,6 +70,13 @@ class KabupatenController extends Controller
             $kabupaten = new Kabupaten();
             $kabupaten->nama = $validated['nama_kabupaten_baru'];
             $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten_baru'];
+            
+            if ($request->hasFile('logo_kabupaten_baru')) {
+                $logo = $request->file('logo_kabupaten_baru');
+                $path = $logo->store('kabupaten-logo', 'public');
+                $kabupaten->logo = $path;
+            }
+            
             $kabupaten->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
@@ -111,9 +119,21 @@ class KabupatenController extends Controller
         try {
             $validated = $request->validated();
 
-            $kabupaten = Kabupaten::find($id);
+            $kabupaten = Kabupaten::findOrFail($id);
             $kabupaten->nama = $validated['nama_kabupaten'];
             $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten'];
+            
+            if ($request->hasFile('logo_kabupaten')) {
+                // Hapus logo lama jika ada
+                if ($kabupaten->logo && Storage::disk('public')->exists($kabupaten->logo)) {
+                    Storage::disk('public')->delete($kabupaten->logo);
+                }
+                
+                $logo = $request->file('logo_kabupaten');
+                $path = $logo->store('kabupaten-logo', 'public');
+                $kabupaten->logo = $path;
+            }
+            
             $kabupaten->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kabupaten.');
@@ -125,10 +145,15 @@ class KabupatenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+     public function destroy(string $id)
     {
         try {
-            $kabupaten = Kabupaten::find($id);
+            $kabupaten = Kabupaten::findOrFail($id);
+            
+            if ($kabupaten->logo && Storage::disk('public')->exists($kabupaten->logo)) {
+                Storage::disk('public')->delete($kabupaten->logo);
+            }
+            
             $kabupaten->delete();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kabupaten.');

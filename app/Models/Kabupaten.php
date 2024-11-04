@@ -13,7 +13,7 @@ class Kabupaten extends Model
 
     protected $table = 'kabupaten';
     
-    protected $fillable = ['nama', 'provinsi_id'];
+    protected $fillable = ['nama', 'logo', 'provinsi_id'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();

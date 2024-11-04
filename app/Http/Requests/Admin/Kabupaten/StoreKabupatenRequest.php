@@ -23,7 +23,8 @@ class StoreKabupatenRequest extends FormRequest
     {
         return [
             'nama_kabupaten_baru' => 'required|unique:kabupaten,nama|max:300',
-            'provinsi_id_kabupaten_baru' => 'required|exists:provinsi,id'
+            'provinsi_id_kabupaten_baru' => 'required|exists:provinsi,id',
+            'logo_kabupaten_baru' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 
@@ -36,6 +37,10 @@ class StoreKabupatenRequest extends FormRequest
 
             'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
             'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+
+            'logo_kabupaten_baru.image' => 'File harus berupa gambar.',
+        'logo_kabupaten_baru.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+        'logo_kabupaten_baru.max' => 'Ukuran gambar maksimal 2MB.',
         ];
     }
 }

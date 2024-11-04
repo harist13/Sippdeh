@@ -29,7 +29,8 @@ class UpdateKabupatenRequest extends FormRequest
                 'max:300',
                 Rule::unique('kabupaten', 'nama')->ignore($id)
             ],
-            'provinsi_id_kabupaten' => 'required|exists:provinsi,id'
+            'provinsi_id_kabupaten' => 'required|exists:provinsi,id',
+            'logo_kabupaten' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 
@@ -42,6 +43,10 @@ class UpdateKabupatenRequest extends FormRequest
 
             'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
             'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+
+            'logo_kabupaten.image' => 'File harus berupa gambar.',
+            'logo_kabupaten.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'logo_kabupaten.max' => 'Ukuran gambar maksimal 2MB.',
         ];
     }
 }
