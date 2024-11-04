@@ -13,6 +13,7 @@ use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use Exception;
+use Sentry\SentrySdk;
 
 class CalonController extends Controller
 {
@@ -86,7 +87,7 @@ class CalonController extends Controller
                 $calon->provinsi_id = $validated['provinsi_id_calon_baru'];
             }
 
-            if ($calon->posisi == 'WALIKOTA') {
+            if ($calon->posisi == 'WALIKOTA' || $calon->posisi == 'BUPATI') {
                 $calon->kabupaten_id = $validated['kabupaten_id_calon_baru'];
             }
 
@@ -98,6 +99,7 @@ class CalonController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah pasangan calon.');
         } catch (Exception $exception) {
+            SentrySdk::getCurrentHub()->captureException($exception);
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah pasangan calon.');
         }
     }
@@ -119,7 +121,7 @@ class CalonController extends Controller
                 $calon->provinsi_id = $validated['provinsi_id_calon'];
             }
 
-            if ($calon->posisi == 'WALIKOTA') {
+            if ($calon->posisi == 'WALIKOTA' || $calon->posisi == 'BUPATI') {
                 $calon->kabupaten_id = $validated['kabupaten_id_calon'];
             }
 

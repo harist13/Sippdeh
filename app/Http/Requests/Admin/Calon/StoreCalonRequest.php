@@ -24,7 +24,7 @@ class StoreCalonRequest extends FormRequest
         $rules = [
             'nama_calon_baru' => 'required|unique:calon,nama|max:300',
             'nama_calon_wakil_baru' => 'required|unique:calon,nama|max:300',
-            'posisi' => 'required|in:GUBERNUR,WALIKOTA'
+            'posisi' => 'required|in:GUBERNUR,WALIKOTA,BUPATI'
         ];
 
         $mencalonSebagai = $this->get('posisi');
@@ -33,7 +33,7 @@ class StoreCalonRequest extends FormRequest
             $rules['provinsi_id_calon_baru'] = 'required|exists:provinsi,id';
         }
 
-        if ($mencalonSebagai == 'WALIKOTA') {
+        if ($mencalonSebagai == 'WALIKOTA' || $mencalonSebagai == 'BUPATI') {
             $rules['kabupaten_id_calon_baru'] = 'required|exists:kabupaten,id';
         }
 

@@ -6,7 +6,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
 			{{-- Nama calon --}}
-            <label for="addCalonName" class="mb-3 block">Nama Calon</label>
+            <label for="addCalonName" class="mb-2 block">Nama Calon</label>
             <input
                 type="text"
                 id="addCalonName"
@@ -37,6 +37,7 @@
                 <option value="" selected disabled>Pilih</option>
                 <option value="GUBERNUR">Gubernur/Wakil Gubernur</option>
                 <option value="WALIKOTA">Walikota/Wakil Walikota</option>
+                <option value="BUPATI">Bupati/Wakil Bupati</option>
 			</select>
 			<span class="text-red-800">{{ $errors->first('posisi') }}</span>
 
@@ -45,8 +46,9 @@
 			<select
                 id="addCalonProvinsi"
                 name="provinsi_id_calon_baru"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
             >
+                <option value="" selected disabled>Pilih</option>
 				@foreach ($provinsi as $prov)
 					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
 				@endforeach
@@ -54,12 +56,13 @@
 			<span class="text-red-800">{{ $errors->first('provinsi_id_calon_baru') }}</span>
 
             {{-- Kabupaten --}}
-			<label for="addCalonKabupaten" class="my-3 mb-1 block">Kabupaten</label>
+			<label for="addCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
 			<select
                 id="addCalonKabupaten"
                 name="kabupaten_id_calon_baru"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
             >
+                <option value="" selected disabled>Pilih</option>
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
 				@endforeach
@@ -108,49 +111,27 @@
 		addCalonModal.classList.add('hidden');
 	}
 
-    function getProvinsiSelector() {
-        const id = 'addCalonProvinsi';
-        const provinsiSelector = document.getElementById(id);
-        
-        if (provinsiSelector == null) {
-            throw new Error(`Selector provinsi dengan id '${$id}' tidak ditemukan.`);
-        }
-
-        return provinsiSelector;
-    }
-
-    function getKabupatenSelector() {
-        const id = 'addCalonKabupaten';
-        const kabupatenSelector = document.getElementById(id);
-        
-        if (kabupatenSelector == null) {
-            throw new Error(`Selector kabupaten dengan id '${$id}' tidak ditemukan.`);
-        }
-
-        return kabupatenSelector;
-    }
-
     function enableProvinsiSelectors() {
-        const provinsiSelector = getProvinsiSelector();
+        const provinsiSelector = document.getElementById('addCalonProvinsi');
         provinsiSelector.disabled = false;
     }
 
     function disableProvinsiSelectors() {
-        const provinsiSelector = getProvinsiSelector();
+        const provinsiSelector = document.getElementById('addCalonProvinsi');
         provinsiSelector.disabled = true;
     }
 
     function enableKabupatenSelectors() {
-        const kabupatenSelector = getKabupatenSelector();
+        const kabupatenSelector = document.getElementById('addCalonKabupaten');
         kabupatenSelector.disabled = false;
     }
 
     function disableKabupatenSelectors() {
-        const kabupatenSelector = getKabupatenSelector();
+        const kabupatenSelector = document.getElementById('addCalonKabupaten');
         kabupatenSelector.disabled = true;
     }
 
-    function changeCalonPosisi(event) {
+    function handlePosisiCalon(event) {
         const posisi = event.target.value;
 
         if (posisi == 'GUBERNUR') {
@@ -158,7 +139,7 @@
             disableKabupatenSelectors();
         }
 
-        if (posisi == 'WALIKOTA') {
+        if (posisi == 'WALIKOTA' || posisi == 'BUPATI') {
             disableProvinsiSelectors();
             enableKabupatenSelectors();
         }
@@ -167,25 +148,13 @@
     disableProvinsiSelectors();
     disableKabupatenSelectors();
 
-    document.getElementById('addCalonAs').addEventListener('change', changeCalonPosisi);
+    document.getElementById('addCalonAs').addEventListener('change', handlePosisiCalon);
 
     document.getElementById('addCalonBtn').addEventListener('click', showAddCalonModal);
     document.getElementById('cancelAddCalon').addEventListener('click', closeAddCalonModal);
 </script>
 
-@error('nama_calon_baru')
-    <script>
-        showAddCalonModal();
-    </script>
-@enderror
-
-@error('kabupaten_id_calon_baru')
-    <script>
-        showAddCalonModal();
-    </script>
-@enderror
-
-@error('foto_calon_baru')
+@error('nama_calon_baru', 'kabupaten_id_calon_baru', 'foto_calon_baru')
     <script>
         showAddCalonModal();
     </script>

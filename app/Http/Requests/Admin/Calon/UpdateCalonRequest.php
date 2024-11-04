@@ -36,14 +36,14 @@ class UpdateCalonRequest extends FormRequest
                 'max:300',
                 Rule::unique('calon', 'nama_wakil')->ignore($id)->where('posisi', $posisi)
             ],
-            'posisi' => 'required|in:GUBERNUR,WALIKOTA'
+            'posisi' => 'required|in:GUBERNUR,WALIKOTA,BUPATI'
         ];
 
         if ($posisi == 'GUBERNUR') {
             $rules['provinsi_id_calon'] = 'required|exists:provinsi,id';
         }
 
-        if ($posisi == 'WALIKOTA') {
+        if ($posisi == 'WALIKOTA' || $posisi == 'BUPATI') {
             $rules['kabupaten_id_calon'] = 'required|exists:kabupaten,id';
         }
 

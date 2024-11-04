@@ -6,7 +6,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Calon</h3>
 
 			{{-- Nama calon --}}
-			<label for="editCalonName" class="mb-3 block">Nama Calon</label>
+			<label for="editCalonName" class="mb-2 block">Nama Calon</label>
             <input
                 type="text"
                 id="editCalonName"
@@ -37,6 +37,7 @@
                 <option value="" selected disabled>Pilih</option>
                 <option value="GUBERNUR">Gubernur/Wakil Gubernur</option>
                 <option value="WALIKOTA">Walikota/Wakil Walikota</option>
+                <option value="BUPATI">Bupati/Wakil Bupati</option>
 			</select>
 			<span class="text-red-800">{{ $errors->first('posisi') }}</span>
 
@@ -45,9 +46,10 @@
 			<select
                 id="editCalonProvinsi"
                 name="provinsi_id_calon"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
                 disabled
             >
+                <option value="" selected disabled>Pilih</option>
 				@foreach ($provinsi as $prov)
 					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
 				@endforeach
@@ -59,9 +61,10 @@
 			<select
                 id="editCalonKabupaten"
                 name="kabupaten_id_calon"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
                 disabled
             >
+                <option value="" selected disabled>Pilih</option>
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
 				@endforeach
@@ -98,98 +101,117 @@
 </div>
 
 <script>
+    function showEditCalonModal() {
+        const editCalonModal = document.getElementById('editCalonModal');
+        editCalonModal.classList.remove('hidden');
+    }
+
+    function closeEditCalonModal() {
+        const editCalonModal = document.getElementById('editCalonModal');
+        editCalonModal.classList.add('hidden');
+    }
+
+    function getCalonId() {
+        return this.closest('tr').querySelector('td:nth-child(2)').dataset.id;
+    }
+
+    function getNamaCalon() {
+        return this.closest('tr').querySelector('td:nth-child(2)').dataset.nama;
+    }
+
+    function getNamaCalonWakil() {
+        return this.closest('tr').querySelector('td:nth-child(2)').dataset.namaWakil;
+    }
+
+    function getPosisiCalon() {
+        return this.closest('tr').querySelector('td:nth-child(3)').dataset.posisi;
+    }
+
+    function getProvinsiId() {
+        return this.closest('tr').querySelector('td:nth-child(4)').dataset.provinsiId;
+    }
+
+    function getKabupatenId() {
+        return this.closest('tr').querySelector('td:nth-child(4)').dataset.kabupatenId;
+    }
+
+    function getUpdateCalonUrl() {
+        const calonId = getCalonId.call(this);
+        const calonUpdateRoute = `{{ route('calon.update', ['calon' => '__id__']) }}`;
+        const calonUpdateUrl = calonUpdateRoute.replace('__id__', calonId);
+
+        return calonUpdateUrl;
+    }
+
+    function enableProvinsiSelector() {
+        const provinsiSelector = document.getElementById('editCalonProvinsi');
+        if (provinsiSelector) provinsiSelector.disabled = false;
+    }
+
+    function disableProvinsiSelector() {
+        const provinsiSelector = document.getElementById('editCalonProvinsi');
+        if (provinsiSelector) provinsiSelector.disabled = true;
+    }
+
+    function enableKabupatenSelector() {
+        const kabupatenSelector = document.getElementById('editCalonKabupaten');
+        if (kabupatenSelector) kabupatenSelector.disabled = false;
+    }
+
+    function disableKabupatenSelector() {
+        const kabupatenSelector = document.getElementById('editCalonKabupaten');
+        if (kabupatenSelector) kabupatenSelector.disabled = true;
+    }
+
+    function handlePosisiCalon(event) {
+        const posisi = event.target.value;
+
+        if (posisi === 'GUBERNUR') {
+            enableProvinsiSelector();
+            disableKabupatenSelector();
+        }
+        
+        if (posisi === 'WALIKOTA' || posisi === 'BUPATI') {
+            disableProvinsiSelector();
+            enableKabupatenSelector();
+        }
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
+        disableProvinsiSelector();
+        disableKabupatenSelector();
+
         document.getElementById('editCalonAs').addEventListener('change', handlePosisiCalon);
 
-        function getProvinsiSelector() {
-            const id = 'editCalonProvinsi';
-            const provinsiSelector = document.getElementById(id);
-            
-            if (!provinsiSelector) {
-                console.error(`Provinsi selector with ID '${id}' not found.`);
-            }
+        document.querySelectorAll('.edit-calon-btn')
+            .forEach(btn => btn.addEventListener('click', function() {
+                showEditCalonModal();
 
-            return provinsiSelector;
-        }
+                const editCalonName = document.getElementById('editCalonName');
+                editCalonName.value = getNamaCalon.call(this);
 
-        function getKabupatenSelector() {
-            const id = 'editCalonKabupaten';
-            const kabupatenSelector = document.getElementById(id);
-            
-            if (!kabupatenSelector) {
-                console.error(`Kabupaten selector with ID '${id}' not found.`);
-            }
+                const editCalonWakilName = document.getElementById('editCalonWakilName');
+                editCalonWakilName.value = getNamaCalonWakil.call(this);
 
-            return kabupatenSelector;
-        }
+                const editCalonAs = document.getElementById('editCalonAs');
+                editCalonAs.value = getPosisiCalon.call(this);
+                editCalonAs.dispatchEvent(new Event('change'));
 
-        function enableProvinsiSelectors() {
-            const provinsiSelector = getProvinsiSelector();
-            if (provinsiSelector) provinsiSelector.disabled = false;
-        }
+                const editCalonProvinsi = document.getElementById('editCalonProvinsi');
+                editCalonProvinsi.value = getProvinsiId.call(this);
 
-        function disableProvinsiSelectors() {
-            const provinsiSelector = getProvinsiSelector();
-            if (provinsiSelector) provinsiSelector.disabled = true;
-        }
+                const editCalonKabupaten = document.getElementById('editCalonKabupaten');
+                editCalonKabupaten.value = getKabupatenId.call(this);
 
-        function enableKabupatenSelectors() {
-            const kabupatenSelector = getKabupatenSelector();
-            if (kabupatenSelector) kabupatenSelector.disabled = false;
-        }
-
-        function disableKabupatenSelectors() {
-            const kabupatenSelector = getKabupatenSelector();
-            if (kabupatenSelector) kabupatenSelector.disabled = true;
-        }
-
-        function handlePosisiCalon(event) {
-            changePosisiCalon(event.target.value);
-        }
-
-        function changePosisiCalon(posisi) {
-            if (posisi === 'GUBERNUR') {
-                enableProvinsiSelectors();
-                disableKabupatenSelectors();
-            } else if (posisi === 'WALIKOTA') {
-                disableProvinsiSelectors();
-                enableKabupatenSelectors();
-            }
-        }
+                const editCalonForm = document.getElementById('editCalonForm');
+                editCalonForm.action = getUpdateCalonUrl.call(this);
+            }));
+        
+        document.getElementById('cancelEditCalon').addEventListener('click', closeAddCalonModal);
     });
 </script>
 
-@error('nama_calon')
-    <script>
-        showEditCalonModal();
-    </script>
-@enderror
-
-@error('nama_calon_wakil')
-    <script>
-        showEditCalonModal();
-    </script>
-@enderror
-
-@error('posisi')
-    <script>
-        showEditCalonModal();
-    </script>
-@enderror
-
-@error('kabupaten_id_calon')
-    <script>
-        showEditCalonModal();
-    </script>
-@enderror
-
-@error('provinsi_id_calon')
-    <script>
-        showEditCalonModal();
-    </script>
-@enderror
-
-@error('foto_calon')
+@error('nama_calon'. 'nama_calon_wakil', 'posisi', 'kabupaten_id_calon', 'provinsi_id_calon', 'foto_calon')
     <script>
         showEditCalonModal();
     </script>

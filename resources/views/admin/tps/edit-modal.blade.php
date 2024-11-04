@@ -78,7 +78,6 @@
             editTPSKelurahanId.value = getTPSKelurahanId.call(this);
 
             const editTPSForm = document.getElementById('editTPSForm');
-            console.log(editTPSForm)
             editTPSForm.action = getUpdateTPSUrl.call(this);
         });
     });

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Calon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CalonSeeder extends Seeder
@@ -62,21 +61,21 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Edi Damansyah',
             'nama_wakil' => 'Rendi Solihin',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 3, // Kabupaten Kutai Kartanegara
         ]);
 
         Calon::create([
             'nama' => 'Awang Yacoub Luthman',
             'nama_wakil' => 'Akhmad Zais',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 3, // Kabupaten Kutai Kartanegara
         ]);
 
         Calon::create([
             'nama' => 'Dendi Suryadi',
             'nama_wakil' => 'Alif Turiadi',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 3, // Kabupaten Kutai Kartanegara
         ]);
 
@@ -84,21 +83,21 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Sahadi',
             'nama_wakil' => 'Alexander Edmond',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 2, // Kabupaten Kutai Barat
         ]);
 
         Calon::create([
             'nama' => 'Frederick Edwin',
             'nama_wakil' => 'Nanang Adriani',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 2, // Kabupaten Kutai Barat
         ]);
 
         Calon::create([
             'nama' => 'Ahmad Syaiful',
             'nama_wakil' => 'Jainudin',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 2, // Kabupaten Kutai Barat
         ]);
 
@@ -106,14 +105,14 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Ardiansyah Sulaiman',
             'nama_wakil' => 'Mahyunadi',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 4, // Kabupaten Kutai Timur
         ]);
 
         Calon::create([
             'nama' => 'Kasmidi Bulang',
             'nama_wakil' => 'Kinsu',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 4, // Kabupaten Kutai Timur
         ]);
 
@@ -150,21 +149,21 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Yohanes Avun',
             'nama_wakil' => 'Y. Juan Jenau',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 5, // Kabupaten Mahakam Ulu
         ]);
 
         Calon::create([
             'nama' => 'Owena Mayang Shari Belawan',
             'nama_wakil' => 'Stanislaus Liah',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 5, // Kabupaten Mahakam Ulu
         ]);
 
         Calon::create([
             'nama' => 'Novita Bulan',
             'nama_wakil' => 'Artya Fathra Marthin',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 5, // Kabupaten Mahakam Ulu
         ]);
 
@@ -172,28 +171,28 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Mudyat Noor',
             'nama_wakil' => 'Abdul Waris Muin',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 7, // Kabupaten Penajam Paser Utara
         ]);
 
         Calon::create([
             'nama' => 'Desmon Hariman Sormin',
             'nama_wakil' => 'Naspi Arsyad',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 7, // Kabupaten Penajam Paser Utara
         ]);
 
         Calon::create([
             'nama' => 'Andi Harahap',
             'nama_wakil' => 'Dayang Dona Walfaries Tania',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 7, // Kabupaten Penajam Paser Utara
         ]);
 
         Calon::create([
             'nama' => 'Hamdam',
             'nama_wakil' => 'Ahmad Basir',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 7, // Kabupaten Penajam Paser Utara
         ]);
 
@@ -201,14 +200,14 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Fahmi Fadli',
             'nama_wakil' => 'Ikhwan Antasari',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 6, // Kabupaten Paser
         ]);
 
         Calon::create([
             'nama' => 'Syarifah Masitah Assegaf',
             'nama_wakil' => 'Denni Mappa',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 6, // Kabupaten Paser
         ]);
 
@@ -216,14 +215,14 @@ class CalonSeeder extends Seeder
         Calon::create([
             'nama' => 'Sri Juniarsih Mas',
             'nama_wakil' => 'Gamalis',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 1, // Kabupaten Berau
         ]);
 
         Calon::create([
             'nama' => 'Madri Pani',
             'nama_wakil' => 'Agus Wahyudi',
-            'posisi' => 'WALIKOTA',
+            'posisi' => 'BUPATI',
             'kabupaten_id' => 1, // Kabupaten Berau
         ]);
     }

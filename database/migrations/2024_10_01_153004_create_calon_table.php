@@ -12,14 +12,14 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('nama_wakil');
-            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA']);
+            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI']);
             $table->string('foto', 300)->nullable();
             $table->timestamps();
             
             $table->foreignId('provinsi_id')->nullable()
-                ->constrained('provinsi')->onDelete('cascade');
+                ->constrained('provinsi')->nullOnDelete();
             $table->foreignId('kabupaten_id')->nullable()
-                ->constrained('kabupaten')->onDelete('cascade');
+                ->constrained('kabupaten')->nullOnDelete();
 
         });
     }
