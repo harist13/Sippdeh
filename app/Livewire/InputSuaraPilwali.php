@@ -18,13 +18,13 @@ use Livewire\Attributes\On;
 use Sentry\SentrySdk;
 use Exception;
 
-class InputSuaraPilgub extends Component
+class InputSuaraPilwali extends Component
 {
     use WithPagination, WithoutUrlPagination, InputSuara;
 
-    public string $posisi = 'GUBERNUR';
+    public string $posisi = 'WALIKOTA';
 
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
 
     public function render()
     {
@@ -33,7 +33,7 @@ class InputSuaraPilgub extends Component
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
-        return view('livewire.input-suara-pilgub', compact('tps', 'paslon'));
+        return view('livewire.input-suara-pilwali', compact('tps', 'paslon'));
     }
 
     private function getTPS()
@@ -112,7 +112,7 @@ class InputSuaraPilgub extends Component
             });
         }
 
-        if ($this->posisi == 'WALIKOTA') {
+        if ($this->posisi == 'WALIKOTA' || $this->posisi == 'BUPATI') {
             $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
         }
 

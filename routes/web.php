@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\TPSController;
 use App\Http\Controllers\Admin\RangkumanController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\Operator\PilgubController;
-use App\Http\Controllers\PilkadaController;
+use App\Http\Controllers\Operator\PilwaliController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -78,8 +78,10 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
     // Middleware untuk operator
     Route::middleware(['auth', 'role:operator'])->group(function () {
         Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
-        Route::get('/operator/pilkada', [PilkadaController::class, 'index'])->name('operator.pilkada');
+
         Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.pilgub');
+        Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.pilwali');
+
         Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
     });
 });
