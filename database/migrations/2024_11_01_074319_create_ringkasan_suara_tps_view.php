@@ -19,7 +19,7 @@ return new class extends Migration
                 COALESCE(suara_tps.dpt, 0) AS dpt,
                 COALESCE(SUM(suara_calon.suara), 0) AS suara_sah,
                 COALESCE(suara_tps.suara_tidak_sah, 0) AS suara_tidak_sah,
-                (COALESCE(suara_tps.dpt, 0) - (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0))) AS jumlah_pengguna_tidak_pilih,
+                (COALESCE(suara_tps.dpt, 0) - (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0))) AS abstain,
                 (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.suara_tidak_sah, 0)) AS suara_masuk,
                 CASE 
                     WHEN COALESCE(suara_tps.dpt, 0) > 0

@@ -36,7 +36,7 @@ class TPS {
         }, 0);
     }
 
-    get jumlahPenggunaTidakPilih() {
+    get abstain() {
 		return this.dpt - this.suaraMasuk;
     }
 
@@ -59,7 +59,7 @@ class TPS {
             suara_calon: this.suaraCalon,
             suara_sah: this.suaraSah,
             suara_tidak_sah: this.suaraTidakSah,
-            jumlah_pengguna_tidak_pilih: this.jumlahPenggunaTidakPilih,
+            abstain: this.abstain,
             suara_masuk: this.suaraMasuk,
             partisipasi: this.partisipasi
         };
@@ -489,9 +489,9 @@ class InputSuaraUIManager {
                     suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
                     suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
 
-                    const jumlahPenggunaTidakPilihRow = row.querySelector('td.jumlah-pengguna-tidak-pilih');
-                    jumlahPenggunaTidakPilihRow.dataset.value = tps.jumlahPenggunaTidakPilih;
-                    jumlahPenggunaTidakPilihRow.textContent = tps.jumlahPenggunaTidakPilih;
+                    const abstainRow = row.querySelector('td.jumlah-pengguna-tidak-pilih');
+                    abstainRow.dataset.value = tps.abstain;
+                    abstainRow.textContent = tps.abstain;
 
                     const suaraMasukCell = row.querySelector('td.suara-masuk');
                     suaraMasukCell.dataset.value = tps.suaraMasuk;

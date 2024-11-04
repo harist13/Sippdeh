@@ -24,7 +24,7 @@
 			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ !in_array('CALON', $includedColumns) ? 'hidden' : '' }}" style="min-width: 200px;">Calon</th>
 			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Sah</th>
 			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Tidak Sah</th>
-			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Jumlah Pengguna<br>Tidak Pilih</th>
+			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Abstain</th>
 			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 200px;">Suara Masuk</th>
 			<th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">Partisipasi</th>
 		</tr>
@@ -138,9 +138,9 @@
 				{{-- Jumlah Pengguna yang Tidak Pilih --}}
 				<td
 					class="py-3 px-4 border jumlah-pengguna-tidak-pilih"
-					data-value="{{ $tpsDatum->jumlah_pengguna_tidak_pilih }}"
+					data-value="{{ $tpsDatum->abstain }}"
 				>
-					{{ $tpsDatum->jumlah_pengguna_tidak_pilih }}
+					{{ $tpsDatum->abstain }}
 				</td>
 
 				{{-- Suara Masuk --}}

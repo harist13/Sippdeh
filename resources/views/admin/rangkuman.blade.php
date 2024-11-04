@@ -182,7 +182,7 @@ select:disabled {
                                         </td>
                                     @endforeach
 
-                                    <td class="py-3 px-4 border-r">{{ $data->jumlah_pengguna_tidak_pilih ?? 0 }}</td>
+                                    <td class="py-3 px-4 border-r">{{ $data->abstain ?? 0 }}</td>
                                     <td class="py-3 px-4 border-r">
                                         @php
                                             $partisipasi = $data->partisipasi ?? 0;

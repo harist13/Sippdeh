@@ -18,7 +18,7 @@ class SuaraTPS extends Model
         });
     }
 
-    public function jumlahPenggunaTidakPilih() {
+    public function abstain() {
         return $this->dpt - $this->suaraMasuk();
     }
 

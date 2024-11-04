@@ -95,7 +95,7 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
             $row->kelurahan_nama ?? '-',         // Kelurahan
             $row->suara->dpt ?? 0,               // DPT
             ...$suaraData,                       // Suara untuk setiap paslon
-            $row->jumlah_pengguna_tidak_pilih ?? 0,  // Abstain dari database
+            $row->abstain ?? 0,  // Abstain dari database
             number_format($row->partisipasi ?? 0, 1)  // Tingkat Partisipasi dari database
         ];
     }

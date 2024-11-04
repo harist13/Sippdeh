@@ -888,7 +888,7 @@
                             <th class="py-3 px-4 border-r border-white">DPT</th>
                             <th class="py-3 px-4 border-r border-white">Suara Sah</th>
                             <th class="py-3 px-4 border-r border-white">Suara Tidak Sah</th>
-                            <th class="py-3 px-4 border-r border-white">Jumlah Pengguna Tidak pilih</th>
+                            <th class="py-3 px-4 border-r border-white">Abstain</th>
                             <th class="py-3 px-4 border-r border-white">Suara Masuk</th>
                             <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
                         </tr>
