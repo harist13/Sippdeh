@@ -1,13 +1,19 @@
 class TPS {
-    constructor(id, dpt, suaraTidakSah) {
+    constructor(id, dpt, suaraSah, suaraTidakSah, oldSuaraCalon = 0) {
         this.id = id;
         this.dpt = dpt;
         this.suaraCalon = [];
+        this.suaraSah = suaraSah;
         this.suaraTidakSah = suaraTidakSah;
+        this.oldSuaraCalon = oldSuaraCalon;
     }
 
-    addSuaraCalon(id, suara) {
+    addSuaraCalon(id, suara, setOldSuara = true) {
         this.suaraCalon.push({ id, suara });
+
+        if (setOldSuara) {
+            this.oldSuaraCalon += suara;
+        }
     }
 
     static updateSuaraCalon(tpsId, calonId, newSuara) {
@@ -30,10 +36,14 @@ class TPS {
         localStorage.setItem('tps_data', JSON.stringify(data));
     }
 
-    get suaraSah() {
+    get newSuaraCalon() {
         return this.suaraCalon.reduce(function (acc, sc) {
             return acc + sc.suara;
         }, 0);
+    }
+
+    get calculatedSuaraSah() {
+        return (this.suaraSah - this.oldSuaraCalon) + this.newSuaraCalon;
     }
 
     get abstain() {
@@ -41,7 +51,7 @@ class TPS {
     }
 
     get suaraMasuk() {
-		return this.suaraSah + (this.suaraTidakSah || 0);
+		return this.calculatedSuaraSah + (this.suaraTidakSah || 0);
     }
 
     get partisipasi() {
@@ -57,6 +67,7 @@ class TPS {
             id: this.id,
             dpt: this.dpt,
             suara_calon: this.suaraCalon,
+            old_suara_calon: this.oldSuaraCalon,
             suara_sah: this.suaraSah,
             suara_tidak_sah: this.suaraTidakSah,
             abstain: this.abstain,
@@ -69,15 +80,17 @@ class TPS {
         const tps = new TPS(
             obj.id,
             obj.dpt,
-            obj.suara_tidak_sah
+            obj.suara_sah,
+            obj.suara_tidak_sah,
+            obj.old_suara_calon,
         );
 
-        obj.suara_calon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+        obj.suara_calon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara), false));
 
         return tps;
     }
 
-    static getAllTPS() {
+    static getAll() {
         try {
             const data = JSON.parse(localStorage.getItem('tps_data')) || [];
             return Array.isArray(data) ? data.map(item => TPS.fromObject(item)) : [];
@@ -91,13 +104,13 @@ class TPS {
             return;
         }
 
-        const data = TPS.getAllTPS();
+        const data = TPS.getAll();
         data.push(this);
         localStorage.setItem('tps_data', JSON.stringify(data.map(tps => tps.toObject())));
     }
 
     static update(id, updatedData) {
-        const data = TPS.getAllTPS();
+        const data = TPS.getAll();
         const index = data.findIndex(item => item.id === id);
 
         if (index !== -1) {
@@ -109,7 +122,7 @@ class TPS {
     }
 
     static delete(id) {
-        const data = TPS.getAllTPS();
+        const data = TPS.getAll();
         const updatedData = data.filter(item => item.id !== id);
         localStorage.setItem('tps_data', JSON.stringify(updatedData.map(tps => tps.toObject())));
     }
@@ -119,7 +132,7 @@ class TPS {
     }
 
     static getById(id) {
-        const data = TPS.getAllTPS();
+        const data = TPS.getAll();
         const tps = data.find(item => item.id === id) || null;
 
         if (tps == null) {
@@ -130,7 +143,7 @@ class TPS {
     }
 
     static exists(id) {
-        return TPS.getAllTPS().some(item => item.id === id);
+        return TPS.getAll().some(item => item.id === id);
     }
 }
 
@@ -222,8 +235,8 @@ class InputSuaraUIManager {
     enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
     cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
 
-    addTPS(id, dpt, suaraCalon, suaraTidakSah) {
-        const tps = new TPS(id, parseInt(dpt), parseInt(suaraTidakSah));
+    addTPS(id, dpt, suaraSah, suaraTidakSah, suaraCalon) {
+        const tps = new TPS(id, parseInt(dpt), parseInt(suaraSah), parseInt(suaraTidakSah));
         suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
         tps.save();
     }
@@ -260,6 +273,7 @@ class InputSuaraUIManager {
                 const row = checkbox.parentElement.parentElement;
 
                 const dpt = row.querySelector('td.dpt').dataset.value;
+                const suaraSah = row.querySelector('td.suara-sah').dataset.value;
                 const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
                 const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
                     .map(suara => ({
@@ -267,7 +281,7 @@ class InputSuaraUIManager {
                         suara: suara.dataset.suara
                     }));
 
-                this.addTPS(tpsId, dpt, suaraCalon, suaraTidakSah);
+                this.addTPS(tpsId, dpt, suaraSah, suaraTidakSah, suaraCalon);
             }
 
             this.lastCheckedCheckbox = event.target;
@@ -302,7 +316,7 @@ class InputSuaraUIManager {
         if (this.isEditMode() && confirm('Simpan perubahan data?')) {
             this.showSaveLoadingMessage();
 
-            const data = TPS.getAllTPS().map(tps => tps.toObject());
+            const data = TPS.getAll().map(tps => tps.toObject());
             this.$wire.dispatch('submit-tps', {
                 data
             });
@@ -472,7 +486,7 @@ class InputSuaraUIManager {
 
                 if (tps instanceof TPS) {
                     const dptCell = row.querySelector('td.dpt');
-                    dptCell.dataset.value = tps.dpt;
+                    // dptCell.dataset.value = tps.dpt;
                     dptCell.querySelector('span').textContent = tps.dpt;
 
                     tps.suaraCalon.forEach(function (sc) {
@@ -482,24 +496,24 @@ class InputSuaraUIManager {
                     });
 
                     const suaraSahCell = row.querySelector('td.suara-sah');
-                    suaraSahCell.dataset.value = tps.suaraSah;
-                    suaraSahCell.textContent = tps.suaraSah;
+                    // suaraSahCell.dataset.value = tps.suaraSah;
+                    suaraSahCell.textContent = tps.calculatedSuaraSah;
 
                     const suaraTidakSahCell = row.querySelector('td.suara-tidak-sah');
-                    suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
+                    // suaraTidakSahCell.dataset.value = tps.suaraTidakSah;
                     suaraTidakSahCell.querySelector('span').textContent = tps.suaraTidakSah;
 
                     const abstainRow = row.querySelector('td.jumlah-pengguna-tidak-pilih');
-                    abstainRow.dataset.value = tps.abstain;
+                    // abstainRow.dataset.value = tps.abstain;
                     abstainRow.textContent = tps.abstain;
 
                     const suaraMasukCell = row.querySelector('td.suara-masuk');
-                    suaraMasukCell.dataset.value = tps.suaraMasuk;
+                    // suaraMasukCell.dataset.value = tps.suaraMasuk;
                     suaraMasukCell.textContent = tps.suaraMasuk;
 
                     const partisipasiCell = row.querySelector('td.partisipasi span');
 
-                    partisipasiCell.dataset.value = tps.partisipasi;
+                    // partisipasiCell.dataset.value = tps.partisipasi;
                     partisipasiCell.textContent = `${tps.partisipasi}%`;
 
                     if (tps.partisipasi <= 100 && tps.partisipasi >= 80) {
