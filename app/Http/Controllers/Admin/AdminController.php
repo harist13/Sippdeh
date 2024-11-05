@@ -12,6 +12,7 @@ use App\Models\LoginHistory;
 use App\Models\Kabupaten;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
+use App\Models\RingkasanSuaraTPS;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -62,8 +63,81 @@ class AdminController extends Controller
             $paslon->persentase = $total_suara > 0 ? 
                 round(($paslon->total_suara / $total_suara) * 100, 1) : 0;
         }
+
+        $kabupatenData = $this->getKabupatenData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData'));
+    }
+
+    
+    private function getKabupatenData(): array
+    {
+        $kabupatens = Kabupaten::all();
+        $data = [];
+
+        foreach ($kabupatens as $kabupaten) {
+            $ringkasanData = $this->getRingkasanDataByKabupaten($kabupaten->id);
+            
+            // Ensure no negative values
+            $suaraSah = max(0, $ringkasanData['suara_sah'] ?? 0);
+            $suaraTidakSah = max(0, $ringkasanData['suara_tidak_sah'] ?? 0);
+            $dpt = max(0, $ringkasanData['dpt'] ?? 0);
+            $abstain = max(0, $ringkasanData['abstain'] ?? 0);
+            
+            // Calculate suara masuk (total votes cast)
+            $suaraMasuk = $suaraSah + $suaraTidakSah;
+            
+            // Calculate and clamp participation percentage between 0 and 100
+            $partisipasi = $this->hitungPartisipasi($suaraMasuk, $dpt);
+            
+            $data[$kabupaten->id] = [
+                'logo' => $kabupaten->logo,
+                'nama' => $kabupaten->nama,
+                'suara_sah' => $suaraSah,
+                'suara_tidak_sah' => $suaraTidakSah,
+                'dpt' => $dpt,
+                'abstain' => $abstain,
+                'suara_masuk' => $suaraMasuk,
+                'partisipasi' => $partisipasi,
+                'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi)
+            ];
+        }
+
+        return $data;
+    }
+
+    private function getRingkasanDataByKabupaten(int $kabupatenId): array
+    {
+        return RingkasanSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+            $query->where('id', $kabupatenId);
+        })->select(
+            \DB::raw('SUM(suara_sah) as suara_sah'),
+            \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
+            \DB::raw('SUM(dpt) as dpt'),
+            \DB::raw('SUM(abstain) as abstain')
+        )->first()->toArray();
+    }
+
+    private function hitungPartisipasi(int $suaraMasuk, int $dpt): float
+    {
+        if ($dpt === 0) return 0;
+        
+        // Calculate participation percentage
+        $partisipasi = ($suaraMasuk / $dpt) * 100;
+        
+        // Clamp the value between 0 and 100
+        return max(0, min(100, round($partisipasi, 2)));
+    }
+
+    private function getWarnaPartisipasi(float $partisipasi): string
+    {
+        if ($partisipasi >= 70) {
+            return 'green';
+        } elseif ($partisipasi >= 50) {
+            return 'yellow';
+        } else {
+            return 'red';
+        }
     }
 
 

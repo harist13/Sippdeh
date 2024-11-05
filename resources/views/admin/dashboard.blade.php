@@ -305,27 +305,28 @@
                     <div class="flex flex-col">
                         <!-- Container untuk slides -->
                         <div class="flex-grow">
-                            <div id="slide1" class="slide101 active">
+                            @foreach($kabupatenData as $id => $data)
+                            <div id="slide{{ $id }}" class="slide101 {{ $loop->first ? 'active' : '' }}">
                                 <div class="mb-6 rounded-lg">
                                     <div class="flex items-start mb-6">
-                                        <img src="{{ asset('assets/smd.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
+                                        <img src="{{ asset('storage/' . $data['logo']) }}" alt="Logo {{ $data['nama'] }}" class="mr-8 w-40 h-45">
                                         <div class="flex-grow pl-10">
                                             <div class="space-y-2">
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Suara Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_sah']) }} Suara</p>
                                                 </div>
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Suara Tidak Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_tidak_sah']) }} Suara</p>
                                                 </div>
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
+                                                    <h2 class="text-sm font-semibold text-gray-600">DPT</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['dpt']) }} Orang</p>
                                                 </div>
                                                 <div class="flex justify-between items-center">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Abstain</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['abstain']) }} Orang</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -335,136 +336,35 @@
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col items-start w-1/3">
                                             <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                                <span>> 90,00% DPT » Merah</span>
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>70,00% - 100,00% DPT » Hijau</span>
                                             </div>
                                             <div class="flex items-center mb-1">
                                                 <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                                <span>> 80,00% DPT » Kuning</span>
+                                                <span>50,00% - 69,99% DPT » Kuning</span>
                                             </div>
                                             <div class="flex items-center">
-                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                                <span>> 70,00% DPT » Hijau</span>
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>0,00% - 49,99% DPT » Merah</span>
                                             </div>
                                         </div>
                                         <div class="text-center w-1/3">
                                             <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
                                         </div>
                                         <div class="text-right w-1/3">
-                                            <div class="text-4xl font-bold color text-green-400">81.40%</div>
+                                            <div class="text-4xl font-bold color 
+                                                {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
+                                                ($data['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
+                                                {{ number_format($data['partisipasi'], 2) }}%
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="slide2" class="slide101">
-                                <!-- Konten slide 2 sama seperti sebelumnya -->
-                                <div class="mb-6 rounded-lg">
-                                    <div class="flex items-start mb-6">
-                                        <img src="{{ asset('assets/bpp.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                                        <div class="flex-grow pl-10">
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                                </div>
-                                                <div class="flex justify-between items-center">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex flex-col items-start w-1/3">
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                                <span>> 90,00% DPT » Merah</span>
-                                            </div>
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                                <span>> 80,00% DPT » Kuning</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                                <span>> 70,00% DPT » Hijau</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center w-1/3">
-                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                        </div>
-                                        <div class="text-right w-1/3">
-                                            <div class="text-4xl font-bold color text-yellow-400">60.40%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="slide3" class="slide101">
-                                <!-- Konten slide 3 sama seperti sebelumnya -->
-                                <div class="mb-6 rounded-lg">
-                                    <div class="flex items-start mb-6">
-                                        <img src="{{ asset('assets/btg.png')}}" alt="Logo Kota" class="mr-8 w-40 h-45">
-                                        <div class="flex-grow pl-10">
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.224.562 Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">37.251 Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Pengguna Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">2.261.813 Orang</p>
-                                                </div>
-                                                <div class="flex justify-between items-center">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Jumlah Tidak Menggunakan Hak Pilih</h2>
-                                                    <p class="text-lg font-bold text-gray-800">516.831 Orang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex flex-col items-start w-1/3">
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                                <span>> 90,00% DPT » Merah</span>
-                                            </div>
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                                <span>> 80,00% DPT » Kuning</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                                <span>> 70,00% DPT » Hijau</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center w-1/3">
-                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                        </div>
-                                        <div class="text-right w-1/3">
-                                            <div class="text-4xl font-bold color text-red-400">20.40%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
 
-                        <!-- Navigation Controls - Centered at bottom -->
+                        <!-- Navigation Controls -->
                         <div class="flex justify-center items-center w-full mt-12 pb-4">
                             <div class="flex items-center gap-4">
                                 <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
