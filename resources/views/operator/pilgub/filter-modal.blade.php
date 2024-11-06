@@ -18,6 +18,12 @@
         <label for="pilihKolom" class="mb-3 font-bold mt-5 block">Kolom</label>
         <ul class="flex flex-col gap-2">
             <li class="flex items-center gap-2 w-full">
+                <label class="flex items-center gap-3" for="pilihKabupaten">
+                    <input type="checkbox" id="pilihKabupaten" value="KABUPATEN" wire:model="includedColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
+                    <span class="cursor-pointer select-none">Kabupaten</span>
+                </label>
+            </li>
+            <li class="flex items-center gap-2 w-full">
                 <label class="flex items-center gap-3" for="pilihKecamatan">
                     <input type="checkbox" id="pilihKecamatan" value="KECAMATAN" wire:model="includedColumns" class="form-checkbox h-5 w-5 text-white border-white rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200 cursor-pointer">
                     <span class="cursor-pointer select-none">Kecamatan</span>
