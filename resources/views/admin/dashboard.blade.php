@@ -396,42 +396,43 @@
         
         <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
             <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
-                <!-- Wrapper untuk semua slide -->
-                @php
-                    // Hitung jumlah slide yang dibutuhkan (3 kandidat per slide)
-                    $totalCandidates = count($calon);
-                    $candidatesPerSlide = 3;
-                    $totalSlides = ceil($totalCandidates / $candidatesPerSlide);
-                @endphp
-
-                @for ($slide = 0; $slide < $totalSlides; $slide++)
-                    <div class="flex justify-center gap-[45px] min-w-[1080px]">
-                        @for ($i = $slide * $candidatesPerSlide; $i < min(($slide + 1) * $candidatesPerSlide, $totalCandidates); $i++)
-                            @php $cal = $calon[$i]; @endphp
-                            <div class="w-[330px] flex flex-col">
-                                <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                                    @if ($cal->foto)
-                                        <img class="w-full h-full object-cover" src="{{ Storage::disk('foto_calon_lokal')->url($cal->foto) }}" alt="{{ $cal->nama }} / {{ $cal->nama_wakil }}">
-                                    @else
-                                        <img class="w-full h-full object-cover" src="{{ asset('assets/default.png') }}" alt="Default Image">
-                                    @endif
-                                </div>
-                                <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                    {{ $cal->posisi == 'GUBERNUR' ? $cal->provinsi->nama : $cal->kabupaten->nama }}
-                                </div>
-                                <div class="bg-white rounded-b-2xl p-4 shadow">
-                                    <h4 class="text-[#52526c] text-center font-bold mb-1">{{ $cal->nama }} / {{ $cal->nama_wakil }}</h4>
-                                    <p class="text-[#6b6b6b] text-center text-sm mb-2">PASLON {{ $i + 1 }}</p>
-                                    <div class="flex justify-center items-center text-[#008bf9]">
-                                        <span class="font-medium">0%</span>
-                                        <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                        <span class="font-medium">0 Suara</span>
+                @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
+                    <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" style="display: none;">
+                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                            @foreach($syncedCalonData[$kabupatenId] as $cal)
+                                <div class="w-[330px] flex flex-col">
+                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                        @if ($cal['foto'])
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ Storage::disk('foto_calon_lokal')->url($cal['foto']) }}" 
+                                                alt="{{ $cal['nama'] }} / {{ $cal['nama_wakil'] }}">
+                                        @else
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ asset('assets/default.png') }}" 
+                                                alt="Default Image">
+                                        @endif
+                                    </div>
+                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                        {{ $cal['wilayah'] }}
+                                    </div>
+                                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                            {{ $cal['nama'] }} / {{ $cal['nama_wakil'] }}
+                                        </h4>
+                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
+                                            {{ $cal['posisi'] }} {{ $cal['nomor_urut'] }}
+                                        </p>
+                                        <div class="flex justify-center items-center text-[#008bf9]">
+                                            <span class="font-medium">{{ number_format($cal['persentase'], 2) }}%</span>
+                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                            <span class="font-medium">{{ number_format($cal['total_suara']) }} Suara</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endfor
+                            @endforeach
+                        </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
 
             <div class="flex justify-center mt-4" id="sliderDots">
@@ -443,6 +444,73 @@
 
 @push('scripts')
     <script>
+        
+        // paslon singkron partisipasi
+        document.addEventListener('DOMContentLoaded', function() {
+        const participationSlides = document.querySelectorAll('.slide101');
+        const candidateSlides = document.querySelectorAll('.candidate-slide');
+        
+        function showSlides(index) {
+            // Hide all slides
+            participationSlides.forEach(slide => slide.style.display = 'none');
+            candidateSlides.forEach(slide => slide.style.display = 'none');
+            
+            // Show current slides
+            if (participationSlides[index]) participationSlides[index].style.display = 'block';
+            if (candidateSlides[index]) candidateSlides[index].style.display = 'block';
+        }
+        
+        // Show first slides initially
+        showSlides(0);
+        
+        // Update navigation buttons
+        document.getElementById('prevSlide101').addEventListener('click', function() {
+            const currentIndex = Array.from(participationSlides).findIndex(slide => 
+                slide.style.display !== 'none'
+            );
+            const newIndex = (currentIndex - 1 + participationSlides.length) % participationSlides.length;
+            showSlides(newIndex);
+        });
+        
+        document.getElementById('nextSlide101').addEventListener('click', function() {
+            const currentIndex = Array.from(participationSlides).findIndex(slide => 
+                slide.style.display !== 'none'
+            );
+            const newIndex = (currentIndex + 1) % participationSlides.length;
+            showSlides(newIndex);
+        });
+        
+        // Autoplay functionality
+        let autoplayInterval;
+        const startAutoplay = () => {
+            autoplayInterval = setInterval(() => {
+                document.getElementById('nextSlide101').click();
+            }, 5000);
+        };
+        
+        const stopAutoplay = () => {
+            clearInterval(autoplayInterval);
+        };
+        
+        document.getElementById('playPauseBtn').addEventListener('click', function() {
+            const playIcon = this.querySelector('.play-icon');
+            const pauseIcon = this.querySelector('.pause-icon');
+            
+            if (playIcon.classList.contains('hidden')) {
+                stopAutoplay();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            } else {
+                startAutoplay();
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }
+        });
+        
+        // Start autoplay initially
+        startAutoplay();
+    });
+
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('voteCountChart').getContext('2d');
             const titleElement = document.getElementById('chartTitle');

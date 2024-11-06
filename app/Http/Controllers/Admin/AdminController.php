@@ -65,8 +65,87 @@ class AdminController extends Controller
         }
 
         $kabupatenData = $this->getKabupatenData();
+        $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData'));
+    }
+
+    
+    private function getCalonDataByWilayah($kabupatens): array
+    {
+        $syncedData = [];
+        
+        foreach ($kabupatens as $kabupaten) {
+            // Get Gubernur
+            $gubernurCalon = $this->getCalonByPosisi('GUBERNUR', $kabupaten->provinsi_id);
+            
+            // Get Walikota/Bupati based on kabupaten
+            $lokalCalon = $this->getCalonByPosisi(['WALIKOTA', 'BUPATI'], null, $kabupaten->id);
+            
+            // Merge and calculate suara for semua calon
+            $allCalon = $gubernurCalon->concat($lokalCalon);
+            
+            $calonData = [];
+            foreach ($allCalon as $index => $cal) {
+                $totalSuara = $this->getSuaraCalonByWilayah($cal->id, $kabupaten->id);
+                $persentase = $this->hitungPersentaseSuaraCalon($totalSuara, $kabupaten->id);
+                
+                $calonData[] = [
+                    'id' => $cal->id,
+                    'nama' => $cal->nama,
+                    'nama_wakil' => $cal->nama_wakil,
+                    'foto' => $cal->foto,
+                    'posisi' => $cal->posisi,
+                    'nomor_urut' => $index + 1,
+                    'total_suara' => $totalSuara,
+                    'persentase' => $persentase,
+                    'wilayah' => $cal->posisi == 'GUBERNUR' ? $cal->provinsi->nama : $kabupaten->nama
+                ];
+            }
+            
+            $syncedData[$kabupaten->id] = $calonData;
+        }
+
+        return $syncedData;
+    }
+
+    private function getCalonByPosisi(string|array $posisi, ?int $provinsiId = null, ?int $kabupatenId = null)
+    {
+        $query = Calon::query();
+        
+        if (is_array($posisi)) {
+            $query->whereIn('posisi', $posisi);
+        } else {
+            $query->where('posisi', $posisi);
+        }
+
+        if ($provinsiId) {
+            $query->where('provinsi_id', $provinsiId);
+        }
+
+        if ($kabupatenId) {
+            $query->where('kabupaten_id', $kabupatenId);
+        }
+
+        return $query->get();
+    }
+
+    private function getSuaraCalonByWilayah(int $calonId, int $kabupatenId): int
+    {
+        return SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+            $query->where('id', $kabupatenId);
+        })->where('calon_id', $calonId)->sum('suara') ?? 0;
+    }
+
+    private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
+    {
+        $totalSuaraKabupaten = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+            $query->where('id', $kabupatenId);
+        })->sum('suara');
+
+        if ($totalSuaraKabupaten === 0) return 0;
+
+        return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
     }
 
     
