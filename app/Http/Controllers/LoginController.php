@@ -81,19 +81,24 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        // Mark the current session as logged out
-        LoginHistory::where('user_id', Auth::id())
+        // Find and mark only the current device session as logged out
+        $currentSession = LoginHistory::where('user_id', Auth::id())
             ->where('ip_address', $request->ip())
             ->where('user_agent', $request->userAgent())
             ->where('is_logged_out', false)
-            ->update([
+            ->first();
+
+        if ($currentSession) {
+            $currentSession->update([
                 'is_logged_out' => true,
                 'logged_out_at' => now(),
             ]);
+        }
 
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'Anda telah berhasil logout.');
+        
+        return redirect('/')->with('success', 'Anda telah berhasil logout dari device ini.');
     }
 }
