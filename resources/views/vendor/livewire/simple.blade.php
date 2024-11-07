@@ -63,3 +63,13 @@
         </span>
     </span>
 </div>
+
+@push('styles')
+    <style>
+        /* Tooltip styling */
+        .tooltip:hover .absolute {
+            display: block;
+            z-index: 10;
+        }
+    </style>
+@endpush
