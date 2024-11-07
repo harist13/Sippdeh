@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RangkumanController extends Controller
 {
-     public function rangkuman(Request $request)
+      public function rangkuman(Request $request)
     {
         // Get items per page from request, default to 10
         $itemsPerPage = $request->input('itemsPerPage', 10);
@@ -55,7 +55,7 @@ class RangkumanController extends Controller
             });
         }
 
-        // Apply filters
+        // Apply location filters
         if ($request->kabupaten_id) {
             $query->where('kabupaten.id', $request->kabupaten_id);
             $kecamatans = Kecamatan::where('kabupaten_id', $request->kabupaten_id)
@@ -74,25 +74,24 @@ class RangkumanController extends Controller
             $query->where('kelurahan.id', $request->kelurahan_id);
         }
 
-        // Apply partisipasi filter if selected
+        // Apply partisipasi filter with fixed ranges
         if ($request->partisipasi) {
             $partisipasiValues = explode(',', $request->partisipasi);
-            $query->whereHas('suara', function($q) use ($partisipasiValues) {
-                $q->where(function($q) use ($partisipasiValues) {
-                    foreach ($partisipasiValues as $value) {
-                        switch ($value) {
-                            case 'hijau':
-                                $q->orWhere('partisipasi', '>=', 70);
-                                break;
-                            case 'kuning':
-                                $q->orWhereBetween('partisipasi', [50, 69.99]);
-                                break;
-                            case 'merah':
-                                $q->orWhere('partisipasi', '<', 50);
-                                break;
-                        }
+            
+            $query->where(function($q) use ($partisipasiValues) {
+                foreach ($partisipasiValues as $value) {
+                    switch ($value) {
+                        case 'hijau':
+                            $q->orWhere('partisipasi', '>=', 70);
+                            break;
+                        case 'kuning':
+                            $q->orWhereBetween('partisipasi', [50, 69.99]);
+                            break;
+                        case 'merah':
+                            $q->orWhere('partisipasi', '<', 50);
+                            break;
                     }
-                });
+                }
             });
         }
 
