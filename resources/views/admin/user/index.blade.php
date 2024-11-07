@@ -6,6 +6,23 @@
 
 @push('styles')
     <style>
+        .spinner {
+            border: 4px solid transparent;
+            border-top: 4px solid #3560A0; /* Customize color */
+            border-right: 4px solid #3560A0;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow */
+        }
+
+        /* Keyframes for spinning animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Style untuk dropdown */
         select#dataLimit {
             min-width: 100px;
@@ -151,7 +168,7 @@
                         >
                         <i class="fas fa-search absolute left-2 top-3 text-gray-400"></i>
                         <div id="searchLoading" class="absolute right-2 top-2 hidden">
-                            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500"></div>
+                            <div class="spinner"></div>
                         </div>
                     </div>
                 </div>
