@@ -143,8 +143,16 @@
 
 
                     <div class="relative w-full-mobile mt-4-mobile">
-                        <input type="text" placeholder="Cari User" class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Cari User" 
+                            class="bg-gray-100 rounded-md px-3 py-2 pl-8 w-full"
+                        >
                         <i class="fas fa-search absolute left-2 top-3 text-gray-400"></i>
+                        <div id="searchLoading" class="absolute right-2 top-2 hidden">
+                            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -484,66 +492,137 @@
 
 
 
-        document.querySelector('input[placeholder="Cari User"]').addEventListener('keyup', function (e) {
-            const searchTerm = e.target.value.toLowerCase();
-            let visibleRowsTPSCount = 0;
-            let visibleRowsSuaraCount = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchLoading = document.getElementById('searchLoading');
+            const tpsTable = document.getElementById('tpsTable');
+            const suaraTable = document.getElementById('suaraTable');
+            let searchTimeout;
 
-            // Search in TPS table
-            const tpsRows = document.querySelectorAll('#tpsTable tbody tr:not(#noDataTPS)');
-            const noDataTPS = document.getElementById('noDataTPS');
-
-            tpsRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                    visibleRowsTPSCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Toggle no data message for TPS table
-            if (visibleRowsTPSCount === 0) {
-                noDataTPS.classList.remove('hidden');
-            } else {
-                noDataTPS.classList.add('hidden');
+            function showNoDataMessage(tableBody, message = 'Data yang dicari tidak ditemukan') {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="py-4 text-center">
+                            <div class="flex flex-col items-center justify-center text-gray-500">
+                                
+                                <p class="text-lg font-medium">${message}</p>
+                                
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }
 
-            // Search in Suara table
-            const suaraRows = document.querySelectorAll('#suaraTable tbody tr:not(#noDataSuara)');
-            const noDataSuara = document.getElementById('noDataSuara');
-
-            suaraRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                    visibleRowsSuaraCount++;
+            function updateContent(searchTerm) {
+                // Show loading
+                searchLoading.classList.remove('hidden');
+                
+                // Build URL with search parameter
+                const url = new URL(window.location.href);
+                if (searchTerm) {
+                    url.searchParams.set('search', searchTerm);
                 } else {
-                    row.style.display = 'none';
+                    url.searchParams.delete('search');
                 }
-            });
 
-            // Toggle no data message for Suara table
-            if (visibleRowsSuaraCount === 0) {
-                noDataSuara.classList.remove('hidden');
-            } else {
-                noDataSuara.classList.add('hidden');
-            }
-        });
-
-        // Clear search and reset display when input is cleared
-        document.querySelector('input[placeholder="Cari User"]').addEventListener('search', function (e) {
-            if (this.value === '') {
-                const allRows = document.querySelectorAll('#tpsTable tbody tr, #suaraTable tbody tr');
-                allRows.forEach(row => {
-                    if (!row.id.includes('noData')) {
-                        row.style.display = '';
+                // Make AJAX request
+                fetch(url.toString(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html'
                     }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    // Update TPS table content
+                    const tpsTableBody = tpsTable.querySelector('tbody');
+                    const newTpsRows = tempDiv.querySelectorAll('#tpsTable tbody tr');
+                    
+                    if (newTpsRows.length > 0) {
+                        tpsTableBody.innerHTML = Array.from(newTpsRows)
+                            .map(row => row.outerHTML)
+                            .join('');
+                    } else {
+                        showNoDataMessage(tpsTableBody);
+                    }
+
+                    // Update Suara table content
+                    if (suaraTable) {
+                        const suaraTableBody = suaraTable.querySelector('tbody');
+                        const newSuaraRows = tempDiv.querySelectorAll('#suaraTable tbody tr');
+                        
+                        if (newSuaraRows.length > 0) {
+                            suaraTableBody.innerHTML = Array.from(newSuaraRows)
+                                .map(row => row.outerHTML)
+                                .join('');
+                        } else {
+                            showNoDataMessage(suaraTableBody);
+                        }
+                    }
+
+                    // Update pagination if exists
+                    const tpsPagination = tpsTable.querySelector('.mt-4');
+                    const newTpsPagination = tempDiv.querySelector('#tpsTable .mt-4');
+                    if (tpsPagination && newTpsPagination) {
+                        tpsPagination.innerHTML = newTpsPagination.innerHTML;
+                    }
+
+                    if (suaraTable) {
+                        const suaraPagination = suaraTable.querySelector('.mt-4');
+                        const newSuaraPagination = tempDiv.querySelector('#suaraTable .mt-4');
+                        if (suaraPagination && newSuaraPagination) {
+                            suaraPagination.innerHTML = newSuaraPagination.innerHTML;
+                        }
+                    }
+
+                    // Update URL without page refresh
+                    window.history.pushState({}, '', url.toString());
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    // Show error message in both tables
+                    const tpsTableBody = tpsTable.querySelector('tbody');
+                    const suaraTableBody = suaraTable ? suaraTable.querySelector('tbody') : null;
+                    
+                    showNoDataMessage(tpsTableBody, 'Terjadi kesalahan saat mencari data');
+                    if (suaraTableBody) {
+                        showNoDataMessage(suaraTableBody, 'Terjadi kesalahan saat mencari data');
+                    }
+                })
+                .finally(() => {
+                    // Hide loading
+                    searchLoading.classList.add('hidden');
                 });
-                document.getElementById('noDataTPS').classList.add('hidden');
-                document.getElementById('noDataSuara').classList.add('hidden');
             }
+
+            // Search input event with 1 second delay
+            searchInput.addEventListener('keyup', function() {
+                clearTimeout(searchTimeout);
+                
+                const searchTerm = this.value.trim();
+                searchTimeout = setTimeout(() => {
+                    updateContent(searchTerm);
+                }, 1000);
+            });
+
+            // Clear search handler
+            searchInput.addEventListener('search', function() {
+                if (this.value === '') {
+                    updateContent('');
+                }
+            });
+
+            // Handle browser back/forward
+            window.addEventListener('popstate', function(e) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchTerm = urlParams.get('search') || '';
+                searchInput.value = searchTerm;
+                updateContent(searchTerm);
+            });
         });
 
 

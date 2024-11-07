@@ -15,13 +15,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RangkumanController extends Controller
 {
-    public function rangkuman(Request $request)
+     public function rangkuman(Request $request)
     {
         // Get items per page from request, default to 10
         $itemsPerPage = $request->input('itemsPerPage', 10);
-
+        
         // Get paslon data for gubernur position
         $paslon = Calon::where('posisi', 'Gubernur')->get();
+
+        // Get location data for filters
+        $kabupatens = Kabupaten::orderBy('nama')->get();
+        $kecamatans = collect();
+        $kelurahans = collect();
 
         // Base query
         $query = RingkasanSuaraTPS::select(
@@ -29,7 +34,7 @@ class RangkumanController extends Controller
             'tps.nama as tps_nama',
             'tps.kelurahan_id',
             'kelurahan.nama as kelurahan_nama',
-            'kelurahan.kecamatan_id',
+            'kelurahan.kecamatan_id', 
             'kecamatan.nama as kecamatan_nama',
             'kecamatan.kabupaten_id',
             'kabupaten.nama as kabupaten_nama'
@@ -40,12 +45,17 @@ class RangkumanController extends Controller
         ->join('kabupaten', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
         ->with(['suara', 'suaraCalon']);
 
-        // Get location data for filters
-        $kabupatens = Kabupaten::orderBy('nama')->get();
-        $kecamatans = collect();
-        $kelurahans = collect();
+        // Apply search if provided
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('kabupaten.nama', 'LIKE', "%{$search}%")
+                  ->orWhere('kecamatan.nama', 'LIKE', "%{$search}%")
+                  ->orWhere('kelurahan.nama', 'LIKE', "%{$search}%");
+            });
+        }
 
-        // Apply filters and get related data
+        // Apply filters
         if ($request->kabupaten_id) {
             $query->where('kabupaten.id', $request->kabupaten_id);
             $kecamatans = Kecamatan::where('kabupaten_id', $request->kabupaten_id)
@@ -86,6 +96,13 @@ class RangkumanController extends Controller
             });
         }
 
+        // If it's an AJAX search request, return JSON
+        if ($request->ajax() && $request->filled('search')) {
+            $results = $query->get();
+            return response()->json($results);
+        }
+
+        // Paginate the results
         $summaryData = $query->paginate($itemsPerPage)->withQueryString();
 
         return view('admin.rangkuman', compact(

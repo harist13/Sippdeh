@@ -230,29 +230,70 @@ class AdminController extends Controller
 
     public function user(Request $request)
     {
-        // Get items per page from request, default to 10
+        $search = $request->input('search');
         $itemsPerPage = $request->input('itemsPerPage', 10);
+
+        // Query for users with search
+        $usersQuery = Petugas::query();
         
-        $users = Petugas::paginate($itemsPerPage)
-            ->withQueryString();
+        // Apply search if provided
+        if ($search) {
+            $usersQuery->where(function($query) use ($search) {
+                $query->where('username', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('wilayah', function($q) use ($search) {
+                        $q->where('nama', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('roles', function($q) use ($search) {
+                        $q->where('name', 'LIKE', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $users = $usersQuery->paginate($itemsPerPage);
+
+        // Query for login histories with search
+        $historiesQuery = LoginHistory::with('user')->active();
+        
+        if ($search) {
+            $historiesQuery->where(function($query) use ($search) {
+                $query->whereHas('user', function($q) use ($search) {
+                    $q->where('email', 'LIKE', '%' . $search . '%')
+                    ->orWhere('username', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('ip_address', 'LIKE', '%' . $search . '%')
+                ->orWhere('user_agent', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $loginHistories = $historiesQuery->orderBy('login_at', 'desc')->paginate($itemsPerPage);
         
         $roles = Role::all();
-        
-        $loginHistories = LoginHistory::with('user')
-            ->active()
-            ->orderBy('login_at', 'desc')
-            ->paginate($itemsPerPage)
-            ->withQueryString();
-            
         $kabupatens = Kabupaten::all();
         
-        // Calculate active devices for each user
+        // Calculate active devices
         $activeDevices = [];
         foreach ($users as $user) {
             $activeDevices[$user->id] = LoginHistory::where('user_id', $user->id)->active()->count();
         }
 
-        return view('admin.user.index', compact('users', 'roles', 'loginHistories', 'activeDevices', 'kabupatens'));
+        if ($request->ajax()) {
+            return view('admin.user.index', compact(
+                'users',
+                'loginHistories',
+                'roles',
+                'activeDevices',
+                'kabupatens'
+            ))->render();
+        }
+
+        return view('admin.user.index', compact(
+            'users',
+            'loginHistories',
+            'roles',
+            'activeDevices',
+            'kabupatens'
+        ));
     }
     
     public function forceLogoutDevice($userId, $loginHistoryId)

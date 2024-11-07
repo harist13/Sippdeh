@@ -154,15 +154,6 @@
                     </div>
                     <div
                         class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-                        <div class="flex items-center w-full sm:w-auto">
-                            <select id="kabupatenFilter"
-                                class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 w-full sm:w-auto">
-                                <option value="">Semua Kabupaten</option>
-                                @foreach($kabupatens as $kabupaten)
-                                <option value="{{ $kabupaten->nama }}">{{ $kabupaten->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -572,105 +563,136 @@
         }
 
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('searchInput');
-            const kabupatenFilter = document.getElementById('kabupatenFilter');
-            const dataTable = document.getElementById('dataTable');
-            let searchTimeout;
+        document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const searchInput = document.getElementById('searchInput');
+        const dataTable = document.getElementById('dataTable');
+        const tbody = dataTable.querySelector('tbody');
+        let searchTimeout;
 
-            // Function untuk melakukan pencarian
-            function performSearch() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const selectedKabupaten = kabupatenFilter.value.toLowerCase();
-                const rows = document.querySelectorAll('.search-row');
-                const noDataRow = document.getElementById('noDataRow');
-                let visibleRows = 0;
+        // Set initial search value from URL if exists
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('search')) {
+            searchInput.value = urlParams.get('search');
+        }
 
-                rows.forEach(row => {
-                    const kabupaten = row.querySelector('.kabupaten-cell').textContent.toLowerCase();
-                    const kecamatan = row.querySelector('.kecamatan-cell').textContent.toLowerCase();
-                    const kelurahan = row.querySelector('.kelurahan-cell').textContent.toLowerCase();
+        // Function to show "No Data" message
+        function showNoDataMessage() {
+            const noDataRow = document.createElement('tr');
+            noDataRow.id = 'noDataMessage';
+            noDataRow.innerHTML = `
+                <td colspan="100%" class="py-4 text-center">
+                    <div class="flex flex-col items-center justify-center text-gray-500">
+                        <p class="text-lg font-medium">Data tidak ditemukan</p>
+                    </div>
+                </td>
+            `;
+            tbody.innerHTML = '';
+            tbody.appendChild(noDataRow);
+        }
 
-                    // Filter berdasarkan kabupaten yang dipilih
-                    const matchesKabupaten = selectedKabupaten === '' || kabupaten === selectedKabupaten;
+        // Function to perform search
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            const url = new URL(window.location.href);
+            
+            // Update search parameter
+            if (searchTerm) {
+                url.searchParams.set('search', searchTerm);
+            } else {
+                url.searchParams.delete('search');
+            }
+            
+            // Reset to first page
+            url.searchParams.delete('page');
 
-                    // Filter berdasarkan pencarian
-                    const matchesSearch =
-                        kabupaten.includes(searchTerm) ||
-                        kecamatan.includes(searchTerm) ||
-                        kelurahan.includes(searchTerm);
+            // Add loading state
+            document.body.classList.add('cursor-wait');
+            tbody.style.opacity = '0.5';
 
-                    // Tampilkan baris jika memenuhi kriteria filter
-                    if (matchesKabupaten && matchesSearch) {
-                        row.style.display = '';
-                        visibleRows++;
+            // Fetch results
+            fetch(url.toString())
+                .then(response => response.text())
+                .then(html => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    
+                    const newTbody = tempDiv.querySelector('#dataTable tbody');
+                    
+                    if (newTbody && newTbody.children.length > 0 && !newTbody.querySelector('#noDataMessage')) {
+                        tbody.innerHTML = newTbody.innerHTML;
                     } else {
-                        row.style.display = 'none';
+                        showNoDataMessage();
                     }
+
+                    // Update pagination if exists
+                    const paginationContainer = document.querySelector('.pagination-container');
+                    const newPagination = tempDiv.querySelector('.pagination-container');
+                    if (paginationContainer && newPagination) {
+                        paginationContainer.innerHTML = newPagination.innerHTML;
+                    }
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    showNoDataMessage();
+                })
+                .finally(() => {
+                    document.body.classList.remove('cursor-wait');
+                    tbody.style.opacity = '1';
                 });
+        }
 
-                // Show or hide the "no data" message
-                if (visibleRows === 0) {
-                    noDataRow.classList.remove('hidden');
-                } else {
-                    noDataRow.classList.add('hidden');
-                }
+        // Event listener for search input with 1 second delay
+        searchInput.addEventListener('keyup', function(e) {
+            clearTimeout(searchTimeout);
 
-                // Update nomor urut yang ditampilkan
-                updateRowNumbers();
+            // Immediate search on Enter key
+            if (e.key === 'Enter') {
+                performSearch();
+                return;
             }
 
-            // Function untuk update nomor urut
-            function updateRowNumbers() {
-                let visibleIndex = 1;
-                const rows = document.querySelectorAll('.search-row');
+            // 1 second delay for normal typing
+            searchTimeout = setTimeout(performSearch, 1000);
+        });
 
-                rows.forEach(row => {
-                    if (row.style.display !== 'none') {
-                        const numberCell = row.querySelector('td:first-child');
-                        numberCell.textContent = String(visibleIndex).padStart(2, '0');
-                        visibleIndex++;
-                    }
-                });
+        // Clear button (x) handler
+        searchInput.addEventListener('search', function() {
+            if (this.value === '') {
+                performSearch();
             }
+        });
 
-            // Event listener untuk input pencarian dengan debounce
-            searchInput.addEventListener('keyup', function () {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(performSearch, 300);
-            });
+        // Browser back/forward handler
+        window.addEventListener('popstate', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            searchInput.value = urlParams.get('search') || '';
+            performSearch();
+        });
 
-            // Event listener untuk filter kabupaten
-            kabupatenFilter.addEventListener('change', performSearch);
-
-            // Event listener untuk reset pencarian
-            searchInput.addEventListener('search', function () {
-                if (this.value === '') {
-                    performSearch();
-                }
-            });
-
-            document.getElementById('exportBtn').addEventListener('click', function () {
-                const searchTerm = document.getElementById('searchInput').value;
-                const selectedKabupaten = document.getElementById('kabupatenFilter').value;
-
-                // Build the export URL with current filters
-                let exportUrl = new URL('/admin/rangkuman/export', window.location.origin);
-                let params = new URLSearchParams();
-
+        // Export button handler
+        const exportBtn = document.getElementById('exportBtn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                const exportUrl = new URL('/admin/rangkuman/export', window.location.origin);
+                
                 if (searchTerm) {
-                    params.append('search', searchTerm);
+                    exportUrl.searchParams.set('search', searchTerm);
                 }
-                if (selectedKabupaten) {
-                    params.append('kabupaten', selectedKabupaten);
+                
+                // Preserve other active filters
+                const currentParams = new URLSearchParams(window.location.search);
+                for (const [key, value] of currentParams) {
+                    if (key !== 'page' && key !== 'search') {
+                        exportUrl.searchParams.set(key, value);
+                    }
                 }
 
-                exportUrl.search = params.toString();
-
-                // Redirect to export URL
                 window.location.href = exportUrl.toString();
             });
-        });
+        }
+    });
 
         document.addEventListener('DOMContentLoaded', function () {
             const exportModal = document.getElementById('exportModal');
