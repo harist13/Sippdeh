@@ -424,6 +424,12 @@ class InputSuaraUIManager {
                 }
             }
         };
+
+        document.getElementById('search').addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === "a") {
+                event.stopPropagation();
+            }
+        });
     }
 
     resetTableInput() {

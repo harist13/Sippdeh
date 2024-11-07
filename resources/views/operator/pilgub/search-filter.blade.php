@@ -6,7 +6,7 @@
                 d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z"
                 clip-rule="evenodd" />
         </svg>
-        <input wire:model.live.debounce.250ms="keyword" type="search" placeholder="Cari" name="cari"
+        <input wire:model.live.debounce.250ms="keyword" type="search" placeholder="Cari" name="cari" id="search"
             class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ request()->get('cari') }}">
     </div>
     <button

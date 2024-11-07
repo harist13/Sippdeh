@@ -21,37 +21,37 @@
             <!-- First Page -->
             @if (!$paginator->onFirstPage())
                 <a href="javascript:void(0);" wire:click="gotoPage(1)" class="text-gray-500 hover:text-blue-500" aria-label="First Page">
-                    &#124;&laquo;
+                    &#124;&lt;
                 </a>
             @else
-                <span class="text-gray-300">&#124;&laquo;</span>
+                <span class="text-gray-300">&#124;&lt;</span>
             @endif
 
             <!-- Previous Page -->
             @if ($paginator->onFirstPage())
-                <span class="text-gray-300">&laquo;</span>
+                <span class="text-gray-300">&lt;</span>
             @else
                 <a href="javascript:void(0);" wire:click="previousPage" class="text-gray-500 hover:text-blue-500" aria-label="Previous Page" id="prevPage">
-                    &laquo;
+                    &lt;
                 </a>
             @endif
 
             <!-- Next Page -->
             @if ($paginator->hasMorePages())
                 <a href="javascript:void(0);" wire:click="nextPage" class="text-gray-500 hover:text-blue-500" aria-label="Next Page" id="nextPage">
-                    &raquo;
+                    &gt;
                 </a>
             @else
-                <span class="text-gray-300">&raquo;</span>
+                <span class="text-gray-300">&gt;</span>
             @endif
 
             <!-- Last Page -->
             @if ($paginator->hasMorePages())
                 <a href="javascript:void(0);" wire:click="gotoPage({{ $paginator->lastPage() }})" class="text-gray-500 hover:text-blue-500" aria-label="Last Page">
-                    &raquo;&#124;
+                    &gt;&#124;
                 </a>
             @else
-                <span class="text-gray-300">&raquo;&#124;</span>
+                <span class="text-gray-300">&gt;&#124;</span>
             @endif
         </div>
     </div>
