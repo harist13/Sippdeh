@@ -641,7 +641,7 @@ class InputSuaraUIManager {
         this.caches.components.rows.forEach(row => {
             this.syncEditableCellMode({
                 row,
-                cellQuery: 'td.kotak-kosong',
+                cellQuery: 'td:not([hidden]).kotak-kosong',
                 onChange: (tpsId, _, value) => {
                     if (value == '' || isNaN(value)) {
                         return;
