@@ -34,10 +34,6 @@
                 </th>
             @endforeach
 
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }}" style="min-width: 200px;">
-                Calon
-            </th>
-
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 Suara Sah
             </th>
@@ -100,11 +96,6 @@
                         <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-xs text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-1 w-20 focus:outline-none hidden" value="{{ $suara }}" data-default-value="{{ $suara }}" autocomplete="off">
                     </td>
                 @endforeach
-
-                {{-- Posisi --}}
-                <td class="py-3 px-4 text-xs border posisi {{ $isCalonColumnIgnored ? 'hidden' : '' }}">
-                    Gubernur/<br>Wakil Gubernur
-                </td>
 
                 {{-- Suara Sah --}}
                 <td class="py-3 px-4 text-xs border suara-sah" data-value="{{ $tpsDatum->suara_sah }}">
