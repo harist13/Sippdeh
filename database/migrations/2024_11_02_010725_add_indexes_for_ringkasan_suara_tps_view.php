@@ -16,6 +16,7 @@ return new class extends Migration {
 
         Schema::table('suara_tps', function (Blueprint $table) {
             $table->index('dpt'); // Index for suara_tps.dpt
+            $table->index('kotak_kosong'); // Index for suara_tps.kotak_kosong
             $table->index('suara_tidak_sah'); // Index for suara_tps.suara_tidak_sah
         });
 
