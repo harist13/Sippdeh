@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('suara_tps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('dpt')->default(0);
+            $table->unsignedBigInteger('kotak_kosong')->default(0);
             $table->unsignedBigInteger('suara_tidak_sah')->default(0);
             $table->timestamps();
 

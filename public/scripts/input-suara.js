@@ -1,10 +1,13 @@
 class TPS {
-    constructor(id, dpt, suaraSah, suaraTidakSah, oldSuaraCalon = 0) {
+    constructor(id, dpt, kotakKosong, suaraSah, suaraTidakSah, oldKotakKosong = 0, oldSuaraCalon = 0) {
         this.id = id;
         this.dpt = dpt;
+        this.kotakKosong = kotakKosong;
         this.suaraCalon = [];
         this.suaraSah = suaraSah;
         this.suaraTidakSah = suaraTidakSah;
+
+        this.oldKotakKosong = oldKotakKosong;
         this.oldSuaraCalon = oldSuaraCalon;
     }
 
@@ -43,7 +46,7 @@ class TPS {
     }
 
     get calculatedSuaraSah() {
-        return (this.suaraSah - this.oldSuaraCalon) + this.newSuaraCalon;
+        return (this.suaraSah - (this.oldSuaraCalon + this.oldKotakKosong)) + (this.newSuaraCalon + this.kotakKosong);
     }
 
     get abstain() {
@@ -66,13 +69,16 @@ class TPS {
         return {
             id: this.id,
             dpt: this.dpt,
+            kotak_kosong: this.kotakKosong,
             suara_calon: this.suaraCalon,
-            old_suara_calon: this.oldSuaraCalon,
             suara_sah: this.suaraSah,
             suara_tidak_sah: this.suaraTidakSah,
             abstain: this.abstain,
             suara_masuk: this.suaraMasuk,
-            partisipasi: this.partisipasi
+            partisipasi: this.partisipasi,
+
+            old_kotak_kosong: this.oldKotakKosong,
+            old_suara_calon: this.oldSuaraCalon,
         };
     }
 
@@ -80,8 +86,10 @@ class TPS {
         const tps = new TPS(
             obj.id,
             obj.dpt,
+            obj.kotak_kosong,
             obj.suara_sah,
             obj.suara_tidak_sah,
+            obj.old_kotak_kosong,
             obj.old_suara_calon,
         );
 
@@ -219,8 +227,10 @@ class InputSuaraUIManager {
             this.caches.components.checkboxes = this.caches.components.rows
                 .map(row => row.querySelector('td.centang input[type=checkbox]'));
 
-            this.caches.components.inputs = this.caches.components.rows
-                .map(row => row.querySelector('td input[type=number]'));
+            this.caches.components.rows.forEach(row => {
+                row.querySelectorAll('td input[type=number]')
+                    .forEach(input => this.caches.components.inputs.push(input));
+            });
         } else {
             this.caches.components.checkboxes = [];
             this.caches.components.inputs = [];
@@ -235,8 +245,8 @@ class InputSuaraUIManager {
     enableEditModeState = () => localStorage.setItem('is_edit_mode', '1');
     cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
 
-    addTPS(id, dpt, suaraSah, suaraTidakSah, suaraCalon) {
-        const tps = new TPS(id, parseInt(dpt), parseInt(suaraSah), parseInt(suaraTidakSah));
+    addTPS(id, dpt, kotakKosong, suaraSah, suaraTidakSah, suaraCalon) {
+        const tps = new TPS(id, parseInt(dpt), parseInt(kotakKosong), parseInt(suaraSah), parseInt(suaraTidakSah));
         suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
         tps.save();
     }
@@ -273,6 +283,7 @@ class InputSuaraUIManager {
                 const row = checkbox.parentElement.parentElement;
 
                 const dpt = row.querySelector('td.dpt').dataset.value;
+                const kotakKosong = row.querySelector('td.kotak-kosong').dataset.value;
                 const suaraSah = row.querySelector('td.suara-sah').dataset.value;
                 const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
                 const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
@@ -281,7 +292,7 @@ class InputSuaraUIManager {
                         suara: suara.dataset.suara
                     }));
 
-                this.addTPS(tpsId, dpt, suaraSah, suaraTidakSah, suaraCalon);
+                this.addTPS(tpsId, dpt, kotakKosong, suaraSah, suaraTidakSah, suaraCalon);
             }
 
             this.lastCheckedCheckbox = event.target;
@@ -314,6 +325,7 @@ class InputSuaraUIManager {
 
     repairInputValues() {
         this.caches.components.inputs.forEach(function(input) {
+            console.log(input.parentElement)
             if (input.value < 0 || input.value == '' || isNaN(input.value)) {
                 input.value = input.dataset.defaultValue || 0;
             }
@@ -496,6 +508,10 @@ class InputSuaraUIManager {
                         suaraCalonValue.value = sc.suara;
                     });
 
+                    const kotakKosongCell = row.querySelector('td.kotak-kosong');
+                    // kotakKosongCell.dataset.value = tps.kotakKosong;
+                    kotakKosongCell.querySelector('span').textContent = tps.kotakKosong;
+
                     const suaraSahCell = row.querySelector('td.suara-sah');
                     // suaraSahCell.dataset.value = tps.suaraSah;
                     suaraSahCell.textContent = tps.calculatedSuaraSah;
@@ -555,6 +571,10 @@ class InputSuaraUIManager {
                         const suaraCalonInput = suaraCalonCell.querySelector('input');
                         suaraCalonInput.value = sc.suara;
                     });
+
+                    const kotakKosongCell = row.querySelector('td.kotak-kosong');
+                    const kotakKosongInput = kotakKosongCell.querySelector('input');
+                    kotakKosongInput.value = tps.kotakKosong;
 
                     const suaraTidakSahCell = row.querySelector('td.suara-tidak-sah');
                     const suaraTidakSahInput = suaraTidakSahCell.querySelector('input');
@@ -634,20 +654,24 @@ class InputSuaraUIManager {
                 row,
                 cellQuery: 'td.dpt',
                 onChange: (tpsId, _, value) => {
-                    TPS.update(tpsId, {
-                        dpt: parseInt(value)
-                    });
+                    if (value == '' || isNaN(value)) {
+                        return;
+                    }
+
+                    TPS.update(tpsId, { dpt: parseInt(value) });
                     this.syncTableDataWithSelectedTPS();
                 }
             });
 
             this.syncEditableCellMode({
                 row,
-                cellQuery: 'td.suara-tidak-sah',
+                cellQuery: 'td.kotak-kosong',
                 onChange: (tpsId, _, value) => {
-                    TPS.update(tpsId, {
-                        suaraTidakSah: parseInt(value)
-                    });
+                    if (value == '' || isNaN(value)) {
+                        return;
+                    }
+
+                    TPS.update(tpsId, { kotakKosong: parseInt(value) });
                     this.syncTableDataWithSelectedTPS();
                 }
             });
@@ -656,7 +680,24 @@ class InputSuaraUIManager {
                 row,
                 cellQuery: 'td.paslon',
                 onChange: (tpsId, cellDataset, value) => {
+                    if (value == '' || isNaN(value)) {
+                        return;
+                    }
+
                     TPS.updateSuaraCalon(tpsId, cellDataset.id, value);
+                    this.syncTableDataWithSelectedTPS();
+                }
+            });
+
+            this.syncEditableCellMode({
+                row,
+                cellQuery: 'td.suara-tidak-sah',
+                onChange: (tpsId, _, value) => {
+                    if (value == '' || isNaN(value)) {
+                        return;
+                    }
+                    
+                    TPS.update(tpsId, { suaraTidakSah: parseInt(value) });
                     this.syncTableDataWithSelectedTPS();
                 }
             });
