@@ -7,7 +7,7 @@ class TPS {
         this.suaraSah = suaraSah;
         this.suaraTidakSah = suaraTidakSah;
 
-        this.oldKotakKosong = oldKotakKosong || kotakKosong;
+        this.oldKotakKosong = oldKotakKosong != null ? oldKotakKosong : kotakKosong;
         this.oldSuaraCalon = oldSuaraCalon;
     }
 
