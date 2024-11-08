@@ -4,6 +4,8 @@
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
+
+    $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
 @push('styles')
@@ -45,6 +47,10 @@
                 DPT
             </th>
 
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                Kotak Kosong
+            </th>
+
             @foreach ($paslon as $calon)
                 <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
                     {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
@@ -71,7 +77,7 @@
 
     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
         @forelse ($tps as $tpsDatum)
-            <tr wire:key="{{ $tpsDatum->id }}" class="border-b text-center select-none cursor-pointer hover:bg-gray-200 tps" data-id="{{ $tpsDatum->id }}">
+            <tr wire:key="{{ $tpsDatum->id }}" class="border-b text-center select-none cursor-pointer tps" data-id="{{ $tpsDatum->id }}">
                 {{-- ID TPS --}}
                 <td class="py-3 px-4 border nomor" data-id="{{ $tpsDatum->id }}">
                     {{ $tpsDatum->getThreeDigitsId() }}
@@ -104,6 +110,12 @@
                 <td class="py-3 px-4 text-xs border dpt" data-value="{{ $tpsDatum->dpt }}">
                     <span class="value">{{ $tpsDatum->dpt }}</span>
                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" data-default-value="{{ $tpsDatum->dpt }}" data-value="{{ $tpsDatum->dpt }}">
+                </td>
+
+                {{-- Kotak Kosong --}}
+                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $tpsDatum->kotak_kosong }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                    <span class="value">{{ $tpsDatum->kotak_kosong }}</span>
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $tpsDatum->kotak_kosong }}" data-default-value="{{ $tpsDatum->kotak_kosong }}" autocomplete="off">
                 </td>
 
                 {{-- Calon-calon --}}
