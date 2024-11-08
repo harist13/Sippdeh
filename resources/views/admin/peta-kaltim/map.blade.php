@@ -128,12 +128,15 @@
 			if (kabupaten && suaraPerKabupaten[kabupatenId]) {
 				kabupatenName.textContent = kabupaten.nama;
 
-				const suaraPaslon1Value = suaraPerKabupaten[kabupatenId][paslon[0].id];
-				const suaraPaslon2Value = suaraPerKabupaten[kabupatenId][paslon[1].id];
+				const suaraPaslon1Value = suaraPerKabupaten[kabupatenId][paslon[0]?.id] || 0;
+				const suaraPaslon2Value = suaraPerKabupaten[kabupatenId][paslon[1]?.id] || 0;
 
 				// Display percentage of votes
 				suaraPaslon1.textContent = `${suaraPaslon1Value}%`;
-				suaraPaslon2.textContent = `${suaraPaslon2Value}%`;
+
+				if (suaraPaslon2) {
+					suaraPaslon2.textContent = `${suaraPaslon2Value}%`;
+				}
 			}
 
 			const { left, top } = calculateTooltipPosition(event);
@@ -155,8 +158,8 @@
 
 		// Function to set region color based on vote count
 		function setWarnaWilayah(group, kabupatenId) {
-			const suaraPaslon1 = suaraPerKabupaten[kabupatenId]?.[paslon[0].id] || 0;
-			const suaraPaslon2 = suaraPerKabupaten[kabupatenId]?.[paslon[1].id] || 0;
+			const suaraPaslon1 = suaraPerKabupaten[kabupatenId]?.[paslon[0]?.id] || 0;
+			const suaraPaslon2 = suaraPerKabupaten[kabupatenId]?.[paslon[1]?.id] || 0;
 
 			let color;
 			if (suaraPaslon1 === 0 && suaraPaslon2 === 0) {

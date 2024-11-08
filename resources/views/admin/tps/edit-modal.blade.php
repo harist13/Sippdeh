@@ -13,6 +13,12 @@
                 placeholder="Nama TPS" required>
             <span class="text-red-800">{{ $errors->first('nama_tps') }}</span>
 
+            {{-- DPT --}}
+			<label for="editTPSDPT" class="mb-1 block">DPT</label>
+            <input type="number" id="editTPSDPT" name="dpt_tps"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <span class="text-red-800">{{ $errors->first('dpt_tps') }}</span>
+
 			{{-- Kelurahan --}}
 			<label for="editTPSKelurahanId" class="my-1 block">Kelurahan</label>
 			<select id="editTPSKelurahanId" name="kelurahan_id_tps" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
@@ -49,6 +55,10 @@
         return this.closest('tr').querySelector('td:nth-child(3)').dataset.id;
     }
 
+    function getDpt() {
+        return this.closest('tr').querySelector('td:nth-child(6)').dataset.value;
+    }
+
     function showEditTPSModal() {
 		const editTPSModal = document.getElementById('editTPSModal');
 		editTPSModal.classList.remove('hidden');
@@ -74,6 +84,9 @@
             const editTPSName = document.getElementById('editTPSName');
             editTPSName.value = getTPSName.call(this);
 
+            const editTPSDPT = document.getElementById('editTPSDPT');
+            editTPSDPT.value = getDpt.call(this);
+
             const editTPSKelurahanId = document.getElementById('editTPSKelurahanId');
             editTPSKelurahanId.value = getTPSKelurahanId.call(this);
 
@@ -85,13 +98,7 @@
     document.getElementById('cancelEditTPS').addEventListener('click', closeEditTPSModal);
 </script>
 
-@error('nama_tps')
-    <script>
-        showEditTPSModal();
-    </script>
-@enderror
-
-@error('kelurahan_id_tps')
+@error('nama_tps', 'dpt_tps', 'kelurahan_id_tps')
     <script>
         showEditTPSModal();
     </script>

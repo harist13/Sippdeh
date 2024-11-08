@@ -23,6 +23,7 @@ class StoreTPSRequest extends FormRequest
     {
         return [
             'nama_tps_baru' => 'required|unique:tps,nama|max:300',
+            'dpt_tps_baru' => 'required',
             'kelurahan_id_tps_baru' => 'required|exists:kelurahan,id'
         ];
     }
@@ -33,6 +34,8 @@ class StoreTPSRequest extends FormRequest
             'nama_tps_baru.required' => 'Mohon isi nama tps.',
             'nama_tps_baru.unique' => 'TPS tersebut sudah ada.',
             'nama_tps_baru.max' => 'Nama TPS terlalu panjang, maksimal 300 karakter.',
+
+            'dpt_tps_baru.required' => 'Mohon isi DPT.',
 
             'kelurahan_id_tps_baru.required' => 'Mohon pilih kelurahan untuk kota tersebut.',
             'kelurahan_id_tps_baru.exists' => 'Kelurahan yang anda pilih tidak tersedia di database.',

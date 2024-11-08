@@ -8,9 +8,14 @@
 			{{-- Nama tps --}}
 			<label for="addTPSName" class="mb-1 block">Nama</label>
             <input type="text" id="addTPSName" name="nama_tps_baru"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama TPS" required>
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             <span class="text-red-800">{{ $errors->first('nama_tps_baru') }}</span>
+
+			{{-- DPT --}}
+			<label for="addTPSDPT" class="mb-1 block">DPT</label>
+            <input type="number" id="addTPSDPT" name="dpt_tps_baru"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <span class="text-red-800">{{ $errors->first('dpt_tps_baru') }}</span>
 
 			{{-- Kelurahan --}}
 			<label for="addTPSKelurahan" class="my-1 block">Kelurahan</label>
@@ -50,13 +55,7 @@
     document.getElementById('cancelAddTPS').addEventListener('click', closeAddTPSModal);
 </script>
 
-@error('nama_tps_baru')
-    <script>
-        showAddTPSModal();
-    </script>
-@enderror
-
-@error('kelurahan_id_tps_baru')
+@error('nama_tps_baru', 'dpt_tps_baru', 'kelurahan_id_tps_baru')
     <script>
         showAddTPSModal();
     </script>

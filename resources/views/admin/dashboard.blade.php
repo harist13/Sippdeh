@@ -204,8 +204,10 @@
                             <div class="info-grid">
                                 <div class="label">{{ $calon[0]->nama }} / {{ $calon[0]->nama_wakil }} :</div>
                                 <div class="value" id="suara-paslon1">0 suara</div>
-                                <div class="label">{{ $calon[1]->nama }} / {{ $calon[1]->nama_wakil }} :</div>
-                                <div class="value" id="suara-paslon2">0 suara</div>
+                                @isset($calon[1])
+                                    <div class="label">{{ $calon[1]->nama }} / {{ $calon[1]->nama_wakil }} :</div>
+                                    <div class="value" id="suara-paslon2">0 suara</div>
+                                @endisset
                             </div>
                         </div>
                         <div class="absolute bottom-2 right-2 bg-white p-2 rounded-lg shadow">
@@ -214,10 +216,12 @@
                                     <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
                                     <span class="text-sm">{{ $calon[0]->nama }}/{{ $calon[0]->nama_wakil }}</span>
                                 </div>
-                                <div class="flex items-center mb-1">
-                                    <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
-                                    <span class="text-sm">{{ $calon[1]->nama }}/{{ $calon[1]->nama_wakil }}</span>
-                                </div>
+                                @isset($calon[1])
+                                    <div class="flex items-center mb-1">
+                                        <div class="w-4 h-4 bg-yellow-400 mr-2"></div>
+                                        <span class="text-sm">{{ $calon[1]->nama }}/{{ $calon[1]->nama_wakil }}</span>
+                                    </div>
+                                @endisset
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 bg-[#a6acb4] mr-2"></div>
                                     <span class="text-sm">Belum ada suara masuk</span>

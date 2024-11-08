@@ -1,5 +1,5 @@
 class TPS {
-    constructor(id, dpt, kotakKosong, suaraSah, suaraTidakSah, oldKotakKosong = 0, oldSuaraCalon = 0) {
+    constructor(id, dpt, kotakKosong, suaraSah, suaraTidakSah, oldSuaraCalon = 0, oldKotakKosong = null) {
         this.id = id;
         this.dpt = dpt;
         this.kotakKosong = kotakKosong;
@@ -7,7 +7,7 @@ class TPS {
         this.suaraSah = suaraSah;
         this.suaraTidakSah = suaraTidakSah;
 
-        this.oldKotakKosong = oldKotakKosong;
+        this.oldKotakKosong = oldKotakKosong || kotakKosong;
         this.oldSuaraCalon = oldSuaraCalon;
     }
 
@@ -89,8 +89,8 @@ class TPS {
             obj.kotak_kosong,
             obj.suara_sah,
             obj.suara_tidak_sah,
-            obj.old_kotak_kosong,
             obj.old_suara_calon,
+            obj.old_kotak_kosong,
         );
 
         obj.suara_calon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara), false));
@@ -287,10 +287,7 @@ class InputSuaraUIManager {
                 const suaraSah = row.querySelector('td.suara-sah').dataset.value;
                 const suaraTidakSah = row.querySelector('td.suara-tidak-sah').dataset.value;
                 const suaraCalon = Array.from(row.querySelectorAll('td.paslon'))
-                    .map(suara => ({
-                        id: suara.dataset.id,
-                        suara: suara.dataset.suara
-                    }));
+                    .map(suara => ({ id: suara.dataset.id, suara: suara.dataset.suara }));
 
                 this.addTPS(tpsId, dpt, kotakKosong, suaraSah, suaraTidakSah, suaraCalon);
             }
@@ -498,10 +495,6 @@ class InputSuaraUIManager {
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
-                    const dptCell = row.querySelector('td.dpt');
-                    // dptCell.dataset.value = tps.dpt;
-                    dptCell.querySelector('span').textContent = tps.dpt;
-
                     tps.suaraCalon.forEach(function (sc) {
                         const suaraCalonCell = row.querySelector(`td.paslon[data-id="${sc.id}"]`);
                         const suaraCalonValue = suaraCalonCell.querySelector('span');
@@ -562,10 +555,6 @@ class InputSuaraUIManager {
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
-                    const dptCell = row.querySelector('td.dpt');
-                    const dptInput = dptCell.querySelector('input');
-                    dptInput.value = tps.dpt;
-
                     tps.suaraCalon.forEach(function (sc) {
                         const suaraCalonCell = row.querySelector(`td.paslon[data-id="${sc.id}"]`);
                         const suaraCalonInput = suaraCalonCell.querySelector('input');
@@ -650,19 +639,6 @@ class InputSuaraUIManager {
 
     syncTableMode() {
         this.caches.components.rows.forEach(row => {
-            this.syncEditableCellMode({
-                row,
-                cellQuery: 'td.dpt',
-                onChange: (tpsId, _, value) => {
-                    if (value == '' || isNaN(value)) {
-                        return;
-                    }
-
-                    TPS.update(tpsId, { dpt: parseInt(value) });
-                    this.syncTableDataWithSelectedTPS();
-                }
-            });
-
             this.syncEditableCellMode({
                 row,
                 cellQuery: 'td.kotak-kosong',

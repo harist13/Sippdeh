@@ -10,7 +10,11 @@ use App\Http\Requests\Admin\TPS\UpdateTPSRequest;
 use App\Imports\TPSImport;
 use App\Models\Kabupaten;
 use App\Models\Kelurahan;
+use App\Models\SuaraTPS;
 use App\Models\TPS;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Sentry\SentrySdk;
 use Exception;
 
 class TPSController extends Controller
@@ -71,11 +75,20 @@ class TPSController extends Controller
 
             $tps = new TPS();
             $tps->nama = $validated['nama_tps_baru'];
+            $tps->alamat = '';
             $tps->kelurahan_id = $validated['kelurahan_id_tps_baru'];
             $tps->save();
+            
+            SuaraTPS::updateOrCreate(
+                [ 'tps_id' => $tps->id ],
+                [ 'dpt' => $validated['dpt_tps_baru'], 'operator_id' => Auth::id() ]
+            );
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah TPS.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah TPS.');
         }
     }
@@ -89,14 +102,14 @@ class TPSController extends Controller
                 $tpsImport = new TPSImport();
                 $tpsImport->import($namaSpreadsheet, disk: 'local');
                 
-                $catatan = $tpsImport->getCatatan();
-                $redirectBackResponse = redirect()->back();
+                // $catatan = $tpsImport->getCatatan();
+                // $redirectBackResponse = redirect()->back();
 
-                if (count($catatan) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $catatan);
-                }
+                // if (count($catatan) > 0) {
+                //     $redirectBackResponse->with('catatan_impor', $catatan);
+                // }
 
-                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data TPS.');
+                return redirect()->back()->with('pesan_sukses', 'Berhasil mengimpor data TPS.');
             }
 
             return redirect()->back()->with('pesan_gagal', 'Berkas .csv atau .xlsx tidak terunggah.');
@@ -116,11 +129,20 @@ class TPSController extends Controller
 
             $tps = TPS::find($id);
             $tps->nama = $validated['nama_tps'];
+            $tps->alamat = '';
             $tps->kelurahan_id = $validated['kelurahan_id_tps'];
             $tps->save();
 
+            SuaraTPS::updateOrCreate(
+                [ 'tps_id' => $tps->id ],
+                [ 'dpt' => $validated['dpt_tps'], 'operator_id' => Auth::id() ]
+            );
+
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit TPS.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit TPS.');
         }
     }

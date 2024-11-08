@@ -88,7 +88,6 @@
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt" data-value="{{ $tpsDatum->dpt }}">
                     <span class="value">{{ $tpsDatum->dpt }}</span>
-                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-xs text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-1 w-20 focus:outline-none hidden" data-default-value="{{ $tpsDatum->dpt }}" data-value="{{ $tpsDatum->dpt }}">
                 </td>
 
                 {{-- Kotak Kosong --}}
