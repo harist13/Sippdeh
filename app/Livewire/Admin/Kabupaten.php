@@ -7,9 +7,13 @@ use App\Models\Kabupaten as Model;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Features\SupportPagination\WithoutUrlPagination;
 
 class Kabupaten extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+    
     public int $perPage = 10;
 
     public string $keyword = '';
