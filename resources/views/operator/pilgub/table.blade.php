@@ -22,16 +22,28 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">NO</th>
+            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+                NO
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
             </th>
 			
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">Kabupaten</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">Kecamatan</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">Kelurahan</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">TPS</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">DPT</th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kabupaten
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kecamatan
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kelurahan
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                TPS
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                DPT
+            </th>
 
             @foreach ($paslon as $calon)
                 <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
@@ -41,11 +53,21 @@
 
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }}" style="min-width: 200px;">Calon</th>
 
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Sah</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Tidak Sah</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Abstain</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Masuk</th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Partisipasi</th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                Suara Sah
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                Suara Tidak Sah
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                Suara Masuk
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                Abstain
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+                Partisipasi
+            </th>
         </tr>
     </thead>
 
@@ -53,7 +75,9 @@
         @forelse ($tps as $tpsDatum)
             <tr wire:key="{{ $tpsDatum->id }}" class="border-b text-center select-none cursor-pointer hover:bg-gray-200 tps" data-id="{{ $tpsDatum->id }}">
                 {{-- ID TPS --}}
-                <td class="py-3 px-4 border nomor" data-id="{{ $tpsDatum->id }}">{{ $tpsDatum->getThreeDigitsId() }}</td>
+                <td class="py-3 px-4 border nomor" data-id="{{ $tpsDatum->id }}">
+                    {{ $tpsDatum->getThreeDigitsId() }}
+                </td>
 
                 {{-- Checkbox --}}
                 <td class="py-3 px-4 border centang" data-id="{{ $tpsDatum->id }}">
@@ -97,10 +121,14 @@
                 @endforeach
 
                 {{-- Posisi --}}
-                <td class="py-3 px-4 text-xs border posisi {{ $isCalonColumnIgnored ? 'hidden' : '' }}">Gubernur/<br>Wakil Gubernur</td>
+                <td class="py-3 px-4 text-xs border posisi {{ $isCalonColumnIgnored ? 'hidden' : '' }}">
+                    Gubernur/<br>Wakil Gubernur
+                </td>
 
                 {{-- Suara Sah --}}
-                <td class="py-3 px-4 text-xs border suara-sah" data-value="{{ $tpsDatum->suara_sah }}">{{ $tpsDatum->suara_sah }}</td>
+                <td class="py-3 px-4 text-xs border suara-sah" data-value="{{ $tpsDatum->suara_sah }}">
+                    {{ $tpsDatum->suara_sah }}
+                </td>
 
                 {{-- Suara Tidak Sah --}}
                 <td class="py-3 px-4 text-xs border suara-tidak-sah" data-value="{{ $tpsDatum->suara_tidak_sah }}">
@@ -108,11 +136,15 @@
                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" data-default-value="{{ $tpsDatum->suara_tidak_sah }}" data-value="{{ $tpsDatum->suara_tidak_sah }}">
                 </td>
 
-                {{-- Abstain --}}
-                <td class="py-3 px-4 text-xs border abstain" data-value="{{ $tpsDatum->abstain }}">{{ $tpsDatum->abstain }}</td>
-
                 {{-- Suara Masuk --}}
-                <td class="py-3 px-4 text-xs border suara-masuk" data-value="{{ $tpsDatum->suara_masuk }}">{{ $tpsDatum->suara_masuk }}</td>
+                <td class="py-3 px-4 text-xs border suara-masuk" data-value="{{ $tpsDatum->suara_masuk }}">
+                    {{ $tpsDatum->suara_masuk }}
+                </td>
+
+                {{-- Abstain --}}
+                <td class="py-3 px-4 text-xs border abstain" data-value="{{ $tpsDatum->abstain }}">
+                    {{ $tpsDatum->abstain }}
+                </td>
 
                 {{-- Partisipasi --}}
                 <td class="py-3 px-4 text-xs border partisipasi {{ strtolower($tpsDatum->partisipasi) }}">
