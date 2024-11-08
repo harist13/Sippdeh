@@ -342,7 +342,7 @@ class InputSuaraUIManager {
     }
 
     onCancelEditButtonClick() {
-        if (this.isEditMode() && confirm('Yakin ingin batalkan pengeditan?')) {
+        if (this.isEditMode()) {
             this.cancelEditModeState();
             this.refreshState();
         }
