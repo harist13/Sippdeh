@@ -312,14 +312,23 @@ class InputSuaraUIManager {
             .length;
     }
 
+    repairInputValues() {
+        this.caches.components.inputs.forEach(function(input) {
+            if (input.value < 0 || input.value == '' || isNaN(input.value)) {
+                input.value = input.dataset.defaultValue || 0;
+            }
+            
+            input.dispatchEvent(new Event('keyup'));
+        });
+    }
+
     onSaveClick() {
         if (this.isEditMode() && confirm('Simpan perubahan data?')) {
             this.showSaveLoadingMessage();
+            this.repairInputValues();
 
             const data = TPS.getAll().map(tps => tps.toObject());
-            this.$wire.dispatch('submit-tps', {
-                data
-            });
+            this.$wire.dispatch('submit-tps', { data });
         }
     }
 
@@ -582,6 +591,13 @@ class InputSuaraUIManager {
         }
     }
 
+    onInputLoseFocus(event) {
+        const value = event.target.value;
+        if (value < 0 || value == '' || isNaN(value)) {
+            event.target.value = event.target.dataset.defaultValue || 0;
+        }
+    }
+
     syncEditableCellMode({
         row,
         cellQuery,
@@ -603,6 +619,7 @@ class InputSuaraUIManager {
 
                 input.onkeyup = event => onChange(tpsId, cellDataset, event.target.value);
                 input.onkeydown = this.onEditableCellInputTabClick.bind(this);
+                input.onblur = this.onInputLoseFocus;
             } else {
                 // Change to value
                 value.classList.remove('hidden');
