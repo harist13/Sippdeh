@@ -5,10 +5,10 @@
                 <i class="text-xl fas fa-bars"></i>
             </button>
             <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-8 h-10 mr-2">
-            <div class="flex flex-col">
+            <a href="{{ route('Dashboard')}}"><div class="flex flex-col">
                 <span class="text-lg font-semibold text-blue-600">Badan Kesatuan Bangsa Dan Politik</span>
                 <span class="text-sm text-gray-600">Provinsi Kalimantan Timur</span>
-            </div>
+            </div></a>
         </div>
         <div class="flex items-center">
             <div class="relative">

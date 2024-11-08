@@ -4,15 +4,15 @@ namespace App\Exports;
 
 use App\Models\RingkasanSuaraTPS;
 use App\Models\Kabupaten;
+use App\Models\Calon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use App\Models\Calon;
 
-class RangkumanExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
+class BupatiExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
 {
     protected $paslon;
     protected $filters;
@@ -20,7 +20,7 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function __construct(array $filters = [])
     {
-        $this->paslon = Calon::where('posisi', 'Gubernur')->get();
+        $this->paslon = Calon::where('posisi', 'Bupati')->get();
         $this->filters = $filters;
     }
 
@@ -40,9 +40,15 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
         ->join('kelurahan', 'tps.kelurahan_id', '=', 'kelurahan.id')
         ->join('kecamatan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
         ->join('kabupaten', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-        ->with(['suara', 'suaraCalon']);
+        ->whereHas('suaraCalon.calon', function($query) {
+            $query->where('posisi', 'Bupati');
+        })
+        ->with(['suara', 'suaraCalon' => function($query) {
+            $query->whereHas('calon', function($q) {
+                $q->where('posisi', 'Bupati');
+            });
+        }]);
 
-        // Apply filters
         if (!empty($this->filters['kabupaten_id'])) {
             $query->where('kabupaten.id', $this->filters['kabupaten_id']);
         }
@@ -79,14 +85,13 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function headings(): array
     {
-        // Get kabupaten name for title if filtered
         $title = !empty($this->filters['kabupaten_id']) ? 
-            'Resume Pilgub - ' . Kabupaten::find($this->filters['kabupaten_id'])->nama :
-            'Resume Pilgub - Semua Kabupaten';
+            'Resume Bupati - ' . Kabupaten::find($this->filters['kabupaten_id'])->nama :
+            'Resume Bupati - Semua Kabupaten';
 
         return [
             [$title],
-            [], // Empty row for spacing
+            [],
             [
                 'No',
                 'Kabupaten/Kota',
@@ -104,35 +109,30 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
     {
         $this->rowNumber++;
 
-        // Get suara data for each paslon
         $suaraData = [];
         foreach ($this->paslon as $calon) {
             $suaraCalon = $row->suaraCalon->where('calon_id', $calon->id)->first();
             $suaraData[] = $suaraCalon ? $suaraCalon->suara : 0;
         }
 
-        // Return data directly from database without calculations
         return [
-            $this->rowNumber,                    // No
-            $row->kabupaten_nama ?? '-',         // Kabupaten/Kota
-            $row->kecamatan_nama ?? '-',         // Kecamatan
-            $row->kelurahan_nama ?? '-',         // Kelurahan
-            $row->suara->dpt ?? 0,               // DPT
-            ...$suaraData,                       // Suara untuk setiap paslon
-            $row->abstain ?? 0,  // Abstain dari database
-            number_format($row->partisipasi ?? 0, 1)  // Tingkat Partisipasi dari database
+            $this->rowNumber,
+            $row->kabupaten_nama ?? '-',
+            $row->kecamatan_nama ?? '-',
+            $row->kelurahan_nama ?? '-',
+            $row->suara->dpt ?? 0,
+            ...$suaraData,
+            $row->abstain ?? 0,
+            number_format($row->partisipasi ?? 0, 1)
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Get the highest column letter
         $highestColumn = $sheet->getHighestColumn();
         
-        // Merge cells for title
-        $sheet->mergeCells('A1:' . $highestColumn . '1');
-        
         // Style for title
+        $sheet->mergeCells('A1:' . $highestColumn . '1');
         $sheet->getStyle('A1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -143,7 +143,7 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
             ],
         ]);
 
-        // Style for data headers (row 3)
+        // Style for headers
         $sheet->getStyle('A3:' . $highestColumn . '3')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -159,7 +159,7 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
             ],
         ]);
 
-        // Add borders and center alignment to all data cells
+        // Add borders to all cells
         $dataRange = 'A3:' . $highestColumn . $sheet->getHighestRow();
         $sheet->getStyle($dataRange)->applyFromArray([
             'borders' => [
@@ -173,18 +173,10 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
             ],
         ]);
 
-        // Set column width for better readability
+        // Auto-size columns
         foreach (range('A', $highestColumn) as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
-
-        // Add some basic styling for data rows
-        $contentRange = 'A4:' . $highestColumn . $sheet->getHighestRow();
-        $sheet->getStyle($contentRange)->applyFromArray([
-            'font' => [
-                'size' => 11,
-            ],
-        ]);
 
         return $sheet;
     }
