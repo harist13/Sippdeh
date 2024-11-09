@@ -231,13 +231,35 @@
                     </div>
                 </section>
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Angka Suara Masuk Kabupaten/Kota</h3>
-                    <a href="{{ route('suara') }}"><div class="p-4">
-                        <div class="mb-4">
-                            <canvas id="participationChart"></canvas>
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Perbandingan DPT dan Abstain</h3>
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-white p-4 rounded-lg text-center">
+                                <h4 class="font-semibold text-gray-600">Total DPT</h4>
+                                <p class="text-2xl font-bold text-[#3560A0]">{{ $dptAbstainData['total_dpt'] }}</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg text-center">
+                                <h4 class="font-semibold text-gray-600">Total Abstain</h4>
+                                <p class="text-2xl font-bold text-[#1E3A8A]">{{ $dptAbstainData['total_abstain'] }}</p>
+                            </div>
                         </div>
-                        <div id="legendContainer" class="bg-white p-4 rounded-lg grid grid-cols-2 gap-4"></div>
-                    </div></a>
+                        <div class="mb-4 relative">
+                            <canvas id="participationChart"></canvas>
+                            <!-- Legend di pojok kiri bawah -->
+                            <div class="absolute mt-2 left-2 bg-white p-2 rounded-lg shadow">
+                                <div class="flex flex-col">
+                                    <div class="flex items-center mb-1">
+                                        <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
+                                        <span class="text-sm">DPT</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-4 h-4 bg-[#1E3A8A] mr-2"></div>
+                                        <span class="text-sm">Abstain</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
 
@@ -721,22 +743,17 @@
         // diagram pie
         
         document.addEventListener('DOMContentLoaded', function() {
+            const pieData = @json($dptAbstainData);
+            const colors = ['#3560A0', '#1E3A8A'];
+
             const ctx = document.getElementById('participationChart').getContext('2d');
-            new Chart(ctx, {
+            const chart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: [
-                        'Kota Samarinda', 'Kota Balikpapan', 'Kota Bontang', 'Kutai Kartanegara',
-                        'Kutai Timur', 'Kutai Barat', 'Berau', 'Paser',
-                        'Penajam Paser Utara', 'Mahakam Ulu'
-                    ],
+                    labels: pieData.labels,
                     datasets: [{
-                        data: [8.4, 10.1, 6.7, 10.9, 12.9, 13.7, 9.4, 11.2, 7.7, 9.0],
-                        backgroundColor: [
-                            '#E6F3FF', '#C5E3FF', '#A4D3FF', '#83C3FF',
-                            '#62B3FF', '#41A3FF', '#2093FF', '#0083FF',
-                            '#0065C2', '#004785'
-                        ]
+                        data: pieData.percentages,
+                        backgroundColor: colors
                     }]
                 },
                 options: {
@@ -744,10 +761,7 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: false,
-                        },
-                        title: {
-                            display: false,
+                            display: false
                         },
                         tooltip: {
                             callbacks: {
@@ -756,31 +770,8 @@
                                 }
                             }
                         }
-                    },
+                    }
                 }
-            });
-        
-            // Custom legend dengan format persentase
-            const chart = Chart.getChart(ctx);
-            const legendContainer = document.getElementById('legendContainer');
-        
-            chart.data.labels.forEach((label, index) => {
-                const legendItem = document.createElement('div');
-                legendItem.className = 'flex items-center';
-        
-                const colorBox = document.createElement('div');
-                colorBox.className = 'w-3 h-3 mr-2 flex-shrink-0';
-                colorBox.style.backgroundColor = chart.data.datasets[0].backgroundColor[index];
-        
-                const text = document.createElement('span');
-                text.className = 'text-sm';
-                // Memastikan nilai persentase ditampilkan dengan 1 angka desimal
-                const percentage = chart.data.datasets[0].data[index].toFixed(1);
-                text.textContent = `${label}: ${percentage}%`;
-        
-                legendItem.appendChild(colorBox);
-                legendItem.appendChild(text);
-                legendContainer.appendChild(legendItem);
             });
         });
         

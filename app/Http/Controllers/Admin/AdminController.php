@@ -66,8 +66,32 @@ class AdminController extends Controller
 
         $kabupatenData = $this->getKabupatenData();
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
+        $dptAbstainData = $this->getTotalDptAbstainData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData'));
+    }
+
+    private function getTotalDptAbstainData(): array 
+    {
+        // Get sum of DPT and Abstain from all regions
+        $totalData = RingkasanSuaraTPS::select(
+            \DB::raw('SUM(dpt) as total_dpt'),
+            \DB::raw('SUM(abstain) as total_abstain')
+        )->first();
+        
+        $totalDPT = max(0, $totalData->total_dpt ?? 0);
+        $totalAbstain = max(0, $totalData->total_abstain ?? 0);
+
+        return [
+            'labels' => ['DPT', 'Abstain'],
+            'values' => [$totalDPT, $totalAbstain],
+            'percentages' => [
+                round(($totalDPT > 0 ? ($totalDPT - $totalAbstain) / $totalDPT * 100 : 0), 1),
+                round(($totalDPT > 0 ? $totalAbstain / $totalDPT * 100 : 0), 1)
+            ],
+            'total_dpt' => number_format($totalDPT, 0, ',', '.'),
+            'total_abstain' => number_format($totalAbstain, 0, ',', '.')
+        ];
     }
 
     
