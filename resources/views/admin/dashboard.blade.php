@@ -778,159 +778,243 @@
         // slide gambar paslon
         
         document.addEventListener('DOMContentLoaded', function() {
-            const slider = document.getElementById('candidateSlider');
-            const dotsContainer = document.getElementById('sliderDots');
-            
-            // Calculate total slides based on actual slides in DOM
-            const slides = slider.children;
-            const totalSlides = slides.length;
-            const slideWidth = 1080; // Fixed width of each slide
-            
-            let currentPosition = 0;
-            let currentSlide = 0;
-        
-            // Set initial width of the slider container
-            slider.style.width = `${slideWidth * totalSlides}px`;
-        
-            // Generate dots dynamically
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('button');
-                dot.classList.add('mx-1', 'rounded-full', 'transition-all', 'duration-300');
-                updateDotStyle(dot, i === 0);
-                dot.addEventListener('click', () => goToSlide(i));
-                dotsContainer.appendChild(dot);
-            }
-        
-            function updateDotStyle(dot, isActive) {
-                if (isActive) {
-                    dot.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-                    dot.classList.add('bg-[#3560A0]', 'w-[61px]');
-                } else {
-                    dot.classList.remove('bg-[#3560A0]', 'w-[61px]');
-                    dot.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-                }
-                dot.classList.add('h-[11px]');
-            }
-        
-            function updateDots() {
-                const dots = dotsContainer.children;
-                for (let i = 0; i < dots.length; i++) {
-                    updateDotStyle(dots[i], i === currentSlide);
-                }
-            }
-        
-            function goToSlide(slideIndex) {
-                currentSlide = slideIndex;
-                currentPosition = -slideWidth * slideIndex;
-                updateSliderPosition();
-            }
-        
-            function slideNext() {
-                if (currentSlide < totalSlides - 1) {
-                    currentSlide++;
-                } else {
-                    currentSlide = 0;
-                }
-                goToSlide(currentSlide);
-            }
-        
-            function slidePrev() {
-                if (currentSlide > 0) {
-                    currentSlide--;
-                } else {
-                    currentSlide = totalSlides - 1;
-                }
-                goToSlide(currentSlide);
-            }
-        
-            function updateSliderPosition() {
-                slider.style.transition = 'transform 500ms ease-in-out';
-                slider.style.transform = `translateX(${currentPosition}px)`;
-                updateDots();
-            }
-        
-            // Touch and drag functionality
-            let isDragging = false;
-            let startPos = 0;
-            let currentTranslate = 0;
-            let prevTranslate = 0;
-        
-            slider.addEventListener('mousedown', dragStart);
-            slider.addEventListener('touchstart', dragStart);
-            slider.addEventListener('mouseup', dragEnd);
-            slider.addEventListener('touchend', dragEnd);
-            slider.addEventListener('mouseleave', dragEnd);
-            slider.addEventListener('mousemove', drag);
-            slider.addEventListener('touchmove', drag);
-        
-            function dragStart(event) {
-                isDragging = true;
-                startPos = getPositionX(event);
-                slider.style.transition = 'none';
-            }
-        
-            function drag(event) {
-                if (!isDragging) return;
-                event.preventDefault();
-                const currentPosition = getPositionX(event);
-                const diff = currentPosition - startPos;
-                currentTranslate = prevTranslate + diff;
-                
-                // Add boundaries
-                const minTranslate = -slideWidth * (totalSlides - 1);
-                const maxTranslate = 0;
-                currentTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
-                
-                slider.style.transform = `translateX(${currentTranslate}px)`;
-            }
-        
-            function dragEnd() {
-                isDragging = false;
-                const movedBy = currentTranslate - prevTranslate;
-                
-                // Determine which slide to snap to
-                if (Math.abs(movedBy) > slideWidth / 4) {
-                    if (movedBy > 0) {
-                        slidePrev();
-                    } else {
-                        slideNext();
-                    }
-                } else {
-                    goToSlide(currentSlide);
-                }
-                
-                prevTranslate = currentTranslate;
-            }
-        
-            function getPositionX(event) {
-                return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-            }
-        
-            // Auto slide functionality
-            let autoSlideInterval = setInterval(slideNext, 5000);
-        
-            // Reset interval on user interaction
-            dotsContainer.addEventListener('click', () => {
-                clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(slideNext, 5000);
-            });
-        
-            slider.addEventListener('mousedown', () => {
-                clearInterval(autoSlideInterval);
-            });
-        
-            slider.addEventListener('touchstart', () => {
-                clearInterval(autoSlideInterval);
-            });
-        
-            slider.addEventListener('mouseup', () => {
-                autoSlideInterval = setInterval(slideNext, 5000);
-            });
-        
-            slider.addEventListener('touchend', () => {
-                autoSlideInterval = setInterval(slideNext, 5000);
-            });
+    const slider = document.getElementById('candidateSlider');
+    const dotsContainer = document.getElementById('sliderDots');
+    const slides = slider.children;
+    const slideWidth = 1080;
+    const candidatesPerSlide = 6;
+    
+    const totalCandidates = slides.length;
+    const totalSlides = Math.ceil(totalCandidates / candidatesPerSlide);
+    
+    let currentPosition = 0;
+    let currentSlide = 0;
+    let candidateAutoSlideInterval = null;
+    let participationAutoSlideInterval = null;
+    let isAllSlidesPaused = false;
+
+    // Set initial width of the slider container
+    slider.style.width = `${slideWidth * totalSlides}px`;
+
+    // Generate dots dynamically
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.classList.add('mx-1', 'rounded-full', 'transition-all', 'duration-300');
+        updateDotStyle(dot, i === 0);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    function updateDotStyle(dot, isActive) {
+        if (isActive) {
+            dot.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
+            dot.classList.add('bg-[#3560A0]', 'w-[61px]');
+        } else {
+            dot.classList.remove('bg-[#3560A0]', 'w-[61px]');
+            dot.classList.add('bg-[#b8bcc2]', 'w-[11px]');
+        }
+        dot.classList.add('h-[11px]');
+    }
+
+    function updateDots() {
+        const dots = dotsContainer.children;
+        for (let i = 0; i < dots.length; i++) {
+            updateDotStyle(dots[i], i === currentSlide);
+        }
+    }
+
+    function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        currentPosition = -slideWidth * slideIndex;
+        updateSliderPosition();
+    }
+
+    function slideNext() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        goToSlide(currentSlide);
+    }
+
+    function slidePrev() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        goToSlide(currentSlide);
+    }
+
+    function updateSliderPosition() {
+        slider.style.transition = 'transform 500ms ease-in-out';
+        slider.style.transform = `translateX(${currentPosition}px)`;
+        updateDots();
+    }
+
+    // Participation slides functionality
+    const participationSlides = document.querySelectorAll('.slide101');
+    let currentParticipationSlide = 0;
+
+    function showParticipationSlide(index) {
+        participationSlides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.classList.add('fade-out');
         });
+        participationSlides[index].classList.remove('fade-out');
+        participationSlides[index].classList.add('active', 'fade-in');
+    }
+
+    function nextParticipationSlide() {
+        currentParticipationSlide = (currentParticipationSlide + 1) % participationSlides.length;
+        showParticipationSlide(currentParticipationSlide);
+    }
+
+    function prevParticipationSlide() {
+        currentParticipationSlide = (currentParticipationSlide - 1 + participationSlides.length) % participationSlides.length;
+        showParticipationSlide(currentParticipationSlide);
+    }
+
+    // Unified play/pause control
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+    const playIcon = playPauseBtn.querySelector('.play-icon');
+
+    function startAllSlideShows() {
+        clearAllIntervals();
+        participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
+        candidateAutoSlideInterval = setInterval(slideNext, 5000);
+        isAllSlidesPaused = false;
+        
+        // Update UI
+        pauseIcon.classList.remove('hidden');
+        playIcon.classList.add('hidden');
+    }
+
+    function stopAllSlideShows() {
+        clearAllIntervals();
+        isAllSlidesPaused = true;
+        
+        // Update UI
+        pauseIcon.classList.add('hidden');
+        playIcon.classList.remove('hidden');
+    }
+
+    function clearAllIntervals() {
+        if (participationAutoSlideInterval) clearInterval(participationAutoSlideInterval);
+        if (candidateAutoSlideInterval) clearInterval(candidateAutoSlideInterval);
+    }
+
+    playPauseBtn.addEventListener('click', function() {
+        if (isAllSlidesPaused) {
+            startAllSlideShows();
+        } else {
+            stopAllSlideShows();
+        }
+    });
+
+    // Navigation button handlers for participation slides
+    document.getElementById('prevSlide101').addEventListener('click', () => {
+        prevParticipationSlide();
+        if (!isAllSlidesPaused) {
+            clearInterval(participationAutoSlideInterval);
+            participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
+        }
+    });
+
+    document.getElementById('nextSlide101').addEventListener('click', () => {
+        nextParticipationSlide();
+        if (!isAllSlidesPaused) {
+            clearInterval(participationAutoSlideInterval);
+            participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
+        }
+    });
+
+    // Touch and drag functionality for candidate slider
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+
+    slider.addEventListener('mousedown', dragStart);
+    slider.addEventListener('touchstart', dragStart);
+    slider.addEventListener('mouseup', dragEnd);
+    slider.addEventListener('touchend', dragEnd);
+    slider.addEventListener('mouseleave', dragEnd);
+    slider.addEventListener('mousemove', drag);
+    slider.addEventListener('touchmove', drag);
+
+    function dragStart(event) {
+        isDragging = true;
+        startPos = getPositionX(event);
+        slider.style.transition = 'none';
+        
+        if (!isAllSlidesPaused) {
+            clearInterval(candidateAutoSlideInterval);
+        }
+    }
+
+    function drag(event) {
+        if (!isDragging) return;
+        event.preventDefault();
+        const currentPosition = getPositionX(event);
+        const diff = currentPosition - startPos;
+        currentTranslate = prevTranslate + diff;
+        
+        const minTranslate = -slideWidth * (totalSlides - 1);
+        const maxTranslate = 0;
+        currentTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
+        
+        slider.style.transform = `translateX(${currentTranslate}px)`;
+    }
+
+    function dragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const movedBy = currentTranslate - prevTranslate;
+        if (Math.abs(movedBy) > slideWidth / 4) {
+            if (movedBy > 0) {
+                slidePrev();
+            } else {
+                slideNext();
+            }
+        } else {
+            goToSlide(currentSlide);
+        }
+        
+        prevTranslate = currentTranslate;
+        
+        if (!isAllSlidesPaused) {
+            candidateAutoSlideInterval = setInterval(slideNext, 5000);
+        }
+    }
+
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    // Initialize both sliders
+    showParticipationSlide(0);
+    goToSlide(0);
+    startAllSlideShows();
+
+    // Handle dot navigation
+    dotsContainer.addEventListener('click', () => {
+        if (!isAllSlidesPaused) {
+            clearInterval(candidateAutoSlideInterval);
+            candidateAutoSlideInterval = setInterval(slideNext, 5000);
+        }
+    });
+
+    // Mouse hover handlers (optional - uncomment if needed)
+    /*
+    slider.addEventListener('mouseenter', () => {
+        if (!isAllSlidesPaused) {
+            clearInterval(candidateAutoSlideInterval);
+        }
+    });
+
+    slider.addEventListener('mouseleave', () => {
+        if (!isAllSlidesPaused) {
+            candidateAutoSlideInterval = setInterval(slideNext, 5000);
+        }
+    });
+    */
+});
         
         
         
