@@ -27,7 +27,7 @@
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
-                        <div class="relative">
+                        <div class="relative mb-2">
                             <input 
                                 type="text" 
                                 class="search-input w-full rounded-md border border-gray-300 pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
@@ -39,6 +39,10 @@
                                 </svg>
                             </div>
                         </div>
+
+                        <button type="button" class="select-all-button text-sm text-blue-600 hover:text-blue-800 font-medium focus:outline-none">
+                            Pilih Semua
+                        </button>
                     </div>
 
                     <div class="max-h-60 overflow-y-auto py-1"> <!-- Wrap options in scrollable container -->
@@ -98,7 +102,7 @@
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
-                        <div class="relative">
+                        <div class="relative mb-2">
                             <input 
                                 type="text" 
                                 class="search-input w-full rounded-md border border-gray-300 pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
@@ -110,6 +114,10 @@
                                 </svg>
                             </div>
                         </div>
+
+                        <button type="button" class="select-all-button text-sm text-blue-600 hover:text-blue-800 font-medium focus:outline-none">
+                            Pilih Semua
+                        </button>
                     </div>
                     <div class="max-h-60 overflow-y-auto py-1">
                         @if(count($kabupaten) > 0)
@@ -172,7 +180,7 @@
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
-                        <div class="relative">
+                        <div class="relative mb-2">
                             <input 
                                 type="text" 
                                 class="search-input w-full rounded-md border border-gray-300 pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
@@ -184,6 +192,10 @@
                                 </svg>
                             </div>
                         </div>
+
+                        <button type="button" class="select-all-button text-sm text-blue-600 hover:text-blue-800 font-medium focus:outline-none">
+                            Pilih Semua
+                        </button>
                     </div>
                     <div class="max-h-60 overflow-y-auto py-1">
                         @if(count($kecamatan) > 0)
@@ -246,7 +258,7 @@
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
-                        <div class="relative">
+                        <div class="relative mb-2">
                             <input 
                                 type="text" 
                                 class="search-input w-full rounded-md border border-gray-300 pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
@@ -258,6 +270,10 @@
                                 </svg>
                             </div>
                         </div>
+
+                        <button type="button" class="select-all-button text-sm text-blue-600 hover:text-blue-800 font-medium focus:outline-none">
+                            Pilih Semua
+                        </button>
                     </div>
                     <div class="max-h-60 overflow-y-auto py-1">
                         @if(count($kelurahan) > 0)
@@ -398,6 +414,7 @@
                 const selectedText = selectContainer.querySelector('.selected-text');
                 const optionsContainer = selectContainer.querySelector('.options-container');
                 const searchInput = optionsContainer.querySelector('.search-input');
+                const selectAllButton = optionsContainer.querySelector('.select-all-button');
                 const options = optionsContainer.querySelectorAll('.option');
                 const applyButton = optionsContainer.querySelector('.apply-button');
                 
@@ -432,6 +449,39 @@
                         }
                     });
                 };
+
+                selectAllButton?.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const visibleOptions = Array.from(options).filter(option => 
+                        !option.classList.contains('hidden')
+                    );
+                    
+                    const allSelected = visibleOptions.every(option => 
+                        selectedValues.has(option.dataset.value)
+                    );
+                    
+                    visibleOptions.forEach(option => {
+                        const value = option.dataset.value;
+                        const name = option.dataset.name;
+                        const checkmark = option.querySelector('.checkmark');
+
+                        if (allSelected) {
+                            selectedValues.delete(value);
+                            option.classList.remove('bg-blue-100');
+                            checkmark.classList.remove('flex');
+                            checkmark.classList.add('hidden');
+                        } else {
+                            selectedValues.add(value);
+                            option.classList.add('bg-blue-100');
+                            checkmark.classList.remove('hidden');
+                            checkmark.classList.add('flex');
+                        }
+                    });
+                    
+                    // Update button text
+                    this.textContent = allSelected ? 'Pilih Semua' : 'Batal Pilih Semua';
+                });
 
                 function closeContainer(e) {
                     if (!selectContainer.contains(e.target)) {
