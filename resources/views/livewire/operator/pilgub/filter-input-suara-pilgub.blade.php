@@ -18,13 +18,6 @@
                     </span>
                 </button>
 
-                <!-- Hidden select for Livewire binding -->
-                <select wire:model.live="selectedProvinsi" multiple class="hidden">
-                    @foreach($provinsi as $prov)
-                        <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
-                    @endforeach
-                </select>
-
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
                         <div class="relative mb-2">
@@ -70,6 +63,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden select for Livewire binding -->
+            <select wire:model.live="selectedProvinsi" multiple class="hidden">
+                @foreach($provinsi as $prov)
+                    <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -92,13 +92,6 @@
                         </svg>
                     </span>
                 </button>
-
-                <!-- Hidden select for Livewire binding -->
-                <select wire:model.live="selectedKabupaten" multiple class="hidden">
-                    @foreach($kabupaten as $kab)
-                        <option value="{{ $kab['id'] }}">{{ $kab['name'] }}</option>
-                    @endforeach
-                </select>
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
@@ -148,6 +141,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden select for Livewire binding -->
+            <select wire:model.live="selectedKabupaten" multiple class="hidden">
+                @foreach($kabupaten as $kab)
+                    <option value="{{ $kab['id'] }}">{{ $kab['name'] }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -170,13 +170,6 @@
                         </svg>
                     </span>
                 </button>
-
-                <!-- Hidden select for Livewire binding -->
-                <select wire:model.live="selectedKecamatan" multiple class="hidden">
-                    @foreach($kecamatan as $kec)
-                        <option value="{{ $kec['id'] }}">{{ $kec['name'] }}</option>
-                    @endforeach
-                </select>
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
@@ -226,6 +219,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden select for Livewire binding -->
+            <select wire:model.live="selectedKecamatan" multiple class="hidden">
+                @foreach($kecamatan as $kec)
+                    <option value="{{ $kec['id'] }}">{{ $kec['name'] }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -248,13 +248,6 @@
                         </svg>
                     </span>
                 </button>
-
-                <!-- Hidden select for Livewire binding -->
-                <select wire:model.live="selectedKelurahan" multiple class="hidden">
-                    @foreach($kelurahan as $kel)
-                        <option value="{{ $kel['id'] }}">{{ $kel['name'] }}</option>
-                    @endforeach
-                </select>
 
                 <div class="options-container absolute z-10 mt-1 hidden w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="sticky top-0 border-b border-gray-200 bg-white px-3 py-2">
@@ -304,6 +297,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden select for Livewire binding -->
+            <select wire:model.live="selectedKelurahan" multiple class="hidden">
+                @foreach($kelurahan as $kel)
+                    <option value="{{ $kel['id'] }}">{{ $kel['name'] }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
