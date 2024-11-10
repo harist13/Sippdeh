@@ -6,23 +6,6 @@
                   {{-- Cari dan Filter --}}
                   @include('operator.resume.pilgub.search-filter')
               </div>
-              
-              @php $status = session('pesan_sukses'); @endphp
-              @isset ($status)
-                  <div class="mt-3">
-                      @include('components.alert-berhasil', ['message' => $status, 'withoutMarginBottom' => true])
-                  </div>
-              @endisset
-
-              @php $status = session('pesan_gagal'); @endphp
-              @isset ($status)
-                  <div class="mt-3">
-                      @include('components.alert-gagal', ['message' => $status])
-                  </div>
-              @endisset
-
-              {{-- Loading --}}
-              @include('operator.resume.pilgub.loading-alert')
           </div>
       </div>
 
@@ -33,14 +16,14 @@
                   <div wire:loading.delay wire:target.except="applyFilter" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                   <div class="px-4">
-                      @include('operator.resume.pilgub.table', compact('tps', 'paslon', 'includedColumns'))
+                      @include('operator.resume.pilgub.kelurahan-table', compact('suara', 'paslon', 'includedColumns'))
                   </div>
               </div>
           </div>
       </div>
 
       <div class="py-4 px-6">
-          {{ $tps->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
+          {{ $suara->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
       </div>
   </div>
 
