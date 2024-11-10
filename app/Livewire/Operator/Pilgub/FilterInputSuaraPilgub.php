@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Operator\Pilgub;
 
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
@@ -34,7 +34,7 @@ class FilterInputSuaraPilgub extends Component
         $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('livewire.filter-input-suara-pilgub', compact('provinsi', 'kabupaten', 'kecamatan', 'kelurahan'));
+        return view('livewire.operator.pilgub.filter-input-suara-pilgub', compact('provinsi', 'kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getProvinsiOptions()

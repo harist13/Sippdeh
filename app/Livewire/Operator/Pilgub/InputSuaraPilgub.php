@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Operator\Pilgub;
 
-use App\Traits\InputSuara;
 use App\Models\Calon;
 use App\Models\RingkasanSuaraTPS;
 use App\Models\SuaraCalon;
@@ -11,20 +10,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Sentry\SentrySdk;
 use Exception;
 
-class InputSuaraPilwali extends Component
+class InputSuaraPilgub extends Component
 {
-    use WithPagination, WithoutUrlPagination, InputSuara;
+    use WithPagination, WithoutUrlPagination;
 
-    public string $posisi = 'WALIKOTA';
+    public string $posisi = 'GUBERNUR';
 
-    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public string $keyword = '';
+
+    public int $perPage = 10;
+
+    public array $selectedProvinsi = [];
+    public array $selectedKabupaten = [];
+    public array $selectedKecamatan = [];
+    public array $selectedKelurahan = [];
+    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
     {
@@ -33,7 +41,7 @@ class InputSuaraPilwali extends Component
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
-        return view('livewire.input-suara-pilwali', compact('tps', 'paslon'));
+        return view('livewire.operator.pilgub.input-suara-pilgub', compact('tps', 'paslon'));
     }
 
     private function getTPS()
@@ -41,12 +49,30 @@ class InputSuaraPilwali extends Component
         $userWilayah = session('user_wilayah');
 
         $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                if (!empty($this->selectedKelurahan)) {
+                    $builder->whereIn('id', $this->selectedKelurahan);
+                }
+
+                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                    if (!empty($this->selectedKecamatan)) {
+                        $builder->whereIn('id', $this->selectedKecamatan);
+                    }
+
+                    $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
+                        if (!empty($this->selectedKabupaten)) {
+                            $builder->whereIn('id', $this->selectedKabupaten);
+                        }
+
+                        if (!empty($this->selectedProvinsi)) {
+                            $builder->whereHas('provinsi', fn (Builder $builder) => $builder->whereIn('id', $this->selectedProvinsi));
+                        }
+                        
+                        $builder->whereNama($userWilayah);
                     });
                 });
             });
+        });
 
         $builder->where(function (Builder $builder) {
             // If 'MERAH' is selected, include records with 'partisipasi' between 0 and 59 or where 'suara' does not exist
@@ -112,11 +138,33 @@ class InputSuaraPilwali extends Component
             });
         }
 
-        if ($this->posisi == 'WALIKOTA' || $this->posisi == 'BUPATI') {
+        if ($this->posisi == 'WALIKOTA') {
             $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
         }
 
         return $builder->get();
+    }
+
+    #[On('reset-filter')] 
+    public function resetFilter()
+    {
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->selectedProvinsi = [];
+        $this->selectedKabupaten = [];
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    }
+
+    #[On('apply-filter')]
+    public function applyFilter($includedColumns, $selectedProvinsi, $selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $partisipasi)
+    {
+        $this->includedColumns = $includedColumns;
+        $this->selectedProvinsi = $selectedProvinsi;
+        $this->selectedKabupaten = $selectedKabupaten;
+        $this->selectedKecamatan = $selectedKecamatan;
+        $this->selectedKelurahan = $selectedKelurahan;
+        $this->partisipasi = $partisipasi;
     }
 
     #[On('submit-tps')]
@@ -135,6 +183,7 @@ class InputSuaraPilwali extends Component
                     ],
                     [
                         'dpt' => $datum['dpt'],
+                        'kotak_kosong' => $datum['kotak_kosong'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
                         'operator_id' => $operatorId,
                     ]
