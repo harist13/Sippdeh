@@ -3,22 +3,28 @@
 namespace App\Livewire;
 
 use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Models\Provinsi;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class FilterInputSuaraPilgub extends Component
 {
-    public $includedColumns = [];
     public $selectedProvinsi = [];
     public $selectedKabupaten = [];
+    public $selectedKecamatan = [];
+    public $selectedKelurahan = [];
+    public $includedColumns = [];
     public $partisipasi = [];
 
-    public function mount($includedColumns, $selectedProvinsi, $selectedKabupaten, $partisipasi)
+    public function mount($selectedProvinsi, $selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
-        $this->includedColumns = $includedColumns;
         $this->selectedProvinsi = $selectedProvinsi;
         $this->selectedKabupaten = $selectedKabupaten;
+        $this->selectedKecamatan = $selectedKecamatan;
+        $this->selectedKelurahan = $selectedKelurahan;
+        $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
     }
 
@@ -26,13 +32,15 @@ class FilterInputSuaraPilgub extends Component
     {
         $provinsi = $this->getProvinsiOptions();
         $kabupaten = $this->getKabupatenOptions();
-        return view('livewire.filter-input-suara-pilgub', compact('provinsi', 'kabupaten'));
+        $kecamatan = $this->getKecamatanOptions();
+        $kelurahan = $this->getKelurahanOptions();
+        return view('livewire.filter-input-suara-pilgub', compact('provinsi', 'kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getProvinsiOptions()
     {
         return Provinsi::all()
-            ->map(fn ($provinsi) => ['id' => $provinsi->id, 'name' => $provinsi->nama])
+            ->map(fn (Provinsi $provinsi) => ['id' => $provinsi->id, 'name' => $provinsi->nama])
             ->toArray();
     }
 
@@ -43,12 +51,54 @@ class FilterInputSuaraPilgub extends Component
         }
 
         return Kabupaten::query()
-            ->whereHas('provinsi', fn (Builder $builder) =>
-                $builder->whereIn('id', $this->selectedProvinsi)
-            )
+            ->whereHas('provinsi', fn (Builder $builder) => $builder->whereIn('id', $this->selectedProvinsi))
             ->get()
-            ->map(fn ($kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
+            ->map(fn (Kabupaten $kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
             ->toArray();
+    }
+
+    private function getKecamatanOptions()
+    {
+        if (empty($this->selectedKabupaten)) {
+            return [];
+        }
+
+        return Kecamatan::query()
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKabupaten))
+            ->get()
+            ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
+            ->toArray();
+    }
+
+    private function getKelurahanOptions()
+    {
+        if (empty($this->selectedKecamatan)) {
+            return [];
+        }
+
+        return Kelurahan::query()
+            ->whereHas('kecamatan', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKecamatan))
+            ->get()
+            ->map(fn (Kelurahan $kelurahan) => ['id' => $kelurahan->id, 'name' => $kelurahan->nama])
+            ->toArray();
+    }
+
+    public function updatedSelectedProvinsi()
+    {
+        $this->selectedKabupaten = [];
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+    }
+
+    public function updatedSelectedKabupaten()
+    {
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+    }
+
+    public function updatedSelectedKecamatan()
+    {
+        $this->selectedKelurahan = [];
     }
 
     public function resetFilter()

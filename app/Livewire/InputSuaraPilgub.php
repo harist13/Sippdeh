@@ -27,9 +27,11 @@ class InputSuaraPilgub extends Component
 
     public int $perPage = 10;
 
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $selectedProvinsi = [];
     public array $selectedKabupaten = [];
+    public array $selectedKecamatan = [];
+    public array $selectedKelurahan = [];
+    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
