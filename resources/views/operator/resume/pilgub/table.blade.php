@@ -27,9 +27,6 @@
             <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
-                <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-            </th>
 			
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kabupaten
@@ -81,11 +78,6 @@
                 {{-- ID TPS --}}
                 <td class="py-3 px-4 border nomor" data-id="{{ $tpsDatum->id }}">
                     {{ $tpsDatum->getThreeDigitsId() }}
-                </td>
-
-                {{-- Checkbox --}}
-                <td class="py-3 px-4 border centang" data-id="{{ $tpsDatum->id }}">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
                 </td>
 
                 {{-- Kabupaten --}}
