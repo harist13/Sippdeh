@@ -49,12 +49,30 @@ class InputSuaraPilgub extends Component
         $userWilayah = session('user_wilayah');
 
         $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                if (!empty($this->selectedKelurahan)) {
+                    $builder->whereIn('id', $this->selectedKelurahan);
+                }
+
+                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                    if (!empty($this->selectedKecamatan)) {
+                        $builder->whereIn('id', $this->selectedKecamatan);
+                    }
+
+                    $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
+                        if (!empty($this->selectedKabupaten)) {
+                            $builder->whereIn('id', $this->selectedKabupaten);
+                        }
+
+                        if (!empty($this->selectedProvinsi)) {
+                            $builder->whereHas('provinsi', fn (Builder $builder) => $builder->whereIn('id', $this->selectedProvinsi));
+                        }
+                        
+                        $builder->whereNama($userWilayah);
                     });
                 });
             });
+        });
 
         $builder->where(function (Builder $builder) {
             // If 'MERAH' is selected, include records with 'partisipasi' between 0 and 59 or where 'suara' does not exist
@@ -133,15 +151,19 @@ class InputSuaraPilgub extends Component
         $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedProvinsi = [];
         $this->selectedKabupaten = [];
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
     #[On('apply-filter')]
-    public function applyFilter($includedColumns, $selectedProvinsi, $selectedKabupaten, $partisipasi)
+    public function applyFilter($includedColumns, $selectedProvinsi, $selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $partisipasi)
     {
         $this->includedColumns = $includedColumns;
         $this->selectedProvinsi = $selectedProvinsi;
         $this->selectedKabupaten = $selectedKabupaten;
+        $this->selectedKecamatan = $selectedKecamatan;
+        $this->selectedKelurahan = $selectedKelurahan;
         $this->partisipasi = $partisipasi;
     }
 

@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
-use App\Models\Provinsi;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
+use Illuminate\Database\Eloquent\Builder;
 
 class FilterInputSuaraPilgub extends Component
 {
@@ -103,6 +103,13 @@ class FilterInputSuaraPilgub extends Component
 
     public function resetFilter()
     {
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->selectedProvinsi = [];
+        $this->selectedKabupaten = [];
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+
         $this->dispatch('reset-filter');
     }
 
@@ -113,6 +120,8 @@ class FilterInputSuaraPilgub extends Component
             includedColumns: $this->includedColumns,
             selectedProvinsi: $this->selectedProvinsi,
             selectedKabupaten: $this->selectedKabupaten,
+            selectedKecamatan: $this->selectedKecamatan,
+            selectedKelurahan: $this->selectedKelurahan,
             partisipasi: $this->partisipasi
         );
 

@@ -450,16 +450,11 @@
                     });
                 };
 
-                selectAllButton?.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                selectAllButton?.addEventListener('click', function(event) {
+                    event.stopPropagation();
                     
-                    const visibleOptions = Array.from(options).filter(option => 
-                        !option.classList.contains('hidden')
-                    );
-                    
-                    const allSelected = visibleOptions.every(option => 
-                        selectedValues.has(option.dataset.value)
-                    );
+                    const visibleOptions = Array.from(options).filter(option => !option.classList.contains('hidden'));
+                    const allSelected = visibleOptions.every(option => selectedValues.has(option.dataset.value));
                     
                     visibleOptions.forEach(option => {
                         const value = option.dataset.value;
@@ -561,6 +556,10 @@
                     });
 
                     updateSelectedText();
+                    
+                    const visibleOptions = Array.from(options).filter(option => !option.classList.contains('hidden'));
+                    const allSelected = visibleOptions.every(option => selectedValues.has(option.dataset.value));
+                    selectAllButton.textContent = allSelected ? 'Batal Pilih Semua' : 'Pilih Semua' ;
                 }
                 
                 initializeFromSelect();
