@@ -390,79 +390,100 @@
                             @endforeach
                         </div>
 
-                        <!-- Navigation Controls -->
-                        <div class="flex justify-center items-center w-full mt-12 pb-4">
-                            <div class="flex items-center gap-4">
-                                <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                </button>
-                                
-                                <button id="playPauseBtn" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 pause-icon">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
-                                    </svg>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 play-icon hidden">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                    </svg>
-                                </button>
-
-                                <button id="nextSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </section>
         </div>
         
         <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
-            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out">
+            <!-- Tombol Navigasi Kiri untuk Paslon -->
+            <button id="prevSlideCandidate" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-r-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out relative">
                 @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
-                    <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" style="display: none;">
-                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
-                            @foreach($syncedCalonData[$kabupatenId] as $cal)
-                                <div class="w-[330px] flex flex-col">
-                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                                        @if ($cal['foto'])
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ Storage::disk('foto_calon_lokal')->url($cal['foto']) }}" 
-                                                alt="{{ $cal['nama'] }} / {{ $cal['nama_wakil'] }}">
-                                        @else
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ asset('assets/default.png') }}" 
-                                                alt="Default Image">
-                                        @endif
-                                    </div>
-                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                        {{ $cal['wilayah'] }}
-                                    </div>
-                                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
-                                            {{ $cal['nama'] }} / {{ $cal['nama_wakil'] }}
-                                        </h4>
-                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
-                                            {{ $cal['posisi'] }} {{ $cal['nomor_urut'] }}
-                                        </p>
-                                        <div class="flex justify-center items-center text-[#008bf9]">
-                                            <span class="font-medium">{{ number_format($cal['persentase'], 2) }}%</span>
-                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                            <span class="font-medium">{{ number_format($cal['total_suara']) }} Suara</span>
+                    @php
+                        $calon = $syncedCalonData[$kabupatenId];
+                        $totalSlides = ceil(count($calon) / 3);
+                    @endphp
+
+                    @for($slideIndex = 0; $slideIndex < $totalSlides; $slideIndex++)
+                        <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="{{ $slideIndex }}" style="display: none;">
+                            <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                                @for($i = $slideIndex * 3; $i < min(($slideIndex + 1) * 3, count($calon)); $i++)
+                                    <div class="w-[330px] flex flex-col">
+                                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                            @if ($calon[$i]['foto'])
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ Storage::disk('foto_calon_lokal')->url($calon[$i]['foto']) }}" 
+                                                    alt="{{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}">
+                                            @else
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ asset('assets/default.png') }}" 
+                                                    alt="Default Image">
+                                            @endif
+                                        </div>
+                                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                            {{ $calon[$i]['wilayah'] }}
+                                        </div>
+                                        <div class="bg-white rounded-b-2xl p-4 shadow">
+                                            <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                                {{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}
+                                            </h4>
+                                            <p class="text-[#6b6b6b] text-center text-sm mb-2">
+                                                {{ $calon[$i]['posisi'] }} {{ $calon[$i]['nomor_urut'] }}
+                                            </p>
+                                            <div class="flex justify-center items-center text-[#008bf9]">
+                                                <span class="font-medium">{{ number_format($calon[$i]['persentase'], 2) }}%</span>
+                                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                                <span class="font-medium">{{ number_format($calon[$i]['total_suara']) }} Suara</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endfor
+                            </div>
                         </div>
-                    </div>
+                    @endfor
                 @endforeach
             </div>
 
-            <div class="flex justify-center mt-4" id="sliderDots">
-                <!-- Dots will be generated dynamically via JavaScript -->
+            <br>
+
+            <!-- Tombol Navigasi Kanan untuk Paslon -->
+            <button id="nextSlideCandidate" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-l-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+
+        
+        <div class="flex justify-center items-center w-full mt-2 pb-4">
+            <div class="flex items-center gap-4">
+                <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <button id="playPauseBtn" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 pause-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 play-icon hidden">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    </svg>
+                </button>
+
+                <button id="nextSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </div>
     </main>
@@ -470,6 +491,136 @@
 
 @push('scripts')
     <script>
+
+        // slide paslon
+        document.addEventListener('DOMContentLoaded', function() {
+            const candidateSlides = document.querySelectorAll('.candidate-slide');
+            const participationSlides = document.querySelectorAll('.slide101');
+            const prevCandidateBtn = document.getElementById('prevSlideCandidate');
+            const nextCandidateBtn = document.getElementById('nextSlideCandidate');
+
+            let currentKabupatenId = '';
+            let currentSlideIndex = 0;
+
+            // Fungsi untuk mendapatkan ID kabupaten dari slide partisipasi yang aktif
+            function getActiveKabupatenId() {
+                const activeParticipationSlide = Array.from(participationSlides).find(slide => 
+                    slide.style.display !== 'none' || slide.classList.contains('active')
+                );
+                return activeParticipationSlide ? activeParticipationSlide.id.replace('slide', '') : null;
+            }
+
+            // Fungsi untuk mendapatkan total slide dalam satu kabupaten
+            function getTotalSlidesForKabupaten(kabupatenId) {
+                return Array.from(candidateSlides).filter(slide => 
+                    slide.getAttribute('data-kabupaten-id') === kabupatenId
+                ).length;
+            }
+
+            // Fungsi untuk menampilkan slide paslon
+            function showCandidateSlide(kabupatenId, slideIndex) {
+                // Sembunyikan semua slide
+                candidateSlides.forEach(slide => {
+                    slide.style.display = 'none';
+                    slide.classList.remove('fade-in');
+                    slide.classList.add('fade-out');
+                });
+
+                // Cari dan tampilkan slide yang sesuai
+                const targetSlide = Array.from(candidateSlides).find(slide => 
+                    slide.getAttribute('data-kabupaten-id') === kabupatenId &&
+                    parseInt(slide.getAttribute('data-slide-index')) === slideIndex
+                );
+
+                if (targetSlide) {
+                    targetSlide.style.display = 'block';
+                    targetSlide.classList.remove('fade-out');
+                    targetSlide.classList.add('fade-in');
+                    currentKabupatenId = kabupatenId;
+                    currentSlideIndex = slideIndex;
+                }
+
+                // Update visibility tombol navigasi
+                updateNavigationButtons(kabupatenId, slideIndex);
+            }
+
+            // Fungsi untuk mengupdate visibilitas tombol navigasi
+            function updateNavigationButtons(kabupatenId, slideIndex) {
+                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
+                
+                prevCandidateBtn.style.visibility = slideIndex === 0 ? 'hidden' : 'visible';
+                nextCandidateBtn.style.visibility = slideIndex === totalSlides - 1 ? 'hidden' : 'visible';
+            }
+
+            // Event listener untuk tombol navigasi
+            prevCandidateBtn.addEventListener('click', function() {
+                const kabupatenId = getActiveKabupatenId();
+                if (currentSlideIndex > 0) {
+                    showCandidateSlide(kabupatenId, currentSlideIndex - 1);
+                }
+            });
+
+            nextCandidateBtn.addEventListener('click', function() {
+                const kabupatenId = getActiveKabupatenId();
+                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
+                if (currentSlideIndex < totalSlides - 1) {
+                    showCandidateSlide(kabupatenId, currentSlideIndex + 1);
+                }
+            });
+
+            // Observer untuk memantau perubahan pada slide partisipasi
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && 
+                        (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                        const kabupatenId = getActiveKabupatenId();
+                        if (kabupatenId && kabupatenId !== currentKabupatenId) {
+                            showCandidateSlide(kabupatenId, 0); // Reset ke slide pertama saat kabupaten berubah
+                        }
+                    }
+                });
+            });
+
+            // Observe semua slide partisipasi
+            participationSlides.forEach(slide => {
+                observer.observe(slide, {
+                    attributes: true,
+                    attributeFilter: ['style', 'class']
+                });
+            });
+
+            // Tambahkan CSS untuk animasi
+            if (!document.getElementById('candidateSliderStyles')) {
+                const style = document.createElement('style');
+                style.id = 'candidateSliderStyles';
+                style.textContent = `
+                    .fade-in {
+                        animation: fadeIn 0.5s ease-in forwards;
+                    }
+                    
+                    .fade-out {
+                        animation: fadeOut 0.5s ease-out forwards;
+                    }
+                    
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    
+                    @keyframes fadeOut {
+                        from { opacity: 1; }
+                        to { opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Inisialisasi tampilan awal
+            const initialKabupatenId = getActiveKabupatenId();
+            if (initialKabupatenId) {
+                showCandidateSlide(initialKabupatenId, 0);
+            }
+        });
         
         // paslon singkron partisipasi
         document.addEventListener('DOMContentLoaded', function() {
@@ -775,246 +926,6 @@
             });
         });
         
-        // slide gambar paslon
-        
-        document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.getElementById('candidateSlider');
-    const dotsContainer = document.getElementById('sliderDots');
-    const slides = slider.children;
-    const slideWidth = 1080;
-    const candidatesPerSlide = 6;
-    
-    const totalCandidates = slides.length;
-    const totalSlides = Math.ceil(totalCandidates / candidatesPerSlide);
-    
-    let currentPosition = 0;
-    let currentSlide = 0;
-    let candidateAutoSlideInterval = null;
-    let participationAutoSlideInterval = null;
-    let isAllSlidesPaused = false;
-
-    // Set initial width of the slider container
-    slider.style.width = `${slideWidth * totalSlides}px`;
-
-    // Generate dots dynamically
-    for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('button');
-        dot.classList.add('mx-1', 'rounded-full', 'transition-all', 'duration-300');
-        updateDotStyle(dot, i === 0);
-        dot.addEventListener('click', () => goToSlide(i));
-        dotsContainer.appendChild(dot);
-    }
-
-    function updateDotStyle(dot, isActive) {
-        if (isActive) {
-            dot.classList.remove('bg-[#b8bcc2]', 'w-[11px]');
-            dot.classList.add('bg-[#3560A0]', 'w-[61px]');
-        } else {
-            dot.classList.remove('bg-[#3560A0]', 'w-[61px]');
-            dot.classList.add('bg-[#b8bcc2]', 'w-[11px]');
-        }
-        dot.classList.add('h-[11px]');
-    }
-
-    function updateDots() {
-        const dots = dotsContainer.children;
-        for (let i = 0; i < dots.length; i++) {
-            updateDotStyle(dots[i], i === currentSlide);
-        }
-    }
-
-    function goToSlide(slideIndex) {
-        currentSlide = slideIndex;
-        currentPosition = -slideWidth * slideIndex;
-        updateSliderPosition();
-    }
-
-    function slideNext() {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        goToSlide(currentSlide);
-    }
-
-    function slidePrev() {
-        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-        goToSlide(currentSlide);
-    }
-
-    function updateSliderPosition() {
-        slider.style.transition = 'transform 500ms ease-in-out';
-        slider.style.transform = `translateX(${currentPosition}px)`;
-        updateDots();
-    }
-
-    // Participation slides functionality
-    const participationSlides = document.querySelectorAll('.slide101');
-    let currentParticipationSlide = 0;
-
-    function showParticipationSlide(index) {
-        participationSlides.forEach(slide => {
-            slide.classList.remove('active');
-            slide.classList.add('fade-out');
-        });
-        participationSlides[index].classList.remove('fade-out');
-        participationSlides[index].classList.add('active', 'fade-in');
-    }
-
-    function nextParticipationSlide() {
-        currentParticipationSlide = (currentParticipationSlide + 1) % participationSlides.length;
-        showParticipationSlide(currentParticipationSlide);
-    }
-
-    function prevParticipationSlide() {
-        currentParticipationSlide = (currentParticipationSlide - 1 + participationSlides.length) % participationSlides.length;
-        showParticipationSlide(currentParticipationSlide);
-    }
-
-    // Unified play/pause control
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const pauseIcon = playPauseBtn.querySelector('.pause-icon');
-    const playIcon = playPauseBtn.querySelector('.play-icon');
-
-    function startAllSlideShows() {
-        clearAllIntervals();
-        participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
-        candidateAutoSlideInterval = setInterval(slideNext, 5000);
-        isAllSlidesPaused = false;
-        
-        // Update UI
-        pauseIcon.classList.remove('hidden');
-        playIcon.classList.add('hidden');
-    }
-
-    function stopAllSlideShows() {
-        clearAllIntervals();
-        isAllSlidesPaused = true;
-        
-        // Update UI
-        pauseIcon.classList.add('hidden');
-        playIcon.classList.remove('hidden');
-    }
-
-    function clearAllIntervals() {
-        if (participationAutoSlideInterval) clearInterval(participationAutoSlideInterval);
-        if (candidateAutoSlideInterval) clearInterval(candidateAutoSlideInterval);
-    }
-
-    playPauseBtn.addEventListener('click', function() {
-        if (isAllSlidesPaused) {
-            startAllSlideShows();
-        } else {
-            stopAllSlideShows();
-        }
-    });
-
-    // Navigation button handlers for participation slides
-    document.getElementById('prevSlide101').addEventListener('click', () => {
-        prevParticipationSlide();
-        if (!isAllSlidesPaused) {
-            clearInterval(participationAutoSlideInterval);
-            participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
-        }
-    });
-
-    document.getElementById('nextSlide101').addEventListener('click', () => {
-        nextParticipationSlide();
-        if (!isAllSlidesPaused) {
-            clearInterval(participationAutoSlideInterval);
-            participationAutoSlideInterval = setInterval(nextParticipationSlide, 5000);
-        }
-    });
-
-    // Touch and drag functionality for candidate slider
-    let isDragging = false;
-    let startPos = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-
-    slider.addEventListener('mousedown', dragStart);
-    slider.addEventListener('touchstart', dragStart);
-    slider.addEventListener('mouseup', dragEnd);
-    slider.addEventListener('touchend', dragEnd);
-    slider.addEventListener('mouseleave', dragEnd);
-    slider.addEventListener('mousemove', drag);
-    slider.addEventListener('touchmove', drag);
-
-    function dragStart(event) {
-        isDragging = true;
-        startPos = getPositionX(event);
-        slider.style.transition = 'none';
-        
-        if (!isAllSlidesPaused) {
-            clearInterval(candidateAutoSlideInterval);
-        }
-    }
-
-    function drag(event) {
-        if (!isDragging) return;
-        event.preventDefault();
-        const currentPosition = getPositionX(event);
-        const diff = currentPosition - startPos;
-        currentTranslate = prevTranslate + diff;
-        
-        const minTranslate = -slideWidth * (totalSlides - 1);
-        const maxTranslate = 0;
-        currentTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
-        
-        slider.style.transform = `translateX(${currentTranslate}px)`;
-    }
-
-    function dragEnd() {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        const movedBy = currentTranslate - prevTranslate;
-        if (Math.abs(movedBy) > slideWidth / 4) {
-            if (movedBy > 0) {
-                slidePrev();
-            } else {
-                slideNext();
-            }
-        } else {
-            goToSlide(currentSlide);
-        }
-        
-        prevTranslate = currentTranslate;
-        
-        if (!isAllSlidesPaused) {
-            candidateAutoSlideInterval = setInterval(slideNext, 5000);
-        }
-    }
-
-    function getPositionX(event) {
-        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-    }
-
-    // Initialize both sliders
-    showParticipationSlide(0);
-    goToSlide(0);
-    startAllSlideShows();
-
-    // Handle dot navigation
-    dotsContainer.addEventListener('click', () => {
-        if (!isAllSlidesPaused) {
-            clearInterval(candidateAutoSlideInterval);
-            candidateAutoSlideInterval = setInterval(slideNext, 5000);
-        }
-    });
-
-    // Mouse hover handlers (optional - uncomment if needed)
-    /*
-    slider.addEventListener('mouseenter', () => {
-        if (!isAllSlidesPaused) {
-            clearInterval(candidateAutoSlideInterval);
-        }
-    });
-
-    slider.addEventListener('mouseleave', () => {
-        if (!isAllSlidesPaused) {
-            candidateAutoSlideInterval = setInterval(slideNext, 5000);
-        }
-    });
-    */
-});
         
         
         
