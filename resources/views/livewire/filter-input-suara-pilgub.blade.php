@@ -7,7 +7,7 @@
     {{-- Provinsi --}}
     <div class="mb-5">
         <label for="provinsi" class="mb-2 font-bold mt-5 block">Provinsi</label>
-        <div class="custom-select" wire:key="provinsi-select">
+        <div class="wilayah-select" wire:key="provinsi-select">
             <div class="relative w-full">
                 <button type="button" class="select-button relative w-full cursor-pointer rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                     <span class="selected-text block truncate">Pilih provinsi...</span>
@@ -76,7 +76,7 @@
     {{-- Kabupaten --}}
     <div class="mb-5">
         <label for="kabupaten" class="mb-2 font-bold mt-5 block">Kabupaten</label>
-        <div class="custom-select" wire:key="kabupaten-select">
+        <div class="wilayah-select" wire:key="kabupaten-select">
             <div class="relative w-full">
                 <button type="button" class="select-button relative w-full {{ empty($selectedProvinsi) ? 'bg-gray-300 cursor-no-drop' : 'bg-white cursor-pointer' }} rounded-md border border-gray-300 py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" @empty($selectedProvinsi) disabled @endempty>
                     <span class="selected-text block truncate">
@@ -154,7 +154,7 @@
     {{-- Kecamatan --}}
     <div class="mb-5">
         <label for="kecamatan" class="mb-2 font-bold mt-5 block">Kecamatan</label>
-        <div class="custom-select" wire:key="kecamatan-select">
+        <div class="wilayah-select" wire:key="kecamatan-select">
             <div class="relative w-full">
                 <button type="button" class="select-button relative w-full {{ empty($selectedKabupaten) ? 'bg-gray-300 cursor-no-drop' : 'bg-white cursor-pointer' }} rounded-md border border-gray-300 py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" @empty($selectedKabupaten) disabled @endempty>
                     <span class="selected-text block truncate">
@@ -232,7 +232,7 @@
     {{-- Kelurahan --}}
     <div class="mb-5">
         <label for="kelurahan" class="mb-2 font-bold mt-5 block">Kelurahan</label>
-        <div class="custom-select" wire:key="kelurahan-select">
+        <div class="wilayah-select" wire:key="kelurahan-select">
             <div class="relative w-full">
                 <button type="button" class="select-button relative w-full {{ empty($selectedKecamatan) ? 'bg-gray-300 cursor-no-drop' : 'bg-white cursor-pointer' }} rounded-md border border-gray-300 py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" @empty($selectedKecamatan) disabled @endempty>
                     <span class="selected-text block truncate">
@@ -403,190 +403,12 @@
     </div>
 </div>
 
+@assets
+    <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
+@endassets
+
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.timeoutId = null;
-
-            function initializeCustomSelect(selectContainer) {
-                const button = selectContainer.querySelector('.select-button');
-                const hiddenSelect = selectContainer.querySelector('select');
-                const selectedText = selectContainer.querySelector('.selected-text');
-                const optionsContainer = selectContainer.querySelector('.options-container');
-                const searchInput = optionsContainer.querySelector('.search-input');
-                const selectAllButton = optionsContainer.querySelector('.select-all-button');
-                const options = optionsContainer.querySelectorAll('.option');
-                const applyButton = optionsContainer.querySelector('.apply-button');
-                
-                // Store selected values
-                let selectedValues = new Set();
-                
-                // Toggle options container
-                button.onclick = function() {
-                    if (button.disabled) return;
-                    
-                    const isOpen = optionsContainer.classList.contains('block');
-                    closeAllOptionContainers();
-                    
-                    if (!isOpen) {
-                        optionsContainer.classList.remove('hidden');
-                        optionsContainer.classList.add('block');
-                    }
-                };
-
-                searchInput.onkeydown = function(event) {
-                    if (event.ctrlKey && event.key === "a") {
-                        event.stopPropagation();
-                    }
-                }
-
-                searchInput.onkeyup = function(event) {
-                    options.forEach(option => {
-                        if (option.dataset.name.toLowerCase().includes(this.value.toLowerCase())) {
-                            option.classList.remove('hidden');
-                        } else {
-                            option.classList.add('hidden');
-                        }
-                    });
-                };
-
-                selectAllButton?.addEventListener('click', function(event) {
-                    event.stopPropagation();
-                    
-                    const visibleOptions = Array.from(options).filter(option => !option.classList.contains('hidden'));
-                    const allSelected = visibleOptions.every(option => selectedValues.has(option.dataset.value));
-                    
-                    visibleOptions.forEach(option => {
-                        const value = option.dataset.value;
-                        const name = option.dataset.name;
-                        const checkmark = option.querySelector('.checkmark');
-
-                        if (allSelected) {
-                            selectedValues.delete(value);
-                            option.classList.remove('bg-blue-100');
-                            checkmark.classList.remove('flex');
-                            checkmark.classList.add('hidden');
-                        } else {
-                            selectedValues.add(value);
-                            option.classList.add('bg-blue-100');
-                            checkmark.classList.remove('hidden');
-                            checkmark.classList.add('flex');
-                        }
-                    });
-                    
-                    // Update button text
-                    this.textContent = allSelected ? 'Pilih Semua' : 'Batal Pilih Semua';
-                });
-
-                function closeContainer(e) {
-                    if (!selectContainer.contains(e.target)) {
-                        optionsContainer.classList.remove('block');
-                        optionsContainer.classList.add('hidden');
-                    }
-                }
-                
-                // Close when clicking outside
-                document.removeEventListener('click', closeContainer);
-                document.addEventListener('click', closeContainer);
-                
-                // Handle option selection
-                options.forEach(option => {
-                    option.onclick = function() {
-                        const value = this.dataset.value;
-                        const name = this.dataset.name;
-                        const checkmark = this.querySelector('.checkmark');
-                        
-                        if (selectedValues.has(value)) {
-                            selectedValues.delete(value);
-                            this.classList.remove('bg-blue-100');
-                            checkmark.classList.remove('flex');
-                            checkmark.classList.add('hidden');
-                        } else {
-                            selectedValues.add(value);
-                            this.classList.add('bg-blue-100');
-                            checkmark.classList.remove('hidden');
-                            checkmark.classList.add('flex');
-                        }
-                    };
-                });
-
-                applyButton.onclick = function() {
-                    updateSelectedText();
-
-                    // Update the hidden select
-                    Array.from(hiddenSelect.options).forEach(option => {
-                        option.selected = selectedValues.has(option.value);
-                    });
-                    
-                    // Dispatch change event
-                    hiddenSelect.dispatchEvent(new Event('change'));
-                };
-                
-                // Update selected text
-                function updateSelectedText() {
-                    if (selectedValues.size === 0) {
-                        // selectedText.textContent = button.disabled ? 
-                        //     'Pilih provinsi terlebih dahulu...' : 
-                        //     'Pilih ' + (selectContainer.closest('[wire\\:key="provinsi-select"]') ? 'provinsi' : 'kabupaten') + '...';
-                        
-                        selectedText.textContent = 'Pilih...';
-                    } else {
-                        const selectedNames = Array.from(options)
-                            .filter(option => selectedValues.has(option.dataset.value))
-                            .map(option => option.dataset.name);
-                        
-                        selectedText.textContent = selectedNames.join(', ');
-                    }
-                }
-                
-                // Initialize from current select values
-                function initializeFromSelect() {
-                    selectedValues.clear();
-
-                    Array.from(hiddenSelect.selectedOptions).forEach(option => {
-                        selectedValues.add(option.value);
-                        const optionEl = optionsContainer.querySelector(`.option[data-value="${option.value}"]`);
-                        if (optionEl) {
-                            const checkmark = optionEl.querySelector('.checkmark');
-                            checkmark.classList.remove('hidden');
-                            checkmark.classList.add('flex');
-                            
-                            optionEl.classList.add('bg-blue-100');
-                        }
-                    });
-
-                    updateSelectedText();
-                    
-                    const visibleOptions = Array.from(options).filter(option => !option.classList.contains('hidden'));
-                    const allSelected = visibleOptions.every(option => selectedValues.has(option.dataset.value));
-                    selectAllButton.textContent = allSelected ? 'Batal Pilih Semua' : 'Pilih Semua' ;
-                }
-                
-                initializeFromSelect();
-                
-                // Listen for Livewire updates
-                document.removeEventListener('livewire:initialized', initializeFromSelect);
-                document.addEventListener('livewire:initialized', initializeFromSelect);
-            }
-            
-            function closeAllOptionContainers() {
-                document.querySelectorAll('.options-container').forEach(container => {
-                    container.classList.remove('block');
-                    container.classList.add('hidden');
-                });
-            }
-            
-            // Initialize all custom selects
-            document.querySelectorAll('.custom-select').forEach(initializeCustomSelect);
-            
-            // Re-initialize when Livewire updates the DOM
-            Livewire.hook('morph.updated', ({ el }) => {
-                clearTimeout(window.timeoutId);
-                window.timeoutId = setTimeout(() => {
-                    document.querySelectorAll('.custom-select').forEach(initializeCustomSelect);
-                    window.timeoutId = null;
-                }, 100);
-            });
-        });
+        document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
     </script>
 @endpush
