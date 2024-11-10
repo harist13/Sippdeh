@@ -42,48 +42,147 @@
         class="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center pt-[12vh] overflow-y-auto"
         x-cloak>
         <div class="w-[393px] p-4 bg-white rounded-[30px] shadow-md relative mb-[5vh]">
-        <button wire:click="$set('showFilterModal', false)"
-            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold w-8 h-8 flex items-center justify-center">
-            ×
-        </button>
+            <button wire:click="$set('showFilterModal', false)"
+                class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold w-8 h-8 flex items-center justify-center">
+                ×
+            </button>
 
             <div class="flex items-center space-x-2 mb-6">
                 <span class="text-lg font-semibold">Filter</span>
             </div>
 
             <div class="space-y-4">
-                <div class="relative">
+                <!-- Kabupaten Multiple Select -->
+                <div class="relative" x-data="{ open: false }" @click.away="open = false; $wire.resetDropdownSearch()">
                     <label class="block text-sm font-semibold mb-1">Kab/Kota</label>
-                    <select wire:model.live="kabupaten_id" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white">
-                        <option value="">Pilih Kab/Kota</option>
-                        @foreach($kabupatens as $kabupaten)
-                        <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <button @click="open = !open" 
+                                type="button"
+                                class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between">
+                            <span x-text="$wire.kabupaten_ids.length ? `${$wire.kabupaten_ids.length} dipilih` : 'Pilih Kab/Kota'"></span>
+                            <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="open" 
+                             class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
+                            <!-- Search input -->
+                            <div class="p-2 border-b">
+                                <input type="text" 
+                                       wire:model.live.debounce.300ms="searchKabupaten" 
+                                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#3560a0]"
+                                       placeholder="Cari Kabupaten..."
+                                       @click.stop>
+                            </div>
+                            <!-- Dropdown list -->
+                            <div class="max-h-60 overflow-y-auto">
+                                @if($this->filteredKabupatens->isEmpty())
+                                    <div class="px-3 py-2 text-gray-500 text-center">Tidak ada data</div>
+                                @else
+                                    @foreach($this->filteredKabupatens as $kabupaten)
+                                    <label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <input type="checkbox" 
+                                               wire:model.live="kabupaten_ids" 
+                                               value="{{ $kabupaten->id }}"
+                                               class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
+                                        <span class="ml-2">{{ $kabupaten->nama }}</span>
+                                    </label>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="relative">
+                <!-- Kecamatan Multiple Select -->
+                <div class="relative" x-data="{ open: false }" @click.away="open = false; $wire.resetDropdownSearch()">
                     <label class="block text-sm font-semibold mb-1">Kecamatan</label>
-                    <select wire:model.live="kecamatan_id" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white" 
-                            @disabled(!$kabupaten_id)>
-                        <option value="">Pilih Kecamatan</option>
-                        @foreach($kecamatans as $kecamatan)
-                        <option value="{{ $kecamatan->id }}">{{ $kecamatan->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <button @click="open = !open" 
+                                type="button"
+                                class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between"
+                                :class="{ 'opacity-50 cursor-not-allowed': !$wire.kabupaten_ids.length }"
+                                :disabled="!$wire.kabupaten_ids.length">
+                            <span x-text="$wire.kecamatan_ids.length ? `${$wire.kecamatan_ids.length} dipilih` : 'Pilih Kecamatan'"></span>
+                            <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="open && $wire.kabupaten_ids.length" 
+                             class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
+                            <!-- Search input -->
+                            <div class="p-2 border-b">
+                                <input type="text" 
+                                       wire:model.live.debounce.300ms="searchKecamatan" 
+                                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#3560a0]"
+                                       placeholder="Cari Kecamatan..."
+                                       @click.stop>
+                            </div>
+                            <!-- Dropdown list -->
+                            <div class="max-h-60 overflow-y-auto">
+                                @if($this->filteredKecamatans->isEmpty())
+                                    <div class="px-3 py-2 text-gray-500 text-center">Tidak ada data</div>
+                                @else
+                                    @foreach($this->filteredKecamatans as $kecamatan)
+                                    <label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <input type="checkbox" 
+                                               wire:model.live="kecamatan_ids" 
+                                               value="{{ $kecamatan->id }}"
+                                               class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
+                                        <span class="ml-2">{{ $kecamatan->nama }}</span>
+                                    </label>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="relative">
+                <!-- Kelurahan Multiple Select -->
+                <div class="relative" x-data="{ open: false }" @click.away="open = false; $wire.resetDropdownSearch()">
                     <label class="block text-sm font-semibold mb-1">Kelurahan</label>
-                    <select wire:model.live="kelurahan_id" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white"
-                            @disabled(!$kecamatan_id)>
-                        <option value="">Pilih Kelurahan</option>
-                        @foreach($kelurahans as $kelurahan)
-                        <option value="{{ $kelurahan->id }}">{{ $kelurahan->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <button @click="open = !open"
+                                type="button"
+                                class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between"
+                                :class="{ 'opacity-50 cursor-not-allowed': !$wire.kecamatan_ids.length }"
+                                :disabled="!$wire.kecamatan_ids.length">
+                            <span x-text="$wire.kelurahan_ids.length ? `${$wire.kelurahan_ids.length} dipilih` : 'Pilih Kelurahan'"></span>
+                            <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="open && $wire.kecamatan_ids.length" 
+                             class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
+                            <!-- Search input -->
+                            <div class="p-2 border-b">
+                                <input type="text" 
+                                       wire:model.live.debounce.300ms="searchKelurahan" 
+                                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#3560a0]"
+                                       placeholder="Cari Kelurahan..."
+                                       @click.stop>
+                            </div>
+                            <!-- Dropdown list -->
+                            <div class="max-h-60 overflow-y-auto">
+                                @if($this->filteredKelurahans->isEmpty())
+                                    <div class="px-3 py-2 text-gray-500 text-center">Tidak ada data</div>
+                                @else
+                                    @foreach($this->filteredKelurahans as $kelurahan)
+                                    <label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <input type="checkbox" 
+                                               wire:model.live="kelurahan_ids" 
+                                               value="{{ $kelurahan->id }}"
+                                               class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
+                                        <span class="ml-2">{{ $kelurahan->nama }}</span>
+                                    </label>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Hide Columns Section -->
                 <div class="relative">
                     <label class="block text-sm font-semibold mb-1">Sembunyikan Kolom</label>
                     <div class="grid grid-cols-2 gap-2">
@@ -105,6 +204,7 @@
                     </div>
                 </div>
 
+                <!-- Partisipasi Section -->
                 <div class="relative">
                     <label class="block text-sm font-semibold mb-1">Tingkat Partisipasi</label>
                     <div class="flex flex-wrap gap-2">
@@ -130,6 +230,7 @@
                 </div>
             </div>
 
+            <!-- Filter Actions -->
             <div class="flex justify-between mt-6">
                 <button wire:click="resetFilter"
                     class="w-[177px] h-10 bg-white border border-[#3560a0] text-[#3560a0] text-sm font-semibold rounded-full hover:bg-gray-50 transition-colors">
@@ -143,6 +244,7 @@
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
         <div class="overflow-hidden mb-8">
             <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
@@ -164,12 +266,12 @@
                     </div>
                     <button wire:click="$set('showFilterModal', true)"
                             class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="">
+                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="Filter">
                         Filter
                     </button>
                     <button wire:click="$set('showExportModal', true)"
                             class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
-                        <img src="{{ asset('assets/icon/download.png') }}" alt="">
+                        <img src="{{ asset('assets/icon/download.png') }}" alt="Export">
                         <span>Export</span>
                     </button>
                 </div>

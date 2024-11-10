@@ -246,7 +246,7 @@
                         <div class="mb-4 relative">
                             <canvas id="participationChart"></canvas>
                             <!-- Legend di pojok kiri bawah -->
-                            <div class="absolute mt-2 left-2 bg-white p-2 rounded-lg shadow">
+                            <div class="absolute mt-5 left-2 bg-white p-2 rounded-lg shadow">
                                 <div class="flex flex-col">
                                     <div class="flex items-center mb-1">
                                         <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>

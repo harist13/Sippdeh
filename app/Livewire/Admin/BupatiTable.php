@@ -19,13 +19,18 @@ class BupatiTable extends Component
 
     public $search = '';
     public $itemsPerPage = 10;
-    public $kabupaten_id = '';
-    public $kecamatan_id = '';
-    public $kelurahan_id = '';
+    public $kabupaten_ids = []; // Changed to array
+    public $kecamatan_ids = []; // Changed to array
+    public $kelurahan_ids = []; // Changed to array
     public $partisipasi = [];
     public $showFilterModal = false;
     public $showExportModal = false;
     public $exportKabupatenId = '';
+
+    // Search properties for dropdowns
+    public $searchKabupaten = '';
+    public $searchKecamatan = '';
+    public $searchKelurahan = '';
 
     public $kabupatens;
     public $kecamatans;
@@ -35,9 +40,9 @@ class BupatiTable extends Component
 
     protected $queryString = [
         'search' => ['except' => ''],
-        'kabupaten_id' => ['except' => ''],
-        'kecamatan_id' => ['except' => ''],
-        'kelurahan_id' => ['except' => ''],
+        'kabupaten_ids' => ['except' => []],
+        'kecamatan_ids' => ['except' => []],
+        'kelurahan_ids' => ['except' => []],
         'partisipasi' => ['except' => []],
         'hiddenColumns' => ['except' => []]
     ];
@@ -50,34 +55,83 @@ class BupatiTable extends Component
         $this->paslon = Calon::where('posisi', 'Bupati')->get();
     }
 
+    // Computed properties for filtered lists
+    public function getFilteredKabupatensProperty()
+    {
+        return $this->kabupatens->filter(function($kabupaten) {
+            return empty($this->searchKabupaten) || 
+                   str_contains(strtolower($kabupaten->nama), strtolower($this->searchKabupaten));
+        });
+    }
+
+    public function getFilteredKecamatansProperty()
+    {
+        return $this->kecamatans->filter(function($kecamatan) {
+            return empty($this->searchKecamatan) || 
+                   str_contains(strtolower($kecamatan->nama), strtolower($this->searchKecamatan));
+        });
+    }
+
+    public function getFilteredKelurahansProperty()
+    {
+        return $this->kelurahans->filter(function($kelurahan) {
+            return empty($this->searchKelurahan) || 
+                   str_contains(strtolower($kelurahan->nama), strtolower($this->searchKelurahan));
+        });
+    }
+
     public function updatedSearch()
     {
         $this->resetPage();
     }
 
-    public function updatedKabupatenId()
+    public function updatedKabupatenIds()
     {
-        $this->kecamatans = $this->kabupaten_id ? 
-            Kecamatan::where('kabupaten_id', $this->kabupaten_id)->orderBy('nama')->get() : 
-            collect();
-        $this->kecamatan_id = '';
-        $this->kelurahan_id = '';
+        if (!empty($this->kabupaten_ids)) {
+            $this->kecamatans = Kecamatan::whereIn('kabupaten_id', $this->kabupaten_ids)
+                ->orderBy('nama')
+                ->get();
+        } else {
+            $this->kecamatans = collect();
+        }
+        $this->kecamatan_ids = [];
+        $this->kelurahan_ids = [];
         $this->kelurahans = collect();
         $this->resetPage();
     }
 
-    public function updatedKecamatanId()
+    public function updatedKecamatanIds()
     {
-        $this->kelurahans = $this->kecamatan_id ? 
-            Kelurahan::where('kecamatan_id', $this->kecamatan_id)->orderBy('nama')->get() : 
-            collect();
-        $this->kelurahan_id = '';
+        if (!empty($this->kecamatan_ids)) {
+            $this->kelurahans = Kelurahan::whereIn('kecamatan_id', $this->kecamatan_ids)
+                ->orderBy('nama')
+                ->get();
+        } else {
+            $this->kelurahans = collect();
+        }
+        $this->kelurahan_ids = [];
         $this->resetPage();
+    }
+
+    // Reset search when closing dropdowns
+    public function resetDropdownSearch()
+    {
+        $this->searchKabupaten = '';
+        $this->searchKecamatan = '';
+        $this->searchKelurahan = '';
     }
 
     public function resetFilter()
     {
-        $this->reset(['kabupaten_id', 'kecamatan_id', 'kelurahan_id', 'partisipasi']);
+        $this->reset([
+            'kabupaten_ids', 
+            'kecamatan_ids', 
+            'kelurahan_ids', 
+            'partisipasi',
+            'searchKabupaten',
+            'searchKecamatan',
+            'searchKelurahan'
+        ]);
         $this->kecamatans = collect();
         $this->kelurahans = collect();
     }
@@ -87,7 +141,9 @@ class BupatiTable extends Component
         $filename = 'rangkuman-suara-bupati-' . date('Y-m-d-His') . '.xlsx';
         
         return Excel::download(new BupatiExport([
-            'kabupaten_id' => $this->exportKabupatenId,
+            'kabupaten_ids' => $this->kabupaten_ids,
+            'kecamatan_ids' => $this->kecamatan_ids,
+            'kelurahan_ids' => $this->kelurahan_ids,
             'search' => $this->search,
             'partisipasi' => $this->partisipasi
         ]), $filename);
@@ -126,16 +182,16 @@ class BupatiTable extends Component
             });
         }
 
-        if ($this->kabupaten_id) {
-            $query->where('kabupaten.id', $this->kabupaten_id);
+        if (!empty($this->kabupaten_ids)) {
+            $query->whereIn('kabupaten.id', $this->kabupaten_ids);
         }
 
-        if ($this->kecamatan_id) {
-            $query->where('kecamatan.id', $this->kecamatan_id);
+        if (!empty($this->kecamatan_ids)) {
+            $query->whereIn('kecamatan.id', $this->kecamatan_ids);
         }
 
-        if ($this->kelurahan_id) {
-            $query->where('kelurahan.id', $this->kelurahan_id);
+        if (!empty($this->kelurahan_ids)) {
+            $query->whereIn('kelurahan.id', $this->kelurahan_ids);
         }
 
         if (!empty($this->partisipasi)) {
