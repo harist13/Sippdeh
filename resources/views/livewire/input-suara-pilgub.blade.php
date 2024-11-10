@@ -48,10 +48,17 @@
     </div>
 
     <!-- Filter Pilgub Modal -->
-    @include('operator.pilgub.filter-modal', [
-        'includedColumns' => $includedColumns,
-        'partisipasi' => $partisipasi
-    ])
+    @include(
+        'operator.pilgub.filter-modal',
+        compact(
+            'selectedProvinsi',
+            'selectedKabupaten',
+            'selectedKecamatan',
+            'selectedKelurahan',
+            'includedColumns',
+            'partisipasi'
+        )
+    )
 </div>
 
 @assets

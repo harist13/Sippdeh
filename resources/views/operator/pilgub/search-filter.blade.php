@@ -16,3 +16,36 @@
         <span class="text-[#344054]">Filter</span>
     </button>
 </div>
+
+@push('scripts')
+    <script>
+        function showFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.remove('hidden');
+        }
+
+        function closeFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.add('hidden');
+        }
+        
+        function initializeFilter() {
+            document.getElementById('openFilterPilgub').addEventListener('click', showFilterPilgubModal);
+            document.getElementById('cancelFilterPilgub').addEventListener('click', closeFilterPilgubModal);
+
+            document.addEventListener('keyup', function(event) {
+                if (event.key === "Escape") {
+                    closeFilterPilgubModal();
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (event.target == filterPilgubModal) {
+                    closeFilterPilgubModal();
+                }
+            });
+        }
+
+        initializeFilter();
+    </script>
+@endpush
