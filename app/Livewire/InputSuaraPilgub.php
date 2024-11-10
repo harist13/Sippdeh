@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Traits\InputSuara;
 use App\Models\Calon;
 use App\Models\RingkasanSuaraTPS;
 use App\Models\SuaraCalon;
@@ -11,20 +10,27 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Sentry\SentrySdk;
 use Exception;
 
 class InputSuaraPilgub extends Component
 {
-    use WithPagination, WithoutUrlPagination, InputSuara;
+    use WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'GUBERNUR';
 
+    public string $keyword = '';
+
+    public int $perPage = 10;
+
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $selectedProvinsi = [];
+    public array $selectedKabupaten = [];
+    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
     {
@@ -117,6 +123,24 @@ class InputSuaraPilgub extends Component
         }
 
         return $builder->get();
+    }
+
+    #[On('reset-filter')] 
+    public function resetFilter()
+    {
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->selectedProvinsi = [];
+        $this->selectedKabupaten = [];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    }
+
+    #[On('apply-filter')]
+    public function applyFilter($includedColumns, $selectedProvinsi, $selectedKabupaten, $partisipasi)
+    {
+        $this->includedColumns = $includedColumns;
+        $this->selectedProvinsi = $selectedProvinsi;
+        $this->selectedKabupaten = $selectedKabupaten;
+        $this->partisipasi = $partisipasi;
     }
 
     #[On('submit-tps')]
