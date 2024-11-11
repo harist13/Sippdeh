@@ -231,7 +231,7 @@
                     </div>
                 </section>
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                    <h3 class="bg-[#3560A0] text-white text-center py-2">Perbandingan DPT dan Abstain</h3>
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah DPT Dan Abstain Se-Kalimantan Timur</h3>
                     <div class="p-4">
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="bg-white p-4 rounded-lg text-center">
@@ -249,11 +249,11 @@
                             <div class="absolute mt-5 left-2 bg-white p-2 rounded-lg shadow">
                                 <div class="flex flex-col">
                                     <div class="flex items-center mb-1">
-                                        <div class="w-4 h-4 bg-[#3560A0] mr-2"></div>
+                                        <div class="w-4 h-4 bg-[#66AFFF] mr-2"></div>
                                         <span class="text-sm">DPT</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <div class="w-4 h-4 bg-[#1E3A8A] mr-2"></div>
+                                        <div class="w-4 h-4 bg-[#004999] mr-2"></div>
                                         <span class="text-sm">Abstain</span>
                                     </div>
                                 </div>
@@ -339,19 +339,19 @@
                                         <div class="flex-grow pl-10">
                                             <div class="space-y-2">
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Suara Sah</h2>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
                                                     <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_sah']) }} Suara</p>
                                                 </div>
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Suara Tidak Sah</h2>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
                                                     <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_tidak_sah']) }} Suara</p>
                                                 </div>
                                                 <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">DPT</h2>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
                                                     <p class="text-lg font-bold text-gray-800">{{ number_format($data['dpt']) }} Orang</p>
                                                 </div>
                                                 <div class="flex justify-between items-center">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Abstain</h2>
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
                                                     <p class="text-lg font-bold text-gray-800">{{ number_format($data['abstain']) }} Orang</p>
                                                 </div>
                                             </div>
@@ -689,62 +689,23 @@
     });
 
         document.addEventListener('DOMContentLoaded', function() {
+            window.gubernurData = @json($chartData['data']);
             const ctx = document.getElementById('voteCountChart').getContext('2d');
             const titleElement = document.getElementById('chartTitle');
             const MAX_VALUE = 500000;
-            let currentView = 0;
-            let isHovering = false; // Add hover state tracker
-        
-            const chartData = [
-                {
-                    title: "Jumlah Angka Suara Masuk Kabupaten/Kota",
-                    data: {
-                        labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-                        datasets: [
-                            {
-                                label: 'Suara Masuk',
-                                data: [158000, 256867, 132472, 145392, 112213, 176394, 163091, 245086, 167015, 128826],
-                                backgroundColor: '#3560A0',
-                                barPercentage: 0.98,
-                                categoryPercentage: 0.5,
-                            },
-                            {
-                                label: 'DPT',
-                                data: [179000, 324534, 169432, 155372, 179193, 213285, 103193, 320193, 178456, 156183],
-                                backgroundColor: '#99C9FF',
-                                barPercentage: 0.98,
-                                categoryPercentage: 0.5,
-                            }
-                        ]
-                    }
-                },
-                {
-                    title: "Jumlah Angka Suara Sah dan Tidak Sah Kabupaten/Kota",
-                    data: {
-                        labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-                        datasets: [
-                            {
-                                label: 'Suara Sah',
-                                data: [125000, 200567, 120000, 132000, 105000, 150000, 143000, 200000, 150000, 120000],
-                                backgroundColor: '#B3E3C1',
-                                barPercentage: 0.98,
-                                categoryPercentage: 0.5,
-                            },
-                            {
-                                label: 'Suara Tidak Sah',
-                                data: [33000, 56300, 12472, 13392, 7213, 26394, 20091, 45086, 17015, 8826],
-                                backgroundColor: '#CC6F85',
-                                barPercentage: 0.98,
-                                categoryPercentage: 0.5,
-                            }
-                        ]
-                    }
+            let isHovering = false;
+
+            const chartData = {
+                title: "Perolehan Suara Gubernur Per Kabupaten/Kota",
+                data: {
+                    labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
+                    datasets: window.gubernurData.datasets // This will be populated from PHP
                 }
-            ];
-        
+            };
+
             let chart = new Chart(ctx, {
                 type: 'bar',
-                data: chartData[0].data,
+                data: chartData.data,
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -797,17 +758,15 @@
                         const previousState = isHovering;
                         isHovering = activeElements.length > 0;
                         
-                        // Only update if the hover state has changed
                         if (previousState !== isHovering) {
-                            chart.update('none'); // Update without animation
+                            chart.update('none');
                         }
                     },
                     animation: {
                         duration: 1,
                         onComplete: function(animation) {
-                            // Don't draw percentages if hovering
                             if (isHovering) return;
-        
+
                             const chartInstance = animation.chart;
                             const ctx = chartInstance.ctx;
                             ctx.textAlign = 'center';
@@ -826,17 +785,7 @@
                                     } else if (data <= 0) {
                                         percentage = 0;
                                     } else {
-                                        if (currentView === 0) {
-                                            percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
-                                        } else {
-                                            const totalVotes = chartData[1].data.datasets[0].data[index] + 
-                                                            chartData[1].data.datasets[1].data[index];
-                                            if (totalVotes > 0) {
-                                                percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
-                                            } else {
-                                                percentage = 0;
-                                            }
-                                        }
+                                        percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
                                     }
                                     
                                     const barWidth = bar.width;
@@ -863,31 +812,6 @@
                     }
                 }
             });
-        
-            function updateView(direction = 'right') {
-                titleElement.style.opacity = '0';
-                
-                setTimeout(() => {
-                    if (direction === 'right') {
-                        currentView = (currentView + 1) % chartData.length;
-                    } else {
-                        currentView = (currentView - 1 + chartData.length) % chartData.length;
-                    }
-                    
-                    titleElement.textContent = chartData[currentView].title;
-                    chart.data = chartData[currentView].data;
-                    isHovering = false; // Reset hover state on view change
-                    chart.update();
-                    
-                    titleElement.style.opacity = '1';
-                }, 300);
-            }
-        
-            document.getElementById('leftArrow').addEventListener('click', () => updateView('left'));
-            document.getElementById('rightArrow').addEventListener('click', () => updateView('right'));
-        
-            // Initial setup
-            updateView();
         });
         
         
@@ -895,7 +819,7 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             const pieData = @json($dptAbstainData);
-            const colors = ['#3560A0', '#1E3A8A'];
+            const colors = ['#66AFFF', '#004999'];
 
             const ctx = document.getElementById('participationChart').getContext('2d');
             const chart = new Chart(ctx, {

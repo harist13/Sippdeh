@@ -67,8 +67,9 @@ class AdminController extends Controller
         $kabupatenData = $this->getKabupatenData();
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
         $dptAbstainData = $this->getTotalDptAbstainData();
+        $chartData = $this->getChartData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData'));
     }
 
     private function getTotalDptAbstainData(): array 
@@ -244,6 +245,62 @@ class AdminController extends Controller
     }
 
 
+    private function getChartData(): array
+    {
+        $kabupatens = Kabupaten::all();
+        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
+        
+        if ($gubernurCalon->count() < 2) {
+            return [];
+        }
+        
+        $paslon1 = $gubernurCalon[0];
+        $paslon2 = $gubernurCalon[1];
+        
+        $labels = [];
+        $paslon1Data = [];
+        $paslon2Data = [];
+        
+        foreach ($kabupatens as $kabupaten) {
+            $labels[] = $kabupaten->nama;
+            
+            // Get votes for Paslon 1
+            $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
+                $query->where('id', $kabupaten->id);
+            })->where('calon_id', $paslon1->id)->sum('suara');
+            
+            // Get votes for Paslon 2
+            $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
+                $query->where('id', $kabupaten->id);
+            })->where('calon_id', $paslon2->id)->sum('suara');
+            
+            $paslon1Data[] = $suaraPaslon1;
+            $paslon2Data[] = $suaraPaslon2;
+        }
+        
+        return [
+            'title' => "Perolehan Suara Gubernur Per Kabupaten/Kota",
+            'data' => [
+                'labels' => $labels,
+                'datasets' => [
+                    [
+                        'label' => "{$paslon1->nama}",
+                        'data' => $paslon1Data,
+                        'backgroundColor' => '#B3E3C1',
+                        'barPercentage' => 0.98,
+                        'categoryPercentage' => 0.5,
+                    ],
+                    [
+                        'label' => "{$paslon2->nama}",
+                        'data' => $paslon2Data,
+                        'backgroundColor' => '#CC6F85',
+                        'barPercentage' => 0.98,
+                        'categoryPercentage' => 0.5,
+                    ]
+                ]
+            ]
+        ];
+    }
 
     public function rekapitulasi()
     {
