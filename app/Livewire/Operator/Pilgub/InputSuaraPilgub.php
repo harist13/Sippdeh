@@ -3,7 +3,7 @@
 namespace App\Livewire\Operator\Pilgub;
 
 use App\Models\Calon;
-use App\Models\RingkasanSuaraTPS;
+use App\Models\ResumeSuaraTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,7 +46,7 @@ class InputSuaraPilgub extends Component
     {
         $userWilayah = session('user_wilayah');
 
-        $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+        $builder = ResumeSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
             $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
                 if (!empty($this->selectedKelurahan)) {
                     $builder->whereIn('id', $this->selectedKelurahan);

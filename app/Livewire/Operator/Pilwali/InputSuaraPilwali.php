@@ -4,7 +4,7 @@ namespace App\Livewire\Operator\Pilwali;
 
 use App\Traits\InputSuara;
 use App\Models\Calon;
-use App\Models\RingkasanSuaraTPS;
+use App\Models\ResumeSuaraTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,7 +40,7 @@ class InputSuaraPilwali extends Component
     {
         $userWilayah = session('user_wilayah');
 
-        $builder = RingkasanSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+        $builder = ResumeSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
                 $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
                     $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
                         $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));

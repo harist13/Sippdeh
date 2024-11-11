@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class RingkasanSuaraTPS extends Model
+class ResumeSuaraTPS extends Model
 {
-    protected $table = 'ringkasan_suara_tps';
+    protected $table = 'resume_suara_tps';
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();

@@ -12,7 +12,7 @@ use App\Models\LoginHistory;
 use App\Models\Kabupaten;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
-use App\Models\RingkasanSuaraTPS;
+use App\Models\ResumeSuaraTPS;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -74,7 +74,7 @@ class AdminController extends Controller
     private function getTotalDptAbstainData(): array 
     {
         // Get sum of DPT and Abstain from all regions
-        $totalData = RingkasanSuaraTPS::select(
+        $totalData = ResumeSuaraTPS::select(
             \DB::raw('SUM(dpt) as total_dpt'),
             \DB::raw('SUM(abstain) as total_abstain')
         )->first();
@@ -211,7 +211,7 @@ class AdminController extends Controller
 
     private function getRingkasanDataByKabupaten(int $kabupatenId): array
     {
-        return RingkasanSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+        return ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
             $query->where('id', $kabupatenId);
         })->select(
             \DB::raw('SUM(suara_sah) as suara_sah'),

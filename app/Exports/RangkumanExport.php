@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\RingkasanSuaraTPS;
+use App\Models\ResumeSuaraTPS;
 use App\Models\Kabupaten;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -26,8 +26,8 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function collection()
     {
-        $query = RingkasanSuaraTPS::select(
-            'ringkasan_suara_tps.*',
+        $query = ResumeSuaraTPS::select(
+            'resume_suara_tps.*',
             'tps.nama as tps_nama',
             'tps.kelurahan_id',
             'kelurahan.nama as kelurahan_nama',
@@ -36,7 +36,7 @@ class RangkumanExport implements FromCollection, WithHeadings, WithMapping, With
             'kecamatan.kabupaten_id',
             'kabupaten.nama as kabupaten_nama'
         )
-        ->join('tps', 'ringkasan_suara_tps.id', '=', 'tps.id')
+        ->join('tps', 'resume_suara_tps.id', '=', 'tps.id')
         ->join('kelurahan', 'tps.kelurahan_id', '=', 'kelurahan.id')
         ->join('kecamatan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
         ->join('kabupaten', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')

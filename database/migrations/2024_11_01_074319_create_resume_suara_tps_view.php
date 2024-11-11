@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("CREATE VIEW ringkasan_suara_tps AS
+        DB::statement("CREATE VIEW resume_suara_tps AS
             SELECT 
                 tps.id AS id,
                 tps.nama AS nama,
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("DROP VIEW ringkasan_suara_tps");
+        DB::statement("DROP VIEW resume_suara_tps");
     }
 };
