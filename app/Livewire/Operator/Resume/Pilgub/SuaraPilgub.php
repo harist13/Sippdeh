@@ -4,7 +4,10 @@ namespace App\Livewire\Operator\Resume\Pilgub;
 
 use App\Models\Calon;
 use App\Models\Kabupaten;
-use App\Models\ResumeSuaraPerKelurahan;
+use App\Models\ResumeSuaraKabupaten;
+use App\Models\ResumeSuaraKecamatan;
+use App\Models\ResumeSuaraKelurahan;
+use App\Models\ResumeSuaraProvinsi;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -31,7 +34,7 @@ class SuaraPilgub extends Component
     public function mount()
     {
         $userWilayah = session('user_wilayah');
-        
+
         $kabupaten = Kabupaten::whereNama($userWilayah)->first();
         $provinsi = $kabupaten->provinsi;
 
@@ -41,15 +44,135 @@ class SuaraPilgub extends Component
 
     public function render()
     {
+        if (!empty($this->selectedKelurahan)) {
+            return $this->getKelurahanTable();
+        }
+
+        if (!empty($this->selectedKecamatan)) {
+            return $this->getKecamatanTable();
+        }
+
+        if (!empty($this->selectedKabupaten)) {
+            return $this->getKabupatenTable();
+        }
+
+        return $this->getProvinsiTable();
+    }
+
+    private function getKelurahanTable()
+    {
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKelurahan();
+        $scope = 'kelurahan';
         
-        return view('livewire.operator.resume.pilgub.suara-pilgub', compact('suara', 'paslon'));
+        return view('livewire.operator.resume.pilgub.suara-pilgub', compact('suara', 'paslon', 'scope'));
+    }
+
+    private function getKecamatanTable()
+    {
+        $paslon = $this->getCalon();
+        $suara = $this->getSuaraPerKecamatan();
+        $scope = 'kecamatan';
+        
+        return view('livewire.operator.resume.pilgub.suara-pilgub', compact('suara', 'paslon', 'scope'));
+    }
+
+    private function getKabupatenTable()
+    {
+        $paslon = $this->getCalon();
+        $suara = $this->getSuaraPerKabupaten();
+        $scope = 'kabupaten';
+        
+        return view('livewire.operator.resume.pilgub.suara-pilgub', compact('suara', 'paslon', 'scope'));
+    }
+
+    private function getProvinsiTable()
+    {
+        $paslon = $this->getCalon();
+        $suara = $this->getSuaraPerProvinsi();
+        $scope = 'provinsi';
+        
+        return view('livewire.operator.resume.pilgub.suara-pilgub', compact('suara', 'paslon', 'scope'));
     }
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPerKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraKelurahan::whereIn('id', $this->selectedKelurahan);
+
+        $builder->where(function (Builder $builder) {
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
+            }
+        
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+            }
+            
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+            }
+        });
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getSuaraPerKecamatan()
+    {
+        $builder = ResumeSuaraKecamatan::whereIn('id', $this->selectedKecamatan);
+
+        $builder->where(function (Builder $builder) {
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
+            }
+        
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+            }
+            
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+            }
+        });
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getSuaraPerKabupaten()
+    {
+        $builder = ResumeSuaraKabupaten::whereIn('id', $this->selectedKabupaten);
+
+        $builder->where(function (Builder $builder) {
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
+            }
+        
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+            }
+            
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+            }
+        });
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getSuaraPerProvinsi()
+    {
+        $builder = ResumeSuaraProvinsi::whereIn('id', $this->selectedProvinsi);
 
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {

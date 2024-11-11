@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
-class ResumeSuaraPerKelurahan extends Model
+class ResumeSuaraKelurahan extends Model
 {
-    protected $table = 'resume_suara_per_kelurahan';
+    protected $table = 'resume_suara_kelurahan';
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
