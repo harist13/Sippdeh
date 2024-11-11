@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\RangkumanController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\Operator\PilgubController;
 use App\Http\Controllers\Operator\PilwaliController;
+use App\Http\Controllers\Operator\ResumeController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -78,6 +79,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
     // Middleware untuk operator
     Route::middleware(['auth', 'role:operator'])->group(function () {
         Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
+        Route::get('/operator/resume', ResumeController::class)->name('operator.resume');
 
         Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.pilgub');
         Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.pilwali');

@@ -36,8 +36,6 @@ class InputSuaraPilgub extends Component
 
     public function render()
     {
-        $userWilayah = session('user_wilayah');
-
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
