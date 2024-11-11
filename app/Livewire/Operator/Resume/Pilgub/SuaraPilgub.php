@@ -28,7 +28,7 @@ class SuaraPilgub extends Component
     public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['PROVINSI', 'KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $includedColumns = ['PROVINSI', 'KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function mount()
@@ -211,7 +211,7 @@ class SuaraPilgub extends Component
     #[On('reset-filter')] 
     public function resetFilter()
     {
-        $this->includedColumns = ['PROVINSI', 'KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['PROVINSI', 'KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
         $this->selectedProvinsi = [];
         $this->selectedKabupaten = [];
         $this->selectedKecamatan = [];
