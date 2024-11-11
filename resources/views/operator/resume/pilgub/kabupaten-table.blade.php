@@ -36,15 +36,19 @@
                 DPT
             </th>
 
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-                Kotak Kosong
-            </th>
-
-            @foreach ($paslon as $calon)
-                <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    Kotak Kosong
                 </th>
-            @endforeach
+            @endif
+
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
+                        {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                    </th>
+                @endforeach
+            @endif
 
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 Suara Sah
@@ -88,19 +92,23 @@
                 </td>
 
                 {{-- Kotak Kosong --}}
-                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kotak_kosong }}
-                </td>
+                @if (!$isCalonColumnIgnored)
+                    <td class="py-3 px-4 text-xs border kotak-kosong">
+                        {{ $datum->kotak_kosong }}
+                    </td>
+                @endif
 
                 {{-- Calon-calon --}}
-                @foreach ($paslon as $calon)
-                    @php
-                        $suara = $datum->getCalonSuaraByCalonId($calon->id);
-                    @endphp
-                    <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
-                        {{ $suara ? $suara->total_suara : 0 }}
-                    </td>
-                @endforeach
+                @if (!$isCalonColumnIgnored)
+                    @foreach ($paslon as $calon)
+                        @php
+                            $suara = $datum->getCalonSuaraByCalonId($calon->id);
+                        @endphp
+                        <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
+                            {{ $suara ? $suara->total_suara : 0 }}
+                        </td>
+                    @endforeach
+                @endif
 
                 {{-- Suara Sah --}}
                 <td class="py-3 px-4 text-xs border suara-sah">

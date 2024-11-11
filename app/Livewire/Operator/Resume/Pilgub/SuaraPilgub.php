@@ -40,6 +40,8 @@ class SuaraPilgub extends Component
 
         $this->selectedProvinsi[] = $provinsi->id;
         $this->selectedKabupaten[] = $kabupaten->id;
+
+        $this->includedColumns = ['KABUPATEN', 'CALON'];
     }
 
     public function render()

@@ -83,22 +83,52 @@ class FilterSuaraPilgub extends Component
             ->toArray();
     }
 
+    private function syncIncludedColumnsByWilayah()
+    {
+        if (!empty($this->selectedProvinsi)) {
+            $this->includedColumns = ['PROVINSI', 'CALON'];
+        }
+
+        if (!empty($this->selectedKabupaten)) {
+            $this->includedColumns = ['KABUPATEN', 'CALON'];
+        }
+
+        if (!empty($this->selectedKecamatan)) {
+            $this->includedColumns = ['KECAMATAN', 'CALON'];
+        }
+
+        if (!empty($this->selectedKelurahan)) {
+            $this->includedColumns = ['KELURAHAN', 'CALON'];
+        }
+    }
+
     public function updatedSelectedProvinsi()
     {
         $this->selectedKabupaten = [];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
+
+        $this->syncIncludedColumnsByWilayah();
     }
 
     public function updatedSelectedKabupaten()
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
+
+        $this->syncIncludedColumnsByWilayah();
     }
 
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
+
+        $this->syncIncludedColumnsByWilayah();
+    }
+
+    public function updatedSelectedKelurahan()
+    {
+        $this->syncIncludedColumnsByWilayah();
     }
 
     public function resetFilter()
