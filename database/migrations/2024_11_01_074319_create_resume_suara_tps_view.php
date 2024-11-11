@@ -19,29 +19,29 @@ return new class extends Migration
                 COALESCE(suara_tps.dpt, 0) AS dpt,
                 COALESCE(suara_tps.kotak_kosong_pilgub, 0) AS kotak_kosong_pilgub,
                 COALESCE(suara_tps.kotak_kosong_pilwali, 0) AS kotak_kosong_pilwali,
-                COALESCE(suara_tps.kotak_kosong_pilbub, 0) AS kotak_kosong_pilbub,
+                COALESCE(suara_tps.kotak_kosong_pilbup, 0) AS kotak_kosong_pilbup,
                 (COALESCE(SUM(suara_calon.suara), 0) 
                 + COALESCE(suara_tps.kotak_kosong_pilgub, 0) 
                 + COALESCE(suara_tps.kotak_kosong_pilwali, 0) 
-                + COALESCE(suara_tps.kotak_kosong_pilbub, 0)) AS suara_sah,
+                + COALESCE(suara_tps.kotak_kosong_pilbup, 0)) AS suara_sah,
                 COALESCE(suara_tps.suara_tidak_sah, 0) AS suara_tidak_sah,
                 (COALESCE(suara_tps.dpt, 0) - (
                     (COALESCE(SUM(suara_calon.suara), 0)
                     + COALESCE(suara_tps.kotak_kosong_pilgub, 0) 
                     + COALESCE(suara_tps.kotak_kosong_pilwali, 0) 
-                    + COALESCE(suara_tps.kotak_kosong_pilbub, 0)) 
+                    + COALESCE(suara_tps.kotak_kosong_pilbup, 0)) 
                     + COALESCE(suara_tps.suara_tidak_sah, 0))) AS abstain,
                 ((COALESCE(SUM(suara_calon.suara), 0) 
                 + COALESCE(suara_tps.kotak_kosong_pilgub, 0) 
                 + COALESCE(suara_tps.kotak_kosong_pilwali, 0) 
-                + COALESCE(suara_tps.kotak_kosong_pilbub, 0)) 
+                + COALESCE(suara_tps.kotak_kosong_pilbup, 0)) 
                 + COALESCE(suara_tps.suara_tidak_sah, 0)) AS suara_masuk,
                 CASE
                     WHEN COALESCE(suara_tps.dpt, 0) > 0
                     THEN ROUND(((COALESCE(SUM(suara_calon.suara), 0) 
                                 + COALESCE(suara_tps.kotak_kosong_pilgub, 0) 
                                 + COALESCE(suara_tps.kotak_kosong_pilwali, 0) 
-                                + COALESCE(suara_tps.kotak_kosong_pilbub, 0)) 
+                                + COALESCE(suara_tps.kotak_kosong_pilbup, 0)) 
                                 + COALESCE(suara_tps.suara_tidak_sah, 0)) / COALESCE(suara_tps.dpt, 0) * 100, 1)
                     ELSE 0
                 END AS partisipasi
@@ -55,7 +55,7 @@ return new class extends Migration
                 tps.id, tps.nama, suara_tps.dpt, 
                 suara_tps.kotak_kosong_pilgub, 
                 suara_tps.kotak_kosong_pilwali, 
-                suara_tps.kotak_kosong_pilbub, 
+                suara_tps.kotak_kosong_pilbup, 
                 suara_tps.suara_tidak_sah;
         ");
     }

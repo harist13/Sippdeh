@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dpt')->default(0);
             $table->unsignedBigInteger('kotak_kosong_pilgub')->default(0);
             $table->unsignedBigInteger('kotak_kosong_pilwali')->default(0);
-            $table->unsignedBigInteger('kotak_kosong_pilbub')->default(0);
+            $table->unsignedBigInteger('kotak_kosong_pilbup')->default(0);
             $table->unsignedBigInteger('suara_tidak_sah')->default(0);
             $table->timestamps();
 
