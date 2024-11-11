@@ -11,17 +11,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FilterInputSuaraPilgub extends Component
 {
-    public $selectedProvinsi = [];
-    public $selectedKabupaten = [];
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
     public $includedColumns = [];
     public $partisipasi = [];
 
-    public function mount($selectedProvinsi, $selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
-        $this->selectedProvinsi = $selectedProvinsi;
-        $this->selectedKabupaten = $selectedKabupaten;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
@@ -30,41 +26,15 @@ class FilterInputSuaraPilgub extends Component
 
     public function render()
     {
-        $provinsi = $this->getProvinsiOptions();
-        $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('livewire.operator.pilgub.filter-input-suara-pilgub', compact('provinsi', 'kabupaten', 'kecamatan', 'kelurahan'));
-    }
-
-    private function getProvinsiOptions()
-    {
-        return Provinsi::all()
-            ->map(fn (Provinsi $provinsi) => ['id' => $provinsi->id, 'name' => $provinsi->nama])
-            ->toArray();
-    }
-
-    private function getKabupatenOptions()
-    {
-        if (empty($this->selectedProvinsi)) {
-            return [];
-        }
-
-        return Kabupaten::query()
-            ->whereHas('provinsi', fn (Builder $builder) => $builder->whereIn('id', $this->selectedProvinsi))
-            ->get()
-            ->map(fn (Kabupaten $kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
-            ->toArray();
+        return view('livewire.operator.pilgub.filter-input-suara-pilgub', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
     {
-        if (empty($this->selectedKabupaten)) {
-            return [];
-        }
-
         return Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKabupaten))
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
@@ -83,19 +53,6 @@ class FilterInputSuaraPilgub extends Component
             ->toArray();
     }
 
-    public function updatedSelectedProvinsi()
-    {
-        $this->selectedKabupaten = [];
-        $this->selectedKecamatan = [];
-        $this->selectedKelurahan = [];
-    }
-
-    public function updatedSelectedKabupaten()
-    {
-        $this->selectedKecamatan = [];
-        $this->selectedKelurahan = [];
-    }
-
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
@@ -103,11 +60,9 @@ class FilterInputSuaraPilgub extends Component
 
     public function resetFilter()
     {
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->selectedProvinsi = [];
-        $this->selectedKabupaten = [];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
+        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
         $this->dispatch('reset-filter');
@@ -117,11 +72,9 @@ class FilterInputSuaraPilgub extends Component
     {
         $event = $this->dispatch(
             'apply-filter',
-            includedColumns: $this->includedColumns,
-            selectedProvinsi: $this->selectedProvinsi,
-            selectedKabupaten: $this->selectedKabupaten,
             selectedKecamatan: $this->selectedKecamatan,
             selectedKelurahan: $this->selectedKelurahan,
+            includedColumns: $this->includedColumns,
             partisipasi: $this->partisipasi
         );
 

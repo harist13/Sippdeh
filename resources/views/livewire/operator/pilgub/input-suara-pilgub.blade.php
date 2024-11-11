@@ -51,8 +51,6 @@
     @include(
         'operator.pilgub.filter-modal',
         compact(
-            'selectedProvinsi',
-            'selectedKabupaten',
             'selectedKecamatan',
             'selectedKelurahan',
             'includedColumns',
