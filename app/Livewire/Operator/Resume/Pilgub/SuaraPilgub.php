@@ -7,6 +7,10 @@ use App\Models\Kabupaten;
 use App\Models\ResumeSuaraKabupaten;
 use App\Models\ResumeSuaraKecamatan;
 use App\Models\ResumeSuaraKelurahan;
+use App\Models\ResumeSuaraPilgubKabupaten;
+use App\Models\ResumeSuaraPilgubKecamatan;
+use App\Models\ResumeSuaraPilgubKelurahan;
+use App\Models\ResumeSuaraPilgubProvinsi;
 use App\Models\ResumeSuaraProvinsi;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
@@ -99,21 +103,9 @@ class SuaraPilgub extends Component
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilgubKelurahan::whereIn('id', $this->selectedKelurahan);
 
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-        });
+        $this->addPartisipasiFilter($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -124,21 +116,9 @@ class SuaraPilgub extends Component
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilgubKecamatan::whereIn('id', $this->selectedKecamatan);
 
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-        });
+        $this->addPartisipasiFilter($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -149,21 +129,9 @@ class SuaraPilgub extends Component
 
     private function getSuaraPerKabupaten()
     {
-        $builder = ResumeSuaraKabupaten::whereIn('id', $this->selectedKabupaten);
+        $builder = ResumeSuaraPilgubKabupaten::whereIn('id', $this->selectedKabupaten);
 
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-        });
+        $this->addPartisipasiFilter($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -174,8 +142,19 @@ class SuaraPilgub extends Component
 
     private function getSuaraPerProvinsi()
     {
-        $builder = ResumeSuaraProvinsi::whereIn('id', $this->selectedProvinsi);
+        $builder = ResumeSuaraPilgubProvinsi::whereIn('id', $this->selectedProvinsi);
 
+        $this->addPartisipasiFilter($builder);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function addPartisipasiFilter(Builder $builder)
+    {
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
                 $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
@@ -189,12 +168,6 @@ class SuaraPilgub extends Component
                 $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
             }
         });
-
-        if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
-
-        return $builder->paginate($this->perPage);
     }
 
     private function getCalon()

@@ -32,14 +32,15 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-    'operator.resume.pilgub.filter-modal',
-    compact(
-    'selectedProvinsi',
-    'selectedKabupaten',
-    'selectedKecamatan',
-    'selectedKelurahan',
-    'includedColumns',
-    'partisipasi'
-    )
+        
+        'operator.resume.pilgub.filter-modal',
+        compact(
+            'selectedProvinsi',
+            'selectedKabupaten',
+            'selectedKecamatan',
+            'selectedKelurahan',
+            'includedColumns',
+            'partisipasi'
+        )
     )
 </div>
