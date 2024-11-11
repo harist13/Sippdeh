@@ -1,6 +1,7 @@
 @php
     $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
@@ -26,8 +27,8 @@
                 NO
             </th>
 			
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
-                Kabupaten
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kecamatan
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 DPT
@@ -73,8 +74,8 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
-                {{-- Kabupaten --}}
-                <td class="py-3 px-4 text-xs border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
+                {{-- Kecamatan --}}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 
@@ -86,7 +87,7 @@
                 {{-- Kotak Kosong --}}
                 @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                     <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ $datum->kotak_kosong_pilgub }}
+                        {{ $datum->kotak_kosong_pilwali }}
                     </td>
                 @endif
 

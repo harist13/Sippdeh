@@ -3,9 +3,9 @@
         <div class="bg-white p-4 rounded-t-[20px]">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
-                    <h1 class="font-bold text-xl">Data Suara Pemilihan Gubernur</h1>
+                    <h1 class="font-bold text-xl">Data Suara Pemilihan Walikota</h1>
                     {{-- Cari dan Filter --}}
-                    @include('operator.resume.pilgub.search-filter')
+                    @include('operator.resume.pilwali.search-filter')
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                         class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
-                        @include('operator.resume.pilgub.'.$scope.'-table', compact('suara', 'paslon',
+                        @include('operator.resume.pilwali.'.$scope.'-table', compact('suara', 'paslon',
                         'includedColumns'))
                     </div>
                 </div>
@@ -32,9 +32,9 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'operator.resume.pilgub.filter-modal',
+        
+        'operator.resume.pilwali.filter-modal',
         compact(
-            'selectedKabupaten',
             'selectedKecamatan',
             'selectedKelurahan',
             'includedColumns',
