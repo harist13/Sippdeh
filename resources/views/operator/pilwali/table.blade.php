@@ -91,9 +91,9 @@
                 </td>
 
                 {{-- Kotak Kosong --}}
-                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $tpsDatum->kotak_kosong }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-                    <span class="value">{{ $tpsDatum->kotak_kosong }}</span>
-                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $tpsDatum->kotak_kosong }}" data-default-value="{{ $tpsDatum->kotak_kosong }}" autocomplete="off">
+                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $tpsDatum->kotak_kosong_pilwali }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                    <span class="value">{{ $tpsDatum->kotak_kosong_pilwali }}</span>
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $tpsDatum->kotak_kosong_pilwali }}" data-default-value="{{ $tpsDatum->kotak_kosong_pilwali }}" autocomplete="off">
                 </td>
 
                 {{-- Calon-calon --}}

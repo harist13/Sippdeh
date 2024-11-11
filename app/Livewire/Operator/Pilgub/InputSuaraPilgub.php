@@ -181,7 +181,7 @@ class InputSuaraPilgub extends Component
                     ],
                     [
                         'dpt' => $datum['dpt'],
-                        'kotak_kosong' => $datum['kotak_kosong'],
+                        'kotak_kosong_pilgub' => $datum['kotak_kosong'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
                         'operator_id' => $operatorId,
                     ]

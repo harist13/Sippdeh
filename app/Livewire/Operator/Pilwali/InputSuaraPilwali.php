@@ -135,6 +135,7 @@ class InputSuaraPilwali extends Component
                     ],
                     [
                         'dpt' => $datum['dpt'],
+                        'kotak_kosong_pilwali' => $datum['kotak_kosong'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
                         'operator_id' => $operatorId,
                     ]
