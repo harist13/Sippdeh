@@ -3,6 +3,7 @@
 namespace App\Livewire\Operator\Resume\Pilgub;
 
 use App\Models\Calon;
+use App\Models\Kabupaten;
 use App\Models\ResumeSuaraPerKelurahan;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
@@ -27,10 +28,19 @@ class SuaraPilgub extends Component
     public array $includedColumns = ['PROVINSI', 'KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-    public function render()
+    public function mount()
     {
         $userWilayah = session('user_wilayah');
+        
+        $kabupaten = Kabupaten::whereNama($userWilayah)->first();
+        $provinsi = $kabupaten->provinsi;
 
+        $this->selectedProvinsi[] = $provinsi->id;
+        $this->selectedKabupaten[] = $kabupaten->id;
+    }
+
+    public function render()
+    {
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKelurahan();
         
