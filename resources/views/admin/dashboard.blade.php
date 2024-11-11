@@ -265,25 +265,9 @@
 
             <!-- Bagian HTML untuk slider dan canvas -->
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                <h3 id="chartTitle" class="bg-[#3560A0] text-white text-center py-2 chart-title">Jumlah Angka Suara
-                    Masuk Kabupaten/Kota</h3>
+                <h3 class="bg-[#3560A0] text-white text-center py-2 chart-title">Perolehan Suara Gubernur Per Kabupaten/Kota</h3>
 
                 <div class="chart-container">
-                    <button class="nav-button nav-button-left" id="leftArrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    <button class="nav-button nav-button-right" id="rightArrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
 
                     <div class="canvas-wrapper">
                         <canvas id="voteCountChart" width="800" height="300"></canvas>
