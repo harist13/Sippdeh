@@ -214,22 +214,22 @@
     <div class="mb-5" x-data="{ partisipasiList: $wire.partisipasi }">
         <label for="partisipasi" class="mb-3 font-bold mt-5 block">Tingkat Partisipasi</label>
         <div class="flex gap-2">
-            <label for="partisipasi-hijau" class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="hidden" id="partisipasi-hijau" value="HIJAU" wire:model="partisipasi"
+            <label for="partisipasi-hijau-pilwali" class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="hidden" id="partisipasi-hijau-pilwali" value="HIJAU" wire:model="partisipasi"
                     x-on:change="partisipasiList = $wire.partisipasi" />
                 <span class="bg-green-400 text-white py-2 px-7 rounded text-sm select-none transition-all duration-200"
                     :class="{ 'border-2 border-blue-500': partisipasiList.includes('HIJAU'), 'border-2 border-transparent': !partisipasiList.includes('HIJAU') }">>
                     80%</span>
             </label>
-            <label for="partisipasi-kuning" class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="hidden" id="partisipasi-kuning" value="KUNING" wire:model="partisipasi"
+            <label for="partisipasi-kuning-pilwali" class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="hidden" id="partisipasi-kuning-pilwali" value="KUNING" wire:model="partisipasi"
                     x-on:change="partisipasiList = $wire.partisipasi" />
                 <span class="bg-yellow-400 text-white py-2 px-7 rounded text-sm select-none transition-all duration-200"
                     :class="{ 'border-2 border-blue-500': partisipasiList.includes('KUNING'), 'border-2 border-transparent': !partisipasiList.includes('KUNING') }">>
                     60%</span>
             </label>
-            <label for="partisipasi-merah" class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="hidden" id="partisipasi-merah" value="MERAH" wire:model="partisipasi" x-on:change="partisipasiList = $wire.partisipasi" />
+            <label for="partisipasi-merah-pilwali" class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="hidden" id="partisipasi-merah-pilwali" value="MERAH" wire:model="partisipasi" x-on:change="partisipasiList = $wire.partisipasi" />
                 <span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none transition-all duration-200" :class="{ 'border-2 border-blue-500': partisipasiList.includes('MERAH'), 'border-2 border-transparent': !partisipasiList.includes('MERAH') }">
                     < 60%
                 </span>
