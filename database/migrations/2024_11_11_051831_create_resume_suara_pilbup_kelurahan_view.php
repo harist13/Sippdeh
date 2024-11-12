@@ -18,7 +18,7 @@ return new class extends Migration
                 kelurahan.nama AS nama,
                 kelurahan.kecamatan_id as kecamatan_id,
                 COALESCE(SUM(resume_suara_pilbup_tps.dpt), 0) AS dpt,
-                COALESCE(SUM(resume_suara_pilbup_tps.kotak_kosong_pilbup), 0) AS kotak_kosong_pilbup,
+                COALESCE(SUM(resume_suara_pilbup_tps.kotak_kosong), 0) AS kotak_kosong,
                 COALESCE(SUM(resume_suara_pilbup_tps.suara_sah), 0) AS suara_sah,
                 COALESCE(SUM(resume_suara_pilbup_tps.suara_tidak_sah), 0) AS suara_tidak_sah,
                 COALESCE(SUM(resume_suara_pilbup_tps.suara_masuk), 0) AS suara_masuk,

@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('alamat');
+            $table->unsignedBigInteger('dpt')->default(0);
             $table->foreignId('kelurahan_id')->constrained('kelurahan')->onDelete('cascade');
             $table->timestamps();
         });

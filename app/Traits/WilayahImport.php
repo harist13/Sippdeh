@@ -115,7 +115,7 @@ trait WilayahImport {
     private function getTPSModel(string $namaTPS, string $alamat, int $kelurahanId): ?TPS
     {
         try {
-            $tps = new TPS(['nama' => $namaTPS, 'alamat' => $alamat, 'kelurahan_id' => $kelurahanId]);
+            $tps = new TPS(['nama' => $namaTPS, 'alamat' => $alamat, 'dpt' => rand(300, 400), 'kelurahan_id' => $kelurahanId]);
             return $tps;
         } catch (Exception $exception) {
             throw new Exception("Error in getKelurahan: " . $exception->getMessage(), 0, $exception);

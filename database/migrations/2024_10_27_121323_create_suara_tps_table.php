@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('suara_tps', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dpt')->default(0);
-            $table->unsignedBigInteger('kotak_kosong_pilgub')->default(0);
-            $table->unsignedBigInteger('kotak_kosong_pilwali')->default(0);
-            $table->unsignedBigInteger('kotak_kosong_pilbup')->default(0);
+            $table->unsignedBigInteger('kotak_kosong')->default(0);
             $table->unsignedBigInteger('suara_tidak_sah')->default(0);
+            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
             $table->timestamps();
 
             $table->foreignId('operator_id')->nullable()

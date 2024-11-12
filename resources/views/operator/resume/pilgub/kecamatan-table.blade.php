@@ -103,7 +103,7 @@
                 {{-- Kotak Kosong --}}
                 @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                     <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ $datum->kotak_kosong_pilgub }}
+                        {{ $datum->kotak_kosong }}
                     </td>
                 @endif
 
