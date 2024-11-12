@@ -4,7 +4,6 @@ namespace App\Livewire\Operator\Pilgub;
 
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubTPS;
-use App\Models\ResumeSuaraTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
@@ -122,7 +121,7 @@ class InputSuaraPilgub extends Component
     private function getCalon()
     {
         $userWilayah = session('user_wilayah');
-        $builder = Calon::with('suaraCalon');
+        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
 
         $builder->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
             $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));

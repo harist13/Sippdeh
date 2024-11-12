@@ -11,8 +11,41 @@
     </div>
     <button
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
-        id="openFilterPilgub">
+        id="openFilterPilwali">
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
     </button>
 </div>
+
+@push('scripts')
+    <script>
+        function showFilterPilwaliModal() {
+            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
+            filterPilwaliModal.classList.remove('hidden');
+        }
+
+        function closeFilterPilwaliModal() {
+            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
+            filterPilwaliModal.classList.add('hidden');
+        }
+        
+        function initializeFilter() {
+            document.getElementById('openFilterPilwali').addEventListener('click', showFilterPilwaliModal);
+            document.getElementById('cancelFilterPilwali').addEventListener('click', closeFilterPilwaliModal);
+
+            document.addEventListener('keyup', function(event) {
+                if (event.key === "Escape") {
+                    closeFilterPilwaliModal();
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (event.target == filterPilwaliModal) {
+                    closeFilterPilwaliModal();
+                }
+            });
+        }
+
+        initializeFilter();
+    </script>
+@endpush

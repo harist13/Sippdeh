@@ -2,9 +2,8 @@
 
 namespace App\Livewire\Operator\Pilwali;
 
-use App\Traits\InputSuara;
 use App\Models\Calon;
-use App\Models\ResumeSuaraTPS;
+use App\Models\ResumeSuaraPilwaliTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,16 +19,22 @@ use Exception;
 
 class InputSuaraPilwali extends Component
 {
-    use WithPagination, WithoutUrlPagination, InputSuara;
+    use WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'WALIKOTA';
 
+    public string $keyword = '';
+
+    public int $perPage = 10;
+
+    public array $selectedKabupaten = [];
+    public array $selectedKecamatan = [];
+    public array $selectedKelurahan = [];
     public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
     {
-        $userWilayah = session('user_wilayah');
-
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
@@ -40,16 +45,37 @@ class InputSuaraPilwali extends Component
     {
         $userWilayah = session('user_wilayah');
 
-        $builder = ResumeSuaraTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        $builder = ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
+                    $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
+                        $builder->whereNama($userWilayah);
                     });
                 });
             });
+        });
+
+        if (!empty($this->selectedKelurahan)) {
+            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    if (!empty($this->selectedKelurahan)) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    }
+                });
+            });
+        }
+
+        if (!empty($this->selectedKecamatan)) {
+            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        $builder->whereIn('id', $this->selectedKecamatan);
+                    });
+                });
+            });
+        }
 
         $builder->where(function (Builder $builder) {
-            // If 'MERAH' is selected, include records with 'partisipasi' between 0 and 59 or where 'suara' does not exist
             if (in_array('MERAH', $this->partisipasi)) {
                 $builder->where(function (Builder $builder) {
                     $builder
@@ -60,7 +86,6 @@ class InputSuaraPilwali extends Component
                 });
             }
         
-            // Handle 'HIJAU' and 'KUNING' conditions if they are selected
             if (in_array('KUNING', $this->partisipasi)) {
                 $builder->orWhereHas('suara', function (Builder $builder) {
                     $builder->whereRaw('partisipasi BETWEEN 60 AND 79.9');
@@ -96,27 +121,29 @@ class InputSuaraPilwali extends Component
     private function getCalon()
     {
         $userWilayah = session('user_wilayah');
-        $builder = Calon::with('suaraCalon');
+        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
 
-        // TODO: Pakai yang ini kalau mau menampilkan semua calon
-        // $builder->orWhereHas('provinsi', function (Builder $builder) use ($userWilayah) {
-        //     $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-        // });
-
-        // $builder->orWhereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-
-        // TODO: Pakai yang ini kalau mau menampilkan calon berdasarkan posisi
-        if ($this->posisi == 'GUBERNUR') {
-            $builder->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-            });
-        }
-
-        if ($this->posisi == 'WALIKOTA' || $this->posisi == 'BUPATI') {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-        }
+        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
 
         return $builder->get();
+    }
+
+    #[On('reset-filter')] 
+    public function resetFilter()
+    {
+        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    }
+
+    #[On('apply-filter')]
+    public function applyFilter($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    {
+        $this->selectedKecamatan = $selectedKecamatan;
+        $this->selectedKelurahan = $selectedKelurahan;
+        $this->includedColumns = $includedColumns;
+        $this->partisipasi = $partisipasi;
     }
 
     #[On('submit-tps')]
