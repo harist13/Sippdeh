@@ -16,7 +16,7 @@ class SuaraPilbup extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
-    public string $posisi = 'WALIKOTA';
+    public string $posisi = 'BUPATI';
 
     public string $keyword = '';
 
