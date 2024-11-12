@@ -26,7 +26,7 @@ class FilterInputSuaraPilwali extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('livewire.operator.pilwali.filter-input-suara-pilwali', compact('kecamatan', 'kelurahan'));
+        return view('operator.input-suara.pilwali.filter-modal', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
