@@ -136,4 +136,8 @@ class RangkumanController extends Controller
         $filename = 'rangkuman-suara-' . date('Y-m-d-His') . '.xlsx';
         return Excel::download(new RangkumanExport($request), $filename);
     }
+
+    public function suara() {
+        return view ('admin.suara');
+    }
 }
