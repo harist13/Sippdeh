@@ -247,7 +247,7 @@ class AdminController extends Controller
 
     private function getChartData(): array
     {
-        $kabupatens = Kabupaten::all();
+        $kabupatens = Kabupaten::orderBy('nama', 'asc')->get();
         $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
         
         if ($gubernurCalon->count() < 2) {
@@ -262,7 +262,9 @@ class AdminController extends Controller
         $paslon2Data = [];
         
         foreach ($kabupatens as $kabupaten) {
-            $labels[] = $kabupaten->nama;
+            // Format label to include line break for better spacing
+            $namaKabupaten = str_replace(['Kota ', 'Kabupaten '], '', $kabupaten->nama);
+            $labels[] = $namaKabupaten;
             
             // Get votes for Paslon 1
             $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
@@ -286,14 +288,14 @@ class AdminController extends Controller
                     [
                         'label' => "{$paslon1->nama}",
                         'data' => $paslon1Data,
-                        'backgroundColor' => '#B3E3C1',
+                        'backgroundColor' => '#3560A0',
                         'barPercentage' => 0.98,
                         'categoryPercentage' => 0.5,
                     ],
                     [
                         'label' => "{$paslon2->nama}",
                         'data' => $paslon2Data,
-                        'backgroundColor' => '#CC6F85',
+                        'backgroundColor' => '#F9D926',
                         'barPercentage' => 0.98,
                         'categoryPercentage' => 0.5,
                     ]

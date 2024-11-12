@@ -196,7 +196,7 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 gap-8 mb-8">
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                    <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Jumlah Suara Masuk Paslon</h3>
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Perolehan Suara Gubernur Per-Kabupaten/Kota</h3>
                     <div id="map" class="p-4 relative">
                         @include('admin.peta-kaltim.map')
                         <div id="tooltip" class="hidden">
@@ -672,6 +672,8 @@
         startAutoplay();
     });
 
+
+        // diagram bar
         document.addEventListener('DOMContentLoaded', function() {
             window.gubernurData = @json($chartData['data']);
             const ctx = document.getElementById('voteCountChart').getContext('2d');
@@ -681,10 +683,7 @@
 
             const chartData = {
                 title: "Perolehan Suara Gubernur Per Kabupaten/Kota",
-                data: {
-                    labels: ['Berau', 'Kota Balikpapan', 'Kota Bontang', 'Kota Samarinda', 'Kutai Barat', 'Kutai Kartanegara', 'Kutai Timur', 'Mahakam Ulu', 'Paser', 'Penajam Paser Utara'],
-                    datasets: window.gubernurData.datasets // This will be populated from PHP
-                }
+                data: window.gubernurData
             };
 
             let chart = new Chart(ctx, {
@@ -697,7 +696,7 @@
                         x: {
                             grid: { display: false },
                             ticks: {
-                                font: { size: 12 },
+                                font: { size: 9 },
                                 maxRotation: 0,
                                 minRotation: 0,
                                 autoSkip: false
@@ -781,7 +780,7 @@
                                         ctx.save();
                                         ctx.translate(barX, barY + barHeight/2);
                                         ctx.rotate(-Math.PI / 2);
-                                        ctx.fillStyle = '#000000';
+                                        ctx.fillStyle = '#FFFFFF';
                                         
                                         const percentageText = percentage === 100 ? '100%' : 
                                                             percentage === 0 ? '0%' : 

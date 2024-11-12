@@ -4,7 +4,7 @@
                     <!-- Title -->
                     <div class="w-full lg:w-auto">
                         <h2 class="text-lg font-bold bg-[#3560A0] text-white px-4 py-2 rounded shadow-sm inline-block">
-                            Jumlah Partisipasi Suara Provinsi Kalimantan Timur
+                            Jumlah Partisipasi Suara Tertinggi Provinsi Kalimantan Timur
                         </h2>
                     </div>
 
