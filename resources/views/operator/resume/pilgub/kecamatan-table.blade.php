@@ -7,19 +7,6 @@
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
-@push('styles')
-    <style>
-        /* Disable spinner on number input */
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-    </style>
-@endpush
-
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>

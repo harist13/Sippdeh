@@ -108,12 +108,6 @@ class FilterSuaraPilgub extends Component
 
     public function resetFilter()
     {
-        $this->selectedKabupaten = [];
-        $this->selectedKecamatan = [];
-        $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
-
         $this->dispatch('reset-filter');
     }
 

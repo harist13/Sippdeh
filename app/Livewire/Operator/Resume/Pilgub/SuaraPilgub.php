@@ -8,7 +8,6 @@ use App\Models\Kabupaten;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
-use App\Models\ResumeSuaraPilgubProvinsi;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -34,13 +33,7 @@ class SuaraPilgub extends Component
 
     public function mount()
     {
-        $this->selectedKabupaten = Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
-            ->pluck('id')
-            ->all();
-
+        $this->fillSelectedKabupaten();
         $this->includedColumns = ['KABUPATEN', 'CALON'];
     }
 
@@ -150,13 +143,24 @@ class SuaraPilgub extends Component
         return $builder->get();
     }
 
+    private function fillSelectedKabupaten()
+    {
+        $this->selectedKabupaten = Kabupaten::query()
+            ->whereHas('provinsi', function (Builder $builder) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            })
+            ->pluck('id')
+            ->all();
+    }
+
     #[On('reset-filter')] 
     public function resetFilter()
     {
-        $this->selectedKabupaten = [];
+        $this->fillSelectedKabupaten();
+
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
@@ -173,6 +177,7 @@ class SuaraPilgub extends Component
     public function export()
     {
         $sheet = new ResumePilgubExport(
+            $this->keyword,
             $this->selectedKabupaten,
             $this->selectedKecamatan,
             $this->selectedKelurahan,
