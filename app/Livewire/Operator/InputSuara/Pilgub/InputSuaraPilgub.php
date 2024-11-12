@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Livewire\Operator\Pilwali;
+namespace App\Livewire\Operator\InputSuara\Pilgub;
 
 use App\Models\Calon;
-use App\Models\ResumeSuaraPilwaliTPS;
+use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Sentry\SentrySdk;
 use Exception;
 
-class InputSuaraPilwali extends Component
+class InputSuaraPilgub extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
-    public string $posisi = 'WALIKOTA';
+    public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
 
@@ -38,14 +38,14 @@ class InputSuaraPilwali extends Component
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
-        return view('livewire.operator.pilwali.input-suara-pilwali', compact('tps', 'paslon'));
+        return view('livewire.operator.pilgub.input-suara-pilgub', compact('tps', 'paslon'));
     }
 
     private function getTPS()
     {
         $userWilayah = session('user_wilayah');
 
-        $builder = ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
+        $builder = ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
             $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
                 $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
                     $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
@@ -123,7 +123,13 @@ class InputSuaraPilwali extends Component
         $userWilayah = session('user_wilayah');
         $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
 
-        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        $builder->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
+            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        });
+
+        // if ($this->posisi == 'WALIKOTA') {
+        //     $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+        // }
 
         return $builder->get();
     }
@@ -164,7 +170,7 @@ class InputSuaraPilwali extends Component
                     [
                         'kotak_kosong' => $datum['kotak_kosong'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
-                        'operator_id' => $operatorId
+                        'operator_id' => $operatorId,
                     ]
                 );
         

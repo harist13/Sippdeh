@@ -2,6 +2,6 @@
 
 @section('content')
     <main class="container mx-auto px-4 py-8">
-        @livewire('operator.pilgub.input-suara-pilgub')
+        @livewire('operator.input-suara.pilwali.input-suara-pilwali')
     </main>
 @endsection

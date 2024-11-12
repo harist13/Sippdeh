@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Pilgub;
+namespace App\Livewire\Operator\InputSuara\Pilgub;
 
 use App\Models\Provinsi;
 use App\Models\Kabupaten;

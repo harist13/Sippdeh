@@ -4,10 +4,10 @@
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.pilbup.action-buttons')
+                    @include('operator.input-suara.pilbup.action-buttons')
                     
                     {{-- Cari dan Filter --}}
-                    @include('operator.pilbup.search-filter')
+                    @include('operator.input-suara.pilbup.search-filter')
                 </div>
                 
                 @php $status = session('pesan_sukses'); @endphp
@@ -25,7 +25,7 @@
                 @endisset
 
                 {{-- Loading --}}
-                @include('operator.pilbup.loading-alert')
+                @include('operator.input-suara.pilbup.loading-alert')
             </div>
         </div>
 
@@ -36,7 +36,7 @@
                     <div wire:loading.delay wire:target.except="applyFilter" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
-                        @include('operator.pilbup.table', compact('tps', 'paslon', 'includedColumns'))
+                        @include('operator.input-suara.pilbup.table', compact('tps', 'paslon', 'includedColumns'))
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'operator.pilbup.filter-modal',
+        'operator.input-suara.pilbup.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',

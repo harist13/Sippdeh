@@ -10,6 +10,6 @@ class PilgubController extends Controller
     public function index()
     {
         $userWilayah = session('user_wilayah');
-        return view('operator.pilgub.index', compact('userWilayah'));
+        return view('operator.input-suara.pilgub.index', compact('userWilayah'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Pilwali;
+namespace App\Livewire\Operator\InputSuara\Pilwali;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;

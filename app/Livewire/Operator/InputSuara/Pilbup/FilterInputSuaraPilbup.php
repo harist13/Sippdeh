@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Pilbup;
+namespace App\Livewire\Operator\InputSuara\Pilbup;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;

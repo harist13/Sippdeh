@@ -82,9 +82,9 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::get('/operator/dashboard', [OperatorController::class, 'dashboard'])->name('operator.dashboard');
         Route::get('/operator/resume', ResumeController::class)->name('operator.resume');
 
-        Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.pilgub');
-        Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.pilwali');
-        Route::get('/operator/pilbup', [PilbupController::class, 'index'])->name('operator.pilbup');
+        Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.input-suara.pilgub');
+        Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.input-suara.pilwali');
+        Route::get('/operator/pilbup', [PilbupController::class, 'index'])->name('operator.input-suara.pilbup');
 
         Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
     });

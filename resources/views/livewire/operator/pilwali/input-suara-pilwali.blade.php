@@ -4,10 +4,10 @@
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.pilwali.action-buttons')
+                    @include('operator.input-suara.pilwali.action-buttons')
                     
                     {{-- Cari dan Filter --}}
-                    @include('operator.pilwali.search-filter')
+                    @include('operator.input-suara.pilwali.search-filter')
                 </div>
                 
                 @php $status = session('pesan_sukses'); @endphp
@@ -25,7 +25,7 @@
                 @endisset
 
                 {{-- Loading --}}
-                @include('operator.pilwali.loading-alert')
+                @include('operator.input-suara.pilwali.loading-alert')
             </div>
         </div>
 
@@ -36,7 +36,7 @@
                     <div wire:loading.delay wire:target.except="applyFilter" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
-                        @include('operator.pilwali.table', compact('tps', 'paslon', 'includedColumns'))
+                        @include('operator.input-suara.pilwali.table', compact('tps', 'paslon', 'includedColumns'))
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'operator.pilwali.filter-modal',
+        'operator.input-suara.pilwali.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',
