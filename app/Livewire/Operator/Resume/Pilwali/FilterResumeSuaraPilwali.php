@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilbup;
+namespace App\Livewire\Operator\Resume\Pilwali;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterSuaraPilbup extends Component
+class FilterResumeSuaraPilwali extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
@@ -26,7 +26,7 @@ class FilterSuaraPilbup extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('livewire.operator.resume.pilbup.filter-suara-pilbup', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilwali.filter-modal', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
@@ -93,6 +93,6 @@ class FilterSuaraPilbup extends Component
             partisipasi: $this->partisipasi
         );
 
-        $event->to(SuaraPilbup::class);
+        $event->to(ResumeSuaraPilwali::class);
     }
 }
