@@ -57,6 +57,8 @@
         <div class="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
             <!-- Section Header -->
         <livewire:admin.vote-summary-provinsi />
+            <hr class="border-t border-gray-300 my-10">
+
         <livewire:admin.vote-summary-kabupaten />
 
             

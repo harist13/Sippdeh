@@ -11,42 +11,25 @@
                     <!-- Controls Container -->
                     <div class="flex flex-wrap gap-3 w-full lg:w-auto">
                         <!-- Export Button -->
-                        <button class="flex items-center gap-2 px-4 py-2 bg-[#ee3c46] text-white rounded-lg hover:bg-red-600 transition-colors">
+                        <button wire:click="export" class="flex items-center gap-2 px-4 py-2 bg-[#ee3c46] text-white rounded-lg hover:bg-red-600 transition-colors">
                             <i class="fas fa-download"></i>
                             <span>Export</span>
                         </button>
 
-                        <!-- Data Limit Dropdown -->
-                        <select class="bg-gray-100 rounded-md px-3 py-2 border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors">
-                            <option value="10">10 Data</option>
-                            <option value="20">20 Data</option>
-                            <option value="50">50 Data</option>
-                            <option value="100">100 Data</option>
-                        </select>
+                      
 
-                       
-
+    
                         <!-- Search Input -->
-                        <div class="relative">
-                            <input type="text" placeholder="Search" class="bg-gray-100 rounded-md px-3 py-2 pl-9">
+                         <div class="relative">
+                            <input 
+                                wire:model.live="search" 
+                                type="text" 
+                                placeholder="Search" 
+                                class="bg-gray-100 rounded-md px-3 py-2 pl-9">
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                         </div>
 
-                        <!-- Filter Dropdown -->
-                        <div class="relative">
-                            <button id="filterDropdownButton" class="flex items-center gap-2 bg-gray-100 rounded-md px-3 py-2 hover:bg-gray-200 transition-colors">
-                                <i class="fas fa-filter text-gray-600"></i>
-                                <span>Filter</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div id="filterDropdown" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-                                <ul class="py-1">
-                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 text-green-500 font-semibold">Tinggi (>70%)</a></li>
-                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 text-yellow-500 font-semibold">Sedang (50-70%)</a></li>
-                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 text-red-500 font-semibold">Rendah (<50%)</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
     <div class="overflow-x-auto shadow-md rounded-lg">

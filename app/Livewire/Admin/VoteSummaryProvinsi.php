@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\ResumeSuaraTPS;
 use App\Models\Provinsi;
 use Illuminate\Support\Facades\DB;
+use App\Exports\VoteProvinsiExport;
+use Excel;
 
 class VoteSummaryProvinsi extends Component
 {
@@ -16,7 +18,7 @@ class VoteSummaryProvinsi extends Component
     public $perPage = 10;
     public $filterPartisipasi = '';
 
-    public function updatingSearch()
+    public function updatedSearch()
     {
         $this->resetPage();
     }
@@ -73,7 +75,7 @@ class VoteSummaryProvinsi extends Component
             ->leftJoin('suara_calon', 'tps.id', '=', 'suara_calon.tps_id')
             ->groupBy('provinsi.id', 'provinsi.nama');
 
-        if ($this->search) {
+        if (!empty($this->search)) {
             $query->where('provinsi.nama', 'like', '%' . $this->search . '%');
         }
 
@@ -99,5 +101,14 @@ class VoteSummaryProvinsi extends Component
         return view('livewire.admin.vote-summary-provinsi', [
             'summaryData' => $this->getProvinsiData()
         ]);
+    }
+
+    public function export()
+    {
+        $data = $this->getProvinsiData();
+        return Excel::download(
+            new VoteProvinsiExport($data),
+            'partisipasi_suara_provinsi_' . date('Y-m-d_H-i-s') . '.xlsx'
+        );
     }
 }
