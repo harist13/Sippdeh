@@ -1,4 +1,8 @@
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
+    <button wire:click="export" class="flex items-center justify-center bg-[#EE3C46] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full">
+        <i class="fas fa-file-export w-4 h-4 mr-2"></i>
+        <span>Ekspor</span>
+    </button>
     <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20"
             fill="currentColor">
@@ -14,10 +18,6 @@
         id="openFilterPilgub">
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
-    </button>
-    <button wire:click="export" class="flex items-center justify-center bg-[#EE3C46] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full">
-        <i class="fas fa-file-export w-4 h-4 mr-2"></i>
-        <span>Ekspor</span>
     </button>
 </div>
 
