@@ -16,7 +16,7 @@
               <div class="overflow-hidden border-b border-gray-200 shadow">
                   <div class="relative px-4">
                       <!-- Loading Overlay -->
-                      <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
+                      <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
                       @include('operator.resume.pilgub.'.$scope.'-table', compact('suara', 'paslon',
                       'includedColumns'))
                   </div>
