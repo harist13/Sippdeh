@@ -38,7 +38,7 @@ class InputSuaraPilwali extends Component
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
-        return view('livewire.operator.pilwali.input-suara-pilwali', compact('tps', 'paslon'));
+        return view('operator.input-suara.pilwali.livewire', compact('tps', 'paslon'));
     }
 
     private function getTPS()

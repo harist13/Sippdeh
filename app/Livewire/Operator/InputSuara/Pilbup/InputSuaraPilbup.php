@@ -38,7 +38,7 @@ class InputSuaraPilbup extends Component
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
 
-        return view('livewire.operator.pilbup.input-suara-pilbup', compact('tps', 'paslon'));
+        return view('operator.input-suara.pilbup.livewire', compact('tps', 'paslon'));
     }
 
     private function getTPS()

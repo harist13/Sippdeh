@@ -1,43 +1,40 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilwali;
+namespace App\Livewire\Operator\Resume\Pilgub;
 
-use App\Exports\ResumePilwaliExport;
+use App\Exports\ResumePilgubExport;
 use App\Models\Calon;
-use App\Models\Kecamatan;
-use App\Models\ResumeSuaraPilwaliKecamatan;
-use App\Models\ResumeSuaraPilwaliKelurahan;
-use Livewire\Attributes\On;
+use App\Models\Kabupaten;
+use App\Models\ResumeSuaraPilgubKabupaten;
+use App\Models\ResumeSuaraPilgubKecamatan;
+use App\Models\ResumeSuaraPilgubKelurahan;
+use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
-use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SuaraPilwali extends Component
+class ResumeSuaraPilgub extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
-    public string $posisi = 'WALIKOTA';
+    public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
 
     public int $perPage = 10;
 
+    public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KECAMATAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function mount()
     {
-        $this->selectedKecamatan = Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
-            ->get()
-            ->pluck('id')
-            ->all();
-        
-        $this->includedColumns = ['KECAMATAN', 'CALON'];
+        $this->fillSelectedKabupaten();
+        $this->includedColumns = ['KABUPATEN', 'CALON'];
     }
 
     public function render()
@@ -46,7 +43,11 @@ class SuaraPilwali extends Component
             return $this->getKelurahanTable();
         }
 
-        return $this->getKecamatanTable();
+        if (!empty($this->selectedKecamatan)) {
+            return $this->getKecamatanTable();
+        }
+        
+        return $this->getKabupatenTable();
     }
 
     private function getKelurahanTable()
@@ -55,7 +56,7 @@ class SuaraPilwali extends Component
         $suara = $this->getSuaraPerKelurahan();
         $scope = 'kelurahan';
         
-        return view('livewire.operator.resume.pilwali.suara-pilwali', compact('suara', 'paslon', 'scope'));
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -64,12 +65,21 @@ class SuaraPilwali extends Component
         $suara = $this->getSuaraPerKecamatan();
         $scope = 'kecamatan';
         
-        return view('livewire.operator.resume.pilwali.suara-pilwali', compact('suara', 'paslon', 'scope'));
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'scope'));
+    }
+
+    private function getKabupatenTable()
+    {
+        $paslon = $this->getCalon();
+        $suara = $this->getSuaraPerKabupaten();
+        $scope = 'kabupaten';
+        
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPilwaliKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilgubKelurahan::whereIn('id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
 
@@ -82,7 +92,20 @@ class SuaraPilwali extends Component
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraPilwaliKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilgubKecamatan::whereIn('id', $this->selectedKecamatan);
+
+        $this->addPartisipasiFilter($builder);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
+    }
+
+    private function getSuaraPerKabupaten()
+    {
+        $builder = ResumeSuaraPilgubKabupaten::whereIn('id', $this->selectedKabupaten);
 
         $this->addPartisipasiFilter($builder);
 
@@ -113,22 +136,38 @@ class SuaraPilwali extends Component
     private function getCalon()
     {
         $builder = Calon::wherePosisi($this->posisi);
-        $builder->whereHas('kabupaten', fn (Builder $query) => $query->whereNama(session('user_wilayah')));
+        $builder->whereHas('provinsi', function (Builder $builder) {
+            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+        });
+
         return $builder->get();
+    }
+
+    private function fillSelectedKabupaten()
+    {
+        $this->selectedKabupaten = Kabupaten::query()
+            ->whereHas('provinsi', function (Builder $builder) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            })
+            ->pluck('id')
+            ->all();
     }
 
     #[On('reset-filter')] 
     public function resetFilter()
     {
+        $this->fillSelectedKabupaten();
+
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KECAMATAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
     #[On('apply-filter')]
-    public function applyFilter($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function applyFilter($selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
+        $this->selectedKabupaten = $selectedKabupaten;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
@@ -137,13 +176,15 @@ class SuaraPilwali extends Component
 
     public function export()
     {
-        $sheet = new ResumePilwaliExport(
+        $sheet = new ResumePilgubExport(
+            $this->keyword,
+            $this->selectedKabupaten,
             $this->selectedKecamatan,
             $this->selectedKelurahan,
             $this->includedColumns,
             $this->partisipasi
         );
 
-        return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
+        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
     }
 }

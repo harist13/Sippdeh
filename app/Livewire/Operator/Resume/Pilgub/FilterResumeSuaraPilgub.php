@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilwali;
+namespace App\Livewire\Operator\Resume\Pilgub;
 
+use App\Models\Provinsi;
+use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterSuaraPilwali extends Component
+class FilterResumeSuaraPilgub extends Component
 {
+    public $selectedKabupaten = [];
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
     public $includedColumns = [];
     public $partisipasi = [];
 
-    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function mount($selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
+        $this->selectedKabupaten = $selectedKabupaten;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
@@ -24,15 +28,31 @@ class FilterSuaraPilwali extends Component
 
     public function render()
     {
+        $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('livewire.operator.resume.pilwali.filter-suara-pilwali', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilgub.filter-modal-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
+    }
+
+    private function getKabupatenOptions()
+    {
+        return Kabupaten::query()
+            ->whereHas('provinsi', function (Builder $builder) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            })
+            ->get()
+            ->map(fn (Kabupaten $kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
+            ->toArray();
     }
 
     private function getKecamatanOptions()
     {
+        if (empty($this->selectedKabupaten)) {
+            return [];
+        }
+
         return Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKabupaten))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
@@ -53,6 +73,10 @@ class FilterSuaraPilwali extends Component
 
     private function syncIncludedColumnsByWilayah()
     {
+        if (!empty($this->selectedKabupaten)) {
+            $this->includedColumns = ['KABUPATEN', 'CALON'];
+        }
+
         if (!empty($this->selectedKecamatan)) {
             $this->includedColumns = ['KECAMATAN', 'CALON'];
         }
@@ -62,9 +86,18 @@ class FilterSuaraPilwali extends Component
         }
     }
 
+    public function updatedSelectedKabupaten()
+    {
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+
+        $this->syncIncludedColumnsByWilayah();
+    }
+
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
+
         $this->syncIncludedColumnsByWilayah();
     }
 
@@ -75,11 +108,6 @@ class FilterSuaraPilwali extends Component
 
     public function resetFilter()
     {
-        $this->selectedKecamatan = [];
-        $this->selectedKelurahan = [];
-        $this->includedColumns = ['KECAMATAN', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
-
         $this->dispatch('reset-filter');
     }
 
@@ -87,12 +115,13 @@ class FilterSuaraPilwali extends Component
     {
         $event = $this->dispatch(
             'apply-filter',
+            selectedKabupaten: $this->selectedKabupaten,
             selectedKecamatan: $this->selectedKecamatan,
             selectedKelurahan: $this->selectedKelurahan,
             includedColumns: $this->includedColumns,
             partisipasi: $this->partisipasi
         );
 
-        $event->to(SuaraPilwali::class);
+        $event->to(ResumeSuaraPilgub::class);
     }
 }

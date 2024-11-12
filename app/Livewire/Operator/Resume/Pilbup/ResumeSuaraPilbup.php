@@ -14,7 +14,7 @@ use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SuaraPilbup extends Component
+class ResumeSuaraPilbup extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
@@ -55,7 +55,7 @@ class SuaraPilbup extends Component
         $suara = $this->getSuaraPerKelurahan();
         $scope = 'kelurahan';
         
-        return view('livewire.operator.resume.pilbup.suara-pilbup', compact('suara', 'paslon', 'scope'));
+        return view('operator.resume.pilbup.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -64,7 +64,7 @@ class SuaraPilbup extends Component
         $suara = $this->getSuaraPerKecamatan();
         $scope = 'kecamatan';
         
-        return view('livewire.operator.resume.pilbup.suara-pilbup', compact('suara', 'paslon', 'scope'));
+        return view('operator.resume.pilbup.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getSuaraPerKelurahan()
