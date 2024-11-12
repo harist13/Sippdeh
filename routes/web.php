@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\KecamatanController;
 use App\Http\Controllers\Admin\KelurahanController;
 use App\Http\Controllers\Admin\TPSController;
 use App\Http\Controllers\Admin\RangkumanController;
+use App\Http\Controllers\Operator\PilbupController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\Operator\PilgubController;
 use App\Http\Controllers\Operator\PilwaliController;
@@ -83,6 +84,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
 
         Route::get('/operator/pilgub', [PilgubController::class, 'index'])->name('operator.pilgub');
         Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.pilwali');
+        Route::get('/operator/pilbup', [PilbupController::class, 'index'])->name('operator.pilbup');
 
         Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
     });
