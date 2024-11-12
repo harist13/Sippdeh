@@ -20,7 +20,7 @@ class KabupatenSeeder extends Seeder
             ['nama' => 'KUTAI TIMUR', 'provinsi_id' => 23],
             ['nama' => 'MAHAKAM ULU', 'provinsi_id' => 23],
             ['nama' => 'PASER', 'provinsi_id' => 23],
-            ['nama' => 'PENAJEM PASER UTARA', 'provinsi_id' => 23],
+            ['nama' => 'PENAJAM PASER UTARA', 'provinsi_id' => 23],
             ['nama' => 'BALIKPAPAN', 'provinsi_id' => 23],
             ['nama' => 'BONTANG', 'provinsi_id' => 23],
             ['nama' => 'SAMARINDA', 'provinsi_id' => 23],

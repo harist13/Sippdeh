@@ -165,10 +165,10 @@ class InputSuaraPilgub extends Component
                 SuaraTPS::updateOrCreate(
                     [
                         'tps_id' => $datum['id'],
+                        'posisi' => $this->posisi
                     ],
                     [
-                        'dpt' => $datum['dpt'],
-                        'kotak_kosong_pilgub' => $datum['kotak_kosong'],
+                        'kotak_kosong' => $datum['kotak_kosong'],
                         'suara_tidak_sah' => $datum['suara_tidak_sah'],
                         'operator_id' => $operatorId,
                     ]

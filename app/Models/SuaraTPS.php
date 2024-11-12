@@ -10,7 +10,7 @@ class SuaraTPS extends Model
 {
     protected $table = 'suara_tps';
 
-    protected $fillable = ['dpt', 'kotak_kosong_pilgub', 'kotak_kosong_pilwali', 'kotak_kosong_pilbup', 'suara_tidak_sah', 'operator_id', 'tps_id'];
+    protected $fillable = ['dpt', 'kotak_kosong', 'suara_tidak_sah', 'posisi', 'operator_id', 'tps_id'];
 
     public function suaraSah() {
         return $this->tps->suaraCalon->reduce(function (?int $acc, SuaraCalon $sc) {

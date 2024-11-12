@@ -76,13 +76,9 @@ class TPSController extends Controller
             $tps = new TPS();
             $tps->nama = $validated['nama_tps_baru'];
             $tps->alamat = '';
+            $tps->dpt = $validated['dpt_tps_baru'];
             $tps->kelurahan_id = $validated['kelurahan_id_tps_baru'];
             $tps->save();
-            
-            SuaraTPS::updateOrCreate(
-                [ 'tps_id' => $tps->id ],
-                [ 'dpt' => $validated['dpt_tps_baru'], 'operator_id' => Auth::id() ]
-            );
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah TPS.');
         } catch (Exception $exception) {
@@ -130,13 +126,9 @@ class TPSController extends Controller
             $tps = TPS::find($id);
             $tps->nama = $validated['nama_tps'];
             $tps->alamat = '';
+            $tps->dpt = $validated['dpt_tps'];
             $tps->kelurahan_id = $validated['kelurahan_id_tps'];
             $tps->save();
-
-            SuaraTPS::updateOrCreate(
-                [ 'tps_id' => $tps->id ],
-                [ 'dpt' => $validated['dpt_tps'], 'operator_id' => Auth::id() ]
-            );
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit TPS.');
         } catch (Exception $exception) {
