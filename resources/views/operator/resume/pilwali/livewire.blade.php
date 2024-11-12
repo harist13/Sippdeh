@@ -5,7 +5,7 @@
               <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                   <h1 class="font-bold text-xl">Data Suara Pemilihan Walikota</h1>
                   {{-- Cari dan Filter --}}
-                  @include('operator.resume.pilwali.search-filter')
+                  @include('operator.resume.pilwali.export-search-filter')
               </div>
           </div>
       </div>
@@ -31,8 +31,8 @@
   </div>
 
   <!-- Filter Pilgub Modal -->
-  @livewire(
-      'operator.resume.pilwali.filter-resume-suara-pilwali',
+  @include(
+      'operator.resume.pilwali.filter-modal',
       compact(
           'selectedKecamatan',
           'selectedKelurahan',

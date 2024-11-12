@@ -30,8 +30,8 @@
   </div>
 
   <!-- Filter Pilgub Modal -->
-  @livewire(
-      'operator.resume.pilgub.filter-resume-suara-pilgub',
+  @include(
+      'operator.resume.pilgub.filter-modal',
       compact(
           'selectedKabupaten',
           'selectedKecamatan',

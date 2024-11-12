@@ -31,7 +31,7 @@ class FilterResumeSuaraPilgub extends Component
         $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.resume.pilgub.filter-modal', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('operator.resume.pilgub.filter-modal-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getKabupatenOptions()
