@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Operator\Resume\Pilgub;
 
+use App\Exports\ResumePilgubExport;
 use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Models\ResumeSuaraPilgubKabupaten;
@@ -13,6 +14,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SuaraPilgub extends Component
 {
@@ -166,5 +168,18 @@ class SuaraPilgub extends Component
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
+    }
+
+    public function export()
+    {
+        $sheet = new ResumePilgubExport(
+            $this->selectedKabupaten,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
     }
 }

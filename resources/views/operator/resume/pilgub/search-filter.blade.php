@@ -15,6 +15,10 @@
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
     </button>
+    <button wire:click="export" class="flex items-center justify-center bg-[#EE3C46] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full">
+        <i class="fas fa-file-export w-4 h-4 mr-2"></i>
+        <span>Ekspor</span>
+    </button>
 </div>
 
 @push('scripts')
