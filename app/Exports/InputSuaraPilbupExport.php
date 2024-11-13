@@ -2,11 +2,20 @@
 
 namespace App\Exports;
 
+// Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilbupTPS;
+
+// Laravel Facades
+use Illuminate\Support\Facades\Log;
+
+// Others
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
+use Sentry\SentrySdk;
+use Exception;
 
 class InputSuaraPilbupExport implements FromView
 {
@@ -33,78 +42,152 @@ class InputSuaraPilbupExport implements FromView
     {
         $includedColumns = $this->includedColumns;
         $paslon = $this->getCalon();
-        $tps = $this->getTPS();
+        $tps = $this->getTps();
+        
         return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
     }
 
-    private function getTPS()
+    private function getTps()
     {
-        $builder = ResumeSuaraPilbupTPS::whereHas('tps', function(Builder $builder) {
-            $builder->whereHas('kelurahan', function (Builder $builder) {
-                $builder->whereHas('kecamatan', function(Builder $builder) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) {
-                        $builder->whereNama(session('user_wilayah'));
-                    });
-                });
-            });
-        });
+        try {
+            $builder = $this->getBaseTPSBuilder();
+    
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+    
+            return $builder->get();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
 
-        if (!empty($this->selectedKelurahan)) {
-            $builder->whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereIn('id', $this->selectedKelurahan);
-                });
-            });
+            throw $exception;
         }
-
-        if (!empty($this->selectedKecamatan)) {
-            $builder->whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereIn('id', $this->selectedKecamatan);
-                    });
-                });
-            });
-        }
-
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-        });
-
-        if ($this->keyword) {
-            $builder->whereHas('tps', function(Builder $builder) {
-                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                
-                $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                });
-
-                $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function (Builder $builder) {
-                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                    });
-                });
-            });
-        }
-
-        return $builder->get();
     }
 
-    private function getCalon()
+    private function getBaseTPSBuilder(): Builder
     {
-        $builder = Calon::wherePosisi('BUPATI');
-        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+        try {
+            return ResumeSuaraPilbupTPS::whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereNama(session('user_wilayah'));
+                        });
+                    });
+                });
+            });
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
 
-        return $builder->get();
+            throw $exception;
+        }
+    }
+
+    private function filterKelurahan(Builder $builder): void
+    {
+        try {
+            if (!empty($this->selectedKelurahan)) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        if (!empty($this->selectedKelurahan)) {
+                            $builder->whereIn('id', $this->selectedKelurahan);
+                        }
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function filterKecamatan(Builder $builder): void
+    {
+        try {
+            if (!empty($this->selectedKecamatan)) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            $builder->whereIn('id', $this->selectedKecamatan);
+                        });
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function filterPartisipasi(Builder $builder): void
+    {
+        try {
+            $builder->where(function (Builder $builder) {
+                if (in_array('MERAH', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
+                }
+            
+                if (in_array('KUNING', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                }
+                
+                if (in_array('HIJAU', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+                }
+            });
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function filterKeyword(Builder $builder): void
+    {
+        try {
+            if ($this->keyword) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    });
+        
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function getCalon(): Collection
+    {
+        try {
+            $builder = Calon::with('suaraCalon')->wherePosisi('BUPATI');
+            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            
+            return $builder->get();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
     }
 }

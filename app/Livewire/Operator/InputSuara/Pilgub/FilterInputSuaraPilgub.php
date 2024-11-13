@@ -5,8 +5,8 @@ namespace App\Livewire\Operator\InputSuara\Pilgub;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Illuminate\Contracts\View\View;
-use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
 class FilterInputSuaraPilgub extends Component
 {

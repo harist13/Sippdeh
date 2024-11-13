@@ -58,12 +58,7 @@ class FilterInputSuaraPilbup extends Component
 
     public function resetFilter()
     {
-        $this->selectedKecamatan = [];
-        $this->selectedKelurahan = [];
-        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
-
-        $this->dispatch('reset-filter');
+        $this->dispatch('reset-filter')->to(InputSuaraPilbup::class);
     }
 
     public function applyFilter()

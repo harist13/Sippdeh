@@ -2,22 +2,32 @@
 
 namespace App\Livewire\Operator\InputSuara\Pilwali;
 
-use App\Exports\InputSuaraPilwaliExport;
+// Laravel Facades
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+
+// Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Livewire\WithoutUrlPagination;
-use Livewire\WithPagination;
+
+// Livewire
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 use Livewire\Attributes\On;
+
+// Others
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use App\Exports\InputSuaraPilwaliExport;
 use Sentry\SentrySdk;
 use Exception;
-use Maatwebsite\Excel\Facades\Excel;
 
 class InputSuaraPilwali extends Component
 {
@@ -29,109 +39,171 @@ class InputSuaraPilwali extends Component
 
     public int $perPage = 10;
 
-    public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-    public function render()
+    public function render(): View
     {
-        $paslon = $this->getCalon();
-        $tps = $this->getTPS();
+        try {
+            $paslon = $this->getCalon();
+            $tps = $this->getTps();
+            return view('operator.input-suara.pilwali.livewire', compact('tps', 'paslon'));
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
 
-        return view('operator.input-suara.pilwali.livewire', compact('tps', 'paslon'));
+            throw $exception;
+        }
     }
 
-    private function getTPS()
+    private function getTps()
     {
-        $userWilayah = session('user_wilayah');
+        try {
+            $builder = $this->getBaseTPSBuilder();
+    
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+    
+            return $builder->paginate($this->perPage);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
 
-        $builder = ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
-                        $builder->whereNama($userWilayah);
-                    });
-                });
-            });
-        });
-
-        if (!empty($this->selectedKelurahan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    if (!empty($this->selectedKelurahan)) {
-                        $builder->whereIn('id', $this->selectedKelurahan);
-                    }
-                });
-            });
+            throw $exception;
         }
+    }
 
-        if (!empty($this->selectedKecamatan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+    private function getBaseTPSBuilder(): Builder
+    {
+        try {
+            return ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
                     $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereIn('id', $this->selectedKecamatan);
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereNama(session('user_wilayah'));
+                        });
                     });
                 });
             });
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
         }
-
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->where(function (Builder $builder) {
-                    $builder
-                        ->whereHas('suara', function (Builder $builder) {
-                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59.9');
-                        })
-                        ->orWhereDoesntHave('suara');
-                });
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79.9');
-                });
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 80 AND 100');
-                });
-            }
-        });
-
-        if ($this->keyword) {
-            $builder->whereHas('tps', function(Builder $builder) {
-                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                
-                $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                });
-
-                $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function (Builder $builder) {
-                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                    });
-                });
-            });
-        }
-
-        return $builder->paginate($this->perPage);
     }
 
-    private function getCalon()
+    private function filterKelurahan(Builder $builder): void
     {
-        $userWilayah = session('user_wilayah');
-        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
+        try {
+            if (!empty($this->selectedKelurahan)) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        if (!empty($this->selectedKelurahan)) {
+                            $builder->whereIn('id', $this->selectedKelurahan);
+                        }
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
 
-        $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
+            throw $exception;
+        }
+    }
 
-        return $builder->get();
+    private function filterKecamatan(Builder $builder): void
+    {
+        try {
+            if (!empty($this->selectedKecamatan)) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            $builder->whereIn('id', $this->selectedKecamatan);
+                        });
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function filterPartisipasi(Builder $builder): void
+    {
+        try {
+            $builder->where(function (Builder $builder) {
+                if (in_array('MERAH', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
+                }
+            
+                if (in_array('KUNING', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                }
+                
+                if (in_array('HIJAU', $this->partisipasi)) {
+                    $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+                }
+            });
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function filterKeyword(Builder $builder): void
+    {
+        try {
+            if ($this->keyword) {
+                $builder->whereHas('tps', function(Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    });
+        
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+                    });
+                });
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
+    }
+
+    private function getCalon(): Collection
+    {
+        try {
+            $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
+            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+    
+            return $builder->get();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
     }
 
     #[On('reset-filter')] 
-    public function resetFilter()
+    public function resetFilter(): void
     {
         $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
@@ -153,42 +225,17 @@ class InputSuaraPilwali extends Component
     {
         try {
             DB::beginTransaction();
-        
-            $operatorId = Auth::id();
 
             foreach ($data as $datum) {
-                // Simpan atau update data di tabel suara_tps
-                SuaraTPS::updateOrCreate(
-                    [
-                        'tps_id' => $datum['id'],
-                        'posisi' => $this->posisi
-                    ],
-                    [
-                        'kotak_kosong' => $datum['kotak_kosong'],
-                        'suara_tidak_sah' => $datum['suara_tidak_sah'],
-                        'operator_id' => $operatorId
-                    ]
-                );
-        
-                // Simpan atau update data di tabel suara_calon
-                foreach ($datum['suara_calon'] as $suaraCalonData) {
-                    SuaraCalon::updateOrCreate(
-                        [
-                            'tps_id' => $datum['id'],
-                            'calon_id' => $suaraCalonData['id'],
-                        ],
-                        [
-                            'suara' => $suaraCalonData['suara'],
-                            'operator_id' => $operatorId,
-                        ]
-                    );
+                $this->insertSuaraTps($datum['id'], $datum['kotak_kosong'], $datum['suara_tidak_sah']);
+                foreach ($datum['suara_calon'] as $suaraCalonDatum) {
+                    $this->insertSuaraCalon($datum['id'], $suaraCalonDatum['id'], $suaraCalonDatum['suara']);
                 }
             }
 
             DB::commit();
 
             session()->flash('pesan_sukses', 'Berhasil menyimpan data.');
-
             $this->dispatch('data-stored', status: 'sukses');
         } catch (Exception $exception) {
             DB::rollBack();
@@ -197,21 +244,64 @@ class InputSuaraPilwali extends Component
             SentrySdk::getCurrentHub()->captureException($exception);
 
             session()->flash('pesan_gagal', 'Gagal menyimpan data.');
-
             $this->dispatch('data-stored', status: 'gagal');
         }
     }
 
-    public function export()
+    private function insertSuaraTps(int $tpsId, int $kotakKosong, int $suaraTidakSah): void
     {
-        $sheet = new InputSuaraPilwaliExport(
-            $this->keyword,
-            $this->selectedKecamatan,
-            $this->selectedKelurahan,
-            $this->includedColumns,
-            $this->partisipasi
-        );
+        try {
+            SuaraTPS::updateOrCreate(
+                [
+                    'tps_id' => $tpsId,
+                    'posisi' => $this->posisi
+                ],
+                [
+                    'kotak_kosong' => $kotakKosong,
+                    'suara_tidak_sah' => $suaraTidakSah,
+                    'operator_id' => Auth::id()
+                ]
+            );
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
 
-        return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
+    private function insertSuaraCalon(int $tpsId, int $calonId, int $suara): void
+    {
+        try {
+            SuaraCalon::updateOrCreate(
+                [
+                    'tps_id' => $tpsId,
+                    'calon_id' => $calonId,
+                ],
+                [
+                    'suara' => $suara,
+                    'operator_id' => Auth::id()
+                ]
+            );
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    public function export(): BinaryFileResponse
+    {
+        try {
+            $sheet = new InputSuaraPilwaliExport(
+                $this->keyword,
+                $this->selectedKecamatan,
+                $this->selectedKelurahan,
+                $this->includedColumns,
+                $this->partisipasi
+            );
+    
+            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
     }
 }
