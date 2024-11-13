@@ -2,29 +2,35 @@
 
 namespace App\Livewire\Operator\InputSuara\Pilgub;
 
+// Models
 use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 
+// Livewire
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
 use Livewire\Attributes\On;
 
+// Facades
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+// Export
 use App\Exports\InputSuaraPilgubExport;
 
+// Packages
 use Sentry\SentrySdk;
 use Maatwebsite\Excel\Facades\Excel;
 
+// Others
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
-
-use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Exception;
 
 class InputSuaraPilgub extends Component
 {
@@ -135,7 +141,7 @@ class InputSuaraPilgub extends Component
         }
     }
 
-    private function getCalon()
+    private function getCalon(): Collection
     {
         $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
 

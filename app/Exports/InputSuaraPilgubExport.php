@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubTPS;
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
 
 class InputSuaraPilgubExport implements FromView
@@ -33,13 +34,26 @@ class InputSuaraPilgubExport implements FromView
     {
         $includedColumns = $this->includedColumns;
         $paslon = $this->getCalon();
-        $tps = $this->getTPS();
+        $tps = $this->getTps();
+        
         return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
     }
 
-    private function getTPS()
+    private function getTps(): Collection
     {
-        $builder = ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
+        $builder = $this->getBaseTPSBuilder();
+
+        $this->filterKeyword($builder);
+        $this->filterKelurahan($builder);
+        $this->filterKecamatan($builder);
+        $this->filterPartisipasi($builder);
+
+        return $builder->get();
+    }
+
+    private function getBaseTPSBuilder(): Builder
+    {
+        return ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
             $builder->whereHas('kelurahan', function (Builder $builder) {
                 $builder->whereHas('kecamatan', function(Builder $builder) {
                     $builder->whereHas('kabupaten', function (Builder $builder) {
@@ -48,15 +62,23 @@ class InputSuaraPilgubExport implements FromView
                 });
             });
         });
+    }
 
+    private function filterKelurahan(Builder $builder): void
+    {
         if (!empty($this->selectedKelurahan)) {
             $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereIn('id', $this->selectedKelurahan);
+                    if (!empty($this->selectedKelurahan)) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    }
                 });
             });
         }
+    }
 
+    private function filterKecamatan(Builder $builder): void
+    {
         if (!empty($this->selectedKecamatan)) {
             $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
@@ -66,7 +88,10 @@ class InputSuaraPilgubExport implements FromView
                 });
             });
         }
+    }
 
+    private function filterPartisipasi(Builder $builder): void
+    {
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
                 $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
@@ -80,7 +105,10 @@ class InputSuaraPilgubExport implements FromView
                 $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
             }
         });
+    }
 
+    private function filterKeyword(Builder $builder): void
+    {
         if ($this->keyword) {
             $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -88,7 +116,7 @@ class InputSuaraPilgubExport implements FromView
                 $builder->orWhereHas('kelurahan', function (Builder $builder) {
                     $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
                 });
-
+    
                 $builder->orWhereHas('kelurahan', function (Builder $builder) {
                     $builder->whereHas('kecamatan', function (Builder $builder) {
                         $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -96,13 +124,12 @@ class InputSuaraPilgubExport implements FromView
                 });
             });
         }
-
-        return $builder->get();
     }
 
-    private function getCalon()
+    private function getCalon(): Collection
     {
-        $builder = Calon::wherePosisi('GUBERNUR');
+        $builder = Calon::with('suaraCalon')->wherePosisi('GUBERNUR');
+
         $builder->whereHas('provinsi', function (Builder $builder) {
             $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
         });
