@@ -1,21 +1,23 @@
 @php
-    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
+
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
-<table style="width: 100%; border-collapse: collapse;">
-    <thead style="background-color: #3560A0; color: white;">
+<table>
+    <thead>
         <tr>
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="50px">
                 NO
             </th>
+            
             @if (!$isKabupatenColumnIgnored)
                 <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                     Kabupaten
                 </th>
             @endif
+
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 DPT
             </th>
@@ -52,7 +54,7 @@
         </tr>
     </thead>
 
-    <tbody style="background-color: #F5F5F5;">
+    <tbody>
         @foreach ($suara as $datum)
             <tr>
                 <td style="text-align: center; border: 1px solid black;">

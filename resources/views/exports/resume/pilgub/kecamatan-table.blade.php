@@ -6,12 +6,13 @@
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
-<table style="width: 100%; border-collapse: collapse;">
-    <thead style="background-color: #3560A0; color: white;">
+<table>
+    <thead>
         <tr>
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="50px">
                 NO
             </th>
+
             @if (!$isKabupatenColumnIgnored)
                 <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                     Kabupaten
@@ -22,9 +23,11 @@
                     Kecamatan
                 </th>
             @endif
+
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 DPT
             </th>
+
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                 <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                     Kotak Kosong
@@ -37,6 +40,7 @@
                     </th>
                 @endforeach
             @endif
+
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Suara Sah
             </th>
@@ -55,11 +59,12 @@
         </tr>
     </thead>
     <tbody style="background-color: #F5F5F5;">
-        @forelse ($suara as $datum)
+        @foreach ($suara as $datum)
             <tr style="border-bottom: 1px solid;">
                 <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->getThreeDigitsId() }}
                 </td>
+
                 @if (!$isKabupatenColumnIgnored)
                     <td style="border: 1px solid black;">
                         {{ $datum->kabupaten->nama }}
@@ -70,9 +75,11 @@
                         {{ $datum->nama }}
                     </td>
                 @endif
+                
                 <td style="text-align: center; border: 1px solid black;">
                     <span>{{ $datum->dpt }}</span>
                 </td>
+
                 @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                     <td style="text-align: center; border: 1px solid black;">
                         {{ $datum->kotak_kosong }}
@@ -86,6 +93,7 @@
                         </td>
                     @endforeach
                 @endif
+
                 <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->suara_sah }}
                 </td>
@@ -114,12 +122,6 @@
                     @endif
                 </td>
             </tr>
-        @empty
-            <tr>
-                <td colspan="15" style="padding: 20px; text-align: center; color: gray;">
-                    Data tidak tersedia.
-                </td>
-            </tr>
-        @endforelse
+        @endforeach
     </tbody>
 </table>
