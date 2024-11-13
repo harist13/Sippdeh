@@ -1,4 +1,4 @@
-<div>
+<form wire:submit="applyFilter">
     {{-- Kecamatan --}}
     <div class="mb-5">
         <label for="kecamatan" class="mb-2 font-bold mt-5 block">Kecamatan</label>
@@ -231,49 +231,43 @@
                 <span class="bg-red-400 text-white py-2 px-7 rounded text-sm select-none transition-all duration-200"
                     :class="{ 'border-2 border-blue-500': partisipasiList.includes('MERAH'), 'border-2 border-transparent': !partisipasiList.includes('MERAH') }">
                     < 60%</span>
-				</label>
-			</div>
+            </label>
 		</div>
-		<hr class="h-1 my-3">
+    </div>
 
-                        <div class="flex gap-4">
-                            <button type="button" wire:loading.attr="disabled"
-                                wire:target="selectedKecamatan, selectedKelurahan, applyFilter, resetFilter"
-                                wire:click="resetFilter"
-                                class="flex-1 relative bg-gray-300 disabled:bg-[#d1d5d06c] hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
-                                <div class="flex items-center justify-center">
-                                    <svg wire:loading wire:target="resetFilter"
-                                        class="animate-spin -ml-1 mr-2 h-4 w-4 text-[#3560A0]"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    <span>Reset</span>
-                                </div>
-                            </button>
+    <hr class="h-1 my-3">
 
-                            <button type="submit" wire:loading.attr="disabled"
-                                wire:target="selectedKecamatan, selectedKelurahan, applyFilter, resetFilter"
-                                wire:click="applyFilter" id="applyFilterPilgub"
-                                class="flex-1 relative bg-[#3560A0] disabled:bg-[#0070F06c] hover:bg-blue-700 text-white rounded-md px-4 py-2">
-                                <div class="flex items-center justify-center">
-                                    <svg wire:loading wire:target="applyFilter"
-                                        class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    <span>Terapkan</span>
-                                </div>
-                            </button>
-                        </div>
-        </div>
+    {{-- Action Buttons --}}
+    <div class="flex gap-4">
+        {{-- Reset Button --}}
+        <button type="button" wire:loading.attr="disabled" wire:target="selectedKecamatan, selectedKelurahan, applyFilter, resetFilter" wire:click="resetFilter" class="flex-1 relative bg-gray-300 disabled:bg-[#d1d5d06c] hover:bg-gray-400 text-black rounded-md px-4 py-2 mr-2">
+            <div class="flex items-center justify-center">
+                <svg wire:loading wire:target="resetFilter" class="animate-spin -ml-1 mr-2 h-4 w-4 text-[#3560A0]"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                <span>Reset</span>
+            </div>
+        </button>
+    
+        {{-- Apply Button --}}
+        <button type="submit" wire:loading.attr="disabled" wire:target="selectedKecamatan, selectedKelurahan, applyFilter, resetFilter" id="applyFilterPilgub" class="flex-1 relative bg-[#3560A0] disabled:bg-[#0070F06c] hover:bg-blue-700 text-white rounded-md px-4 py-2">
+            <div class="flex items-center justify-center">
+                <svg wire:loading wire:target="applyFilter" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                <span>Terapkan</span>
+            </div>
+        </button>
+    </div>
+</div>
 
 @assets
     <script src="{{ asset('scripts/wilayah-select.js') }}"></script>

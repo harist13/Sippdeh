@@ -5,12 +5,11 @@
             display: block;
             z-index: 10;
         }
-
     </style>
 @endpush
 
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:items-center !ml-0 order-2 lg:order-1">
-    <!-- Save Changes Button -->
+    {{-- Save Changes Button --}}
     <div class="flex items-center mr-7">
         <button
             class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto"
@@ -27,7 +26,7 @@
         </span>
     </div>
 
-    <!-- Cancel Edit Button -->
+    {{-- Cancel Edit Button --}}
     <div class="flex items-center !mr-7">
         <button
             class="bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto"
@@ -44,7 +43,7 @@
         </span>
     </div>
 
-    <!-- Edit Selected Button -->
+    {{-- Edit Selected Button --}}
     <div class="flex items-center">
         <button
             class="bg-[#0070FF] disabled:bg-[#0070F06c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium w-full sm:w-auto"
