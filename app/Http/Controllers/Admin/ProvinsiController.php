@@ -69,9 +69,6 @@ class ProvinsiController extends Controller
         return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor provinsi.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreProvinsiRequest $request)
     {
         try {

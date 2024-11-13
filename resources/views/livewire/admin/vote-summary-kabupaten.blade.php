@@ -2,10 +2,8 @@
  <div class="p-6">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
                     <!-- Title -->
-                    <div class="w-full lg:w-auto">
-                        <h2 class="text-lg font-bold bg-[#3560A0] text-white px-4 py-2 rounded shadow-sm inline-block">
+                    <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
                             Jumlah Partisipasi Suara Tertinggi Provinsi Kalimantan Timur
-                        </h2>
                     </div>
 
                     <!-- Controls Container -->

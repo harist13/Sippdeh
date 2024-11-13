@@ -188,8 +188,6 @@
                     <div class="grid grid-cols-2 gap-2">
                         @foreach([
                             'kabupaten' => 'Kab/Kota',
-                            'kecamatan' => 'Kec.',
-                            'kelurahan' => 'Kel.',
                             'calon' => 'Paslon',
                             'abstain' => 'Abstain'
                         ] as $key => $label)
@@ -245,11 +243,10 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
         <div class="overflow-hidden mb-8">
             <!-- Header Section -->
             <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div class="text-black py-2 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
                     Daftar Paslon Gubernur Dengan Partisipasi Se-Kalimantan Timur
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
@@ -290,12 +287,6 @@
                             @if(!in_array('kabupaten', $hiddenColumns))
                                 <th class="py-3 px-4 border-r border-white">Kab/Kota</th>
                             @endif
-                            @if(!in_array('kecamatan', $hiddenColumns))
-                                <th class="py-3 px-4 border-r border-white">Kec.</th>
-                            @endif
-                            @if(!in_array('kelurahan', $hiddenColumns))
-                                <th class="py-3 px-4 border-r border-white">Kel.</th>
-                            @endif
                             <th class="py-3 px-4 border-r border-white">DPT</th>
                             @if(!in_array('calon', $hiddenColumns))
                                 @foreach($paslon as $calon)
@@ -318,12 +309,6 @@
                             </td>
                             @if(!in_array('kabupaten', $hiddenColumns))
                                 <td class="py-3 px-4 border-r">{{ $data->kabupaten_nama }}</td>
-                            @endif
-                            @if(!in_array('kecamatan', $hiddenColumns))
-                                <td class="py-3 px-4 border-r">{{ $data->kecamatan_nama }}</td>
-                            @endif
-                            @if(!in_array('kelurahan', $hiddenColumns))
-                                <td class="py-3 px-4 border-r">{{ $data->kelurahan_nama }}</td>
                             @endif
                             <td class="py-3 px-4 border-r">{{ $data->suara->dpt ?? 0 }}</td>
                             @if(!in_array('calon', $hiddenColumns))
@@ -358,7 +343,7 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
+            
 
             <!-- Pagination -->
             <div class="mt-4">
