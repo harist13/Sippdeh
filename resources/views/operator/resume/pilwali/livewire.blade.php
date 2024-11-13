@@ -14,7 +14,7 @@
           <div class="inline-block min-w-full align-middle">
               <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg relative">
                   <!-- Loading Overlay -->
-                  <div wire:loading.delay wire:target.except="applyFilter"
+                  <div wire:loading.delay wire:target.except="export"
                       class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                   <div class="px-4">

@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Operator\Resume\Pilgub;
 
-use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -108,7 +107,7 @@ class FilterResumeSuaraPilgub extends Component
 
     public function resetFilter()
     {
-        $this->dispatch('reset-filter');
+        $this->dispatch('reset-filter')->to(ResumeSuaraPilgub::class);
     }
 
     public function applyFilter()

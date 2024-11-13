@@ -31,12 +31,7 @@ class ResumeSuaraPilwali extends Component
 
     public function mount()
     {
-        $this->selectedKecamatan = Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
-            ->get()
-            ->pluck('id')
-            ->all();
-        
+        $this->fillSelectedKecamatan();
         $this->includedColumns = ['KECAMATAN', 'CALON'];
     }
 
@@ -117,10 +112,20 @@ class ResumeSuaraPilwali extends Component
         return $builder->get();
     }
 
+    private function fillSelectedKecamatan()
+    {
+        $this->selectedKecamatan = Kecamatan::query()
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
+            ->get()
+            ->pluck('id')
+            ->all();
+    }
+
     #[On('reset-filter')] 
     public function resetFilter()
     {
-        $this->selectedKecamatan = [];
+        $this->fillSelectedKecamatan();
+        
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KECAMATAN', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
