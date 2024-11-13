@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Operator\InputSuara\Pilgub;
 
+use App\Exports\InputSuaraPilgubExport;
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\SuaraCalon;
@@ -16,6 +17,7 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use Sentry\SentrySdk;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InputSuaraPilgub extends Component
 {
@@ -204,5 +206,18 @@ class InputSuaraPilgub extends Component
 
             $this->dispatch('data-stored', status: 'gagal');
         }
+    }
+
+    public function export()
+    {
+        $sheet = new InputSuaraPilgubExport(
+            $this->keyword,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
     }
 }
