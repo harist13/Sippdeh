@@ -2,6 +2,41 @@
 
 @push('styles')
     <style>
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #CBD5E1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            margin: 0 2px;
+        }
+
+        .dot.active {
+            background-color: #2563EB;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
         /* slide kusus diagram bar */
         .chart-container {
                 position: relative;
@@ -447,24 +482,27 @@
 
         
         <div class="flex justify-center items-center w-full mt-2 pb-4">
-            <div class="flex items-center gap-4">
-                <button id="prevSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+            <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/80 backdrop-blur rounded-full">
+                <button id="prevSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                
-                <button id="playPauseBtn" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 pause-icon">
+
+                <!-- Dots container -->
+                <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
+
+                <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 pause-icon">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 play-icon hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 play-icon hidden">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                     </svg>
                 </button>
 
-                <button id="nextSlide101" class="p-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                <button id="nextSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
@@ -608,69 +646,191 @@
         
         // paslon singkron partisipasi
         document.addEventListener('DOMContentLoaded', function() {
-        const participationSlides = document.querySelectorAll('.slide101');
-        const candidateSlides = document.querySelectorAll('.candidate-slide');
-        
-        function showSlides(index) {
+            const slideContainer = document.getElementById('slideContainer');
+            const slides = document.querySelectorAll('.slide101');
+            const candidateSlides = document.querySelectorAll('.candidate-slide');
+            const prevBtn = document.getElementById('prevSlide101');
+            const nextBtn = document.getElementById('nextSlide101');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+            const playIcon = playPauseBtn.querySelector('.play-icon');
+            
+            // Create dots container
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'flex items-center gap-1 mx-2';
+            playPauseBtn.parentNode.insertBefore(dotsContainer, playPauseBtn);
+            
+            let currentSlide = 0;
+            let isPlaying = true;
+            let slideInterval = null;
+
+            // Create dots for each slide
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `dot ${index === 0 ? 'active' : ''}`;
+                dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    showSlides(currentSlide);
+                    if (isPlaying) {
+                        startSlideShow();
+                    }
+                });
+                dotsContainer.appendChild(dot);
+            });
+
+            // Update dots
+            function updateDots() {
+                document.querySelectorAll('.dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+
             // Hide all slides
-            participationSlides.forEach(slide => slide.style.display = 'none');
-            candidateSlides.forEach(slide => slide.style.display = 'none');
-            
-            // Show current slides
-            if (participationSlides[index]) participationSlides[index].style.display = 'block';
-            if (candidateSlides[index]) candidateSlides[index].style.display = 'block';
-        }
-        
-        // Show first slides initially
-        showSlides(0);
-        
-        // Update navigation buttons
-        document.getElementById('prevSlide101').addEventListener('click', function() {
-            const currentIndex = Array.from(participationSlides).findIndex(slide => 
-                slide.style.display !== 'none'
-            );
-            const newIndex = (currentIndex - 1 + participationSlides.length) % participationSlides.length;
-            showSlides(newIndex);
-        });
-        
-        document.getElementById('nextSlide101').addEventListener('click', function() {
-            const currentIndex = Array.from(participationSlides).findIndex(slide => 
-                slide.style.display !== 'none'
-            );
-            const newIndex = (currentIndex + 1) % participationSlides.length;
-            showSlides(newIndex);
-        });
-        
-        // Autoplay functionality
-        let autoplayInterval;
-        const startAutoplay = () => {
-            autoplayInterval = setInterval(() => {
-                document.getElementById('nextSlide101').click();
-            }, 5000);
-        };
-        
-        const stopAutoplay = () => {
-            clearInterval(autoplayInterval);
-        };
-        
-        document.getElementById('playPauseBtn').addEventListener('click', function() {
-            const playIcon = this.querySelector('.play-icon');
-            const pauseIcon = this.querySelector('.pause-icon');
-            
-            if (playIcon.classList.contains('hidden')) {
-                stopAutoplay();
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-            } else {
-                startAutoplay();
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
+            function hideAllSlides() {
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                    slide.classList.add('fade-out');
+                    slide.style.display = 'none';
+                });
+                if (candidateSlides) {
+                    candidateSlides.forEach(slide => {
+                        slide.style.display = 'none';
+                    });
+                }
+            }
+
+            // Show specific slides
+            function showSlides(index) {
+                hideAllSlides();
+                
+                // Show participation slide
+                if (slides[index]) {
+                    slides[index].style.display = 'block';
+                    slides[index].classList.remove('fade-out');
+                    slides[index].classList.add('active', 'fade-in');
+                }
+                
+                // Show candidate slide
+                if (candidateSlides && candidateSlides[index]) {
+                    candidateSlides[index].style.display = 'block';
+                }
+                
+                updateDots();
+            }
+
+            // Next slide function
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlides(currentSlide);
+            }
+
+            // Previous slide function
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlides(currentSlide);
+            }
+
+            // Start auto-sliding
+            function startSlideShow() {
+                if (slideInterval) clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+
+            // Toggle play/pause
+            function togglePlayPause() {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    startSlideShow();
+                    pauseIcon.classList.remove('hidden');
+                    playIcon.classList.add('hidden');
+                } else {
+                    clearInterval(slideInterval);
+                    pauseIcon.classList.add('hidden');
+                    playIcon.classList.remove('hidden');
+                }
+            }
+
+            // Initialize slider
+            hideAllSlides();
+            showSlides(0);
+            startSlideShow();
+
+            // Event listeners
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                if (isPlaying) {
+                    startSlideShow(); // Reset interval after manual navigation
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                if (isPlaying) {
+                    startSlideShow(); // Reset interval after manual navigation
+                }
+            });
+
+            playPauseBtn.addEventListener('click', togglePlayPause);
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    if (isPlaying) startSlideShow();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    if (isPlaying) startSlideShow();
+                } else if (e.key === ' ') {
+                    e.preventDefault(); // Prevent page scrolling
+                    togglePlayPause();
+                }
+            });
+
+            // Add swipe support for touch devices
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            if (slideContainer) {
+                slideContainer.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                slideContainer.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+            }
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const difference = touchStartX - touchEndX;
+
+                if (Math.abs(difference) > swipeThreshold) {
+                    if (difference > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    if (isPlaying) startSlideShow();
+                }
+            }
+
+            // Pause on hover
+            if (slideContainer) {
+                slideContainer.addEventListener('mouseenter', () => {
+                    if (isPlaying) {
+                        clearInterval(slideInterval);
+                    }
+                });
+
+                slideContainer.addEventListener('mouseleave', () => {
+                    if (isPlaying) {
+                        startSlideShow();
+                    }
+                });
             }
         });
-        
-        // Start autoplay initially
-        startAutoplay();
-    });
 
 
         // diagram bar
