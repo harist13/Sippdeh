@@ -28,7 +28,8 @@ class UpdateProvinsiRequest extends FormRequest
                 'required',
                 'max:300',
                 Rule::unique('provinsi', 'nama')->ignore($id)
-            ]
+            ],
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
 

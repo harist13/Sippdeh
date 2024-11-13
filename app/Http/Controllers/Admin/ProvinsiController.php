@@ -13,6 +13,7 @@ use App\Models\Provinsi;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ProvinsiController extends Controller
 {
@@ -78,11 +79,72 @@ class ProvinsiController extends Controller
 
             $provinsi = new Provinsi();
             $provinsi->nama = $validated['nama_provinsi_baru'];
+            
+            // Handle logo upload
+            if ($request->hasFile('logo')) {
+                $logo = $request->file('logo');
+                $logoName = time() . '_' . $logo->getClientOriginalName(); // Menggunakan nama asli file
+                // Simpan file ke storage
+                $logo->move(public_path('storage/kabupaten_logo'), $logoName);
+                $provinsi->logo = $logoName;
+            }
+            
             $provinsi->save();
-    
+
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah provinsi.');
         } catch (Exception $exception) {
+            dd($exception); // Untuk debugging
             return redirect()->back()->with('pesan_gagal', 'Gagal manambah provinsi.');
+        }
+    }
+
+    public function update(UpdateProvinsiRequest $request, string $id)
+    {
+        try {
+            $validated = $request->validated();
+
+            $provinsi = Provinsi::find($id);
+            $provinsi->nama = $validated['nama_provinsi'];
+            
+            // Handle logo update
+            if ($request->hasFile('logo')) {
+                // Delete old logo if exists
+                if ($provinsi->logo && file_exists(public_path('storage/kabupaten_logo/' . $provinsi->logo))) {
+                    unlink(public_path('storage/kabupaten_logo/' . $provinsi->logo));
+                }
+                
+                $logo = $request->file('logo');
+                $logoName = time() . '_' . $logo->getClientOriginalName(); // Menggunakan nama asli file
+                // Simpan file ke storage
+                $logo->move(public_path('storage/kabupaten_logo'), $logoName);
+                $provinsi->logo = $logoName;
+            }
+            
+            $provinsi->save();
+
+            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit provinsi.');
+        } catch (Exception $exception) {
+            dd($exception); // Untuk debugging
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit provinsi.');
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $provinsi = Provinsi::find($id);
+            
+            // Delete logo if exists
+            if ($provinsi->logo && file_exists(public_path('storage/kabupaten_logo/' . $provinsi->logo))) {
+                unlink(public_path('storage/kabupaten_logo/' . $provinsi->logo));
+            }
+            
+            $provinsi->delete();
+
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus provinsi.');
+        } catch (Exception $exception) {
+            dd($exception); // Untuk debugging
+            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus provinsi.');
         }
     }
 
@@ -112,36 +174,4 @@ class ProvinsiController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProvinsiRequest $request, string $id)
-    {
-        try {
-            $validated = $request->validated();
-
-            $provinsi = Provinsi::find($id);
-            $provinsi->nama = $validated['nama_provinsi'];
-            $provinsi->save();
-    
-            return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit provinsi.');
-        } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Gagal mengedit provinsi.');
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-            $provinsi = Provinsi::find($id);
-            $provinsi->delete();
-    
-            return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus provinsi.');
-        } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Gagal menghapus provinsi.');
-        }
-    }
 }

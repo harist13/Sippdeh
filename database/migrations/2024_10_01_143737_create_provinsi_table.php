@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('provinsi', function (Blueprint $table) {
             $table->id();
+            $table->string('logo', 300)->nullable();
             $table->string('nama');
             $table->timestamps();
         });

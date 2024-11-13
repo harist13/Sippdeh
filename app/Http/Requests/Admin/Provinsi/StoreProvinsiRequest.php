@@ -22,7 +22,8 @@ class StoreProvinsiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_provinsi_baru' => 'required|unique:provinsi,nama|max:300'
+            'nama_provinsi_baru' => 'required|unique:provinsi,nama|max:300',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
 

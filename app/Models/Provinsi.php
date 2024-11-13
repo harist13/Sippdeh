@@ -13,7 +13,7 @@ class Provinsi extends Model
 
     protected $table = 'provinsi';
 
-    protected $fillable = ['nama'];
+    protected $fillable = ['logo','nama'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();

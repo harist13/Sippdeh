@@ -1,7 +1,7 @@
 <!-- Add Provinsi Modal -->
 <div id="addProvinsiModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
     <div class="relative inset-y-1/2 -translate-y-1/2 mx-auto px-5 py-5 border w-96 shadow-lg rounded-md bg-white">
-        <form action="{{ route('provinsi.store') }}" method="POST">
+        <form action="{{ route('provinsi.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Provinsi</h3>
 
@@ -9,6 +9,13 @@
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama provinsi" required>
             <span class="text-red-800">{{ $errors->first('nama_provinsi_baru') }}</span>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700">Logo Provinsi</label>
+                <input type="file" name="logo" accept="image/*"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500">
+                <span class="text-red-800">{{ $errors->first('logo') }}</span>
+            </div>
 
             <hr class="h-1 my-3">
 
