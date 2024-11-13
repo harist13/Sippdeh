@@ -29,8 +29,8 @@
 
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-                <div class="relative w-[300px] w-full-mobile">
-                    <select wire:model.live="kabupatenId" class="bg-gray-100 w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-between w-full-mobile">
+                {{-- <div class="relative w-[300px] w-full-mobile">
+                    <select wire:model.live="kabupatenId" class="w-full rounded-lg bg-[#ECEFF5] px-4 py-2">
                         <option value="0" {{ $kabupatenId == 0 ? 'selected' : '' }}>
                             Semua
                         </option>
@@ -41,13 +41,30 @@
                             </option>
                         @endforeach
                     </select>
-                </div>                
+                </div> --}}
 
-                <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                {{-- Search Input --}}
+                <div class="flex items-center rounded-lg border bg-[#ECEFF5] px-4 py-2">
+                    {{-- Loading Icon --}}
+                    <svg wire:loading wire:target="keyword" class="animate-spin -ml-1 mr-2 h-4 w-4 text-[#3560A0]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+
+                    {{-- Search Icon --}}
+                    <svg wire:loading.remove wire:target="keyword" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                     </svg>
-                    <input wire:model.live.debounce.250ms="keyword" type="search" placeholder="Cari provinsi" name="cari" class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ $keyword }}">
+
+                    {{-- Input --}}
+                    <input 
+                        wire:model.live.debounce.500ms="keyword"
+                        type="search" 
+                        placeholder="Cari"
+                        name="cari" 
+                        id="search"
+                        class="ml-2 w-[300px] bg-transparent focus:outline-none text-gray-600"
+                    >
                 </div>
             </div>
 

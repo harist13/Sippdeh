@@ -25,7 +25,7 @@ class Provinsi extends Component
         $kabupaten = Kabupaten::all();
         $provinsi = $this->getProvinsi();
 
-        return view('livewire.admin.provinsi', compact('kabupaten', 'provinsi'));
+        return view('admin.provinsi.livewire', compact('kabupaten', 'provinsi'));
     }
 
     private function getProvinsi(): LengthAwarePaginator
