@@ -1,4 +1,5 @@
 @php
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
@@ -9,86 +10,99 @@
 <table>
     <thead>
         <tr>
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="50px">
                 NO
             </th>
-            
+
+            @if (!$isKabupatenColumnIgnored)
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
+                    Kabupaten
+                </th>
+            @endif
             @if (!$isKecamatanColumnIgnored)
-                <th style="min-width: 100px;">
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                     Kecamatan
                 </th>
             @endif
             @if (!$isKelurahanColumnIgnored)
-                <th style="min-width: 100px;">
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                     Kelurahan
                 </th>
             @endif
-            <th style="min-width: 50px;">
+
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 DPT
             </th>
 
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th width="50px">
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                     Kotak Kosong
                 </th>
             @endif
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
-                    <th width="100px">
+                    <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                     </th>
                 @endforeach
             @endif
 
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Suara Sah
             </th>
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Suara Tidak Sah
             </th>
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Suara Masuk
             </th>
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Abstain
             </th>
-            <th style="min-width: 50px;">
+            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                 Partisipasi
             </th>
         </tr>
     </thead>
 
     <tbody>
-        @forelse ($suara as $datum)
-            <tr wire:key="{{ $datum->id }}">
+        @foreach ($suara as $datum)
+            <tr style="border-bottom: 1px solid;">
                 {{-- ID TPS --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
+                {{-- Kabupaten --}}
+                @if (!$isKabupatenColumnIgnored)
+                    <td style="border: 1px solid black;">
+                        {{ $datum->kecamatan->kabupaten->nama }}
+                    </td>
+                @endif
+
                 {{-- Kecamatan --}}
                 @if (!$isKecamatanColumnIgnored)
-                    <td>
+                    <td style="border: 1px solid black;">
                         {{ $datum->kecamatan->nama }}
                     </td>
                 @endif
 
                 {{-- Kelurahan --}}
                 @if (!$isKelurahanColumnIgnored)
-                    <td>
+                    <td style="border: 1px solid black;">
                         {{ $datum->nama }}
                     </td>
                 @endif
 
                 {{-- DPT --}}
-                <td>
-                    <span class="value">{{ $datum->dpt }}</span>
+                <td style="text-align: center; border: 1px solid black;">
+                    {{ $datum->dpt }}
                 </td>
 
                 {{-- Kotak Kosong --}}
                 @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td>
+                    <td style="text-align: center; border: 1px solid black;">
                         {{ $datum->kotak_kosong }}
                     </td>
                 @endif
@@ -99,34 +113,34 @@
                         @php
                             $suara = $datum->getCalonSuaraByCalonId($calon->id);
                         @endphp
-                        <td wire:key="{{ $datum->id }}{{ $calon->id }}">
+                        <td style="text-align: center; border: 1px solid black;">
                             {{ $suara ? $suara->total_suara : 0 }}
                         </td>
                     @endforeach
                 @endif
 
                 {{-- Suara Sah --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->suara_sah }}
                 </td>
 
                 {{-- Suara Tidak Sah --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->suara_tidak_sah }}
                 </td>
 
                 {{-- Suara Masuk --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->suara_masuk }}
                 </td>
 
                 {{-- Abstain --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     {{ $datum->abstain }}
                 </td>
 
                 {{-- Partisipasi --}}
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     @if ($datum->partisipasi <= 100 && $datum->partisipasi >= 80)
                         <span>
                             {{ $datum->partisipasi }}%
@@ -146,12 +160,6 @@
                     @endif
                 </td>
             </tr>
-        @empty
-            <tr>
-                <td colspan="15" style="text-align: center;">
-                    Data tidak tersedia.
-                </td>
-            </tr>
-        @endforelse
+        @endforeach
     </tbody>
 </table>
