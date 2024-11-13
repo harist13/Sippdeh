@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Operator\InputSuara\Pilgub;
 
+use App\Models\ResumeSuaraPilgubTPS;
 use App\Exports\InputSuaraPilgubExport;
 use App\Models\Calon;
-use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +16,8 @@ use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Livewire\Component;
 use Sentry\SentrySdk;
-use Exception;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class InputSuaraPilgub extends Component
 {
@@ -29,7 +29,6 @@ class InputSuaraPilgub extends Component
 
     public int $perPage = 10;
 
-    public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
@@ -39,7 +38,6 @@ class InputSuaraPilgub extends Component
     {
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
-
         return view('operator.input-suara.pilgub.livewire', compact('tps', 'paslon'));
     }
 
@@ -58,7 +56,7 @@ class InputSuaraPilgub extends Component
         });
 
         if (!empty($this->selectedKelurahan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
                     if (!empty($this->selectedKelurahan)) {
                         $builder->whereIn('id', $this->selectedKelurahan);
@@ -68,7 +66,7 @@ class InputSuaraPilgub extends Component
         }
 
         if (!empty($this->selectedKecamatan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
                     $builder->whereHas('kecamatan', function(Builder $builder) {
                         $builder->whereIn('id', $this->selectedKecamatan);
@@ -79,25 +77,15 @@ class InputSuaraPilgub extends Component
 
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
-                $builder->where(function (Builder $builder) {
-                    $builder
-                        ->whereHas('suara', function (Builder $builder) {
-                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59.9');
-                        })
-                        ->orWhereDoesntHave('suara');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
             }
         
             if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79.9');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 80 AND 100');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
             }
         });
 
@@ -128,10 +116,6 @@ class InputSuaraPilgub extends Component
         $builder->whereHas('provinsi', function (Builder $builder) use ($userWilayah) {
             $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
         });
-
-        // if ($this->posisi == 'WALIKOTA') {
-        //     $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama($userWilayah));
-        // }
 
         return $builder->get();
     }

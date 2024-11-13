@@ -12,11 +12,10 @@ class InputSuaraPilgubExport implements FromView
 {
     public string $keyword = '';
 
-    public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'CALON'];
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $includedColumns = [];
+    public array $partisipasi = [];
     
     public function __construct($keyword, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
@@ -35,40 +34,31 @@ class InputSuaraPilgubExport implements FromView
         $includedColumns = $this->includedColumns;
         $paslon = $this->getCalon();
         $tps = $this->getTPS();
-        
-        if (!empty($this->selectedKelurahan)) {
-            return view('exports.input-suara.pilgub.kelurahan-table', compact('tps', 'paslon', 'includedColumns'));
-        }
-        
-        return view('exports.input-suara.pilgub.kecamatan-table', compact('tps', 'paslon', 'includedColumns'));
+        return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
     }
 
     private function getTPS()
     {
-        $userWilayah = session('user_wilayah');
-
-        $builder = ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) use ($userWilayah) {
-            $builder->whereHas('kelurahan', function (Builder $builder) use ($userWilayah) {
-                $builder->whereHas('kecamatan', function(Builder $builder) use ($userWilayah) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) use ($userWilayah) {
-                        $builder->whereNama($userWilayah);
+        $builder = ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
+            $builder->whereHas('kelurahan', function (Builder $builder) {
+                $builder->whereHas('kecamatan', function(Builder $builder) {
+                    $builder->whereHas('kabupaten', function (Builder $builder) {
+                        $builder->whereNama(session('user_wilayah'));
                     });
                 });
             });
         });
 
         if (!empty($this->selectedKelurahan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
-                    if (!empty($this->selectedKelurahan)) {
-                        $builder->whereIn('id', $this->selectedKelurahan);
-                    }
+                    $builder->whereIn('id', $this->selectedKelurahan);
                 });
             });
         }
 
         if (!empty($this->selectedKecamatan)) {
-            $builder->whereHas('tps', function(Builder $builder) use ($userWilayah) {
+            $builder->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
                     $builder->whereHas('kecamatan', function(Builder $builder) {
                         $builder->whereIn('id', $this->selectedKecamatan);
@@ -79,25 +69,15 @@ class InputSuaraPilgubExport implements FromView
 
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
-                $builder->where(function (Builder $builder) {
-                    $builder
-                        ->whereHas('suara', function (Builder $builder) {
-                            $builder->whereRaw('partisipasi BETWEEN 0 AND 59.9');
-                        })
-                        ->orWhereDoesntHave('suara');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
             }
         
             if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 60 AND 79.9');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereHas('suara', function (Builder $builder) {
-                    $builder->whereRaw('partisipasi BETWEEN 80 AND 100');
-                });
+                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
             }
         });
 
@@ -118,23 +98,6 @@ class InputSuaraPilgubExport implements FromView
         }
 
         return $builder->get();
-    }
-
-    private function addPartisipasiFilter(Builder $builder)
-    {
-        $builder->where(function (Builder $builder) {
-            if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-            }
-            
-            if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
-            }
-        });
     }
 
     private function getCalon()
