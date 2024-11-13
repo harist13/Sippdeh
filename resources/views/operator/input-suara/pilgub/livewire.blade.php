@@ -51,8 +51,8 @@
 	</div>
 
 	{{-- Filter Pilgub Modal --}}
-	@livewire(
-		'operator.input-suara.pilgub.filter-input-suara-pilgub',
+	@include(
+		'operator.input-suara.pilgub.filter-modal',
 		compact('selectedKecamatan','selectedKelurahan','includedColumns','partisipasi')
 	)
 </div>

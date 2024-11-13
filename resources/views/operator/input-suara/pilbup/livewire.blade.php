@@ -48,8 +48,8 @@
 	</div>
 
 	<!-- Filter Pilgub Modal -->
-	@livewire(
-		'operator.input-suara.pilbup.filter-input-suara-pilbup',
+	@include(
+		'operator.input-suara.pilbup.filter-modal',
 		compact(
 			'selectedKecamatan',
 			'selectedKelurahan',

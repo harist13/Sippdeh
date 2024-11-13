@@ -26,7 +26,7 @@ class FilterInputSuaraPilbup extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.input-suara.pilbup.filter-modal', compact('kecamatan', 'kelurahan'));
+        return view('operator.input-suara.pilbup.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
