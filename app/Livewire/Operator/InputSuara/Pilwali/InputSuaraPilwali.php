@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Operator\InputSuara\Pilwali;
 
+use App\Exports\InputSuaraPilwaliExport;
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
 use App\Models\SuaraCalon;
@@ -16,6 +17,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Sentry\SentrySdk;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InputSuaraPilwali extends Component
 {
@@ -198,5 +200,18 @@ class InputSuaraPilwali extends Component
 
             $this->dispatch('data-stored', status: 'gagal');
         }
+    }
+
+    public function export()
+    {
+        $sheet = new InputSuaraPilwaliExport(
+            $this->keyword,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-walikkota.xlsx');
     }
 }
