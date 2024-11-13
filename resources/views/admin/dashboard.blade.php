@@ -493,10 +493,10 @@
                 <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
 
                 <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 pause-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 pause-icon">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 play-icon hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 play-icon hidden">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                     </svg>
                 </button>
@@ -996,145 +996,5 @@
         
         
         
-        //buat animasi sama slide di logo logo
-        document.addEventListener('DOMContentLoaded', function() {
-            const slideContainer = document.getElementById('slideContainer');
-            const slides = document.querySelectorAll('.slide101');
-            const prevBtn = document.getElementById('prevSlide101');
-            const nextBtn = document.getElementById('nextSlide101');
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const pauseIcon = playPauseBtn.querySelector('.pause-icon');
-            const playIcon = playPauseBtn.querySelector('.play-icon');
-            
-            let currentSlide = 0;
-            let isPlaying = true;
-            let slideInterval = null;
-        
-            // Hide all slides except the first one
-            function hideAllSlides() {
-                slides.forEach(slide => {
-                    slide.classList.remove('active');
-                    slide.classList.add('fade-out');
-                });
-            }
-        
-            // Show specific slide
-            function showSlide(index) {
-                hideAllSlides();
-                slides[index].classList.remove('fade-out');
-                slides[index].classList.add('active', 'fade-in');
-            }
-        
-            // Next slide function
-            function nextSlide() {
-                currentSlide = (currentSlide + 1) % slides.length;
-                showSlide(currentSlide);
-            }
-        
-            // Previous slide function
-            function prevSlide() {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(currentSlide);
-            }
-        
-            // Start auto-sliding
-            function startSlideShow() {
-                if (slideInterval) clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000);
-            }
-        
-            // Toggle play/pause
-            function togglePlayPause() {
-                isPlaying = !isPlaying;
-                if (isPlaying) {
-                    startSlideShow();
-                    pauseIcon.classList.remove('hidden');
-                    playIcon.classList.add('hidden');
-                } else {
-                    clearInterval(slideInterval);
-                    pauseIcon.classList.add('hidden');
-                    playIcon.classList.remove('hidden');
-                }
-            }
-        
-            // Initialize slider
-            hideAllSlides();
-            showSlide(0);
-            startSlideShow();
-        
-            // Event listeners
-            prevBtn.addEventListener('click', () => {
-                prevSlide();
-                if (isPlaying) {
-                    startSlideShow(); // Reset interval after manual navigation
-                }
-            });
-        
-            nextBtn.addEventListener('click', () => {
-                nextSlide();
-                if (isPlaying) {
-                    startSlideShow(); // Reset interval after manual navigation
-                }
-            });
-        
-            playPauseBtn.addEventListener('click', togglePlayPause);
-        
-            // Add keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    prevSlide();
-                    if (isPlaying) startSlideShow();
-                } else if (e.key === 'ArrowRight') {
-                    nextSlide();
-                    if (isPlaying) startSlideShow();
-                } else if (e.key === ' ') {
-                    // Space bar to toggle play/pause
-                    e.preventDefault(); // Prevent page scrolling
-                    togglePlayPause();
-                }
-            });
-        
-            // Add swipe support for touch devices
-            let touchStartX = 0;
-            let touchEndX = 0;
-        
-            slideContainer.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            });
-        
-            slideContainer.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            });
-        
-            function handleSwipe() {
-                const swipeThreshold = 50; // Minimum distance for a swipe
-                const difference = touchStartX - touchEndX;
-        
-                if (Math.abs(difference) > swipeThreshold) {
-                    if (difference > 0) {
-                        // Swipe left
-                        nextSlide();
-                    } else {
-                        // Swipe right
-                        prevSlide();
-                    }
-                    if (isPlaying) startSlideShow();
-                }
-            }
-        
-            // Pause on hover (optional)
-            slideContainer.addEventListener('mouseenter', () => {
-                if (isPlaying) {
-                    clearInterval(slideInterval);
-                }
-            });
-        
-            slideContainer.addEventListener('mouseleave', () => {
-                if (isPlaying) {
-                    startSlideShow();
-                }
-            });
-        });
     </script>
 @endpush
