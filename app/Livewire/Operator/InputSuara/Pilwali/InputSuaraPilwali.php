@@ -212,6 +212,6 @@ class InputSuaraPilwali extends Component
             $this->partisipasi
         );
 
-        return Excel::download($sheet, 'resume-suara-pemilihan-walikkota.xlsx');
+        return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
     }
 }
