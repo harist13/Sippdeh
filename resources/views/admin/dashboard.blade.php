@@ -397,8 +397,7 @@
                                             <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
                                         </div>
                                         <div class="text-right w-1/3">
-                                            <div class="text-4xl font-bold color 
-                                                {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
+                                            <div class="text-4xl font-bold {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
                                                 ($data['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
                                                 {{ number_format($data['partisipasi'], 2) }}%
                                             </div>
@@ -407,244 +406,208 @@
                                 </div>
                             </div>
                             @endforeach
-                        </div>
 
-                        
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-        <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
-            <!-- Tombol Navigasi Kiri untuk Paslon -->
-            <button id="prevSlideCandidate" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-r-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-
-            <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out relative">
-                @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
-                    @php
-                        $calon = $syncedCalonData[$kabupatenId];
-                        $totalSlides = ceil(count($calon) / 3);
-                    @endphp
-
-                    @for($slideIndex = 0; $slideIndex < $totalSlides; $slideIndex++)
-                        <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="{{ $slideIndex }}" style="display: none;">
-                            <div class="flex justify-center gap-[45px] min-w-[1080px]">
-                                @for($i = $slideIndex * 3; $i < min(($slideIndex + 1) * 3, count($calon)); $i++)
-                                    <div class="w-[330px] flex flex-col">
-                                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                                            @if ($calon[$i]['foto'])
-                                                <img class="w-full h-full object-cover" 
-                                                    src="{{ Storage::disk('foto_calon_lokal')->url($calon[$i]['foto']) }}" 
-                                                    alt="{{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}">
-                                            @else
-                                                <img class="w-full h-full object-cover" 
-                                                    src="{{ asset('assets/default.png') }}" 
-                                                    alt="Default Image">
-                                            @endif
-                                        </div>
-                                        <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                            {{ $calon[$i]['wilayah'] }}
-                                        </div>
-                                        <div class="bg-white rounded-b-2xl p-4 shadow">
-                                            <h4 class="text-[#52526c] text-center font-bold mb-1">
-                                                {{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}
-                                            </h4>
-                                            <p class="text-[#6b6b6b] text-center text-sm mb-2">
-                                                {{ $calon[$i]['posisi'] }} {{ $calon[$i]['nomor_urut'] }}
-                                            </p>
-                                            <div class="flex justify-center items-center text-[#008bf9]">
-                                                <span class="font-medium">{{ number_format($calon[$i]['persentase'], 2) }}%</span>
-                                                <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                                <span class="font-medium">{{ number_format($calon[$i]['total_suara']) }} Suara</span>
+                            <!-- Slide Provinsi -->
+                            @if($provinsiData)
+                            <div id="slideProvinsi" class="slide101">
+                                <div class="mb-6 rounded-lg">
+                                    <div class="flex items-start mb-6">
+                                        <img src="{{ asset('storage/' . $provinsiData['logo']) }}" 
+                                            alt="Logo {{ $provinsiData['nama'] }}" 
+                                            class="mr-8 w-40 h-45">
+                                        <div class="flex-grow pl-10">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah Provinsi</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_sah']) }} Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah Provinsi</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_tidak_sah']) }} Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total DPT Provinsi</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['dpt']) }} Orang</p>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Abstain Provinsi</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['abstain']) }} Orang</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endfor
+                                </div>
+                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col items-start w-1/3">
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>70,00% - 100,00% DPT » Hijau</span>
+                                            </div>
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                <span>50,00% - 69,99% DPT » Kuning</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>0,00% - 49,99% DPT » Merah</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-1/3">
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat Provinsi</h2>
+                                        </div>
+                                        <div class="text-right w-1/3">
+                                            <div class="text-4xl font-bold {{ $provinsiData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
+                                                ($provinsiData['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
+                                                {{ number_format($provinsiData['partisipasi'], 2) }}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            @endif
                         </div>
-                    @endfor
-                @endforeach
-            </div>
+                    </div>
+                </div>
+            </section>
 
-            <br>
-
-            <!-- Tombol Navigasi Kanan untuk Paslon -->
-            <button id="nextSlideCandidate" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-l-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
-
-        
-        <div class="flex justify-center items-center w-full mt-2 pb-4">
-            <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/80 backdrop-blur rounded-full">
-                <button id="prevSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+            <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
+                <!-- Tombol Navigasi Kiri untuk Paslon -->
+                <button id="prevSlideCandidate" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-r-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
 
-                <!-- Dots container -->
-                <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
+                <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out relative">
+                    @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
+                        @php
+                            $calon = $syncedCalonData[$kabupatenId];
+                            $totalSlides = ceil(count($calon) / 3);
+                        @endphp
 
-                <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 pause-icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 play-icon hidden">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
-                </button>
+                        @for($slideIndex = 0; $slideIndex < $totalSlides; $slideIndex++)
+                            <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="{{ $slideIndex }}" style="display: none;">
+                                <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                                    @for($i = $slideIndex * 3; $i < min(($slideIndex + 1) * 3, count($calon)); $i++)
+                                        <div class="w-[330px] flex flex-col">
+                                            <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                                @if ($calon[$i]['foto'])
+                                                    <img class="w-full h-full object-cover" 
+                                                        src="{{ Storage::disk('foto_calon_lokal')->url($calon[$i]['foto']) }}" 
+                                                        alt="{{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}">
+                                                @else
+                                                    <img class="w-full h-full object-cover" 
+                                                        src="{{ asset('assets/default.png') }}" 
+                                                        alt="Default Image">
+                                                @endif
+                                            </div>
+                                            <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                                {{ $calon[$i]['wilayah'] }}
+                                            </div>
+                                            <div class="bg-white rounded-b-2xl p-4 shadow">
+                                                <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                                    {{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}
+                                                </h4>
+                                                <p class="text-[#6b6b6b] text-center text-sm mb-2">
+                                                    {{ $calon[$i]['posisi'] }} {{ $calon[$i]['nomor_urut'] }}
+                                                </p>
+                                                <div class="flex justify-center items-center text-[#008bf9]">
+                                                    <span class="font-medium">{{ number_format($calon[$i]['persentase'], 2) }}%</span>
+                                                    <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                                    <span class="font-medium">{{ number_format($calon[$i]['total_suara']) }} Suara</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                        @endfor
+                    @endforeach
 
-                <button id="nextSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                    <!-- Slide Provinsi untuk Paslon -->
+                    @if($provinsiData && !empty($provinsiData['candidates']))
+                    <div class="candidate-slide" data-province="true" style="display: none;">
+                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                            @foreach($provinsiData['candidates'] as $candidate)
+                                <div class="w-[330px] flex flex-col">
+                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                        @if ($candidate['foto'])
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
+                                                alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
+                                        @else
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ asset('assets/default.png') }}" 
+                                                alt="Default Image">
+                                        @endif
+                                    </div>
+                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                        {{ $candidate['wilayah'] }}
+                                    </div>
+                                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                            {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
+                                        </h4>
+                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
+                                            {{ $candidate['posisi'] }} {{ $candidate['nomor_urut'] }}
+                                        </p>
+                                        <div class="flex justify-center items-center text-[#008bf9]">
+                                            <span class="font-medium">{{ number_format($candidate['persentase'], 2) }}%</span>
+                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                            <span class="font-medium">{{ number_format($candidate['total_suara']) }} Suara</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                <!-- Tombol Navigasi Kanan untuk Paslon -->
+                <button id="nextSlideCandidate" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-l-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
+                <br>
             </div>
-        </div>
+
+            <div class="flex justify-center items-center w-full mt-2 pb-4">
+                <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/80 backdrop-blur rounded-full">
+                    <button id="prevSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dots container -->
+                    <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
+
+                    <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 pause-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 play-icon hidden">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        </svg>
+                    </button>
+
+                    <button id="nextSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
     </main>
 @endsection
 
 @push('scripts')
     <script>
 
-        // slide paslon
-        document.addEventListener('DOMContentLoaded', function() {
-            const candidateSlides = document.querySelectorAll('.candidate-slide');
-            const participationSlides = document.querySelectorAll('.slide101');
-            const prevCandidateBtn = document.getElementById('prevSlideCandidate');
-            const nextCandidateBtn = document.getElementById('nextSlideCandidate');
-
-            let currentKabupatenId = '';
-            let currentSlideIndex = 0;
-
-            // Fungsi untuk mendapatkan ID kabupaten dari slide partisipasi yang aktif
-            function getActiveKabupatenId() {
-                const activeParticipationSlide = Array.from(participationSlides).find(slide => 
-                    slide.style.display !== 'none' || slide.classList.contains('active')
-                );
-                return activeParticipationSlide ? activeParticipationSlide.id.replace('slide', '') : null;
-            }
-
-            // Fungsi untuk mendapatkan total slide dalam satu kabupaten
-            function getTotalSlidesForKabupaten(kabupatenId) {
-                return Array.from(candidateSlides).filter(slide => 
-                    slide.getAttribute('data-kabupaten-id') === kabupatenId
-                ).length;
-            }
-
-            // Fungsi untuk menampilkan slide paslon
-            function showCandidateSlide(kabupatenId, slideIndex) {
-                // Sembunyikan semua slide
-                candidateSlides.forEach(slide => {
-                    slide.style.display = 'none';
-                    slide.classList.remove('fade-in');
-                    slide.classList.add('fade-out');
-                });
-
-                // Cari dan tampilkan slide yang sesuai
-                const targetSlide = Array.from(candidateSlides).find(slide => 
-                    slide.getAttribute('data-kabupaten-id') === kabupatenId &&
-                    parseInt(slide.getAttribute('data-slide-index')) === slideIndex
-                );
-
-                if (targetSlide) {
-                    targetSlide.style.display = 'block';
-                    targetSlide.classList.remove('fade-out');
-                    targetSlide.classList.add('fade-in');
-                    currentKabupatenId = kabupatenId;
-                    currentSlideIndex = slideIndex;
-                }
-
-                // Update visibility tombol navigasi
-                updateNavigationButtons(kabupatenId, slideIndex);
-            }
-
-            // Fungsi untuk mengupdate visibilitas tombol navigasi
-            function updateNavigationButtons(kabupatenId, slideIndex) {
-                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
-                
-                prevCandidateBtn.style.visibility = slideIndex === 0 ? 'hidden' : 'visible';
-                nextCandidateBtn.style.visibility = slideIndex === totalSlides - 1 ? 'hidden' : 'visible';
-            }
-
-            // Event listener untuk tombol navigasi
-            prevCandidateBtn.addEventListener('click', function() {
-                const kabupatenId = getActiveKabupatenId();
-                if (currentSlideIndex > 0) {
-                    showCandidateSlide(kabupatenId, currentSlideIndex - 1);
-                }
-            });
-
-            nextCandidateBtn.addEventListener('click', function() {
-                const kabupatenId = getActiveKabupatenId();
-                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
-                if (currentSlideIndex < totalSlides - 1) {
-                    showCandidateSlide(kabupatenId, currentSlideIndex + 1);
-                }
-            });
-
-            // Observer untuk memantau perubahan pada slide partisipasi
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'attributes' && 
-                        (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
-                        const kabupatenId = getActiveKabupatenId();
-                        if (kabupatenId && kabupatenId !== currentKabupatenId) {
-                            showCandidateSlide(kabupatenId, 0); // Reset ke slide pertama saat kabupaten berubah
-                        }
-                    }
-                });
-            });
-
-            // Observe semua slide partisipasi
-            participationSlides.forEach(slide => {
-                observer.observe(slide, {
-                    attributes: true,
-                    attributeFilter: ['style', 'class']
-                });
-            });
-
-            // Tambahkan CSS untuk animasi
-            if (!document.getElementById('candidateSliderStyles')) {
-                const style = document.createElement('style');
-                style.id = 'candidateSliderStyles';
-                style.textContent = `
-                    .fade-in {
-                        animation: fadeIn 0.5s ease-in forwards;
-                    }
-                    
-                    .fade-out {
-                        animation: fadeOut 0.5s ease-out forwards;
-                    }
-                    
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                    
-                    @keyframes fadeOut {
-                        from { opacity: 1; }
-                        to { opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
-            // Inisialisasi tampilan awal
-            const initialKabupatenId = getActiveKabupatenId();
-            if (initialKabupatenId) {
-                showCandidateSlide(initialKabupatenId, 0);
-            }
-        });
-        
-        // paslon singkron partisipasi
+        // Script untuk mengatur slide partisipasi dan kandidat
         document.addEventListener('DOMContentLoaded', function() {
             const slideContainer = document.getElementById('slideContainer');
             const slides = document.querySelectorAll('.slide101');
@@ -756,18 +719,18 @@
             showSlides(0);
             startSlideShow();
 
-            // Event listeners
+            // Event listeners for navigation
             prevBtn.addEventListener('click', () => {
                 prevSlide();
                 if (isPlaying) {
-                    startSlideShow(); // Reset interval after manual navigation
+                    startSlideShow();
                 }
             });
 
             nextBtn.addEventListener('click', () => {
                 nextSlide();
                 if (isPlaying) {
-                    startSlideShow(); // Reset interval after manual navigation
+                    startSlideShow();
                 }
             });
 
@@ -782,7 +745,7 @@
                     nextSlide();
                     if (isPlaying) startSlideShow();
                 } else if (e.key === ' ') {
-                    e.preventDefault(); // Prevent page scrolling
+                    e.preventDefault();
                     togglePlayPause();
                 }
             });
@@ -829,6 +792,160 @@
                         startSlideShow();
                     }
                 });
+            }
+
+            // Add styles for dots and animations
+            const style = document.createElement('style');
+            style.textContent = `
+                .dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background-color: #CBD5E0;
+                    transition: background-color 0.3s ease;
+                }
+                
+                .dot.active {
+                    background-color: #3560a0;
+                }
+
+                .fade-in {
+                    animation: fadeIn 0.5s ease-in forwards;
+                }
+                
+                .fade-out {
+                    animation: fadeOut 0.5s ease-out forwards;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Script untuk mengatur slide kandidat dan sinkronisasi dengan slide partisipasi
+        document.addEventListener('DOMContentLoaded', function() {
+            const candidateSlides = document.querySelectorAll('.candidate-slide');
+            const participationSlides = document.querySelectorAll('.slide101');
+            const prevCandidateBtn = document.getElementById('prevSlideCandidate');
+            const nextCandidateBtn = document.getElementById('nextSlideCandidate');
+
+            let currentKabupatenId = '';
+            let currentSlideIndex = 0;
+
+            // Fungsi untuk mendapatkan ID kabupaten dari slide partisipasi yang aktif
+            function getActiveKabupatenId() {
+                const activeParticipationSlide = Array.from(participationSlides).find(slide => 
+                    slide.style.display !== 'none' || slide.classList.contains('active')
+                );
+                return activeParticipationSlide ? activeParticipationSlide.id.replace('slide', '') : null;
+            }
+
+            // Fungsi untuk mendapatkan total slide dalam satu kabupaten
+            function getTotalSlidesForKabupaten(kabupatenId) {
+                return Array.from(candidateSlides).filter(slide => 
+                    slide.getAttribute('data-kabupaten-id') === kabupatenId ||
+                    (kabupatenId === 'Provinsi' && slide.getAttribute('data-province') === 'true')
+                ).length;
+            }
+
+            // Fungsi untuk menampilkan slide paslon
+            function showCandidateSlide(kabupatenId, slideIndex) {
+                // Sembunyikan semua slide
+                candidateSlides.forEach(slide => {
+                    slide.style.display = 'none';
+                    slide.classList.remove('fade-in');
+                    slide.classList.add('fade-out');
+                });
+
+                // Cari dan tampilkan slide yang sesuai
+                let targetSlide;
+                if (kabupatenId === 'Provinsi') {
+                    targetSlide = Array.from(candidateSlides).find(slide => 
+                        slide.getAttribute('data-province') === 'true'
+                    );
+                } else {
+                    targetSlide = Array.from(candidateSlides).find(slide => 
+                        slide.getAttribute('data-kabupaten-id') === kabupatenId &&
+                        parseInt(slide.getAttribute('data-slide-index')) === slideIndex
+                    );
+                }
+
+                if (targetSlide) {
+                    targetSlide.style.display = 'block';
+                    targetSlide.classList.remove('fade-out');
+                    targetSlide.classList.add('fade-in');
+                    currentKabupatenId = kabupatenId;
+                    currentSlideIndex = slideIndex;
+                }
+
+                // Update visibility tombol navigasi
+                updateNavigationButtons(kabupatenId, slideIndex);
+            }
+
+            // Fungsi untuk mengupdate visibilitas tombol navigasi
+            function updateNavigationButtons(kabupatenId, slideIndex) {
+                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
+                
+                // Handle khusus untuk provinsi yang hanya memiliki satu slide
+                if (kabupatenId === 'Provinsi') {
+                    prevCandidateBtn.style.visibility = 'hidden';
+                    nextCandidateBtn.style.visibility = 'hidden';
+                    return;
+                }
+                
+                prevCandidateBtn.style.visibility = slideIndex === 0 ? 'hidden' : 'visible';
+                nextCandidateBtn.style.visibility = slideIndex === totalSlides - 1 ? 'hidden' : 'visible';
+            }
+
+            // Event listener untuk tombol navigasi
+            prevCandidateBtn.addEventListener('click', function() {
+                const kabupatenId = getActiveKabupatenId();
+                if (currentSlideIndex > 0) {
+                    showCandidateSlide(kabupatenId, currentSlideIndex - 1);
+                }
+            });
+
+            nextCandidateBtn.addEventListener('click', function() {
+                const kabupatenId = getActiveKabupatenId();
+                const totalSlides = getTotalSlidesForKabupaten(kabupatenId);
+                if (currentSlideIndex < totalSlides - 1) {
+                    showCandidateSlide(kabupatenId, currentSlideIndex + 1);
+                }
+            });
+
+            // Observer untuk memantau perubahan pada slide partisipasi
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && 
+                        (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                        const kabupatenId = getActiveKabupatenId();
+                        if (kabupatenId && kabupatenId !== currentKabupatenId) {
+                            showCandidateSlide(kabupatenId, 0);
+                        }
+                    }
+                });
+            });
+
+            // Observe semua slide partisipasi
+            participationSlides.forEach(slide => {
+                observer.observe(slide, {
+                    attributes: true,
+                    attributeFilter: ['style', 'class']
+                });
+            });
+
+            // Inisialisasi tampilan awal
+            const initialKabupatenId = getActiveKabupatenId();
+            if (initialKabupatenId) {
+                showCandidateSlide(initialKabupatenId, 0);
             }
         });
 
