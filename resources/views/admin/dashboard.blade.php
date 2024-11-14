@@ -350,63 +350,6 @@
                     <div class="flex flex-col">
                         <!-- Container untuk slides -->
                         <div class="flex-grow">
-                            @foreach($kabupatenData as $id => $data)
-                            <div id="slide{{ $id }}" class="slide101 {{ $loop->first ? 'active' : '' }}">
-                                <div class="mb-6 rounded-lg">
-                                    <div class="flex items-start mb-6">
-                                        <img src="{{ asset('storage/' . $data['logo']) }}" alt="Logo {{ $data['nama'] }}" class="mr-8 w-40 h-45">
-                                        <div class="flex-grow pl-10">
-                                            <div class="space-y-2">
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_sah']) }} Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_tidak_sah']) }} Suara</p>
-                                                </div>
-                                                <div class="flex justify-between items-center border-b pb-2">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
-                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['dpt']) }} Orang</p>
-                                                </div>
-                                                <div class="flex justify-between items-center">
-                                                    <h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
-                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['abstain']) }} Orang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-4 text-white bg-blue-900 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex flex-col items-start w-1/3">
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
-                                                <span>70,00% - 100,00% DPT » Hijau</span>
-                                            </div>
-                                            <div class="flex items-center mb-1">
-                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-                                                <span>50,00% - 69,99% DPT » Kuning</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
-                                                <span>0,00% - 49,99% DPT » Merah</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center w-1/3">
-                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
-                                        </div>
-                                        <div class="text-right w-1/3">
-                                            <div class="text-4xl font-bold {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
-                                                ($data['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
-                                                {{ number_format($data['partisipasi'], 2) }}%
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-
                             <!-- Slide Provinsi -->
                             @if($provinsiData)
                             <div id="slideProvinsi" class="slide101">
@@ -465,6 +408,62 @@
                                     </div>
                                 </div>
                             </div>
+                            @foreach($kabupatenData as $id => $data)
+                            <div id="slide{{ $id }}" class="slide101 {{ $loop->first ? 'active' : '' }}">
+                                <div class="mb-6 rounded-lg">
+                                    <div class="flex items-start mb-6">
+                                        <img src="{{ asset('storage/' . $data['logo']) }}" alt="Logo {{ $data['nama'] }}" class="mr-8 w-40 h-45">
+                                        <div class="flex-grow pl-10">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_sah']) }} Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['suara_tidak_sah']) }} Suara</p>
+                                                </div>
+                                                <div class="flex justify-between items-center border-b pb-2">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['dpt']) }} Orang</p>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
+                                                    <p class="text-lg font-bold text-gray-800">{{ number_format($data['abstain']) }} Orang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col items-start w-1/3">
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                                <span>70,00% - 100,00% DPT » Hijau</span>
+                                            </div>
+                                            <div class="flex items-center mb-1">
+                                                <div class="w-4 h-4 mr-2 bg-yellow-500"></div>
+                                                <span>50,00% - 69,99% DPT » Kuning</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                                <span>0,00% - 49,99% DPT » Merah</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-1/3">
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                        </div>
+                                        <div class="text-right w-1/3">
+                                            <div class="text-4xl font-bold {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
+                                                ($data['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
+                                                {{ number_format($data['partisipasi'], 2) }}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
                             @endif
                         </div>
                     </div>
@@ -480,6 +479,43 @@
                 </button>
 
                 <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out relative">
+                    <!-- Slide Provinsi untuk Paslon -->
+                    @if($provinsiData && !empty($provinsiData['candidates']))
+                    <div class="candidate-slide" data-province="true" style="display: none;">
+                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                            @foreach($provinsiData['candidates'] as $candidate)
+                                <div class="w-[330px] flex flex-col">
+                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                        @if ($candidate['foto'])
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
+                                                alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
+                                        @else
+                                            <img class="w-full h-full object-cover" 
+                                                src="{{ asset('assets/default.png') }}" 
+                                                alt="Default Image">
+                                        @endif
+                                    </div>
+                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
+                                        {{ $candidate['wilayah'] }}
+                                    </div>
+                                    <div class="bg-white rounded-b-2xl p-4 shadow">
+                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                            {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
+                                        </h4>
+                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
+                                            {{ $candidate['posisi'] }} {{ $candidate['nomor_urut'] }}
+                                        </p>
+                                        <div class="flex justify-center items-center text-[#008bf9]">
+                                            <span class="font-medium">{{ number_format($candidate['persentase'], 2) }}%</span>
+                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
+                                            <span class="font-medium">{{ number_format($candidate['total_suara']) }} Suara</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                     @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
                         @php
                             $calon = $syncedCalonData[$kabupatenId];
@@ -524,44 +560,6 @@
                             </div>
                         @endfor
                     @endforeach
-
-                    <!-- Slide Provinsi untuk Paslon -->
-                    @if($provinsiData && !empty($provinsiData['candidates']))
-                    <div class="candidate-slide" data-province="true" style="display: none;">
-                        <div class="flex justify-center gap-[45px] min-w-[1080px]">
-                            @foreach($provinsiData['candidates'] as $candidate)
-                                <div class="w-[330px] flex flex-col">
-                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
-                                        @if ($candidate['foto'])
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
-                                                alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
-                                        @else
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ asset('assets/default.png') }}" 
-                                                alt="Default Image">
-                                        @endif
-                                    </div>
-                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                        {{ $candidate['wilayah'] }}
-                                    </div>
-                                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
-                                            {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
-                                        </h4>
-                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
-                                            {{ $candidate['posisi'] }} {{ $candidate['nomor_urut'] }}
-                                        </p>
-                                        <div class="flex justify-center items-center text-[#008bf9]">
-                                            <span class="font-medium">{{ number_format($candidate['persentase'], 2) }}%</span>
-                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                            <span class="font-medium">{{ number_format($candidate['total_suara']) }} Suara</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
                     @endif
                 </div>
 
