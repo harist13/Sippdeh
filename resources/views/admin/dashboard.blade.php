@@ -266,12 +266,12 @@
                     </div>
                 </section>
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah DPT Dan Abstain Se-Kalimantan Timur</h3>
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Suara Masuk Dan Abstain Se-Kalimantan Timur</h3>
                     <div class="p-4">
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="bg-white p-4 rounded-lg text-center">
-                                <h4 class="font-semibold text-gray-600">Total DPT</h4>
-                                <p class="text-2xl font-bold text-[#3560A0]">{{ $dptAbstainData['total_dpt'] }}</p>
+                                <h4 class="font-semibold text-gray-600">Total Suara Masuk</h4>
+                                <p class="text-2xl font-bold text-[#3560A0]">{{ $dptAbstainData['total_suara_masuk'] }}</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg text-center">
                                 <h4 class="font-semibold text-gray-600">Total Abstain</h4>
@@ -285,7 +285,7 @@
                                 <div class="flex flex-col">
                                     <div class="flex items-center mb-1">
                                         <div class="w-4 h-4 bg-[#66AFFF] mr-2"></div>
-                                        <span class="text-sm">DPT</span>
+                                        <span class="text-sm">Suara Masuk</span>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="w-4 h-4 bg-[#004999] mr-2"></div>
@@ -470,7 +470,35 @@
                 </div>
             </section>
 
-            <div class="relative overflow-hidden w-[1080px] mx-auto mt-20">
+            <div class="flex justify-center items-center w-full mt-2 pb-4">
+                <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/80 backdrop-blur rounded-full">
+                    <button id="prevSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dots container -->
+                    <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
+
+                    <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 pause-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 play-icon hidden">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        </svg>
+                    </button>
+
+                    <button id="nextSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative overflow-hidden w-[1080px] mx-auto mt-10">
                 <!-- Tombol Navigasi Kiri untuk Paslon -->
                 <button id="prevSlideCandidate" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 shadow-lg z-20 transition-all duration-300 rounded-r-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3560a0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -570,34 +598,6 @@
                     </svg>
                 </button>
                 <br>
-            </div>
-
-            <div class="flex justify-center items-center w-full mt-2 pb-4">
-                <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/80 backdrop-blur rounded-full">
-                    <button id="prevSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    <!-- Dots container -->
-                    <div id="sliderDots" class="flex items-center gap-1 mx-2"></div>
-
-                    <button id="playPauseBtn" class="text-blue-600 hover:text-blue-800 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 pause-icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7 play-icon hidden">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        </svg>
-                    </button>
-
-                    <button id="nextSlide101" class="text-blue-600 hover:text-blue-800 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
             </div>
     </main>
 @endsection

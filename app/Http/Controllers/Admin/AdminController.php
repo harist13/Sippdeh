@@ -149,23 +149,26 @@ class AdminController extends Controller
 
     private function getTotalDptAbstainData(): array 
     {
-        // Get sum of DPT and Abstain from all regions
+        // Get sum of suara masuk (suara sah + tidak sah) and Abstain from all regions
         $totalData = ResumeSuaraTPS::select(
-            \DB::raw('SUM(dpt) as total_dpt'),
+            \DB::raw('SUM(suara_sah + suara_tidak_sah) as total_suara_masuk'),
             \DB::raw('SUM(abstain) as total_abstain')
         )->first();
         
-        $totalDPT = max(0, $totalData->total_dpt ?? 0);
+        $totalSuaraMasuk = max(0, $totalData->total_suara_masuk ?? 0);
         $totalAbstain = max(0, $totalData->total_abstain ?? 0);
+        
+        // Calculate total for percentage calculation
+        $total = $totalSuaraMasuk + $totalAbstain;
 
         return [
-            'labels' => ['DPT', 'Abstain'],
-            'values' => [$totalDPT, $totalAbstain],
+            'labels' => ['Suara Masuk', 'Abstain'],
+            'values' => [$totalSuaraMasuk, $totalAbstain],
             'percentages' => [
-                round(($totalDPT > 0 ? ($totalDPT - $totalAbstain) / $totalDPT * 100 : 0), 1),
-                round(($totalDPT > 0 ? $totalAbstain / $totalDPT * 100 : 0), 1)
+                round(($total > 0 ? $totalSuaraMasuk / $total * 100 : 0), 1),
+                round(($total > 0 ? $totalAbstain / $total * 100 : 0), 1)
             ],
-            'total_dpt' => number_format($totalDPT, 0, ',', '.'),
+            'total_suara_masuk' => number_format($totalSuaraMasuk, 0, ',', '.'),
             'total_abstain' => number_format($totalAbstain, 0, ',', '.')
         ];
     }
