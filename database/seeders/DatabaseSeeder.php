@@ -17,23 +17,20 @@ class DatabaseSeeder extends Seeder
    {
         $this->startTime = microtime(true);
 
-        // $this->call([
-            // ProvinsiSeeder::class,
-            // KabupatenSeeder::class,
-            // KecamatanSeeder::class,
-            // KelurahanSeeder::class,
-        // ]);
-
-        // $this->running();
-        // Artisan::call('import:tps');
-        // $this->done();
-
         $this->call([
             ProvinsiSeeder::class,
             KabupatenSeeder::class,
-            RolesAndPermissionsSeeder::class,
+            KecamatanSeeder::class,
+            KelurahanSeeder::class,
+        ]);
+
+        $this->running();
+        Artisan::call('import:tps');
+        $this->done();
+
+        $this->call([
             UserSeeder::class,
-            // CalonSeeder::class,
+            CalonSeeder::class,
         ]);
     }
 
