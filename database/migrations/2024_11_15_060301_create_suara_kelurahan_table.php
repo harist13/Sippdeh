@@ -11,23 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suara_kelurahan', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('kotak_kosong')->default(0);
-            $table->unsignedBigInteger('suara_tidak_sah')->default(0);
-            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
-            $table->timestamps();
+        // Schema::create('suara_kelurahan', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->unsignedBigInteger('kotak_kosong')->default(0);
+        //     $table->unsignedBigInteger('suara_tidak_sah')->default(0);
+        //     $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
+        //     $table->timestamps();
 
-            $table->foreignId('operator_id')
-                ->nullable()
-                ->constrained('petugas')
-                ->nullOnDelete();
+        //     $table->foreignId('operator_id')
+        //         ->nullable()
+        //         ->constrained('petugas')
+        //         ->nullOnDelete();
             
-            $table->foreignId('kelurahan_id')
-                ->nullable()
-                ->constrained('kelurahan')
-                ->nullOnDelete();
-        });
+        //     $table->foreignId('kelurahan_id')
+        //         ->nullable()
+        //         ->constrained('kelurahan')
+        //         ->nullOnDelete();
+        // });
     }
 
     /**
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suara_kelurahan');
+        // Schema::dropIfExists('suara_kelurahan');
     }
 };

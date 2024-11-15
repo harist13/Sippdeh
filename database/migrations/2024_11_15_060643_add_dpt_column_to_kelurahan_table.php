@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('kelurahan', function (Blueprint $table) {
-            $table->unsignedBigInteger('dpt')->default(0);
-        });
+        // Schema::table('kelurahan', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('dpt')->default(0);
+        // });
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('kelurahan', function (Blueprint $table) {
-            $table->dropColumn('dpt');
-        });
+        // Schema::table('kelurahan', function (Blueprint $table) {
+        //     $table->dropColumn('dpt');
+        // });
     }
 };
