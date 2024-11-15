@@ -13,7 +13,6 @@ class KabupatenSeeder extends Seeder
     public function run(): void
     {
         $kabupaten = [
-            // Sesuaikan 'provinsi_id' dengan ID provinsi Kalimantan Timur
             ['nama' => 'BERAU', 'provinsi_id' => 23],
             ['nama' => 'KUTAI BARAT', 'provinsi_id' => 23],
             ['nama' => 'KUTAI KARTANEGARA', 'provinsi_id' => 23],
