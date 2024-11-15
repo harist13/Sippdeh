@@ -335,25 +335,35 @@ class AdminController extends Controller
         $labels = [];
         $paslon1Data = [];
         $paslon2Data = [];
+        $totalSuarahSahPerKabupaten = []; // Array untuk menyimpan total suara sah per kabupaten
         
         foreach ($kabupatens as $kabupaten) {
-            // Format label to include line break for better spacing
             $namaKabupaten = str_replace(['Kota ', 'Kabupaten '], '', $kabupaten->nama);
             $labels[] = $namaKabupaten;
             
-            // Get votes for Paslon 1
             $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
                 $query->where('id', $kabupaten->id);
             })->where('calon_id', $paslon1->id)->sum('suara');
             
-            // Get votes for Paslon 2
             $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
                 $query->where('id', $kabupaten->id);
             })->where('calon_id', $paslon2->id)->sum('suara');
             
+            // Hitung total suara sah per kabupaten
+            $totalSuarahSahPerKabupaten[] = $suaraPaslon1 + $suaraPaslon2;
+            
             $paslon1Data[] = $suaraPaslon1;
             $paslon2Data[] = $suaraPaslon2;
         }
+        
+        // Calculate the maximum value from both datasets
+        $maxValue = max(
+            max($paslon1Data ?: [0]),
+            max($paslon2Data ?: [0])
+        );
+        
+        // Calculate the dynamic max range
+        $dynamicMaxRange = $this->calculateDynamicMaxRange($maxValue);
         
         return [
             'title' => "Perolehan Suara Gubernur Per Kabupaten/Kota",
@@ -374,9 +384,23 @@ class AdminController extends Controller
                         'barPercentage' => 0.98,
                         'categoryPercentage' => 0.5,
                     ]
-                ]
+                ],
+                'maxRange' => $dynamicMaxRange,
+                'totalSuarahSah' => $totalSuarahSahPerKabupaten // Mengirim total suara sah ke frontend
             ]
         ];
+    }
+
+    private function calculateDynamicMaxRange($maxValue): int
+    {
+        // Base step size for ranges (e.g., 500, 1000, 1500, etc.)
+        $baseStep = 500;
+        
+        // Calculate how many steps we need to accommodate the max value
+        $steps = ceil($maxValue / $baseStep);
+        
+        // Return the next range that would fully contain the max value
+        return $steps * $baseStep;
     }
 
     public function rekapitulasi()

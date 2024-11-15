@@ -953,13 +953,17 @@
             window.gubernurData = @json($chartData['data']);
             const ctx = document.getElementById('voteCountChart').getContext('2d');
             const titleElement = document.getElementById('chartTitle');
-            const MAX_VALUE = 500000;
             let isHovering = false;
 
             const chartData = {
                 title: "Perolehan Suara Gubernur Per Kabupaten/Kota",
                 data: window.gubernurData
             };
+
+            // Get the dynamic max range from the data
+            const MAX_VALUE = chartData.data.maxRange;
+            // Calculate step size based on MAX_VALUE
+            const STEP_SIZE = MAX_VALUE / 5; // This will create 5 steps on the y-axis
 
             let chart = new Chart(ctx, {
                 type: 'bar',
@@ -981,7 +985,7 @@
                             beginAtZero: true,
                             max: MAX_VALUE,
                             ticks: {
-                                stepSize: 100000,
+                                stepSize: STEP_SIZE,
                                 callback: function(value) {
                                     return value.toLocaleString();
                                 }
@@ -994,7 +998,10 @@
                             callbacks: {
                                 label: function(context) {
                                     const value = context.raw;
-                                    return `${context.dataset.label}: ${value.toLocaleString()} suara`;
+                                    const index = context.dataIndex;
+                                    const totalSuarahSah = chartData.data.totalSuarahSah[index];
+                                    const percentage = totalSuarahSah > 0 ? ((value / totalSuarahSah) * 100).toFixed(1) : 0;
+                                    return `${context.dataset.label}: ${value.toLocaleString()} suara (${percentage}%)`;
                                 }
                             }
                         },
@@ -1036,14 +1043,14 @@
                                 
                                 meta.data.forEach((bar, index) => {
                                     const data = dataset.data[index];
+                                    const totalSuarahSah = chartData.data.totalSuarahSah[index];
                                     let percentage;
                                     
-                                    if (data >= MAX_VALUE) {
-                                        percentage = 100;
-                                    } else if (data <= 0) {
-                                        percentage = 0;
+                                    // Hitung persentase berdasarkan total suara sah
+                                    if (totalSuarahSah > 0) {
+                                        percentage = ((data / totalSuarahSah) * 100).toFixed(1);
                                     } else {
-                                        percentage = Math.min(((data / MAX_VALUE) * 100), 100).toFixed(1);
+                                        percentage = 0;
                                     }
                                     
                                     const barWidth = bar.width;
@@ -1057,9 +1064,7 @@
                                         ctx.rotate(-Math.PI / 2);
                                         ctx.fillStyle = '#FFFFFF';
                                         
-                                        const percentageText = percentage === 100 ? '100%' : 
-                                                            percentage === 0 ? '0%' : 
-                                                            `${percentage}%`;
+                                        const percentageText = `${percentage}%`;
                                         
                                         ctx.fillText(percentageText, 0, 0);
                                         ctx.restore();
