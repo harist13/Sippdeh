@@ -58,21 +58,21 @@ class TPSSheetImport implements ToModel, WithStartRow, WithValidation, SkipsOnFa
             $namaKecamatan = $row[1];
             $namaKelurahan = $row[2];
             $namaTPS = $row[3];
-            $alamat = $row[4];
+            $dpt = $row[4];
             
             if (
                 (is_null($namaKabupaten) || empty($namaKabupaten)) ||
                 (is_null($namaKecamatan) || empty($namaKecamatan)) ||
                 (is_null($namaKelurahan) || empty($namaKelurahan)) ||
                 (is_null($namaTPS) || empty($namaTPS)) ||
-                (is_null($alamat) || empty($alamat))
+                (is_null($dpt) || empty($dpt))
             ) {
                 return null;
             }
 
             Log::debug("TPS $namaTPS berhasil ditambahkan.");
 
-            return $this->addTPS($namaTPS, $alamat, $namaKelurahan, $namaKecamatan, $namaKabupaten, $namaProvinsi);
+            return $this->addTPS($namaTPS, $dpt, $namaKelurahan, $namaKecamatan, $namaKabupaten, $namaProvinsi);
         } catch (Exception $exception) {
             throw new Exception("Error in model: " . $exception->getMessage(), 0, $exception);
         }
@@ -83,7 +83,7 @@ class TPSSheetImport implements ToModel, WithStartRow, WithValidation, SkipsOnFa
      */
     private function addTPS(
         string $namaTPS,
-        string $alamat,
+        string $dpt,
         string $namaKelurahan,
         string $namaKecamatan,
         string $namaKabupaten,
@@ -96,7 +96,7 @@ class TPSSheetImport implements ToModel, WithStartRow, WithValidation, SkipsOnFa
                 $this->kelurahanIds[$namaKelurahan] = $kelurahan->id;
             }
 
-            return $this->getTPSModel($namaTPS, $alamat, $this->kelurahanIds[$namaKelurahan]);
+            return $this->getTPSModel($namaTPS, $dpt, $this->kelurahanIds[$namaKelurahan]);
         } catch (Exception $exception) {
             throw new Exception("Error in addTPS: " . $exception->getMessage(), 0, $exception);
         }
