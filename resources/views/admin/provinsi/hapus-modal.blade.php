@@ -16,37 +16,46 @@
 	</div>
 </div>
 
-<script>
-	function showDeleteProvinsiModal() {
-		const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
-		deleteProvinsiModal.classList.remove('hidden');
-	}
+@push('scripts')
+	<script>
+		function showDeleteProvinsiModal() {
+			const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
+			deleteProvinsiModal.classList.remove('hidden');
+		}
 
-	function closeDeleteProvinsiModal() {
-		const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
-		deleteProvinsiModal.classList.add('hidden');
-	}
+		function closeDeleteProvinsiModal() {
+			const deleteProvinsiModal = document.getElementById('deleteProvinsiModal');
+			deleteProvinsiModal.classList.add('hidden');
+		}
 
-	function getProvinsiId() {
-		return this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
-	}
+		function getProvinsiId() {
+			return this.closest('tr').querySelector('td:nth-child(1)').dataset.id;
+		}
 
-	function getDestroyProvinsiUrl() {
-		const provinsiId = getProvinsiId.call(this);
-		const provinsiDestroyRoute = `{{ route('provinsi.destroy', ['provinsi' => '__provinsi__']) }}`;
-		const provinsiDestroyUrl = provinsiDestroyRoute.replace('__provinsi__', provinsiId);
+		function getDestroyProvinsiUrl() {
+			const provinsiId = getProvinsiId.call(this);
+			const provinsiDestroyRoute = `{{ route('provinsi.destroy', ['provinsi' => '__provinsi__']) }}`;
+			const provinsiDestroyUrl = provinsiDestroyRoute.replace('__provinsi__', provinsiId);
 
-		return provinsiDestroyUrl;
-	}
+			return provinsiDestroyUrl;
+		}
 
-	document.querySelectorAll('.hapus-provinsi-btn').forEach(button => {
-		button.addEventListener('click', function () {
-			showDeleteProvinsiModal();
-
+		function onRemoveButtonClick() {
 			const deleteProvinsiForm = document.getElementById('deleteProvinsiForm');
 			deleteProvinsiForm.action = getDestroyProvinsiUrl.call(this);
-		});
-	});
+			
+			showDeleteProvinsiModal();
+		}
 
-	document.getElementById('cancelDeleteProvinsi').addEventListener('click', closeDeleteProvinsiModal);
-</script>
+		function initializeRemoveProvinsiEvents() {
+			setTimeout(function() {
+				document.querySelectorAll('.hapus-provinsi-btn')
+					.forEach(button => button.onclick = onRemoveButtonClick);
+				
+				document.getElementById('cancelDeleteProvinsi').onclick = closeDeleteProvinsiModal;
+			}, 1000);
+		}
+
+		initializeRemoveProvinsiEvents();
+	</script>
+@endpush

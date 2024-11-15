@@ -127,6 +127,10 @@
 
 @script
     <script>
+        Livewire.hook('request', function({ respond }) {
+            respond(() => initializeRemoveProvinsiEvents());
+        });
+
         // Tutup modal saat tombol esc di tekan
         document.addEventListener('keyup', function(event) {
             if(event.key === "Escape") {
