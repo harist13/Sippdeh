@@ -2,62 +2,53 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\ProvinsiExport;
 use App\Http\Controllers\Controller;
+use App\Models\Provinsi;
 use App\Http\Requests\Admin\Provinsi\ImportProvinsiRequest;
 use App\Http\Requests\Admin\Provinsi\StoreProvinsiRequest;
 use App\Http\Requests\Admin\Provinsi\UpdateProvinsiRequest;
+use App\Exports\ProvinsiExport;
 use App\Imports\ProvinsiImport;
-use App\Models\Kabupaten;
-use App\Models\Provinsi;
-use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
+use Sentry\SentrySdk;
+use Exception;
 
 class ProvinsiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
+   public function index()
     {
-        // Get items per page from request, default to 10
-        $itemsPerPage = $request->input('itemsPerPage', 10);
-        
-        $kabupaten = Kabupaten::all();
-        $provinsiQuery = Provinsi::query();
+        return view('admin.provinsi.index');
+    }
 
-        if ($request->has('cari')) {
-            $kataKunci = $request->get('cari');
+    public function store(StoreProvinsiRequest $request)
+    {
+        try {
+            $validated = $request->validated();
 
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
-            if ($kataKunci == '') {
-                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
-                if ($request->has('kabupaten')) {
-                    return redirect()->route('provinsi', [
-                        'kabupaten' => $request->get('kabupaten'),
-                        'itemsPerPage' => $itemsPerPage
-                    ]);
-                }
-
-                return redirect()->route('provinsi', ['itemsPerPage' => $itemsPerPage]);
+            $provinsi = new Provinsi();
+            $provinsi->nama = $validated['name'];
+            
+            if ($request->hasFile('logo')) {
+                $logo = $request->file('logo');
+                $logoName = time() . '_' . $logo->getClientOriginalName();
+                $logo->move(public_path('storage/kabupaten_logo'), $logoName);
+                $provinsi->logo = $logoName;
             }
+            
+            $provinsi->save();
 
-            $provinsiQuery->whereLike('nama', "%$kataKunci%");
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah provinsi.');
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
+            return redirect()->back()->with('pesan_gagal', 'Gagal manambah provinsi.');
         }
-
-        if ($request->has('kabupaten')) {
-            $provinsiQuery->whereHas('kabupaten', function($builder) use ($request) {
-                $builder->where('id', $request->get('kabupaten'));
-            });
-        }
-
-        $provinsi = $provinsiQuery->orderByDesc('id')
-            ->paginate($itemsPerPage)
-            ->withQueryString(); // Ini penting untuk mempertahankan parameter URL saat paginasi
-        
-        return view('admin.provinsi.index', compact('kabupaten', 'provinsi'));
     }
 
     public function export(Request $request)
@@ -67,32 +58,6 @@ class ProvinsiController extends Controller
         }
         
         return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor provinsi.');
-    }
-
-    public function store(StoreProvinsiRequest $request)
-    {
-        try {
-            $validated = $request->validated();
-
-            $provinsi = new Provinsi();
-            $provinsi->nama = $validated['nama_provinsi_baru'];
-            
-            // Handle logo upload
-            if ($request->hasFile('logo')) {
-                $logo = $request->file('logo');
-                $logoName = time() . '_' . $logo->getClientOriginalName(); // Menggunakan nama asli file
-                // Simpan file ke storage
-                $logo->move(public_path('storage/kabupaten_logo'), $logoName);
-                $provinsi->logo = $logoName;
-            }
-            
-            $provinsi->save();
-
-            return redirect()->back()->with('pesan_sukses', 'Berhasil menambah provinsi.');
-        } catch (Exception $exception) {
-            dd($exception); // Untuk debugging
-            return redirect()->back()->with('pesan_gagal', 'Gagal manambah provinsi.');
-        }
     }
 
     public function update(UpdateProvinsiRequest $request, string $id)

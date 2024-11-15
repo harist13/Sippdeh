@@ -18,8 +18,6 @@ class Provinsi extends Component
 
     public string $keyword = '';
 
-    public ?int $kabupatenId = null;
-
     public function render(): View
     {
         $kabupaten = Kabupaten::all();
@@ -34,12 +32,6 @@ class Provinsi extends Component
             $provinsiQuery = Model::whereLike('nama', "%{$this->keyword}%");
         } else {
             $provinsiQuery = Model::query();
-        }
-
-        if ($this->kabupatenId) {
-            $provinsiQuery->whereHas('kabupaten', function($builder) {
-                $builder->where('id', $this->kabupatenId);
-            });
         }
 
         return $provinsiQuery->paginate($this->perPage);
