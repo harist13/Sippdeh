@@ -129,7 +129,7 @@
                                 <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->kelurahan->kecamatan->id }}">{{ $data->kelurahan->kecamatan->nama }}</td>
                                 <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->nama }}</td>
                                 <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">{{ $data->nama }}</td>
-                                <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->id }}" data-value="{{ $data->suara ? $data->suara->dpt : 0 }}">{{ $data->suara ? $data->suara->dpt : 0 }}</td>
+                                <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->id }}" data-value="{{ $data->dpt }}">{{ $data->dpt }}</td>
                                 <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                     <button class="text-[#3560A0] hover:text-blue-900 edit-tps-btn"><i class="fas fa-edit"></i></button>
                                     <button class="text-red-600 hover:text-red-900 ml-3 hapus-tps-btn"><i class="fas fa-trash-alt"></i></button>
