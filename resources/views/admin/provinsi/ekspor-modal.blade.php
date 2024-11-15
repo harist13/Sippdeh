@@ -6,14 +6,14 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Ekspor Provinsi</h3>
 
 			{{-- Kabupaten --}}
-			<label for="exportProvinsiKabupaten" class="my-1 block">Kabupaten</label>
+			{{-- <label for="exportProvinsiKabupaten" class="my-1 block">Kabupaten</label>
 			<select id="exportProvinsiKabupaten" name="kabupaten_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
                 <option value="0">Semua</option>
 				@foreach ($kabupaten as $kab)
 					<option value="{{ $kab->id }}" {{ request()->has('kabupaten') && request()->get('kabupaten') == $kab->id ? 'selected' : '' }}>{{ $kab->nama }}</option>
 				@endforeach
 			</select>
-			<span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span>
+			<span class="text-red-800">{{ $errors->first('kabupaten_id') }}</span> --}}
 
             <hr class="h-1 my-3">
 
@@ -40,8 +40,8 @@
 		exportProvinsiModal.classList.add('hidden');
 	}
 
-    document.getElementById('exportProvinsiBtn').addEventListener('click', showExportProvinsiModal);
-    document.getElementById('cancelExportProvinsi').addEventListener('click', closeExportProvinsiModal);
+    // document.getElementById('exportProvinsiBtn').addEventListener('click', showExportProvinsiModal);
+    // document.getElementById('cancelExportProvinsi').addEventListener('click', closeExportProvinsiModal);
 </script>
 
 @error('kabupaten_id')

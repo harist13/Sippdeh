@@ -1,48 +1,12 @@
-<main class="container flex-grow px-4 mx-auto mt-6">
-    @php $status = session('pesan_sukses'); @endphp
-    @isset ($status)
-        @include('components.alert-berhasil', ['message' => $status])
-    @endisset
-
-    @php $status = session('pesan_gagal'); @endphp
-    @isset ($status)
-        @include('components.alert-gagal', ['message' => $status])
-    @endisset
-    
-    @php $catatanImpor = session('catatan_impor'); @endphp
-    @isset ($catatanImpor)
-        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
-            <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
-            <ul class="list-disc ms-5">
-                @foreach ($catatanImpor as $catatan)
-                    <li>{!! $catatan !!}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endisset
-
+<div>
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
             <img src="{{ asset('assets/icon/provinsi.svg') }}" class="mr-1" alt="Provinsi">
             <span class="font-bold">Provinsi</span>
         </div>
-
+    
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-                {{-- <div class="relative w-[300px] w-full-mobile">
-                    <select wire:model.live="kabupatenId" class="w-full rounded-lg bg-[#ECEFF5] px-4 py-2">
-                        <option value="0" {{ $kabupatenId == 0 ? 'selected' : '' }}>
-                            Semua
-                        </option>
-
-                        @foreach ($kabupaten as $kab)
-                            <option value="{{ $kab->id }}" {{ $kabupatenId == $kab->id ? 'selected' : '' }}>
-                                {{ $kab->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div> --}}
-
                 {{-- Search Input --}}
                 <div class="flex items-center rounded-lg border bg-[#ECEFF5] px-4 py-2">
                     {{-- Loading Icon --}}
@@ -50,12 +14,12 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-
+    
                     {{-- Search Icon --}}
                     <svg wire:loading.remove wire:target="keyword" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z" clip-rule="evenodd" />
                     </svg>
-
+    
                     {{-- Input --}}
                     <input 
                         wire:model.live.debounce.500ms="keyword"
@@ -67,9 +31,9 @@
                     >
                 </div>
             </div>
-
+    
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-                <div class="flex gap-2">
+                {{-- <div class="flex gap-2">
                     <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
                         <i class="fas fa-file-import me-1"></i>
                         <span>Impor</span>
@@ -78,18 +42,18 @@
                         <i class="fas fa-file-export me-1"></i>
                         <span>Ekspor</span>
                     </button>
-                </div>
+                </div> --}}
                 <button id="addProvinsiBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-plus me-1"></i>
                     <span>Tambah Provinsi</span>
                 </button>
             </div>
         </div>
-
+    
         <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto relative mb-5">
             <!-- Loading Overlay -->
             <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
-
+    
             <table class="min-w-full leading-normal text-sm-mobile">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -147,30 +111,37 @@
                 </tbody>
             </table>
         </div>
-
+    
         {{-- Pagination --}}
         <div class="mt-4">
             {{ $provinsi->links('vendor.livewire.simple') }}
         </div>
     </div>
-
+    
     @include('admin.provinsi.tambah-modal')
     @include('admin.provinsi.edit-modal')
     @include('admin.provinsi.hapus-modal')
     @include('admin.provinsi.ekspor-modal')
     @include('admin.provinsi.impor-modal')
-</main>
+</div>
 
 @script
     <script>
+        Livewire.hook('request', function({ respond }) {
+            respond(function() {
+                initializeRemoveProvinsiEvents();
+                initializeEditProvinsiEvents();
+            });
+        });
+
         // Tutup modal saat tombol esc di tekan
         document.addEventListener('keyup', function(event) {
             if(event.key === "Escape") {
                 closeAddProvinsiModal();
                 closeEditProvinsiModal();
                 closeDeleteProvinsiModal();
-                closeImportProvinsiModal();
-                closeExportProvinsiModal();
+                // closeImportProvinsiModal();
+                // closeExportProvinsiModal();
             }
         });
 
@@ -188,13 +159,13 @@
                 closeDeleteProvinsiModal();
             }
 
-            if (event.target == importProvinsiModal) {
-                closeImportProvinsiModal();
-            }
+            // if (event.target == importProvinsiModal) {
+            //     closeImportProvinsiModal();
+            // }
 
-            if (event.target == exportProvinsiModal) {
-                closeExportProvinsiModal();
-            }
+            // if (event.target == exportProvinsiModal) {
+            //     closeExportProvinsiModal();
+            // }
         });
     </script>
 @endscript

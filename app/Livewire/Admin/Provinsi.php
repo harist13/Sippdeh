@@ -18,28 +18,18 @@ class Provinsi extends Component
 
     public string $keyword = '';
 
-    public ?int $kabupatenId = null;
-
     public function render(): View
     {
-        $kabupaten = Kabupaten::all();
         $provinsi = $this->getProvinsi();
-
-        return view('admin.provinsi.livewire', compact('kabupaten', 'provinsi'));
+        return view('admin.provinsi.livewire', compact('provinsi'));
     }
 
     private function getProvinsi(): LengthAwarePaginator
     {
         if ($this->keyword) {
-            $provinsiQuery = Model::whereLike('nama', "%{$this->keyword}%");
+            $provinsiQuery = Model::whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         } else {
             $provinsiQuery = Model::query();
-        }
-
-        if ($this->kabupatenId) {
-            $provinsiQuery->whereHas('kabupaten', function($builder) {
-                $builder->where('id', $this->kabupatenId);
-            });
         }
 
         return $provinsiQuery->paginate($this->perPage);
