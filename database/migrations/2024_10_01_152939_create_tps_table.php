@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('tps', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('alamat');
+            $table->string('alamat')->nullable();
             $table->unsignedBigInteger('dpt')->default(0);
             $table->foreignId('kelurahan_id')->constrained('kelurahan')->onDelete('cascade');
             $table->timestamps();
