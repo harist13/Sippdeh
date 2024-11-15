@@ -128,7 +128,10 @@
 @script
     <script>
         Livewire.hook('request', function({ respond }) {
-            respond(() => initializeRemoveProvinsiEvents());
+            respond(function() {
+                initializeRemoveProvinsiEvents();
+                initializeEditProvinsiEvents();
+            });
         });
 
         // Tutup modal saat tombol esc di tekan

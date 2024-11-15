@@ -6,13 +6,13 @@
             @method('PUT')
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">Edit Provinsi</h3>
             
-            <input type="text" id="editProvinsiName" name="nama_provinsi"
+            <input type="text" id="editProvinsiName" name="name"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nama provinsi" required>
-            <span class="text-red-800">{{ $errors->first('nama_provinsi') }}</span>
+            <span class="text-red-800">{{ $errors->first('name') }}</span>
 
             <div class="mt-4">
-                <label class="block text-sm font-medium text-gray-700">Logo Provinsi</label>
+                <label class="block text-sm font-medium text-gray-700">Logo</label>
                 <div id="currentLogo" class="mt-2 mb-2">
                     <img src="" alt="Current Logo" class="w-20 h-20 object-cover rounded-full mx-auto hidden">
                 </div>
@@ -23,10 +23,8 @@
 
             <hr class="h-1 my-3">
             <div class="flex items-center">
-                <button type="button" id="cancelEditProvinsi"
-                    class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">Batalkan</button>
-                <button type="submit" id="confirmEditProvinsi"
-                    class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">Simpan</button>
+                <button type="button" id="cancelEditModal" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">Batalkan</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">Simpan</button>
             </div>
         </form>
     </div>
@@ -64,32 +62,39 @@
         return provinsiUpdateUrl;
     }
 
-    document.querySelectorAll('.edit-provinsi-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            showEditProvinsiModal();
+    function onEditButtonClick() {
+        showEditProvinsiModal();
+    
+        const name = document.getElementById('editProvinsiName');
+        name.value = getProvinsiName.call(this);
+        
+        const currentLogo = document.querySelector('#currentLogo img');
+        const logoUrl = getProvinsiLogo.call(this);
 
-            const editProvinsiName = document.getElementById('editProvinsiName');
-            editProvinsiName.value = getProvinsiName.call(this);
-            
-            // Handle logo preview
-            const currentLogo = document.querySelector('#currentLogo img');
-            const logoUrl = getProvinsiLogo.call(this);
-            if (logoUrl) {
-                currentLogo.src = logoUrl;
-                currentLogo.classList.remove('hidden');
-            } else {
-                currentLogo.classList.add('hidden');
-            }
-            
-            const editProvinsiForm = document.getElementById('editProvinsiForm');
-            editProvinsiForm.action = getUpdateProvinsiUrl.call(this);
-        });
-    });
+        if (logoUrl) {
+            currentLogo.src = logoUrl;
+            currentLogo.classList.remove('hidden');
+        } else {
+            currentLogo.classList.add('hidden');
+        }
+        
+        const editProvinsiForm = document.getElementById('editProvinsiForm');
+        editProvinsiForm.action = getUpdateProvinsiUrl.call(this);
+    }
 
-    document.getElementById('cancelEditProvinsi').addEventListener('click', closeEditProvinsiModal);
+    function initializeEditProvinsiEvents() {
+        setTimeout(function() {
+            document.querySelectorAll('.edit-provinsi-btn')
+                .forEach(button => button.addEventListener('click', onEditButtonClick));
+        
+            document.getElementById('cancelEditModal').addEventListener('click', closeEditProvinsiModal);
+        }, 1000);
+    }
+
+    initializeEditProvinsiEvents();
 </script>
 
-@error('nama_provinsi')
+@error('name', 'logo')
     <script>
         showEditProvinsiModal();
     </script>

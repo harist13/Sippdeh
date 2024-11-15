@@ -66,7 +66,7 @@ class ProvinsiController extends Controller
             $validated = $request->validated();
 
             $provinsi = Provinsi::find($id);
-            $provinsi->nama = $validated['nama_provinsi'];
+            $provinsi->nama = $validated['name'];
             
             // Handle logo update
             if ($request->hasFile('logo')) {
