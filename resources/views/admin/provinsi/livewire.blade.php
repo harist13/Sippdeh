@@ -33,7 +33,7 @@
             </div>
     
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-                <div class="flex gap-2">
+                {{-- <div class="flex gap-2">
                     <button id="importProvinsiBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
                         <i class="fas fa-file-import me-1"></i>
                         <span>Impor</span>
@@ -42,7 +42,7 @@
                         <i class="fas fa-file-export me-1"></i>
                         <span>Ekspor</span>
                     </button>
-                </div>
+                </div> --}}
                 <button id="addProvinsiBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-plus me-1"></i>
                     <span>Tambah Provinsi</span>
@@ -140,8 +140,8 @@
                 closeAddProvinsiModal();
                 closeEditProvinsiModal();
                 closeDeleteProvinsiModal();
-                closeImportProvinsiModal();
-                closeExportProvinsiModal();
+                // closeImportProvinsiModal();
+                // closeExportProvinsiModal();
             }
         });
 
@@ -159,13 +159,13 @@
                 closeDeleteProvinsiModal();
             }
 
-            if (event.target == importProvinsiModal) {
-                closeImportProvinsiModal();
-            }
+            // if (event.target == importProvinsiModal) {
+            //     closeImportProvinsiModal();
+            // }
 
-            if (event.target == exportProvinsiModal) {
-                closeExportProvinsiModal();
-            }
+            // if (event.target == exportProvinsiModal) {
+            //     closeExportProvinsiModal();
+            // }
         });
     </script>
 @endscript

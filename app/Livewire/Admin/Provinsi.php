@@ -20,16 +20,14 @@ class Provinsi extends Component
 
     public function render(): View
     {
-        $kabupaten = Kabupaten::all();
         $provinsi = $this->getProvinsi();
-
-        return view('admin.provinsi.livewire', compact('kabupaten', 'provinsi'));
+        return view('admin.provinsi.livewire', compact('provinsi'));
     }
 
     private function getProvinsi(): LengthAwarePaginator
     {
         if ($this->keyword) {
-            $provinsiQuery = Model::whereLike('nama', "%{$this->keyword}%");
+            $provinsiQuery = Model::whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         } else {
             $provinsiQuery = Model::query();
         }
