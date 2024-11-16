@@ -72,7 +72,7 @@
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->kabupaten->nama }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
 								<button class="text-[#3560A0] hover:text-blue-900 edit-kecamatan"><i class="fas fa-edit"></i></button>
-								<button class="text-red-600 hover:text-red-900 ml-3 hapus-kecamatan-btn"><i class="fas fa-trash-alt"></i></button>
+								<button class="text-red-600 hover:text-red-900 ml-3 hapus-kecamatan"><i class="fas fa-trash-alt"></i></button>
 							</td>
 						</tr>
 					@empty
@@ -99,8 +99,8 @@
 	@include('admin.kecamatan.tambah-modal')
 	@include('admin.kecamatan.edit-modal')
 	@include('admin.kecamatan.hapus-modal')
-	@include('admin.kecamatan.ekspor-modal')
-	@include('admin.kecamatan.impor-modal')
+	{{-- @include('admin.kecamatan.ekspor-modal') --}}
+	{{-- @include('admin.kecamatan.impor-modal') --}}
 </div>
 
 @script
