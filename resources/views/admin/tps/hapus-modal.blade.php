@@ -27,26 +27,27 @@
 		deleteTPSModal.classList.add('hidden');
 	}
 
-	function getTPSId() {
-		return this.closest('tr').querySelector('td:nth-child(5)').dataset.id;
+	function getId() {
+		return this.closest('tr').dataset.id;
 	}
 
 	function getDestroyTPSUrl() {
-		const tpsId = getTPSId.call(this);
+		const tpsId = getId.call(this);
 		const tpsDestroyRoute = `{{ route('tps.destroy', ['tp' => '__tp__']) }}`;
 		const tpsDestroyUrl = tpsDestroyRoute.replace('__tp__', tpsId);
 
 		return tpsDestroyUrl;
 	}
 
-	document.querySelectorAll('.hapus-tps-btn').forEach(button => {
-		button.addEventListener('click', function () {
-			showDeleteTPSModal();
+	function onDeleteTpsButtonClick() {
+		const deleteTPSForm = document.getElementById('deleteTPSForm');
+		deleteTPSForm.action = getDestroyTPSUrl.call(this);
 
-			const deleteTPSForm = document.getElementById('deleteTPSForm');
-			deleteTPSForm.action = getDestroyTPSUrl.call(this);
-		});
-	});
+		showDeleteTPSModal();
+	}
+
+	document.querySelectorAll('.hapus-tps')
+		.forEach(button => button.addEventListener('click', onDeleteTpsButtonClick));
 
 	document.getElementById('cancelDeleteTPS').addEventListener('click', closeDeleteTPSModal);
 </script>
