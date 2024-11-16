@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
@@ -26,10 +27,13 @@ class Kecamatan extends Component
 
     private function getKecamatan(): LengthAwarePaginator
     {
+        $kecamatanQuery = Model::query();
+
         if ($this->keyword) {
-            $kecamatanQuery = Model::whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        } else {
-            $kecamatanQuery = Model::query();
+            $keyword = '%' . strtolower($this->keyword) . '%';
+            $kecamatanQuery
+                ->whereRaw('LOWER(nama) LIKE ?', [$keyword])
+                ->orWhereHas('kabupaten', fn (Builder $builder) => $builder->whereRaw('LOWER(nama) LIKE ?', [$keyword]));
         }
 
         return $kecamatanQuery->paginate($this->perPage);

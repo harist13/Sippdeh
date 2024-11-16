@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\KecamatanExport;
+use App\Imports\KecamatanImport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Kecamatan\ImportKecamatanRequest;
 use App\Http\Requests\Admin\Kecamatan\StoreKecamatanRequest;
 use App\Http\Requests\Admin\Kecamatan\UpdateKecamatanRequest;
-use App\Imports\KecamatanImport;
-use App\Models\Kabupaten;
 use App\Models\Kecamatan;
-use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Sentry\SentrySdk;
+use Exception;
 
 class KecamatanController extends Controller
 {
@@ -42,12 +43,16 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kecamatan = new Kecamatan();
-            $kecamatan->nama = $validated['nama_kecamatan_baru'];
-            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
+            $kecamatan->nama = $validated['name'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id'];
+
             $kecamatan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah kecamatan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah kecamatan.');
         }
     }
