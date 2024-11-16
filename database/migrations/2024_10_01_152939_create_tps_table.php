@@ -11,10 +11,13 @@ return new class extends Migration
         Schema::create('tps', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('alamat')->nullable();
             $table->unsignedBigInteger('dpt')->default(0);
-            $table->foreignId('kelurahan_id')->constrained('kelurahan')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreignId('kelurahan_id')
+                ->nullable()
+                ->constrained('kelurahan')
+                ->nullOnDelete();
         });
     }
 

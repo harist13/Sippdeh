@@ -11,8 +11,12 @@ return new class extends Migration
         Schema::create('kelurahan', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('kecamatan_id')->constrained('kecamatan')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreignId('kecamatan_id')
+                ->nullable()
+                ->constrained('kecamatan')
+                ->nullOnDelete();
         });
     }
 
