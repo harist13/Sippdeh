@@ -19,42 +19,9 @@ class KecamatanController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function index(Request $request)
+     public function index()
     {
-        // Get items per page from request, default to 10
-        $itemsPerPage = $request->input('itemsPerPage', 10);
-        
-        $kabupaten = Kabupaten::all();
-        $kecamatanQuery = Kecamatan::query();
-
-        if ($request->has('cari')) {
-            $kataKunci = $request->get('cari');
-
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
-            if ($kataKunci == '') {
-                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
-                if ($request->has('kabupaten')) {
-                    return redirect()->route('kecamatan', [
-                        'kabupaten' => $request->get('kabupaten'),
-                        'itemsPerPage' => $itemsPerPage
-                    ]);
-                }
-
-                return redirect()->route('kecamatan', ['itemsPerPage' => $itemsPerPage]);
-            }
-
-            $kecamatanQuery->whereLike('nama', "%$kataKunci%");
-        }
-
-        if ($request->has('kabupaten')) {
-            $kecamatanQuery->where('kabupaten_id', $request->get('kabupaten'));
-        }
-
-        $kecamatan = $kecamatanQuery->orderByDesc('id')
-            ->paginate($itemsPerPage)
-            ->withQueryString();
-        
-        return view('admin.kecamatan.index', compact('kabupaten', 'kecamatan'));
+        return view('admin.kecamatan.index');
     }
 
     public function export(Request $request)
