@@ -46,6 +46,32 @@ class KabupatenController extends Controller
         return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
+     public function store(StoreKabupatenRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $kabupaten = new Kabupaten();
+            $kabupaten->nama = $validated['name'];
+            $kabupaten->provinsi_id = $validated['provinsi_id'];
+            
+            if ($request->hasFile('logo')) {
+                $logo = $request->file('logo');
+                $path = $logo->store('kabupaten-logo', 'public');
+                $kabupaten->logo = $path;
+            }
+            
+            $kabupaten->save();
+
+            return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
+        }
+    }
+
     public function export(Request $request)
     {
         try {
@@ -56,32 +82,6 @@ class KabupatenController extends Controller
             return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-     public function store(StoreKabupatenRequest $request)
-    {
-        try {
-            $validated = $request->validated();
-
-            $kabupaten = new Kabupaten();
-            $kabupaten->nama = $validated['nama_kabupaten_baru'];
-            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten_baru'];
-            
-            if ($request->hasFile('logo_kabupaten_baru')) {
-                $logo = $request->file('logo_kabupaten_baru');
-                $path = $logo->store('kabupaten-logo', 'public');
-                $kabupaten->logo = $path;
-            }
-            
-            $kabupaten->save();
-
-            return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
-        } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
         }
     }
 

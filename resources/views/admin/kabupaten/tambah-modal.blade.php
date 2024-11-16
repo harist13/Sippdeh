@@ -5,31 +5,31 @@
             @csrf
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Kabupaten/Kota</h3>
 
-			{{-- Logo --}}
+			{{-- Nama kabupaten --}}
+			<label for="addKabupatenName" class="mb-1 block">Nama</label>
+            <input type="text" id="addKabupatenName" name="name"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nama kabupaten" required>
+            <span class="text-red-800">{{ $errors->first('name') }}</span>
+
+            {{-- Logo --}}
             <label for="addKabupatenLogo" class="mb-1 block">Logo</label>
             <div class="mb-2">
                 <img id="previewLogoAdd" src="" alt="Preview Logo" class="w-32 h-32 object-contain mx-auto hidden">
             </div>
-            <input type="file" id="addKabupatenLogo" name="logo_kabupaten_baru" accept="image/*"
+            <input type="file" id="addKabupatenLogo" name="logo" accept="image/*"
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <span class="text-gray-500 text-sm">Format: JPG, JPEG, PNG (max 2MB)</span>
-            <span class="text-red-800">{{ $errors->first('logo_kabupaten_baru') }}</span>
-
-			{{-- Nama kabupaten --}}
-			<label for="addKabupatenName" class="mb-1 block">Nama</label>
-            <input type="text" id="addKabupatenName" name="nama_kabupaten_baru"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama kabupaten" required>
-            <span class="text-red-800">{{ $errors->first('nama_kabupaten_baru') }}</span>
+            <span class="text-red-800">{{ $errors->first('logo') }}</span>
 
 			{{-- Provinsi --}}
 			<label for="addKabupatenProvinsi" class="my-1 block">Provinsi</label>
-			<select id="addKabupatenProvinsi" name="provinsi_id_kabupaten_baru" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+			<select id="addKabupatenProvinsi" name="provinsi_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
 				@foreach ($provinsi as $prov)
 					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
 				@endforeach
 			</select>
-			<span class="text-red-800">{{ $errors->first('provinsi_id_kabupaten_baru') }}</span>
+			<span class="text-red-800">{{ $errors->first('provinsi_id') }}</span>
 
             <hr class="h-1 my-3">
 
@@ -45,51 +45,43 @@
     </div>
 </div>
 
-<script>
-	function showAddKabupatenModal() {
-		const addKabupatenModal = document.getElementById('addKabupatenModal');
-		addKabupatenModal.classList.remove('hidden');
-	}
-
-	function closeAddKabupatenModal() {
-		const addKabupatenModal = document.getElementById('addKabupatenModal');
-		addKabupatenModal.classList.add('hidden');
-        // Reset form
-        document.getElementById('addKabupatenName').value = '';
-        document.getElementById('addKabupatenLogo').value = '';
-        document.getElementById('previewLogoAdd').classList.add('hidden');
-	}
-
-    // Preview logo saat file dipilih untuk tambah
-    document.getElementById('addKabupatenLogo').addEventListener('change', function(e) {
-        const previewLogo = document.getElementById('previewLogoAdd');
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewLogo.src = e.target.result;
-                previewLogo.classList.remove('hidden');
-            }
-            reader.readAsDataURL(this.files[0]);
+@push('scripts')
+    <script>
+        function showAddKabupatenModal() {
+            const addKabupatenModal = document.getElementById('addKabupatenModal');
+            addKabupatenModal.classList.remove('hidden');
         }
-    });
 
-    document.getElementById('addKabupatenBtn').addEventListener('click', showAddKabupatenModal);
-    document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
-</script>
+        function closeAddKabupatenModal() {
+            const addKabupatenModal = document.getElementById('addKabupatenModal');
+            addKabupatenModal.classList.add('hidden');
+            // Reset form
+            document.getElementById('addKabupatenName').value = '';
+            document.getElementById('addKabupatenLogo').value = '';
+            document.getElementById('previewLogoAdd').classList.add('hidden');
+        }
 
-@error('nama_kabupaten_baru')
-    <script>
-        showAddKabupatenModal();
+        function onLogoChange(e) {
+            const previewLogo = document.getElementById('previewLogoAdd');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewLogo.src = e.target.result;
+                    previewLogo.classList.remove('hidden');
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        }
+
+        // Preview logo saat file dipilih untuk tambah
+        document.getElementById('addKabupatenLogo').addEventListener('change', onLogoChange);
+
+        document.getElementById('addKabupatenBtn').addEventListener('click', showAddKabupatenModal);
+        document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
     </script>
-@enderror
+@endpush
 
-@error('provinsi_id_kabupaten_baru')
-    <script>
-        showAddKabupatenModal();
-    </script>
-@enderror
-
-@error('logo_kabupaten_baru')
+@error('name', 'logo', 'provinsi_id')
     <script>
         showAddKabupatenModal();
     </script>

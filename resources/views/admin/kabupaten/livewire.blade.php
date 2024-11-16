@@ -120,45 +120,44 @@
     @include('admin.kabupaten.tambah-modal')
     @include('admin.kabupaten.edit-modal')
     @include('admin.kabupaten.hapus-modal')
-    @include('admin.kabupaten.impor-modal')
-    @include('admin.kabupaten.ekspor-modal')
+    {{-- @include('admin.kabupaten.impor-modal')
+    @include('admin.kabupaten.ekspor-modal') --}}
 </div>
 
 @script
-<script>
-    // Tutup modal saat tombol esc di tekan
-    document.addEventListener('keyup', function (event) {
-        if (event.key === "Escape") {
-            closeAddKabupatenModal();
-            closeEditKabupatenModal();
-            closeDeleteKabupatenModal();
-            closeExportKabupatenModal();
-            closeImportKabupatenModal();
-        }
-    });
+    <script>
+        // Tutup modal saat tombol esc di tekan
+        document.addEventListener('keyup', function (event) {
+            if (event.key === "Escape") {
+                closeAddKabupatenModal();
+                closeEditKabupatenModal();
+                closeDeleteKabupatenModal();
+                // closeExportKabupatenModal();
+                // closeImportKabupatenModal();
+            }
+        });
 
-    // Tutup modal saat overlay diklik
-    document.addEventListener('click', function (event) {
-        if (event.target == addKabupatenModal) {
-            closeAddKabupatenModal();
-        }
+        // Tutup modal saat overlay diklik
+        document.addEventListener('click', function (event) {
+            if (event.target == addKabupatenModal) {
+                closeAddKabupatenModal();
+            }
 
-        if (event.target == editKabupatenModal) {
-            closeEditKabupatenModal();
-        }
+            if (event.target == editKabupatenModal) {
+                closeEditKabupatenModal();
+            }
 
-        if (event.target == deleteKabupatenModal) {
-            closeDeleteKabupatenModal();
-        }
+            if (event.target == deleteKabupatenModal) {
+                closeDeleteKabupatenModal();
+            }
 
-        if (event.target == exportKabupatenModal) {
-            closeExportKabupatenModal();
-        }
+            // if (event.target == exportKabupatenModal) {
+            //     closeExportKabupatenModal();
+            // }
 
-        if (event.target == importKabupatenModal) {
-            closeImportKabupatenModal();
-        }
-    });
-
-</script>
+            // if (event.target == importKabupatenModal) {
+            //     closeImportKabupatenModal();
+            // }
+        });
+    </script>
 @endscript
