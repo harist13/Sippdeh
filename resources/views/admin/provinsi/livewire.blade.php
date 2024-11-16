@@ -64,7 +64,7 @@
                             Logo
                         </th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
-                            Nama
+                            Provinsi
                         </th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             Aksi

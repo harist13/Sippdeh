@@ -59,7 +59,7 @@
                     <tr class="bg-[#3560A0] text-white">
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">ID</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Logo</th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Nama</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Kabupaten/Kota</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Provinsi</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Aksi</th>
                     </tr>
