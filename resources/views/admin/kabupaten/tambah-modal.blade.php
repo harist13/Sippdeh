@@ -10,18 +10,16 @@
                 <label for="addKabupatenName" class="mb-1 block">Nama</label>
                 <input type="text" id="addKabupatenName" name="name" placeholder="Nama kabupaten" required
                     class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {{-- <span class="text-red-800">{{ $errors->first('add_name') }}</span> --}}
             </div>
 
             {{-- Logo --}}
             <div class="mb-3">
                 <label for="addKabupatenLogo" class="mb-1 block">Logo</label>
                 <div class="mb-2">
-                    <img id="currentLogo" src="" alt="Current Logo" class="w-32 h-32 object-contain mx-auto hidden">
+                    <img id="previewLogo" src="" alt="Current Logo" class="w-32 h-32 object-contain mx-auto hidden">
                 </div>
                 <input type="file" id="addKabupatenLogo" name="logo" accept="image/*"
                     class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {{-- <span class="text-red-800 block">{{ $errors->first('add_logo') }}</span> --}}
                 <span class="text-gray-500 text-sm">Format: JPG, JPEG, PNG (max 2MB)</span>
             </div>
 
@@ -34,13 +32,12 @@
                         <option value="{{ $prov->id }}">{{ $prov->nama }}</option>
                     @endforeach
                 </select>
-                {{-- <span class="text-red-800">{{ $errors->first('provinsi_id') }}</span> --}}
             </div>
 
             <hr class="h-1 my-3">
 
             <div class="flex items-center">
-                <button type="button" id="cancelAddKabupaten" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
+                <button type="button" id="closeAddKabupaten" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
 					Batalkan
 				</button>
                 <button type="submit" id="confirmAddKabupaten" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
@@ -64,11 +61,11 @@
             // Reset form
             document.getElementById('addKabupatenName').value = '';
             document.getElementById('addKabupatenLogo').value = '';
-            document.getElementById('previewLogoAdd').classList.add('hidden');
+            document.getElementById('previewLogo').classList.add('hidden');
         }
 
         function onLogoChange(e) {
-            const previewLogo = document.getElementById('previewLogoAdd');
+            const previewLogo = document.getElementById('previewLogo');
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -82,7 +79,7 @@
         // Preview logo saat file dipilih untuk tambah
         document.getElementById('addKabupatenLogo').addEventListener('change', onLogoChange);
 
-        document.getElementById('addKabupatenBtn').addEventListener('click', showAddKabupatenModal);
-        document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
+        document.getElementById('addKabupaten').addEventListener('click', showAddKabupatenModal);
+        document.getElementById('closeAddKabupaten').addEventListener('click', closeAddKabupatenModal);
     </script>
 @endpush

@@ -12,7 +12,6 @@
                 <label for="editKabupatenName" class="mb-1 block">Nama</label>
                 <input type="text" id="editKabupatenName" name="name" placeholder="Nama kabupaten" required
                     class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {{-- <span class="text-red-800">{{ $errors->first('edit_name') }}</span> --}}
             </div>
 
             {{-- Logo --}}
@@ -23,7 +22,6 @@
                 </div>
                 <input type="file" id="editKabupatenLogo" name="logo" accept="image/*"
                     class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {{-- <span class="text-red-800 block">{{ $errors->first('edit_logo') }}</span> --}}
                 <span class="text-gray-500 text-sm">Format: JPG, JPEG, PNG (max 2MB)</span>
             </div>
 
@@ -36,13 +34,12 @@
                         <option value="{{ $prov->id }}">{{ $prov->nama }}</option>
                     @endforeach
                 </select>
-                {{-- <span class="text-red-800">{{ $errors->first('provinsi_id') }}</span> --}}
             </div>
 
             <hr class="h-1 my-3">
 
             <div class="flex items-center">
-                <button type="button" id="closeEditKabupatenModal" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
+                <button type="button" id="closeEditKabupaten" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
 					Batalkan
 				</button>
                 <button type="submit" id="confirmEditKabupaten" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
@@ -133,6 +130,6 @@
         
         document.getElementById('editKabupatenLogo').addEventListener('change', onLogoChange);
         
-        document.getElementById('closeEditKabupatenModal').addEventListener('click', closeEditKabupatenModal);
+        document.getElementById('closeEditKabupaten').addEventListener('click', closeEditKabupatenModal);
     </script>
 @endpush

@@ -43,7 +43,7 @@
                         <span>Ekspor</span>
                     </button>
                 </div> --}}
-                <button id="addKabupatenBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+                <button id="addKabupaten" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-plus me-1"></i>
                     <span>Tambah Kabupaten</span>
                 </button>
@@ -91,7 +91,7 @@
                                 <button class="edit-kabupaten text-[#3560A0] hover:text-blue-900">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-kabupaten-btn">
+                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-kabupaten">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>

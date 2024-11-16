@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Imports\KabupatenImport;
 use App\Exports\KabupatenExport;
 use App\Models\Kabupaten;
-use App\Models\Provinsi;
 use App\Http\Requests\Admin\Kabupaten\ImportKabupatenRequest;
 use App\Http\Requests\Admin\Kabupaten\StoreKabupatenRequest;
 use App\Http\Requests\Admin\Kabupaten\UpdateKabupatenRequest;
@@ -36,6 +35,9 @@ class KabupatenController extends Controller
             
             return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         }
     }
@@ -62,6 +64,9 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
         }
     }
@@ -74,20 +79,15 @@ class KabupatenController extends Controller
 
                 $kabupatenImport = new KabupatenImport();
                 $kabupatenImport->import($namaSpreadsheet, disk: 'local');
-                
-                $catatan = $kabupatenImport->getCatatan();
-                $redirectBackResponse = redirect()->back();
 
-                if (count($catatan) > 0) {
-                    $redirectBackResponse->with('catatan_impor', $catatan);
-                }
-
-                return $redirectBackResponse->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');
+                return redirect()->back()->with('pesan_sukses', 'Berhasil mengimpor data kabupaten.');
             }
 
             return redirect()->back()->with('pesan_gagal', 'Berkas .csv atau .xlsx tidak terunggah.');
         } catch (Exception $exception) {
-            // dd($exception);
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengimpor data kabupaten.');
         }
     }
@@ -142,6 +142,9 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menghapus kabupaten.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal menghapus kabupaten.');
         }
     }
