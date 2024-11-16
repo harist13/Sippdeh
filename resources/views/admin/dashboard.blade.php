@@ -398,7 +398,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center w-1/3">
-                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat Provinsi</h2>
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat Provinsi {{ $provinsiData['nama'] }}</h2>
                                         </div>
                                         <div class="text-right w-1/3">
                                             <div class="text-4xl font-bold {{ $provinsiData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
@@ -453,7 +453,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center w-1/3">
-                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat</h2>
+                                            <h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{$data['nama']}}</h2>
                                         </div>
                                         <div class="text-right w-1/3">
                                             <div class="text-4xl font-bold {{ $data['warna_partisipasi'] === 'green' ? 'text-green-400' : 
