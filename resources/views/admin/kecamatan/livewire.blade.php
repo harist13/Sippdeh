@@ -66,12 +66,12 @@
 				</thead>
 				<tbody class="bg-gray-100">
 					@forelse ($kecamatan as $kec)
-						<tr class="hover:bg-gray-200">
+						<tr class="hover:bg-gray-200" data-id="{{ $kec->id }}" data-nama="{{ $kec->nama }}" data-kabupaten-id="{{ $kec->kabupaten->id }}">
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->getThreeDigitsId() }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kec->id }}" data-nama="{{ $kec->nama }}">{{ $kec->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kec->kabupaten->id }}">{{ $kec->kabupaten->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->kabupaten->nama }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-								<button class="text-[#3560A0] hover:text-blue-900 edit-kecamatan-btn"><i class="fas fa-edit"></i></button>
+								<button class="text-[#3560A0] hover:text-blue-900 edit-kecamatan"><i class="fas fa-edit"></i></button>
 								<button class="text-red-600 hover:text-red-900 ml-3 hapus-kecamatan-btn"><i class="fas fa-trash-alt"></i></button>
 							</td>
 						</tr>

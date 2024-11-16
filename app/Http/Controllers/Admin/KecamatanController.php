@@ -92,12 +92,15 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kecamatan = Kecamatan::find($id);
-            $kecamatan->nama = $validated['nama_kecamatan'];
-            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan'];
+            $kecamatan->nama = $validated['name'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id'];
             $kecamatan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kecamatan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kecamatan.');
         }
     }
