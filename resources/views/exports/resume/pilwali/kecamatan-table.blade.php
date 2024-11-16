@@ -67,7 +67,7 @@
 
                 @if (!$isKabupatenColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->kabupaten->nama }}
+                        {{ $datum->kabupaten?->nama ?? '-' }}
                     </td>
                 @endif
                 @if (!$isKecamatanColumnIgnored)

@@ -69,12 +69,12 @@
 
                 {{-- Provinsi --}}
                 <td class="py-3 px-4 text-xs border provinsi {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kabupaten->provinsi->nama }}
+                    {{ $datum->kabupaten?->provinsi?->nama ?? '-' }}
                 </td>
 
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kabupaten->nama }}
+                    {{ $datum->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}

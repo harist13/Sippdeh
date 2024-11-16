@@ -68,11 +68,11 @@
 				</thead>
 				<tbody class="bg-gray-100">
 					@forelse ($tps as $data)
-						<tr class="hover:bg-gray-200" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}" data-kelurahan-id="{{ $data->kelurahan->id }}" data-dpt="{{ $data->dpt }}">
+						<tr class="hover:bg-gray-200" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}" data-kelurahan-id="{{ $data->kelurahan?->id }}" data-dpt="{{ $data->dpt }}">
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->getThreeDigitsId() }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->kecamatan->kabupaten->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->kecamatan->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->kecamatan?->nama ?? '-' }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->nama ?? '-' }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->nama }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->dpt }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">

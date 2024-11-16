@@ -83,7 +83,7 @@
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan->nama }}
+                    {{ $datum->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}

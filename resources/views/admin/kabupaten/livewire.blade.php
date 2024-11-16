@@ -66,7 +66,7 @@
                 </thead>
                 <tbody class="bg-gray-100">
                     @forelse ($kabupaten as $kota)
-                        <tr class="hover:bg-gray-200" data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}" data-logo="{{ $kota->logo ? Storage::url($kota->logo) : '' }}" data-provinsi-id="{{ $kota->provinsi->id }}">
+                        <tr class="hover:bg-gray-200" data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}" data-logo="{{ $kota->logo ? Storage::url($kota->logo) : '' }}" data-provinsi-id="{{ $kota->provinsi?->id }}">
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 {{ $kota->getThreeDigitsId() }}
                             </td>
@@ -84,7 +84,7 @@
                             </td>
 
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-                                {{ $kota->provinsi->nama }}
+                                {{ $kota->provinsi?->nama ?? '-' }}
                             </td>
 
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
