@@ -74,10 +74,9 @@ class TPSController extends Controller
             $validated = $request->validated();
 
             $tps = new TPS();
-            $tps->nama = $validated['nama_tps_baru'];
-            $tps->alamat = '';
-            $tps->dpt = $validated['dpt_tps_baru'];
-            $tps->kelurahan_id = $validated['kelurahan_id_tps_baru'];
+            $tps->nama = $validated['name'];
+            $tps->dpt = $validated['dpt'];
+            $tps->kelurahan_id = $validated['kelurahan_id'];
             $tps->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah TPS.');
