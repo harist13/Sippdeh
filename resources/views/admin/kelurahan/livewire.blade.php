@@ -65,20 +65,20 @@
                 </thead>
                 <tbody class="bg-gray-100">
                     @forelse ($kelurahan as $kel)
-                        <tr class="hover:bg-gray-200">
+                        <tr class="hover:bg-gray-200" data-id="{{ $kel->id }}" data-nama="{{ $kel->nama }}" data-kecamatan-id="{{ $kel->kecamatan->id }}">
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kel->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kel->id }}" data-nama="{{ $kel->nama }}">{{ $kel->nama }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $kel->kecamatan->id }}">{{ $kel->kecamatan->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kel->nama }}</td>
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kel->kecamatan->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-                                <button class="text-[#3560A0] hover:text-blue-900 edit-kelurahan-btn"><i class="fas fa-edit"></i></button>
+                                <button class="text-[#3560A0] hover:text-blue-900 edit-kelurahan"><i class="fas fa-edit"></i></button>
                                 <button class="text-red-600 hover:text-red-900 ml-3 hapus-kelurahan-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @empty
                         <tr class="hover:bg-gray-200 text-center">
                             <td class="py-5" colspan="4">
-                                @if (request()->has('cari'))
-                                    <p>Tidak ada data kelurahan dengan kata kunci "{{ request()->get('cari') }}"</p>
+                                @if ($keyword)
+                                    <p>Tidak ada data kelurahan dengan kata kunci "{{ $keyword }}"</p>
                                 @else
                                     <p>Belum ada data kelurahan</p>
                                 @endif

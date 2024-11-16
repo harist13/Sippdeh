@@ -129,12 +129,15 @@ class KelurahanController extends Controller
             $validated = $request->validated();
 
             $kelurahan = Kelurahan::find($id);
-            $kelurahan->nama = $validated['nama_kelurahan'];
+            $kelurahan->nama = $validated['name'];
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kelurahan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kelurahan.');
         }
     }
