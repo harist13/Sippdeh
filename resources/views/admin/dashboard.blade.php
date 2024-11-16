@@ -508,13 +508,41 @@
                 </button>
 
                 <div id="candidateSlider" class="flex transition-transform duration-500 ease-in-out relative">
-                    <!-- Slide Provinsi untuk Paslon -->
                     @if($provinsiData && !empty($provinsiData['candidates']))
+                    @php
+                        $currentType = '';
+                        $counter = 0;
+                        $lastPilgubNumber = 0;
+                    @endphp
+
                     <div class="candidate-slide" data-province="true" style="display: none;">
                         <div class="flex justify-center gap-[45px] min-w-[1080px]">
                             @foreach($provinsiData['candidates'] as $candidate)
-                                <div class="w-[330px] flex flex-col">
-                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                @php
+                                    $posisi = strtolower($candidate['posisi']);
+                                    
+                                    // Track the last PILGUB number
+                                    if (strpos($posisi, 'gubernur') !== false) {
+                                        $lastPilgubNumber = $candidate['nomor_urut'];
+                                    }
+                                    
+                                    // Reset counter when type changes
+                                    if (strpos($posisi, 'gubernur') !== false && $currentType != 'pilgub') {
+                                        $currentType = 'pilgub';
+                                        $counter = $candidate['nomor_urut'];
+                                    } elseif (strpos($posisi, 'bupati') !== false && $currentType != 'pilbub') {
+                                        $currentType = 'pilbub';
+                                        $counter = 1;
+                                    } elseif (strpos($posisi, 'walikota') !== false && $currentType != 'pilwali') {
+                                        $currentType = 'pilwali';
+                                        $counter = 1;
+                                    } else {
+                                        $counter = $currentType == 'pilgub' ? $candidate['nomor_urut'] : $counter;
+                                    }
+                                @endphp
+
+                                <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
+                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
                                         @if ($candidate['foto'])
                                             <img class="w-full h-full object-cover" 
                                                 src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
@@ -525,38 +553,68 @@
                                                 alt="Default Image">
                                         @endif
                                     </div>
-                                    <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                        {{ $candidate['wilayah'] }}
-                                    </div>
-                                    <div class="bg-white rounded-b-2xl p-4 shadow">
-                                        <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                    <div class="p-4 text-center">
+                                        <h4 class="text-[#52526c] font-bold mb-1">
                                             {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
                                         </h4>
-                                        <p class="text-[#6b6b6b] text-center text-sm mb-2">
-                                            {{ $candidate['posisi'] }} {{ $candidate['nomor_urut'] }}
+                                        <p class="text-[#6b6b6b] mb-2">
+                                            {{ $candidate['wilayah'] }}
                                         </p>
-                                        <div class="flex justify-center items-center text-[#008bf9]">
-                                            <span class="font-medium">{{ number_format($candidate['persentase'], 2) }}%</span>
-                                            <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                            <span class="font-medium">{{ number_format($candidate['total_suara']) }} Suara</span>
+                                        <p class="text-[#6b6b6b] mb-2">
+                                            @if (strpos($posisi, 'gubernur') !== false)
+                                                PASLON PILGUB {{ $counter }}
+                                            @elseif (strpos($posisi, 'bupati') !== false)
+                                                PASLON PILBUB {{ $counter }}
+                                            @elseif (strpos($posisi, 'walikota') !== false)
+                                                PASLON PILWALI {{ $counter }}
+                                            @endif
+                                        </p>
+                                        <div class="text-[#008bf9] font-medium">
+                                            {{ number_format($candidate['persentase'], 2) }}% | {{ number_format($candidate['total_suara']) }} Suara
                                         </div>
                                     </div>
                                 </div>
+                                @php
+                                    if ($currentType != 'pilgub') {
+                                        $counter++;
+                                    }
+                                @endphp
                             @endforeach
                         </div>
                     </div>
+
                     @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
                         @php
                             $calon = $syncedCalonData[$kabupatenId];
                             $totalSlides = ceil(count($calon) / 3);
+                            $currentType = '';
+                            $counter = 0;
                         @endphp
 
                         @for($slideIndex = 0; $slideIndex < $totalSlides; $slideIndex++)
                             <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="{{ $slideIndex }}" style="display: none;">
                                 <div class="flex justify-center gap-[45px] min-w-[1080px]">
                                     @for($i = $slideIndex * 3; $i < min(($slideIndex + 1) * 3, count($calon)); $i++)
-                                        <div class="w-[330px] flex flex-col">
-                                            <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] rounded-t-2xl overflow-hidden">
+                                        @php
+                                            $posisi = strtolower($calon[$i]['posisi']);
+                                            
+                                            // Reset counter when type changes
+                                            if (strpos($posisi, 'gubernur') !== false && $currentType != 'pilgub') {
+                                                $currentType = 'pilgub';
+                                                $counter = $calon[$i]['nomor_urut'];
+                                            } elseif (strpos($posisi, 'bupati') !== false && $currentType != 'pilbub') {
+                                                $currentType = 'pilbub';
+                                                $counter = 1;
+                                            } elseif (strpos($posisi, 'walikota') !== false && $currentType != 'pilwali') {
+                                                $currentType = 'pilwali';
+                                                $counter = 1;
+                                            } else {
+                                                $counter = $currentType == 'pilgub' ? $calon[$i]['nomor_urut'] : $counter;
+                                            }
+                                        @endphp
+
+                                        <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
+                                            <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
                                                 @if ($calon[$i]['foto'])
                                                     <img class="w-full h-full object-cover" 
                                                         src="{{ Storage::disk('foto_calon_lokal')->url($calon[$i]['foto']) }}" 
@@ -567,23 +625,32 @@
                                                         alt="Default Image">
                                                 @endif
                                             </div>
-                                            <div class="bg-[#3560a0] text-white text-center py-2 px-4 rounded-md inline-block -mt-12 ml-20 mr-20 z-10">
-                                                {{ $calon[$i]['wilayah'] }}
-                                            </div>
-                                            <div class="bg-white rounded-b-2xl p-4 shadow">
-                                                <h4 class="text-[#52526c] text-center font-bold mb-1">
+                                            <div class="p-4 text-center">
+                                                <h4 class="text-[#52526c] font-bold mb-1">
                                                     {{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}
                                                 </h4>
-                                                <p class="text-[#6b6b6b] text-center text-sm mb-2">
-                                                    {{ $calon[$i]['posisi'] }} {{ $calon[$i]['nomor_urut'] }}
+                                                <p class="text-[#6b6b6b] mb-2">
+                                                    {{ $calon[$i]['wilayah'] }}
                                                 </p>
-                                                <div class="flex justify-center items-center text-[#008bf9]">
-                                                    <span class="font-medium">{{ number_format($calon[$i]['persentase'], 2) }}%</span>
-                                                    <div class="mx-2 h-4 w-px bg-[#008bf9] opacity-80"></div>
-                                                    <span class="font-medium">{{ number_format($calon[$i]['total_suara']) }} Suara</span>
+                                                <p class="text-[#6b6b6b] mb-2">
+                                                    @if (strpos($posisi, 'gubernur') !== false)
+                                                        PASLON PILGUB {{ $counter }}
+                                                    @elseif (strpos($posisi, 'bupati') !== false)
+                                                        PASLON PILBUB {{ $counter }}
+                                                    @elseif (strpos($posisi, 'walikota') !== false)
+                                                        PASLON PILWALI {{ $counter }}
+                                                    @endif
+                                                </p>
+                                                <div class="text-[#008bf9] font-medium">
+                                                    {{ number_format($calon[$i]['persentase'], 2) }}% | {{ number_format($calon[$i]['total_suara']) }} Suara
                                                 </div>
                                             </div>
                                         </div>
+                                        @php
+                                            if ($currentType != 'pilgub') {
+                                                $counter++;
+                                            }
+                                        @endphp
                                     @endfor
                                 </div>
                             </div>
