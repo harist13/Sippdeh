@@ -345,9 +345,10 @@
                 </a>
             </div>
 
-            <section class="bg-gray-100 rounded-lg shadow-md p-6 mb-8">
+            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Di Kalimantan Timur</h3>
                 <div id="slideContainer" class="relative w-full">
-                    <div class="flex flex-col">
+                    <div class="flex flex-col p-6">
                         <!-- Container untuk slides -->
                         <div class="flex-grow">
                             <!-- Slide Provinsi -->
@@ -380,7 +381,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                <div class="p-3 text-white bg-blue-900 rounded-lg">
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col items-start w-1/3">
                                             <div class="flex items-center mb-1">
@@ -435,7 +436,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="p-4 text-white bg-blue-900 rounded-lg">
+                                <div class="p-3 text-white bg-blue-900 rounded-lg">
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col items-start w-1/3">
                                             <div class="flex items-center mb-1">
