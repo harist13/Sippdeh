@@ -20,8 +20,8 @@
                     <img src="{{ asset('assets/user.png')}}" alt="Logo" class="w-10 h-10 mr-2">
 
                     <div class="flex-col text-left hidden sm:flex">
-                        <span class="font-semibold">{{ Auth::user()->wilayah->nama }}</span>
-                        <span class="text-sm text-gray-500">{{ Auth::user()->roles->first()->name }}</span>
+                        <span class="font-semibold">{{ Auth::user()->wilayah?->nama ?? '-' }}</span>
+                        <span class="text-sm text-gray-500">{{ Auth::user()->roles->first()?->name ?? '-' }}</span>
                     </div>
                 </button>
                 <!-- Dropdown Menu -->
@@ -69,7 +69,7 @@
                         </label>
                         <input
                             class="w-full px-3 py-2 border bg-gray-300 border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
-                            id="wilayah" type="text" value="{{ Auth::user()->wilayah->nama }}" readonly>
+                            id="wilayah" type="text" value="{{ Auth::user()->wilayah?->nama ?? '-' }}" readonly>
                     </div>
                     <div>
                         <label class="block text-gray-700 text-sm font-medium mb-1 text-left" for="password">

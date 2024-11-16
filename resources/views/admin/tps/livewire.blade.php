@@ -1,13 +1,13 @@
 <div>
 	<div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
 		<div class="flex items-center space-x-2 w-full-mobile mb-5">
-			<img src="{{ asset('assets/icon/kecamatan.svg') }}" class="mr-1" alt="Kecamatan">
-			<span class="font-bold">Kecamatan</span>
+			<img src="{{ asset('assets/icon/tps.svg') }}" class="mr-1" alt="TPS">
+			<span class="font-bold">TPS</span>
 		</div>
 
 		<div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
 			<div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-				{{-- Search Input --}}
+                {{-- Search Input --}}
                 <div class="flex items-center rounded-lg border bg-[#ECEFF5] px-4 py-2">
                     {{-- Loading Icon --}}
                     <svg wire:loading wire:target="keyword" class="animate-spin -ml-1 mr-2 h-4 w-4 text-[#3560A0]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -30,23 +30,22 @@
                         class="ml-2 w-[300px] bg-transparent focus:outline-none text-gray-600"
                     >
                 </div>
-			</div>
+            </div>
 
 			<div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-				{{-- <div class="flex gap-2">
-					<button id="importKecamatanBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
+				<div class="flex gap-2">
+					<button id="importTPSBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
 						<i class="fas fa-file-import me-1"></i>
 						<span>Impor</span>
 					</button>
-					<button id="exportKecamatanBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+					<button id="exportTPSBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
 						<i class="fas fa-file-export me-1"></i>
 						<span>Ekspor</span>
 					</button>
-				</div> --}}
-				
-				<button id="addKecamatanBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+				</div>
+				<button id="addTPSBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
 					<i class="fas fa-plus me-1"></i>
-					<span>Tambah Kecamatan</span>
+					<span>Tambah TPS</span>
 				</button>
 			</div>
 		</div>
@@ -54,34 +53,40 @@
 		<div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto relative mb-5">
 			<!-- Loading Overlay -->
             <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
-
+			
 			<table class="min-w-full leading-normal text-sm-mobile">
 				<thead>
 					<tr class="bg-[#3560A0] text-white">
 						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">ID</th>
-						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Nama</th>
 						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Kabupaten/Kota</th>
+						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Kecamatan</th>
+						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Kelurahan</th>
+						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">TPS</th>
+						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">DPT</th>
 						<th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">Aksi</th>
 					</tr>
 				</thead>
 				<tbody class="bg-gray-100">
-					@forelse ($kecamatan as $kec)
-						<tr class="hover:bg-gray-200" data-id="{{ $kec->id }}" data-nama="{{ $kec->nama }}" data-kabupaten-id="{{ $kec->kabupaten?->id }}">
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->getThreeDigitsId() }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kec->kabupaten?->nama ?? '-' }}</td>
+					@forelse ($tps as $data)
+						<tr class="hover:bg-gray-200" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}" data-kelurahan-id="{{ $data->kelurahan?->id }}" data-dpt="{{ $data->dpt }}">
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->getThreeDigitsId() }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->kecamatan?->nama ?? '-' }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan?->nama ?? '-' }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->dpt }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-								<button class="text-[#3560A0] hover:text-blue-900 edit-kecamatan"><i class="fas fa-edit"></i></button>
-								<button class="text-red-600 hover:text-red-900 ml-3 hapus-kecamatan"><i class="fas fa-trash-alt"></i></button>
+								<button class="text-[#3560A0] hover:text-blue-900 edit-tps"><i class="fas fa-edit"></i></button>
+								<button class="text-red-600 hover:text-red-900 ml-3 hapus-tps"><i class="fas fa-trash-alt"></i></button>
 							</td>
 						</tr>
 					@empty
 						<tr class="hover:bg-gray-200 text-center">
-							<td class="py-5" colspan="4">
+							<td class="py-5" colspan="7">
 								@if ($keyword)
-									<p>Tidak ada data kecamatan dengan kata kunci "{{ $keyword }}"</p>
+									<p>Tidak ada data TPS dengan kata kunci "{{ $keyword }}"</p>
 								@else
-									<p>Belum ada data kecamatan</p>
+									<p>Belum ada data TPS</p>
 								@endif
 							</td>
 						</tr>
@@ -92,50 +97,51 @@
 
 		{{-- Pagination --}}
 		<div class="mt-4">
-			{{ $kecamatan->links('vendor.livewire.simple') }}
+			{{ $tps->links('vendor.livewire.simple') }}
 		</div>
 	</div>
 
-	@include('admin.kecamatan.tambah-modal')
-	@include('admin.kecamatan.edit-modal')
-	@include('admin.kecamatan.hapus-modal')
-	{{-- @include('admin.kecamatan.ekspor-modal') --}}
-	{{-- @include('admin.kecamatan.impor-modal') --}}
+	@include('admin.tps.tambah-modal')
+	@include('admin.tps.edit-modal')
+	@include('admin.tps.hapus-modal')
+	@include('admin.tps.impor-modal')
+	@include('admin.tps.ekspor-modal')
 </div>
 
 @script
 	<script>
 		// Tutup modal saat tombol esc di tekan
 		document.addEventListener('keyup', function(event) {
-			if (event.key === "Escape") {
-				closeAddKecamatanModal();
-				closeEditKecamatanModal();
-				closeDeleteKecamatanModal();
-				// closeExportKecamatanModal();
-				// closeImportKecamatanModal();
+			if(event.key === "Escape") {
+				closeAddTPSModal();
+				closeEditTPSModal();
+				closeDeleteTPSModal();
+				closeImportTPSModal();
+				closeExportTPSModal();
 			}
 		});
 
+		// Tutup modal saat overlay diklik
 		document.addEventListener('click', function(event) {
-			if (event.target == addKecamatanModal) {
-				closeAddKecamatanModal();
+			if (event.target == addTPSModal) {
+				closeAddTPSModal();
 			}
 
-			if (event.target == editKecamatanModal) {
-				closeEditKecamatanModal();
+			if (event.target == editTPSModal) {
+				closeEditTPSModal();
 			}
 
-			if (event.target == deleteKecamatanModal) {
-				closeDeleteKecamatanModal();
+			if (event.target == deleteTPSModal) {
+				closeDeleteTPSModal();
 			}
 
-			// if (event.target == exportKecamatanModal) {
-			// 	closeExportKecamatanModal();
-			// }
+			if (event.target == importTPSModal) {
+				closeImportTPSModal();
+			}
 
-			// if (event.target == importKecamatanModal) {
-			// 	closeImportKecamatanModal();
-			// }
+			if (event.target == exportTPSModal) {
+				closeExportTPSModal();
+			}
 		});
 	</script>
 @endscript

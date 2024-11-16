@@ -18,10 +18,15 @@ return new class extends Migration
             $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
             $table->timestamps();
 
-            $table->foreignId('operator_id')->nullable()
-                ->constrained('petugas')->onDelete('cascade');
-            $table->foreignId('tps_id')->nullable()
-                ->constrained('tps')->onDelete('cascade');
+            $table->foreignId('operator_id')
+                ->nullable()
+                ->constrained('petugas')
+                ->nullOnDelete();
+            
+            $table->foreignId('tps_id')
+                ->nullable()
+                ->constrained('tps')
+                ->nullOnDelete();
         });
     }
 

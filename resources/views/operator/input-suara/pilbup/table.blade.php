@@ -85,13 +85,13 @@
                 </td>
 
                 {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps->kelurahan->kecamatan->id }}">
-                    {{ $datum->tps->kelurahan->kecamatan->nama }}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps?->kelurahan?->kecamatan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}
-                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps->kelurahan->id }}">
-                    {{ $datum->tps->kelurahan->nama }}
+                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps?->kelurahan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                 </td>
 
                 {{-- Nama TPS --}}

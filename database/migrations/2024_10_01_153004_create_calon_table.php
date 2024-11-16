@@ -16,11 +16,15 @@ return new class extends Migration
             $table->string('foto', 300)->nullable();
             $table->timestamps();
             
-            $table->foreignId('provinsi_id')->nullable()
-                ->constrained('provinsi')->nullOnDelete();
-            $table->foreignId('kabupaten_id')->nullable()
-                ->constrained('kabupaten')->nullOnDelete();
-
+            $table->foreignId('provinsi_id')
+                ->nullable()
+                ->constrained('provinsi')
+                ->nullOnDelete();
+            
+            $table->foreignId('kabupaten_id')
+                ->nullable()
+                ->constrained('kabupaten')
+                ->nullOnDelete();
         });
     }
 

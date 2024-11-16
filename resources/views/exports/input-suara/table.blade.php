@@ -79,14 +79,14 @@
                 {{-- Kecamatan --}}
                 @if (!$isKecamatanColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->tps->kelurahan->kecamatan->nama }}
+                        {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                     </td>
                 @endif
 
                 {{-- Kelurahan --}}
                 @if (!$isKelurahanColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->tps->kelurahan->nama }}
+                        {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                     </td>
                 @endif
 

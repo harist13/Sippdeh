@@ -7,31 +7,34 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit TPS</h3>
 
 			{{-- Nama TPS --}}
-			<label for="editTPSName" class="mb-1 block">Nama</label>
-            <input type="text" id="editTPSName" name="nama_tps"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama TPS" required>
-            <span class="text-red-800">{{ $errors->first('nama_tps') }}</span>
+            <div class="mb-3">
+                <label for="editTPSName" class="mb-1 block">Nama</label>
+                <input type="text" id="editTPSName" name="name"
+                    class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Nama TPS" required>
+            </div>
 
             {{-- DPT --}}
-			<label for="editTPSDPT" class="mb-1 block">DPT</label>
-            <input type="number" id="editTPSDPT" name="dpt_tps"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            <span class="text-red-800">{{ $errors->first('dpt_tps') }}</span>
+            <div class="mb-3">
+                <label for="editTPSDPT" class="mb-1 block">DPT</label>
+                <input type="number" id="editTPSDPT" name="dpt"
+                    class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
 
 			{{-- Kelurahan --}}
-			<label for="editTPSKelurahanId" class="my-1 block">Kelurahan</label>
-			<select id="editTPSKelurahanId" name="kelurahan_id_tps" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-				@foreach ($kelurahan as $kel)
-					<option value="{{ $kel->id }}">{{ $kel->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('kelurahan_id_tps') }}</span>
+            <div class="mb-3">
+                <label for="editTPSKelurahanId" class="my-1 block">Kelurahan</label>
+                <select id="editTPSKelurahanId" name="kelurahan_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    @foreach ($kelurahan as $kel)
+                        <option value="{{ $kel->id }}">{{ $kel->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <hr class="h-1 my-3">
 
             <div class="flex items-center">
-                <button type="button" id="cancelEditTPS" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
+                <button type="button" id="closeEditTps" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
 					Batalkan
 				</button>
                 <button type="submit" id="confirmEditTPS" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
@@ -42,64 +45,61 @@
     </div>
 </div>
 
-<script>
-    function getTPSId() {
-        return this.closest('tr').querySelector('td:nth-child(5)').dataset.id;
-    }
+@push('scripts')
+    <script>
+        function showEditTPSModal() {
+            const editTPSModal = document.getElementById('editTPSModal');
+            editTPSModal.classList.remove('hidden');
+        }
 
-    function getTPSName() {
-        return this.closest('tr').querySelector('td:nth-child(5)').dataset.nama;
-    }
+        function closeEditTPSModal() {
+            const editTPSModal = document.getElementById('editTPSModal');
+            editTPSModal.classList.add('hidden');
+        }
+        
+        function getId() {
+            return this.closest('tr').dataset.id;
+        }
 
-    function getTPSKelurahanId() {
-        return this.closest('tr').querySelector('td:nth-child(3)').dataset.id;
-    }
+        function getName() {
+            return this.closest('tr').dataset.nama;
+        }
 
-    function getDpt() {
-        return this.closest('tr').querySelector('td:nth-child(6)').dataset.value;
-    }
+        function getKelurahanId() {
+            return this.closest('tr').dataset.kelurahanId;
+        }
 
-    function showEditTPSModal() {
-		const editTPSModal = document.getElementById('editTPSModal');
-		editTPSModal.classList.remove('hidden');
-	}
+        function getDpt() {
+            return this.closest('tr').dataset.dpt;
+        }
 
-	function closeEditTPSModal() {
-		const editTPSModal = document.getElementById('editTPSModal');
-		editTPSModal.classList.add('hidden');
-	}
+        function getUpdateUrl() {
+            const tpsId = getId.call(this);
+            const tpsUpdateRoute = `{{ route('tps.update', ['tp' => '__tp__']) }}`;
+            const tpsUpdateUrl = tpsUpdateRoute.replace('__tp__', tpsId);
 
-    function getUpdateTPSUrl() {
-        const tpsId = getTPSId.call(this);
-        const tpsUpdateRoute = `{{ route('tps.update', ['tp' => '__tp__']) }}`;
-        const tpsUpdateUrl = tpsUpdateRoute.replace('__tp__', tpsId);
+            return tpsUpdateUrl;
+        }
 
-        return tpsUpdateUrl;
-    }
-
-    document.querySelectorAll('.edit-tps-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            showEditTPSModal();
-
+        function onEditTpsButtonClick() {
             const editTPSName = document.getElementById('editTPSName');
-            editTPSName.value = getTPSName.call(this);
+            editTPSName.value = getName.call(this);
 
             const editTPSDPT = document.getElementById('editTPSDPT');
             editTPSDPT.value = getDpt.call(this);
 
             const editTPSKelurahanId = document.getElementById('editTPSKelurahanId');
-            editTPSKelurahanId.value = getTPSKelurahanId.call(this);
+            editTPSKelurahanId.value = getKelurahanId.call(this);
 
             const editTPSForm = document.getElementById('editTPSForm');
-            editTPSForm.action = getUpdateTPSUrl.call(this);
-        });
-    });
+            editTPSForm.action = getUpdateUrl.call(this);
 
-    document.getElementById('cancelEditTPS').addEventListener('click', closeEditTPSModal);
-</script>
+            showEditTPSModal();
+        }
 
-@error('nama_tps', 'dpt_tps', 'kelurahan_id_tps')
-    <script>
-        showEditTPSModal();
+        document.querySelectorAll('.edit-tps')
+            .forEach(button => button.addEventListener('click', onEditTpsButtonClick));
+
+        document.getElementById('closeEditTps').addEventListener('click', closeEditTPSModal);
     </script>
-@enderror
+@endpush

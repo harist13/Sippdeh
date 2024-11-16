@@ -42,7 +42,7 @@ class TPSSheetImport implements ToModel, WithStartRow, WithValidation, SkipsOnFa
             '0' => ['required', 'string'], // Validasi kolom kabupaten/kota
             '1' => ['required', 'string'], // Validasi kolom kecamatan
             '2' => ['required', 'string'], // Validasi desa/kelurahan
-            '3' => ['required', 'numeric'], // Validasi nomor TPS
+            '3' => ['required'], // Validasi nomor TPS
             '4' => ['required', 'numeric'], // Validasi DPT
         ];
     }

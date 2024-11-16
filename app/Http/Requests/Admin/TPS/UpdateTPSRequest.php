@@ -24,27 +24,27 @@ class UpdateTPSRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama_tps' => [
+            'name' => [
                 'required',
                 'max:300',
                 Rule::unique('tps', 'nama')->ignore($id)
             ],
-            'dpt_tps' => 'required',
-            'kelurahan_id_tps' => 'required|exists:kelurahan,id'
+            'dpt' => 'required',
+            'kelurahan_id' => 'required|exists:kelurahan,id'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama_tps.required' => 'Mohon isi nama TPS.',
-            'nama_tps.unique' => 'Kelurahan tersebut sudah ada.',
-            'nama_tps.max' => 'Nama TPS terlalu panjang, maksimal 300 karakter.',
+            'name.required' => 'Mohon isi nama TPS.',
+            'name.unique' => 'Kelurahan tersebut sudah ada.',
+            'name.max' => 'Nama TPS terlalu panjang, maksimal 300 karakter.',
 
-            'dpt_tps.required' => 'Mohon isi DPT.',
+            'dpt.required' => 'Mohon isi DPT.',
 
-            'kelurahan_id_tps.required' => 'Mohon pilih kelurahan untuk kota tersebut.',
-            'kelurahan_id_tps.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',
+            'kelurahan_id.required' => 'Mohon pilih kelurahan untuk kota tersebut.',
+            'kelurahan_id.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',
         ];
     }
 }

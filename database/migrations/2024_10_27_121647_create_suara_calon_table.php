@@ -16,12 +16,20 @@ return new class extends Migration
             $table->unsignedBigInteger('suara')->default(0);
             $table->timestamps();
 
-            $table->foreignId('operator_id')->nullable()
-                ->constrained('petugas')->onDelete('cascade');
-            $table->foreignId('tps_id')->nullable()
-                ->constrained('tps')->onDelete('cascade');
-            $table->foreignId('calon_id')->nullable()
-                ->constrained('calon')->onDelete('cascade');
+            $table->foreignId('operator_id')
+                ->nullable()
+                ->constrained('petugas')
+                ->nullOnDelete();
+            
+            $table->foreignId('tps_id')
+                ->nullable()
+                ->constrained('tps')
+                ->nullOnDelete();
+            
+            $table->foreignId('calon_id')
+                ->nullable()
+                ->constrained('calon')
+                ->nullOnDelete();
         });
     }
 
