@@ -71,7 +71,7 @@
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $kel->kecamatan->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 <button class="text-[#3560A0] hover:text-blue-900 edit-kelurahan"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-kelurahan-btn"><i class="fas fa-trash-alt"></i></button>
+                                <button class="text-red-600 hover:text-red-900 ml-3 hapus-kelurahan"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @empty
