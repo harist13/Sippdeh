@@ -50,7 +50,10 @@
 			</div>
 		</div>
 
-		<div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto mb-5">
+		<div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto relative mb-5">
+			<!-- Loading Overlay -->
+            <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
+			
 			<table class="min-w-full leading-normal text-sm-mobile">
 				<thead>
 					<tr class="bg-[#3560A0] text-white">
@@ -65,15 +68,15 @@
 				</thead>
 				<tbody class="bg-gray-100">
 					@forelse ($tps as $data)
-						<tr class="hover:bg-gray-200">
+						<tr class="hover:bg-gray-200" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}" data-kelurahan-id="{{ $data->kelurahan->id }}" data-dpt="{{ $data->dpt }}">
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->getThreeDigitsId() }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->kecamatan->kabupaten->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->kelurahan->kecamatan->id }}">{{ $data->kelurahan->kecamatan->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->kecamatan->nama }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->kelurahan->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">{{ $data->nama }}</td>
-							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $data->id }}" data-value="{{ $data->dpt }}">{{ $data->dpt }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->nama }}</td>
+							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $data->dpt }}</td>
 							<td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-								<button class="text-[#3560A0] hover:text-blue-900 edit-tps-btn"><i class="fas fa-edit"></i></button>
+								<button class="text-[#3560A0] hover:text-blue-900 edit-tps"><i class="fas fa-edit"></i></button>
 								<button class="text-red-600 hover:text-red-900 ml-3 hapus-tps-btn"><i class="fas fa-trash-alt"></i></button>
 							</td>
 						</tr>
@@ -101,8 +104,8 @@
 	@include('admin.tps.tambah-modal')
 	@include('admin.tps.edit-modal')
 	@include('admin.tps.hapus-modal')
-	{{-- @include('admin.tps.ekspor-modal') --}}
-	{{-- @include('admin.tps.impor-modal') --}}
+	@include('admin.tps.impor-modal')
+	@include('admin.tps.ekspor-modal')
 </div>
 
 @script

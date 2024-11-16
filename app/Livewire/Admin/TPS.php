@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Kabupaten;
 use App\Models\Kelurahan;
 use App\Models\TPS as Model;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
@@ -20,9 +21,10 @@ class TPS extends Component
     
     public function render()
     {
+        $kabupaten = Kabupaten::all();
         $kelurahan = Kelurahan::all();
         $tps = $this->getTps();
-        return view('admin.tps.livewire', compact('kelurahan', 'tps'));
+        return view('admin.tps.livewire', compact('kabupaten', 'kelurahan', 'tps'));
     }
 
     private function getTps(): LengthAwarePaginator

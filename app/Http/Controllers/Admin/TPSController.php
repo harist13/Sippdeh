@@ -22,47 +22,9 @@ class TPSController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Get items per page from request, default to 10
-        $itemsPerPage = $request->input('itemsPerPage', 10);
-        
-        $kabupaten = Kabupaten::all();
-        $kelurahan = Kelurahan::all();
-        $tpsQuery = TPS::query();
-
-        if ($request->has('cari')) {
-            $kataKunci = $request->get('cari');
-
-            // kembalikan lagi ke halaman Daftar TPS kalau query 'cari'-nya ternyata kosong.
-            if ($kataKunci == '') {
-                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
-                if ($request->has('kabupaten')) {
-                    return redirect()->route('tps', [
-                        'kabupaten' => $request->get('kabupaten'),
-                        'itemsPerPage' => $itemsPerPage
-                    ]);
-                }
-
-                return redirect()->route('tps', ['itemsPerPage' => $itemsPerPage]);
-            }
-
-            $tpsQuery->whereLike('nama', "%$kataKunci%");
-        }
-
-        if ($request->has('kabupaten')) {
-            $tpsQuery->whereHas('kelurahan', function($builder) use ($request) {
-                $builder->whereHas('kecamatan', function($builder) use ($request) {
-                    $builder->where('kabupaten_id', $request->get('kabupaten'));
-                });
-            });
-        }
-
-        $tps = $tpsQuery->orderByDesc('id')
-            ->paginate($itemsPerPage)
-            ->withQueryString();
-        
-        return view('admin.tps.index', compact('tps', 'kelurahan', 'kabupaten'));
+        return view('admin.tps.index');
     }
 
     /**
@@ -96,13 +58,6 @@ class TPSController extends Controller
 
                 $tpsImport = new TPSImport();
                 $tpsImport->import($namaSpreadsheet, disk: 'local');
-                
-                // $catatan = $tpsImport->getCatatan();
-                // $redirectBackResponse = redirect()->back();
-
-                // if (count($catatan) > 0) {
-                //     $redirectBackResponse->with('catatan_impor', $catatan);
-                // }
 
                 return redirect()->back()->with('pesan_sukses', 'Berhasil mengimpor data TPS.');
             }
@@ -123,10 +78,9 @@ class TPSController extends Controller
             $validated = $request->validated();
 
             $tps = TPS::find($id);
-            $tps->nama = $validated['nama_tps'];
-            $tps->alamat = '';
-            $tps->dpt = $validated['dpt_tps'];
-            $tps->kelurahan_id = $validated['kelurahan_id_tps'];
+            $tps->nama = $validated['name'];
+            $tps->dpt = $validated['dpt'];
+            $tps->kelurahan_id = $validated['kelurahan_id'];
             $tps->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit TPS.');
