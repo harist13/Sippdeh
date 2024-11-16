@@ -55,6 +55,14 @@
             @include('components.alert-gagal', ['message' => $pesanGagal])
         @endisset
 
+        @if ($errors->first('name') != null)
+            @include('components.alert-gagal', ['message' => $errors->first('name')])
+        @endif
+
+        @if ($errors->first('kecamatan_id') != null)
+            @include('components.alert-gagal', ['message' => $errors->first('kecamatan_id')])
+        @endif
+
         @livewire('admin.kelurahan')
     </main>
 @endsection

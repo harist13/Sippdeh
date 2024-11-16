@@ -43,7 +43,7 @@
                         <span>Ekspor</span>
                     </button>
                 </div> --}}
-                <button id="addKelurahanBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
+                <button id="addKelurahan" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-plus me-1"></i>
                     <span>Tambah Kelurahan</span>
                 </button>
