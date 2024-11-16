@@ -6,30 +6,36 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Kabupaten/Kota</h3>
 
 			{{-- Nama kabupaten --}}
-			<label for="addKabupatenName" class="mb-1 block">Nama</label>
-            <input type="text" id="addKabupatenName" name="name"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nama kabupaten" required>
-            <span class="text-red-800">{{ $errors->first('name') }}</span>
+            <div class="mb-3">
+                <label for="addKabupatenName" class="mb-1 block">Nama</label>
+                <input type="text" id="addKabupatenName" name="name" placeholder="Nama kabupaten" required
+                    class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {{-- <span class="text-red-800">{{ $errors->first('add_name') }}</span> --}}
+            </div>
 
             {{-- Logo --}}
-            <label for="addKabupatenLogo" class="mb-1 block">Logo</label>
-            <div class="mb-2">
-                <img id="previewLogoAdd" src="" alt="Preview Logo" class="w-32 h-32 object-contain mx-auto hidden">
+            <div class="mb-3">
+                <label for="addKabupatenLogo" class="mb-1 block">Logo</label>
+                <div class="mb-2">
+                    <img id="currentLogo" src="" alt="Current Logo" class="w-32 h-32 object-contain mx-auto hidden">
+                </div>
+                <input type="file" id="addKabupatenLogo" name="logo" accept="image/*"
+                    class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {{-- <span class="text-red-800 block">{{ $errors->first('add_logo') }}</span> --}}
+                <span class="text-gray-500 text-sm">Format: JPG, JPEG, PNG (max 2MB)</span>
             </div>
-            <input type="file" id="addKabupatenLogo" name="logo" accept="image/*"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <span class="text-gray-500 text-sm">Format: JPG, JPEG, PNG (max 2MB)</span>
-            <span class="text-red-800">{{ $errors->first('logo') }}</span>
 
 			{{-- Provinsi --}}
-			<label for="addKabupatenProvinsi" class="my-1 block">Provinsi</label>
-			<select id="addKabupatenProvinsi" name="provinsi_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-				@foreach ($provinsi as $prov)
-					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('provinsi_id') }}</span>
+            <div class="mb-3">
+                <label for="addKabupatenProvinsiId" class="my-1 block">Provinsi</label>
+                <select id="addKabupatenProvinsiId" name="provinsi_id"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    @foreach ($provinsi as $prov)
+                        <option value="{{ $prov->id }}">{{ $prov->nama }}</option>
+                    @endforeach
+                </select>
+                {{-- <span class="text-red-800">{{ $errors->first('provinsi_id') }}</span> --}}
+            </div>
 
             <hr class="h-1 my-3">
 
@@ -80,9 +86,3 @@
         document.getElementById('cancelAddKabupaten').addEventListener('click', closeAddKabupatenModal);
     </script>
 @endpush
-
-@error('name', 'logo', 'provinsi_id')
-    <script>
-        showAddKabupatenModal();
-    </script>
-@enderror
