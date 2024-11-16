@@ -1,36 +1,14 @@
-<main class="container flex-grow px-4 mx-auto mt-6">
-    @php $pesanSukses = session('pesan_sukses'); @endphp
-    @isset ($pesanSukses)
-    @include('components.alert-berhasil', ['message' => $pesanSukses])
-    @endisset
-
-    @php $pesanGagal = session('pesan_gagal'); @endphp
-    @isset ($pesanGagal)
-    @include('components.alert-gagal', ['message' => $pesanGagal])
-    @endisset
-
-    @php $catatanImpor = session('catatan_impor'); @endphp
-    @isset ($catatanImpor)
-    <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 mb-3 rounded relative" role="alert">
-        <strong class="font-bold mb-1 block">Catatan pengimporan:</strong>
-        <ul class="list-disc ms-5">
-            @foreach ($catatanImpor as $catatan)
-            <li>{!! $catatan !!}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endisset
-
+<div>
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
             <img src="{{ asset('assets/icon/kabupaten.svg') }}" class="mr-1" alt="Kabupaten">
             <span class="font-bold">Kabupaten</span>
         </div>
-
+    
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 {{-- @include('components.dropdown-kabupaten', ['kabupaten' => $kabupaten, 'routeName' => 'kabupaten']) --}}
-
+    
                 <div class="flex items-center border border-gray-300 rounded-lg bg-gray-100 px-4 py-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -42,7 +20,7 @@
                         class="ml-2 bg-transparent focus:outline-none text-gray-600" value="{{ $keyword }}">
                 </div>
             </div>
-
+    
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
                 <div class="flex gap-2">
                     <button id="importKabupatenBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
@@ -60,11 +38,11 @@
                 </button>
             </div>
         </div>
-
+    
         <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto relative mb-5">
             <!-- Loading Overlay -->
             <div wire:loading.delay class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
-
+    
             <table class="min-w-full leading-normal text-sm-mobile">
                 <thead>
                     <tr class="bg-[#3560A0] text-white">
@@ -131,19 +109,19 @@
                 </tbody>
             </table>
         </div>
-
+    
         {{-- Pagination --}}
         <div class="mt-4">
-            {{ $kabupaten->links('vendor.pagination.custom') }}
+            {{ $kabupaten->links('vendor.livewire.simple') }}
         </div>
     </div>
-
+    
     @include('admin.kabupaten.tambah-modal')
     @include('admin.kabupaten.edit-modal')
     @include('admin.kabupaten.hapus-modal')
     @include('admin.kabupaten.impor-modal')
     @include('admin.kabupaten.ekspor-modal')
-</main>
+</div>
 
 @script
 <script>

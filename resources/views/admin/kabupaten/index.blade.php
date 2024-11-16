@@ -44,5 +44,17 @@
 @endpush
 
 @section('content')
-    @livewire('admin.kabupaten')
+    <main class="container flex-grow px-4 mx-auto mt-6">
+        @php $pesanSukses = session('pesan_sukses'); @endphp
+        @isset ($pesanSukses)
+            @include('components.alert-berhasil', ['message' => $pesanSukses])
+        @endisset
+
+        @php $pesanGagal = session('pesan_gagal'); @endphp
+        @isset ($pesanGagal)
+            @include('components.alert-gagal', ['message' => $pesanGagal])
+        @endisset
+        
+        @livewire('admin.kabupaten')
+    </main>
 @endsection
