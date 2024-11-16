@@ -39,7 +39,9 @@ class RangkumanTable extends Component
     public $kecamatans;
     public $kelurahans;
     public $paslon;
-    public $hiddenColumns = [];
+    
+    // Changed default shown columns (removed kecamatan and kelurahan)
+    public $shownColumns = ['kabupaten', 'calon', 'abstain'];
 
     // Add new properties to queryString if needed
     protected $queryString = [
@@ -48,7 +50,7 @@ class RangkumanTable extends Component
         'kecamatan_ids' => ['except' => []],
         'kelurahan_ids' => ['except' => []],
         'partisipasi' => ['except' => []],
-        'hiddenColumns' => ['except' => []]
+        'shownColumns' => ['except' => ['kabupaten', 'calon', 'abstain']]
     ];
 
     public function mount()
@@ -59,7 +61,6 @@ class RangkumanTable extends Component
         $this->paslon = Calon::where('posisi', 'Gubernur')->get();
     }
 
-    // Reset Pagination when filters change
     public function updatedSearch()
     {
         $this->resetPage();
@@ -98,7 +99,6 @@ class RangkumanTable extends Component
         $this->resetPage();
     }
 
-    // Reset all filters
     public function resetFilter()
     {
         $this->reset([
@@ -110,11 +110,12 @@ class RangkumanTable extends Component
             'searchKecamatan',
             'searchKelurahan'
         ]);
+        // Reset shownColumns ke nilai default
+        $this->shownColumns = ['kabupaten', 'calon', 'abstain'];
         $this->kecamatans = collect();
         $this->kelurahans = collect();
     }
 
-    // Export functionality
     public function export()
     {
         $filename = 'rangkuman-suara-' . date('Y-m-d-His') . '.xlsx';
@@ -131,7 +132,6 @@ class RangkumanTable extends Component
         );
     }
 
-    // Computed properties for filtered lists
     public function getFilteredKabupatensProperty()
     {
         return $this->kabupatens->filter(function($kabupaten) {
@@ -156,7 +156,6 @@ class RangkumanTable extends Component
         });
     }
 
-    // Reset search when closing dropdowns
     public function resetDropdownSearch()
     {
         $this->searchKabupaten = '';
@@ -164,7 +163,6 @@ class RangkumanTable extends Component
         $this->searchKelurahan = '';
     }
 
-    // Main data query
     public function getSummaryDataProperty()
     {
         $query = ResumeSuaraTPS::select(
@@ -224,7 +222,6 @@ class RangkumanTable extends Component
         return $query->paginate($this->itemsPerPage);
     }
 
-    // Render view
     public function render()
     {
         return view('livewire.admin.rangkuman-table', [

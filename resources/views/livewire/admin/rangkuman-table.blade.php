@@ -182,18 +182,20 @@
                     </div>
                 </div>
 
-                <!-- Hide Columns Section -->
+                <!-- Show Columns Section -->
                 <div class="relative">
-                    <label class="block text-sm font-semibold mb-1">Sembunyikan Kolom</label>
+                    <label class="block text-sm font-semibold mb-1">Tampilkan Kolom</label>
                     <div class="grid grid-cols-2 gap-2">
                         @foreach([
                             'kabupaten' => 'Kab/Kota',
+                            'kecamatan' => 'Kecamatan',
                             'calon' => 'Paslon',
+                            'kelurahan' => 'Kelurahan',
                             'abstain' => 'Abstain'
                         ] as $key => $label)
                         <label class="flex items-center space-x-2 cursor-pointer">
                             <input type="checkbox" 
-                                wire:model.live="hiddenColumns" 
+                                wire:model.live="shownColumns" 
                                 value="{{ $key }}" 
                                 class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
                             <span class="text-sm">{{ $label }}</span>
@@ -243,112 +245,124 @@
     </div>
 
     <!-- Main Content -->
-        <div class="overflow-hidden mb-8">
-            <!-- Header Section -->
-            <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
-                    Daftar Paslon Gubernur Dengan Partisipasi Se-Kalimantan Timur
-                </div>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-                    <!-- Search Box -->
-                    <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <input type="search" 
-                               wire:model.live.debounce.1000ms="search"
-                               placeholder="Cari..." 
-                               class="ml-2 bg-transparent focus:outline-none text-gray-600">
-                    </div>
-                    <!-- Filter Button -->
-                    <button wire:click="$set('showFilterModal', true)"
-                            class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
-                        <img src="{{ asset('assets/icon/filter.svg') }}" alt="Filter">
-                        Filter
-                    </button>
-                    <!-- Export Button -->
-                    <button wire:click="$set('showExportModal', true)"
-                            class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
-                        <img src="{{ asset('assets/icon/download.png') }}" alt="Export">
-                        <span>Export</span>
-                    </button>
-                </div>
+    <div class="overflow-hidden mb-8">
+        <!-- Header Section -->
+        <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <div class="bg-[#3560a0] text-white py-2 px-4 rounded-lg mb-4 sm:mb-0 w-full sm:w-auto">
+                Daftar Paslon Gubernur Dengan Partisipasi Se-Kalimantan Timur
             </div>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                <!-- Search Box -->
+                <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 mr-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 11-1.42 1.42l-4.1-4.1zM8 14A6 6 0 108 2a6 6 0 000 12z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <input type="search" 
+                           wire:model.live.debounce.1000ms="search"
+                           placeholder="Cari..." 
+                           class="ml-2 bg-transparent focus:outline-none text-gray-600">
+                </div>
+                <!-- Filter Button -->
+                <button wire:click="$set('showFilterModal', true)"
+                        class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 flex items-center justify-center w-full sm:w-auto">
+                    <img src="{{ asset('assets/icon/filter.svg') }}" alt="Filter">
+                    Filter
+                </button>
+                <!-- Export Button -->
+                <button wire:click="$set('showExportModal', true)"
+                        class="px-4 py-2 bg-[#ee3c46] text-white rounded-lg whitespace-nowrap flex items-center space-x-2">
+                    <img src="{{ asset('assets/icon/download.png') }}" alt="Export">
+                    <span>Export</span>
+                </button>
+            </div>
+        </div>
 
-            <!-- Table Section -->
-            <div class="overflow-x-auto">
-                <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
-                    <thead class="bg-[#3560a0] text-white">
-                        <tr>
-                            <th class="py-3 px-4 border-r border-white">No</th>
-                            @if(!in_array('kabupaten', $hiddenColumns))
-                                <th class="py-3 px-4 border-r border-white">Kab/Kota</th>
-                            @endif
-                            <th class="py-3 px-4 border-r border-white">DPT</th>
-                            @if(!in_array('calon', $hiddenColumns))
-                                @foreach($paslon as $calon)
-                                <th class="py-3 px-4 border-r border-white">
-                                    {{ $calon->nama }}/{{ $calon->nama_wakil }}
-                                </th>
-                                @endforeach
-                            @endif
-                            @if(!in_array('abstain', $hiddenColumns))
-                                <th class="py-3 px-4 border-r border-white">Abstain</th>
-                            @endif
-                            <th class="py-3 px-4 border-r border-white">Tingkat Partisipasi (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-gray-100">
-                        @forelse($summaryData as $index => $data)
-                        <tr class="border-b">
+        <!-- Table Section -->
+        <div class="overflow-x-auto">
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
+                <thead class="bg-[#3560a0] text-white">
+                    <tr>
+                        <th class="py-3 px-4 border-r border-white">No</th>
+                        @if(in_array('kabupaten', $shownColumns))
+                            <th class="py-3 px-4 border-r border-white">Kab/Kota</th>
+                        @endif
+                        @if(in_array('kecamatan', $shownColumns))
+                            <th class="py-3 px-4 border-r border-white">Kecamatan</th>
+                        @endif
+                        @if(in_array('kelurahan', $shownColumns))
+                            <th class="py-3 px-4 border-r border-white">Kelurahan</th>
+                        @endif
+                        <th class="py-3 px-4 border-r border-white">DPT</th>
+                        @if(in_array('calon', $shownColumns))
+                            @foreach($paslon as $calon)
+                            <th class="py-3 px-4 border-r border-white">
+                                {{ $calon->nama }}/{{ $calon->nama_wakil }}
+                            </th>
+                            @endforeach
+                        @endif
+                        @if(in_array('abstain', $shownColumns))
+                            <th class="py-3 px-4 border-r border-white">Abstain</th>
+                        @endif
+                        <th class="py-3 px-4 border-r border-white">Tingkat Partisipasi (%)</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-100">
+                    @forelse($summaryData as $index => $data)
+                    <tr class="border-b">
+                        <td class="py-3 px-4 border-r">
+                            {{ str_pad(($summaryData->currentPage() - 1) * $summaryData->perPage() + $loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                        </td>
+                        @if(in_array('kabupaten', $shownColumns))
+                            <td class="py-3 px-4 border-r">{{ $data->kabupaten_nama }}</td>
+                        @endif
+                        @if(in_array('kecamatan', $shownColumns))
+                            <td class="py-3 px-4 border-r">{{ $data->kecamatan_nama }}</td>
+                        @endif
+                        @if(in_array('kelurahan', $shownColumns))
+                            <td class="py-3 px-4 border-r">{{ $data->kelurahan_nama }}</td>
+                        @endif
+                        <td class="py-3 px-4 border-r">{{ $data->suara->dpt ?? 0 }}</td>
+                        @if(in_array('calon', $shownColumns))
+                            @foreach($paslon as $calon)
                             <td class="py-3 px-4 border-r">
-                                {{ str_pad(($summaryData->currentPage() - 1) * $summaryData->perPage() + $loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                {{ $data->suaraCalon->where('calon_id', $calon->id)->first()->suara ?? 0 }}
                             </td>
-                            @if(!in_array('kabupaten', $hiddenColumns))
-                                <td class="py-3 px-4 border-r">{{ $data->kabupaten_nama }}</td>
-                            @endif
-                            <td class="py-3 px-4 border-r">{{ $data->suara->dpt ?? 0 }}</td>
-                            @if(!in_array('calon', $hiddenColumns))
-                                @foreach($paslon as $calon)
-                                <td class="py-3 px-4 border-r">
-                                    {{ $data->suaraCalon->where('calon_id', $calon->id)->first()->suara ?? 0 }}
-                                </td>
-                                @endforeach
-                            @endif
-                            @if(!in_array('abstain', $hiddenColumns))
-                                <td class="py-3 px-4 border-r">{{ $data->abstain ?? 0 }}</td>
-                            @endif
-                            <td class="py-3 px-4 border-r">
-                                @php
-                                $partisipasi = $data->partisipasi ?? 0;
-                                $colorClass = $partisipasi >= 80 ? 'bg-green-400' : 
-                                        ($partisipasi >= 60 ? 'bg-yellow-400' : 'bg-red-400');
-                                @endphp
-                                <div class="participation-button {{ $colorClass }} text-white py-1 px-7 rounded text-xs">
-                                    {{ number_format($partisipasi, 1) }}%
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="100%" class="py-8 text-center text-gray-500">
-                                <div class="flex flex-col items-center justify-center">
-                                    <p class="text-lg">Data yang dicari tidak ditemukan</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                            @endforeach
+                        @endif
+                        @if(in_array('abstain', $shownColumns))
+                            <td class="py-3 px-4 border-r">{{ $data->abstain ?? 0 }}</td>
+                        @endif
+                        <td class="py-3 px-4 border-r">
+                            @php
+                            $partisipasi = $data->partisipasi ?? 0;
+                            $colorClass = $partisipasi >= 70 ? 'bg-green-400' : 
+                                    ($partisipasi >= 50 ? 'bg-yellow-400' : 'bg-red-400');
+                            @endphp
+                            <div class="participation-button {{ $colorClass }} text-white py-1 px-7 rounded text-xs">
+                                {{ number_format($partisipasi, 1) }}%
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="100%" class="py-8 text-center text-gray-500">
+                            <div class="flex flex-col items-center justify-center">
+                                <p class="text-lg">Data yang dicari tidak ditemukan</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
             
-
-            <!-- Pagination -->
-            <div class="mt-4">
-                {{ $summaryData->links('vendor.livewire.simple') }}
-            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="mt-4">
+            {{ $summaryData->links('vendor.livewire.simple') }}
         </div>
     </div>
 </div>

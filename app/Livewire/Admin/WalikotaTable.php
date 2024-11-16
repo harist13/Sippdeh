@@ -20,9 +20,9 @@ class WalikotaTable extends Component
     // Regular properties
     public $search = '';
     public $itemsPerPage = 10;
-    public $kabupaten_ids = []; // Changed to array
-    public $kecamatan_ids = []; // Changed to array
-    public $kelurahan_ids = []; // Changed to array
+    public $kabupaten_ids = []; 
+    public $kecamatan_ids = []; 
+    public $kelurahan_ids = []; 
     public $partisipasi = [];
     public $showFilterModal = false;
     public $showExportModal = false;
@@ -38,7 +38,9 @@ class WalikotaTable extends Component
     public $kecamatans;
     public $kelurahans;
     public $paslon;
-    public $hiddenColumns = [];
+
+    // Changed from hiddenColumns to shownColumns with default visible columns
+    public $shownColumns = ['kabupaten', 'calon', 'abstain'];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -46,7 +48,7 @@ class WalikotaTable extends Component
         'kecamatan_ids' => ['except' => []],
         'kelurahan_ids' => ['except' => []],
         'partisipasi' => ['except' => []],
-        'hiddenColumns' => ['except' => []]
+        'shownColumns' => ['except' => ['kabupaten', 'calon', 'abstain']]
     ];
 
     public function mount()
@@ -57,7 +59,6 @@ class WalikotaTable extends Component
         $this->paslon = Calon::where('posisi', 'Walikota')->get();
     }
 
-    // Computed properties for filtered lists
     public function getFilteredKabupatensProperty()
     {
         return $this->kabupatens->filter(function($kabupaten) {
@@ -115,7 +116,6 @@ class WalikotaTable extends Component
         $this->resetPage();
     }
 
-    // Reset search when closing dropdowns
     public function resetDropdownSearch()
     {
         $this->searchKabupaten = '';
@@ -134,6 +134,8 @@ class WalikotaTable extends Component
             'searchKecamatan',
             'searchKelurahan'
         ]);
+        // Reset shownColumns ke nilai default
+        $this->shownColumns = ['kabupaten', 'calon', 'abstain'];
         $this->kecamatans = collect();
         $this->kelurahans = collect();
     }
