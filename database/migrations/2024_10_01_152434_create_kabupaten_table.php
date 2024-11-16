@@ -12,8 +12,12 @@ return new class extends Migration
             $table->id();
             $table->string('logo', 300)->nullable();
             $table->string('nama');
-            $table->foreignId('provinsi_id')->constrained('provinsi')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreignId('provinsi_id')
+                ->nullable()
+                ->constrained('provinsi')
+                ->nullOnDelete();
         });
     }
 
