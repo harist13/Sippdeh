@@ -66,29 +66,29 @@
                 </thead>
                 <tbody class="bg-gray-100">
                     @forelse ($kabupaten as $kota)
-                        <tr class="hover:bg-gray-200">
+                        <tr class="hover:bg-gray-200" data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}" data-logo="{{ $kota->logo ? Storage::url($kota->logo) : '' }}" data-provinsi-id="{{ $kota->provinsi->id }}">
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 {{ $kota->getThreeDigitsId() }}
                             </td>
+
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 @if($kota->logo)
-                                <img src="{{ Storage::url($kota->logo) }}" alt="Logo {{ $kota->nama }}"
-                                    class="w-20 h-20 object-contain mx-auto">
+                                    <img src="{{ Storage::url($kota->logo) }}" alt="Logo {{ $kota->nama }}" class="w-20 h-20 object-contain mx-auto">
                                 @else
-                                <span class="text-gray-400">Tidak Ada Logo</span>
+                                    <span class="text-gray-400">Tidak Ada Logo</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r kabupaten-data"
-                                data-id="{{ $kota->id }}" data-nama="{{ $kota->nama }}"
-                                data-logo="{{ $kota->logo ? Storage::url($kota->logo) : '' }}">
+
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 {{ $kota->nama }}
                             </td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r"
-                                data-id="{{ $kota->provinsi->id }}">
+
+                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 {{ $kota->provinsi->nama }}
                             </td>
+
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
-                                <button class="editKabupatenBtn text-[#3560A0] hover:text-blue-900">
+                                <button class="edit-kabupaten text-[#3560A0] hover:text-blue-900">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="text-red-600 hover:text-red-900 ml-3 hapus-kabupaten-btn">
@@ -120,8 +120,8 @@
     @include('admin.kabupaten.tambah-modal')
     @include('admin.kabupaten.edit-modal')
     @include('admin.kabupaten.hapus-modal')
-    {{-- @include('admin.kabupaten.impor-modal')
-    @include('admin.kabupaten.ekspor-modal') --}}
+    {{-- @include('admin.kabupaten.impor-modal') --}}
+    {{-- @include('admin.kabupaten.ekspor-modal') --}}
 </div>
 
 @script

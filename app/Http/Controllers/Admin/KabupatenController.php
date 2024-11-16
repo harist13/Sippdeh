@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\KabupatenExport;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Imports\KabupatenImport;
+use App\Exports\KabupatenExport;
+use App\Models\Kabupaten;
+use App\Models\Provinsi;
 use App\Http\Requests\Admin\Kabupaten\ImportKabupatenRequest;
 use App\Http\Requests\Admin\Kabupaten\StoreKabupatenRequest;
 use App\Http\Requests\Admin\Kabupaten\UpdateKabupatenRequest;
-use App\Imports\KabupatenImport;
-use App\Models\Kabupaten;
-use App\Models\Provinsi;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Sentry\SentrySdk;
 use Exception;
 
 class KabupatenController extends Controller
@@ -22,28 +24,20 @@ class KabupatenController extends Controller
      */
     public function index(Request $request)
     {
-        // Get items per page from request, default to 10
-        $itemsPerPage = $request->input('itemsPerPage', 10);
-        
-        $provinsi = Provinsi::all();
-        $kabupatenQuery = Kabupaten::query();
+        return view('admin.kabupaten.index');
+    }
 
-        if ($request->has('cari')) {
-            $kataKunci = $request->get('cari');
-
-            // kembalikan lagi ke halaman Daftar Kabupaten kalau query 'cari'-nya ternyata kosong.
-            if ($kataKunci == '') {
-                return redirect()->route('kabupaten', ['itemsPerPage' => $itemsPerPage]);
+    public function export(Request $request)
+    {
+        try {
+            if ($request->has('provinsi_id') && is_numeric($request->get('provinsi_id'))) {
+                return Excel::download(new KabupatenExport($request->get('provinsi_id')), 'kabupaten.xlsx');
             }
-
-            $kabupatenQuery->whereLike('nama', "%$kataKunci%");
+            
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         }
-
-        $kabupaten = $kabupatenQuery->orderByDesc('id')
-            ->paginate($itemsPerPage)
-            ->withQueryString(); // Mempertahankan parameter URL saat paginasi
-
-        return view('admin.kabupaten.index', compact('kabupaten', 'provinsi'));
     }
 
     /**
@@ -69,19 +63,6 @@ class KabupatenController extends Controller
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambahkan kabupaten.');
         } catch (Exception $exception) {
             return redirect()->back()->with('pesan_gagal', 'Gagal menambahkan kabupaten.');
-        }
-    }
-
-    public function export(Request $request)
-    {
-        try {
-            if ($request->has('provinsi_id') && is_numeric($request->get('provinsi_id'))) {
-                return Excel::download(new KabupatenExport($request->get('provinsi_id')), 'kabupaten.xlsx');
-            }
-            
-            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
-        } catch (Exception $exception) {
-            return redirect()->back()->with('pesan_gagal', 'Gagal mengekspor kabupaten.');
         }
     }
 
@@ -120,16 +101,16 @@ class KabupatenController extends Controller
             $validated = $request->validated();
 
             $kabupaten = Kabupaten::findOrFail($id);
-            $kabupaten->nama = $validated['nama_kabupaten'];
-            $kabupaten->provinsi_id = $validated['provinsi_id_kabupaten'];
+            $kabupaten->nama = $validated['name'];
+            $kabupaten->provinsi_id = $validated['provinsi_id'];
             
-            if ($request->hasFile('logo_kabupaten')) {
+            if ($request->hasFile('logo')) {
                 // Hapus logo lama jika ada
                 if ($kabupaten->logo && Storage::disk('public')->exists($kabupaten->logo)) {
                     Storage::disk('public')->delete($kabupaten->logo);
                 }
                 
-                $logo = $request->file('logo_kabupaten');
+                $logo = $request->file('logo');
                 $path = $logo->store('kabupaten-logo', 'public');
                 $kabupaten->logo = $path;
             }
@@ -138,6 +119,9 @@ class KabupatenController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kabupaten.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kabupaten.');
         }
     }
