@@ -31,11 +31,16 @@ class ResumeSuaraPilgub extends Component
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-    public function mount()
+    public function mount($wilayah = null)
     {
-        // Get all kabupaten IDs instead of filtering by user_wilayah
-        $this->selectedKabupaten = Kabupaten::pluck('id')->toArray();
-        $this->includedColumns = ['KABUPATEN', 'CALON'];
+        if ($wilayah) {
+            $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
+            if ($kabupaten) {
+                $this->selectedKabupaten = [$kabupaten->id];
+            }
+        } else {
+            $this->selectedKabupaten = Kabupaten::pluck('id')->toArray();
+        }
     }
 
     public function render()

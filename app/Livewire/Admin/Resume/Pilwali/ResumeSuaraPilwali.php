@@ -29,11 +29,18 @@ class ResumeSuaraPilwali extends Component
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-    public function mount()
+    public function mount($wilayah = null)
     {
-        // Get all kecamatan IDs without filtering
-        $this->selectedKecamatan = Kecamatan::pluck('id')->toArray();
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
+        if ($wilayah) {
+            $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
+            if ($kabupaten) {
+                $this->selectedKecamatan = Kecamatan::where('kabupaten_id', $kabupaten->id)
+                                                ->pluck('id')
+                                                ->toArray();
+            }
+        } else {
+            $this->selectedKecamatan = Kecamatan::pluck('id')->toArray();
+        }
     }
 
     public function render()
