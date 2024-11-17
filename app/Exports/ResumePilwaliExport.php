@@ -84,7 +84,7 @@ class ResumePilwaliExport implements FromView, WithStyles
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 80 AND 100');
+                $builder->orWhereRaw('partisipasi >= 80');
             }
         });
     }

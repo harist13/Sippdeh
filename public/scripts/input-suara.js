@@ -526,7 +526,7 @@ class InputSuaraUIManager {
                     // partisipasiCell.dataset.value = tps.partisipasi;
                     partisipasiCell.textContent = `${tps.partisipasi}%`;
 
-                    if (tps.partisipasi <= 100 && tps.partisipasi >= 80) {
+                    if (tps.partisipasi >= 80) {
                         partisipasiCell.classList.add('bg-green-400');
                         partisipasiCell.classList.remove('bg-yellow-400');
                         partisipasiCell.classList.remove('bg-red-400');

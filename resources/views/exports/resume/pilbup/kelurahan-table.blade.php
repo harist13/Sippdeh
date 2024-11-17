@@ -141,7 +141,7 @@
 
                 {{-- Partisipasi --}}
                 <td style="text-align: center; border: 1px solid black;">
-                    @if ($datum->partisipasi <= 100 && $datum->partisipasi >= 80)
+                    @if ($datum->partisipasi >= 80)
                         <span>
                             {{ $datum->partisipasi }}%
                         </span>

@@ -119,7 +119,7 @@
 
                 {{-- Partisipasi --}}
                 <td class="py-3 px-4 text-xs border partisipasi">
-					@if ($datum->partisipasi <= 100 && $datum->partisipasi >= 80)
+					@if ($datum->partisipasi >= 80)
 						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
 							{{ $datum->partisipasi }}%
 						</span>

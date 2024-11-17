@@ -101,7 +101,7 @@
                     {{ $datum->abstain }}
                 </td>
                 <td style="text-align: center; border: 1px solid black;">
-                    @if ($datum->partisipasi <= 100 && $datum->partisipasi >= 80)
+                    @if ($datum->partisipasi >= 80)
                         <span style="background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 3px;">
                             {{ $datum->partisipasi }}%
                         </span>
