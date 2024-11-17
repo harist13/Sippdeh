@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProvinsiSeeder::class,
             KabupatenSeeder::class,
-            KecamatanSeeder::class,
-            KelurahanSeeder::class,
+            // KecamatanSeeder::class,
+            // KelurahanSeeder::class,
         ]);
 
-        $this->running();
-        Artisan::call('import:tps');
-        $this->done();
+        // $this->running();
+        // Artisan::call('import:tps');
+        // $this->done();
 
         $this->call([
             UserSeeder::class,

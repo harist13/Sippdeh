@@ -13,16 +13,16 @@ class KabupatenSeeder extends Seeder
     public function run(): void
     {
         $kabupaten = [
-            ['nama' => 'BERAU', 'provinsi_id' => 23],
-            ['nama' => 'KUTAI BARAT', 'provinsi_id' => 23],
-            ['nama' => 'KUTAI KARTANEGARA', 'provinsi_id' => 23],
-            ['nama' => 'KUTAI TIMUR', 'provinsi_id' => 23],
-            ['nama' => 'MAHAKAM ULU', 'provinsi_id' => 23],
-            ['nama' => 'PASER', 'provinsi_id' => 23],
-            ['nama' => 'PENAJAM PASER UTARA', 'provinsi_id' => 23],
-            ['nama' => 'BALIKPAPAN', 'provinsi_id' => 23],
-            ['nama' => 'BONTANG', 'provinsi_id' => 23],
-            ['nama' => 'SAMARINDA', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Berau', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Kutai Barat', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Kutai Kartanegara', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Kutai Timur', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Mahakam Ulu', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Paser', 'provinsi_id' => 23],
+            ['nama' => 'Kabupaten Penajam Paser Utara', 'provinsi_id' => 23],
+            ['nama' => 'Kota Balikpapan', 'provinsi_id' => 23],
+            ['nama' => 'Kota Bontang', 'provinsi_id' => 23],
+            ['nama' => 'Kota Samarinda', 'provinsi_id' => 23],
         ];
 
         foreach ($kabupaten as $data) {
