@@ -11,14 +11,20 @@ class FilterResumeSuaraPilwali extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
+
+    public $availableColumns = [];
     public $includedColumns = [];
+
     public $partisipasi = [];
 
     public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
+
+        $this->availableColumns = $includedColumns;
         $this->includedColumns = $includedColumns;
+
         $this->partisipasi = $partisipasi;
     }
 
@@ -26,7 +32,7 @@ class FilterResumeSuaraPilwali extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.resume.pilwali.filter-modal-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilwali.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
@@ -51,26 +57,28 @@ class FilterResumeSuaraPilwali extends Component
             ->toArray();
     }
 
-    private function syncIncludedColumnsByWilayah()
+    private function syncAvailableColumnsByWilayah()
     {
         if (!empty($this->selectedKecamatan)) {
-            $this->includedColumns = ['KECAMATAN', 'CALON'];
+            $this->availableColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
+            $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
         }
 
         if (!empty($this->selectedKelurahan)) {
-            $this->includedColumns = ['KELURAHAN', 'CALON'];
+            $this->availableColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+            $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
         }
     }
 
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-        $this->syncIncludedColumnsByWilayah();
+        $this->syncAvailableColumnsByWilayah();
     }
 
     public function updatedSelectedKelurahan()
     {
-        $this->syncIncludedColumnsByWilayah();
+        $this->syncAvailableColumnsByWilayah();
     }
 
     public function resetFilter()

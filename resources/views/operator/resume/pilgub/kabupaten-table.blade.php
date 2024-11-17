@@ -61,7 +61,7 @@
                 </td>
 
                 {{-- Kabupaten --}}
-                <td class="py-3 px-4 text-xs border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 

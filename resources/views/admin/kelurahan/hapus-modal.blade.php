@@ -27,26 +27,27 @@
 		deleteKelurahanModal.classList.add('hidden');
 	}
 
-	function getKelurahanId() {
-		return this.closest('tr').querySelector('td:nth-child(2)').dataset.id;
+	function getId() {
+		return this.closest('tr').dataset.id;
 	}
 
 	function getDestroyKelurahanUrl() {
-		const kelurahanId = getKelurahanId.call(this);
+		const kelurahanId = getId.call(this);
 		const kelurahanDestroyRoute = `{{ route('kelurahan.destroy', ['kelurahan' => '__kelurahan__']) }}`;
 		const kelurahanDestroyUrl = kelurahanDestroyRoute.replace('__kelurahan__', kelurahanId);
-
+		
 		return kelurahanDestroyUrl;
 	}
 
-	document.querySelectorAll('.hapus-kelurahan-btn').forEach(button => {
-		button.addEventListener('click', function () {
-			showDeleteKelurahanModal();
+	function onDeleteKelurahanButtonClick() {
+		const deleteKelurahanForm = document.getElementById('deleteKelurahanForm');
+		deleteKelurahanForm.action = getDestroyKelurahanUrl.call(this);
+		
+		showDeleteKelurahanModal();
+	}
 
-			const deleteKelurahanForm = document.getElementById('deleteKelurahanForm');
-			deleteKelurahanForm.action = getDestroyKelurahanUrl.call(this);
-		});
-	});
+	document.querySelectorAll('.hapus-kelurahan')
+		.forEach(button => button.addEventListener('click', onDeleteKelurahanButtonClick));
 
 	document.getElementById('cancelDeleteKelurahan').addEventListener('click', closeDeleteKelurahanModal);
 </script>

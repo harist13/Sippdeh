@@ -1,4 +1,5 @@
 @php
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
@@ -6,7 +7,6 @@
 
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
-
 
 @push('styles')
     <style>
@@ -30,7 +30,10 @@
             <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
             </th>
-
+			
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kabupaten
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kecamatan
             </th>
@@ -40,7 +43,7 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 TPS
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 DPT
             </th>
 
@@ -71,33 +74,37 @@
             </th>
         </tr>
     </thead>
+
     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
         @forelse ($tps as $datum)
             <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none cursor-pointer tps" data-id="{{ $datum->id }}">
                 {{-- ID TPS --}}
-                <td class="py-3 px-4 text-xs border nomor" data-id="{{ $datum->id }}">
+                <td class="py-3 px-4 border nomor" data-id="{{ $datum->id }}">
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
                 {{-- Checkbox --}}
-                <td class="py-3 px-4 text-xs border centang" data-id="{{ $datum->id }}">
+                <td class="py-3 px-4 border centang" data-id="{{ $datum->id }}">
                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
                 </td>
 
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" data-kabupaten-id="{{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
+                </td>
+
                 {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps->kelurahan->kecamatan->id }}">
-                    {{ $datum->tps->kelurahan->kecamatan->nama }}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps?->kelurahan?->kecamatan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}
-                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps->kelurahan->id }}">
-                    {{ $datum->tps->kelurahan->nama }}
+                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps?->kelurahan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                 </td>
 
                 {{-- Nama TPS --}}
-                <td class="py-3 px-4 text-xs border tps {{ $isTPSColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->nama }}
-                </td>
+                <td class="py-3 px-4 border text-xs tps {{ $isTPSColumnIgnored ? 'hidden' : '' }}">{{ $datum->nama }}</td>
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt" data-value="{{ $datum->dpt }}">
@@ -118,7 +125,7 @@
                     @endphp
                     <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-id="{{ $calon->id }}" data-suara="{{ $suara }}">
                         <span class="value">{{ $suara }}</span>
-                        <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-xs text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-1 w-20 focus:outline-none hidden" value="{{ $suara }}" data-default-value="{{ $suara }}" autocomplete="off">
+                        <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $suara }}" data-default-value="{{ $suara }}" autocomplete="off">
                     </td>
                 @endforeach
 
@@ -130,7 +137,7 @@
                 {{-- Suara Tidak Sah --}}
                 <td class="py-3 px-4 text-xs border suara-tidak-sah" data-value="{{ $datum->suara_tidak_sah }}">
                     <span class="value">{{ $datum->suara_tidak_sah }}</span>
-                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-xs text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-1 w-20 focus:outline-none hidden" data-default-value="{{ $datum->suara_tidak_sah }}" data-value="{{ $datum->suara_tidak_sah }}">
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" data-default-value="{{ $datum->suara_tidak_sah }}" data-value="{{ $datum->suara_tidak_sah }}">
                 </td>
 
                 {{-- Suara Masuk --}}

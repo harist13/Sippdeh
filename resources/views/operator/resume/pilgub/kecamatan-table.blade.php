@@ -67,18 +67,13 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
-                {{-- Provinsi --}}
-                <td class="py-3 px-4 text-xs border provinsi {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kabupaten->provinsi->nama }}
-                </td>
-
                 {{-- Kabupaten --}}
-                <td class="py-3 px-4 text-xs border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kabupaten->nama }}
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
+                <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 

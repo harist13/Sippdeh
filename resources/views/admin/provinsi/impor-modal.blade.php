@@ -47,8 +47,8 @@
 		importProvinsiModal.classList.add('hidden');
 	}
 
-    document.getElementById('importProvinsiBtn').addEventListener('click', showImportProvinsiModal);
-    document.getElementById('cancelImportProvinsi').addEventListener('click', closeImportProvinsiModal);
+    // document.getElementById('importProvinsiBtn').addEventListener('click', showImportProvinsiModal);
+    // document.getElementById('cancelImportProvinsi').addEventListener('click', closeImportProvinsiModal);
 </script>
 
 @error('spreadsheet')

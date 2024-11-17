@@ -22,25 +22,25 @@ class StoreKabupatenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_kabupaten_baru' => 'required|unique:kabupaten,nama|max:300',
-            'provinsi_id_kabupaten_baru' => 'required|exists:provinsi,id',
-            'logo_kabupaten_baru' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'name' => 'required|unique:kabupaten,nama|max:300',
+            'provinsi_id' => 'required|exists:provinsi,id',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 
     public function messages()
     {
         return [
-            'nama_kabupaten_baru.required' => 'Mohon isi nama kabupaten.',
-            'nama_kabupaten_baru.unique' => 'Kabupaten tersebut sudah ada.',
-            'nama_kabupaten_baru.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
+            'name.required' => 'Mohon isi nama kabupaten.',
+            'name.unique' => 'Kabupaten tersebut sudah ada.',
+            'name.max' => 'Nama kabupaten terlalu panjang, maksimal 300 karakter.',
 
-            'provinsi_id_kabupaten_baru.required' => 'Mohon pilih provinsi untuk kota tersebut.',
-            'provinsi_id_kabupaten_baru.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
+            'provinsi_id.required' => 'Mohon pilih provinsi untuk kota tersebut.',
+            'provinsi_id.exists' => 'Provinsi yang anda pilih tidak tersedia di database.',
 
-            'logo_kabupaten_baru.image' => 'File harus berupa gambar.',
-        'logo_kabupaten_baru.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
-        'logo_kabupaten_baru.max' => 'Ukuran gambar maksimal 2MB.',
+            'logo.image' => 'File harus berupa gambar.',
+            'logo.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'logo.max' => 'Ukuran gambar maksimal 2MB.',
         ];
     }
 }

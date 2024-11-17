@@ -13,6 +13,7 @@ use App\Models\Kabupaten;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
 use App\Models\ResumeSuaraTPS;
+use App\Models\Provinsi;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -68,29 +69,106 @@ class AdminController extends Controller
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
         $dptAbstainData = $this->getTotalDptAbstainData();
         $chartData = $this->getChartData();
+        $provinsiData = $this->getProvinsiData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData', 'provinsiData'));
+    }
+
+    private function getProvinsiData(): array
+    {
+        // Get provinsi Kalimantan Timur
+        $provinsi = Provinsi::where('nama', 'LIKE', '%Kalimantan Timur%')->first();
+        
+        if (!$provinsi) {
+            return [];
+        }
+
+        // Get summary data for the province by summing up all kabupaten
+        $ringkasanData = ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
+            $query->where('id', $provinsi->id);
+        })->select(
+            \DB::raw('SUM(suara_sah) as suara_sah'),
+            \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
+            \DB::raw('SUM(dpt) as dpt'),
+            \DB::raw('SUM(abstain) as abstain')
+        )->first();
+
+        // Ensure no negative values
+        $suaraSah = max(0, $ringkasanData->suara_sah ?? 0);
+        $suaraTidakSah = max(0, $ringkasanData->suara_tidak_sah ?? 0);
+        $dpt = max(0, $ringkasanData->dpt ?? 0);
+        $abstain = max(0, $ringkasanData->abstain ?? 0);
+
+        // Calculate suara masuk
+        $suaraMasuk = $suaraSah + $suaraTidakSah;
+
+        // Calculate participation percentage
+        $partisipasi = $this->hitungPartisipasi($suaraMasuk, $dpt);
+
+        // Get only Gubernur candidates for Kaltim
+        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')
+            ->where('provinsi_id', $provinsi->id)
+            ->get();
+
+        $candidates = [];
+        foreach ($gubernurCalon as $index => $cal) {
+            // Get total votes from all kabupaten for this candidate
+            $totalSuara = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
+                $query->where('id', $provinsi->id);
+            })->where('calon_id', $cal->id)
+            ->sum('suara');
+
+            $persentase = $suaraSah > 0 ? round(($totalSuara / $suaraSah) * 100, 2) : 0;
+
+            $candidates[] = [
+                'id' => $cal->id,
+                'nama' => $cal->nama,
+                'nama_wakil' => $cal->nama_wakil,
+                'foto' => $cal->foto,
+                'posisi' => $cal->posisi,
+                'nomor_urut' => $index + 1,
+                'total_suara' => $totalSuara,
+                'persentase' => $persentase,
+                'wilayah' => $provinsi->nama
+            ];
+        }
+
+        return [
+            'logo' => $provinsi->logo,
+            'nama' => $provinsi->nama,
+            'suara_sah' => $suaraSah,
+            'suara_tidak_sah' => $suaraTidakSah,
+            'dpt' => $dpt,
+            'abstain' => $abstain,
+            'suara_masuk' => $suaraMasuk,
+            'partisipasi' => $partisipasi,
+            'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi),
+            'candidates' => $candidates
+        ];
     }
 
     private function getTotalDptAbstainData(): array 
     {
-        // Get sum of DPT and Abstain from all regions
+        // Get sum of suara masuk (suara sah + tidak sah) and Abstain from all regions
         $totalData = ResumeSuaraTPS::select(
-            \DB::raw('SUM(dpt) as total_dpt'),
+            \DB::raw('SUM(suara_sah + suara_tidak_sah) as total_suara_masuk'),
             \DB::raw('SUM(abstain) as total_abstain')
         )->first();
         
-        $totalDPT = max(0, $totalData->total_dpt ?? 0);
+        $totalSuaraMasuk = max(0, $totalData->total_suara_masuk ?? 0);
         $totalAbstain = max(0, $totalData->total_abstain ?? 0);
+        
+        // Calculate total for percentage calculation
+        $total = $totalSuaraMasuk + $totalAbstain;
 
         return [
-            'labels' => ['DPT', 'Abstain'],
-            'values' => [$totalDPT, $totalAbstain],
+            'labels' => ['Suara Masuk', 'Abstain'],
+            'values' => [$totalSuaraMasuk, $totalAbstain],
             'percentages' => [
-                round(($totalDPT > 0 ? ($totalDPT - $totalAbstain) / $totalDPT * 100 : 0), 1),
-                round(($totalDPT > 0 ? $totalAbstain / $totalDPT * 100 : 0), 1)
+                round(($total > 0 ? $totalSuaraMasuk / $total * 100 : 0), 1),
+                round(($total > 0 ? $totalAbstain / $total * 100 : 0), 1)
             ],
-            'total_dpt' => number_format($totalDPT, 0, ',', '.'),
+            'total_suara_masuk' => number_format($totalSuaraMasuk, 0, ',', '.'),
             'total_abstain' => number_format($totalAbstain, 0, ',', '.')
         ];
     }
@@ -260,25 +338,35 @@ class AdminController extends Controller
         $labels = [];
         $paslon1Data = [];
         $paslon2Data = [];
+        $totalSuarahSahPerKabupaten = []; // Array untuk menyimpan total suara sah per kabupaten
         
         foreach ($kabupatens as $kabupaten) {
-            // Format label to include line break for better spacing
             $namaKabupaten = str_replace(['Kota ', 'Kabupaten '], '', $kabupaten->nama);
             $labels[] = $namaKabupaten;
             
-            // Get votes for Paslon 1
             $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
                 $query->where('id', $kabupaten->id);
             })->where('calon_id', $paslon1->id)->sum('suara');
             
-            // Get votes for Paslon 2
             $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
                 $query->where('id', $kabupaten->id);
             })->where('calon_id', $paslon2->id)->sum('suara');
             
+            // Hitung total suara sah per kabupaten
+            $totalSuarahSahPerKabupaten[] = $suaraPaslon1 + $suaraPaslon2;
+            
             $paslon1Data[] = $suaraPaslon1;
             $paslon2Data[] = $suaraPaslon2;
         }
+        
+        // Calculate the maximum value from both datasets
+        $maxValue = max(
+            max($paslon1Data ?: [0]),
+            max($paslon2Data ?: [0])
+        );
+        
+        // Calculate the dynamic max range
+        $dynamicMaxRange = $this->calculateDynamicMaxRange($maxValue);
         
         return [
             'title' => "Perolehan Suara Gubernur Per Kabupaten/Kota",
@@ -299,9 +387,23 @@ class AdminController extends Controller
                         'barPercentage' => 0.98,
                         'categoryPercentage' => 0.5,
                     ]
-                ]
+                ],
+                'maxRange' => $dynamicMaxRange,
+                'totalSuarahSah' => $totalSuarahSahPerKabupaten // Mengirim total suara sah ke frontend
             ]
         ];
+    }
+
+    private function calculateDynamicMaxRange($maxValue): int
+    {
+        // Base step size for ranges (e.g., 500, 1000, 1500, etc.)
+        $baseStep = 500;
+        
+        // Calculate how many steps we need to accommodate the max value
+        $steps = ceil($maxValue / $baseStep);
+        
+        // Return the next range that would fully contain the max value
+        return $steps * $baseStep;
     }
 
     public function rekapitulasi()

@@ -22,7 +22,7 @@ class StoreProvinsiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_provinsi_baru' => 'required|unique:provinsi,nama|max:300',
+            'name' => 'required|unique:provinsi,nama|max:300',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
@@ -30,9 +30,9 @@ class StoreProvinsiRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_provinsi_baru.required' => 'Mohon isi nama provinsi.',
-            'nama_provinsi_baru.unique' => 'Provinsi tersebut sudah ada.',
-            'nama_provinsi_baru.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
+            'name.required' => 'Mohon isi nama provinsi.',
+            'name.unique' => 'Provinsi tersebut sudah ada.',
+            'name.max' => 'Nama provinsi terlalu panjang, maksimal 300 karakter.',
         ];
     }
 }

@@ -27,26 +27,25 @@
 		deleteKecamatanModal.classList.add('hidden');
 	}
 
-	function getKecamatanId() {
-		return this.closest('tr').querySelector('td:nth-child(2)').dataset.id;
+	function getId() {
+		return this.closest('tr').dataset.id;
 	}
 
 	function getDestroyKecamatanUrl() {
-		const kecamatanId = getKecamatanId.call(this);
+		const kecamatanId = getId.call(this);
 		const kecamatanDestroyRoute = `{{ route('kecamatan.destroy', ['kecamatan' => '__kecamatan__']) }}`;
 		const kecamatanDestroyUrl = kecamatanDestroyRoute.replace('__kecamatan__', kecamatanId);
 
 		return kecamatanDestroyUrl;
 	}
 
-	document.querySelectorAll('.hapus-kecamatan-btn').forEach(button => {
-		button.addEventListener('click', function () {
-			showDeleteKecamatanModal();
+	function onDeleteKecamatanButtonClick() {
+		const deleteKecamatanForm = document.getElementById('deleteKecamatanForm');
+		deleteKecamatanForm.action = getDestroyKecamatanUrl.call(this);
 
-			const deleteKecamatanForm = document.getElementById('deleteKecamatanForm');
-			deleteKecamatanForm.action = getDestroyKecamatanUrl.call(this);
-		});
-	});
+		showDeleteKecamatanModal();
+	}
 
+	document.querySelectorAll('.hapus-kecamatan').forEach(button => button.addEventListener('click', onDeleteKecamatanButtonClick));
 	document.getElementById('cancelDeleteKecamatan').addEventListener('click', closeDeleteKecamatanModal);
 </script>

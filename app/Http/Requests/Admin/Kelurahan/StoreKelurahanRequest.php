@@ -22,7 +22,7 @@ class StoreKelurahanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_kelurahan_baru' => 'required|unique:kelurahan,nama|max:300',
+            'name' => 'required|unique:kelurahan,nama|max:300',
             'kecamatan_id' => 'required|exists:kecamatan,id'
         ];
     }
@@ -30,9 +30,9 @@ class StoreKelurahanRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_kelurahan_baru.required' => 'Mohon isi nama kelurahan.',
-            'nama_kelurahan_baru.unique' => 'Kelurahan tersebut sudah ada.',
-            'nama_kelurahan_baru.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
+            'name.required' => 'Mohon isi nama kelurahan.',
+            'name.unique' => 'Kelurahan tersebut sudah ada.',
+            'name.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
 
             'kecamatan_id.required' => 'Mohon pilih kecamatan untuk kota tersebut.',
             'kecamatan_id.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',

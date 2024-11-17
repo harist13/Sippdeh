@@ -15,6 +15,11 @@
                 NO
             </th>
 
+            @if (!$isKabupatenColumnIgnored)
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
+                    Kabupaten
+                </th>
+            @endif
             @if (!$isKecamatanColumnIgnored)
                 <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
                     Kecamatan
@@ -76,17 +81,24 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
+                {{-- Kabupaten --}}
+                @if (!$isKabupatenColumnIgnored)
+                    <td style="border: 1px solid black;">
+                        {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
+                    </td>
+                @endif
+
                 {{-- Kecamatan --}}
                 @if (!$isKecamatanColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->tps->kelurahan->kecamatan->nama }}
+                        {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                     </td>
                 @endif
 
                 {{-- Kelurahan --}}
                 @if (!$isKelurahanColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->tps->kelurahan->nama }}
+                        {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                     </td>
                 @endif
 

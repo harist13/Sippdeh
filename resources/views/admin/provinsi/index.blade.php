@@ -50,5 +50,17 @@
 @endpush
 
 @section('content')
-    @livewire('admin.provinsi')
+    <main class="container flex-grow px-4 mx-auto mt-6">
+        @php $status = session('pesan_sukses'); @endphp
+        @isset ($status)
+            @include('components.alert-berhasil', ['message' => $status])
+        @endisset
+        
+        @php $status = session('pesan_gagal'); @endphp
+        @isset ($status)
+            @include('components.alert-gagal', ['message' => $status])
+        @endisset
+        
+        @livewire('admin.provinsi')
+    </main>
 @endsection

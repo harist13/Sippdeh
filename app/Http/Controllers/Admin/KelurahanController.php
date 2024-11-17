@@ -14,6 +14,8 @@ use App\Imports\KelurahanImport;
 use App\Exports\KelurahanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Sentry\SentrySdk;
 
 class KelurahanController extends Controller
 {
@@ -79,12 +81,15 @@ class KelurahanController extends Controller
             $validated = $request->validated();
 
             $kelurahan = new Kelurahan();
-            $kelurahan->nama = $validated['nama_kelurahan_baru'];
+            $kelurahan->nama = $validated['name'];
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah kelurahan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah kelurahan.');
         }
     }
@@ -124,12 +129,15 @@ class KelurahanController extends Controller
             $validated = $request->validated();
 
             $kelurahan = Kelurahan::find($id);
-            $kelurahan->nama = $validated['nama_kelurahan'];
+            $kelurahan->nama = $validated['name'];
             $kelurahan->kecamatan_id = $validated['kecamatan_id'];
             $kelurahan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kelurahan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kelurahan.');
         }
     }

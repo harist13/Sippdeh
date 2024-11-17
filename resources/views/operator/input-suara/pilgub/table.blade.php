@@ -1,4 +1,5 @@
 @php
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
@@ -30,6 +31,9 @@
                 <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
             </th>
 			
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kabupaten
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kecamatan
             </th>
@@ -84,14 +88,19 @@
                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
                 </td>
 
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" data-kabupaten-id="{{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
+                </td>
+
                 {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps->kelurahan->kecamatan->id }}">
-                    {{ $datum->tps->kelurahan->kecamatan->nama }}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps?->kelurahan?->kecamatan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}
-                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps->kelurahan->id }}">
-                    {{ $datum->tps->kelurahan->nama }}
+                <td class="py-3 px-4 text-xs border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps?->kelurahan?->id ?? '-' }}">
+                    {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                 </td>
 
                 {{-- Nama TPS --}}

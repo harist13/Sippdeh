@@ -84,7 +84,7 @@
                 {{-- Kecamatan --}}
                 @if (!$isKecamatanColumnIgnored)
                     <td style="border: 1px solid black;">
-                        {{ $datum->kecamatan->nama }}
+                        {{ $datum->kecamatan?->nama ?? '-' }}
                     </td>
                 @endif
 

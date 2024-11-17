@@ -3,58 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\KecamatanExport;
+use App\Imports\KecamatanImport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Kecamatan\ImportKecamatanRequest;
 use App\Http\Requests\Admin\Kecamatan\StoreKecamatanRequest;
 use App\Http\Requests\Admin\Kecamatan\UpdateKecamatanRequest;
-use App\Imports\KecamatanImport;
-use App\Models\Kabupaten;
 use App\Models\Kecamatan;
-use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Sentry\SentrySdk;
+use Exception;
 
 class KecamatanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-     public function index(Request $request)
+     public function index()
     {
-        // Get items per page from request, default to 10
-        $itemsPerPage = $request->input('itemsPerPage', 10);
-        
-        $kabupaten = Kabupaten::all();
-        $kecamatanQuery = Kecamatan::query();
-
-        if ($request->has('cari')) {
-            $kataKunci = $request->get('cari');
-
-            // kembalikan lagi ke halaman Daftar Kecamatan kalau query 'cari'-nya ternyata kosong.
-            if ($kataKunci == '') {
-                // jika pengguna juga mencari kabupaten, maka tetap sertakan kabupaten di URL-nya.
-                if ($request->has('kabupaten')) {
-                    return redirect()->route('kecamatan', [
-                        'kabupaten' => $request->get('kabupaten'),
-                        'itemsPerPage' => $itemsPerPage
-                    ]);
-                }
-
-                return redirect()->route('kecamatan', ['itemsPerPage' => $itemsPerPage]);
-            }
-
-            $kecamatanQuery->whereLike('nama', "%$kataKunci%");
-        }
-
-        if ($request->has('kabupaten')) {
-            $kecamatanQuery->where('kabupaten_id', $request->get('kabupaten'));
-        }
-
-        $kecamatan = $kecamatanQuery->orderByDesc('id')
-            ->paginate($itemsPerPage)
-            ->withQueryString();
-        
-        return view('admin.kecamatan.index', compact('kabupaten', 'kecamatan'));
+        return view('admin.kecamatan.index');
     }
 
     public function export(Request $request)
@@ -75,12 +43,16 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kecamatan = new Kecamatan();
-            $kecamatan->nama = $validated['nama_kecamatan_baru'];
-            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan_baru'];
+            $kecamatan->nama = $validated['name'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id'];
+
             $kecamatan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil menambah kecamatan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            
             return redirect()->back()->with('pesan_gagal', 'Gagal menambah kecamatan.');
         }
     }
@@ -120,12 +92,15 @@ class KecamatanController extends Controller
             $validated = $request->validated();
 
             $kecamatan = Kecamatan::find($id);
-            $kecamatan->nama = $validated['nama_kecamatan'];
-            $kecamatan->kabupaten_id = $validated['kabupaten_id_kecamatan'];
+            $kecamatan->nama = $validated['name'];
+            $kecamatan->kabupaten_id = $validated['kabupaten_id'];
             $kecamatan->save();
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit kecamatan.');
         } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit kecamatan.');
         }
     }

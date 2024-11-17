@@ -23,13 +23,13 @@ class Kabupaten extends Component
         $provinsi = Provinsi::all();
         $kabupaten = $this->getKabupaten();
 
-        return view('livewire.admin.kabupaten', compact('provinsi', 'kabupaten'));
+        return view('admin.kabupaten.livewire', compact('provinsi', 'kabupaten'));
     }
 
     private function getKabupaten(): LengthAwarePaginator
     {
         if ($this->keyword) {
-            $kabupatenQuery = Model::whereLike('nama', "%{$this->keyword}%");
+            $kabupatenQuery = Model::whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         } else {
             $kabupatenQuery = Model::query();
         }

@@ -6,33 +6,36 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah TPS</h3>
 
 			{{-- Nama tps --}}
-			<label for="addTPSName" class="mb-1 block">Nama</label>
-            <input type="text" id="addTPSName" name="nama_tps_baru"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            <span class="text-red-800">{{ $errors->first('nama_tps_baru') }}</span>
+			<div class="mb-3">
+				<label for="addTPSName" class="mb-1 block">Nama</label>
+				<input type="text" id="addTPSName" name="name"
+					class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+			</div>
 
 			{{-- DPT --}}
-			<label for="addTPSDPT" class="mb-1 block">DPT</label>
-            <input type="number" id="addTPSDPT" name="dpt_tps_baru"
-                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            <span class="text-red-800">{{ $errors->first('dpt_tps_baru') }}</span>
+			<div class="mb-3">
+				<label for="addTPSDPT" class="mb-1 block">DPT</label>
+				<input type="number" id="addTPSDPT" name="dpt"
+					class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+			</div>
 
 			{{-- Kelurahan --}}
-			<label for="addTPSKelurahan" class="my-1 block">Kelurahan</label>
-			<select id="addTPSKelurahan" name="kelurahan_id_tps_baru" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-				@foreach ($kelurahan as $kel)
-					<option value="{{ $kel->id }}">{{ $kel->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('kelurahan_id_tps_baru') }}</span>
+			<div class="mb-3">
+				<label for="addTPSKelurahan" class="my-1 block">Kelurahan</label>
+				<select id="addTPSKelurahan" name="kelurahan_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+					@foreach ($kelurahan as $kel)
+						<option value="{{ $kel->id }}">{{ $kel->nama }}</option>
+					@endforeach
+				</select>
+			</div>
 
             <hr class="h-1 my-3">
 
             <div class="flex items-center">
-                <button type="button" id="cancelAddTPS" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
+                <button type="button" id="closeAddTPS" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
 					Batalkan
 				</button>
-                <button type="submit" id="confirmAddTPS" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
+                <button type="submit" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
 					Tambah
 				</button>
             </div>
@@ -52,11 +55,5 @@
 	}
 
     document.getElementById('addTPSBtn').addEventListener('click', showAddTPSModal);
-    document.getElementById('cancelAddTPS').addEventListener('click', closeAddTPSModal);
+    document.getElementById('closeAddTPS').addEventListener('click', closeAddTPSModal);
 </script>
-
-@error('nama_tps_baru', 'dpt_tps_baru', 'kelurahan_id_tps_baru')
-    <script>
-        showAddTPSModal();
-    </script>
-@enderror

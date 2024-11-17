@@ -24,7 +24,7 @@ class UpdateKelurahanRequest extends FormRequest
     {
         $id = last(explode('/', $this->path()));
         return [
-            'nama_kelurahan' => [
+            'name' => [
                 'required',
                 'max:300',
                 Rule::unique('kelurahan', 'nama')->ignore($id)
@@ -36,9 +36,9 @@ class UpdateKelurahanRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama_kelurahan.required' => 'Mohon isi nama kelurahan.',
-            'nama_kelurahan.unique' => 'Kelurahan tersebut sudah ada.',
-            'nama_kelurahan.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
+            'name.required' => 'Mohon isi nama kelurahan.',
+            'name.unique' => 'Kelurahan tersebut sudah ada.',
+            'name.max' => 'Nama kelurahan terlalu panjang, maksimal 300 karakter.',
 
             'kecamatan_id.required' => 'Mohon pilih kecamatan untuk kota tersebut.',
             'kecamatan_id.exists' => 'Kecamatan yang anda pilih tidak tersedia di database.',

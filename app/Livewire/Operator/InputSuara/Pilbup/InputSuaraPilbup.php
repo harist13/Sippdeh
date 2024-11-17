@@ -40,7 +40,7 @@ class InputSuaraPilbup extends Component
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
@@ -198,7 +198,7 @@ class InputSuaraPilbup extends Component
     #[On('reset-filter')] 
     public function resetFilter(): void
     {
-        $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
