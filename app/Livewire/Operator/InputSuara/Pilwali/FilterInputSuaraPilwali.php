@@ -4,6 +4,7 @@ namespace App\Livewire\Operator\InputSuara\Pilwali;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
@@ -11,25 +12,31 @@ class FilterInputSuaraPilwali extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
+
+    public $availableColumns = [];
     public $includedColumns = [];
+
     public $partisipasi = [];
 
-    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi): void
     {
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
+
+        $this->availableColumns = $includedColumns;
         $this->includedColumns = $includedColumns;
+        
         $this->partisipasi = $partisipasi;
     }
 
-    public function render()
+    public function render(): View
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.input-suara.pilwali.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.input-suara.pilgub.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
-    private function getKecamatanOptions()
+    private function getKecamatanOptions(): array
     {
         return Kecamatan::query()
             ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
@@ -38,7 +45,7 @@ class FilterInputSuaraPilwali extends Component
             ->toArray();
     }
 
-    private function getKelurahanOptions()
+    private function getKelurahanOptions(): array
     {
         if (empty($this->selectedKecamatan)) {
             return [];
@@ -51,17 +58,22 @@ class FilterInputSuaraPilwali extends Component
             ->toArray();
     }
 
-    public function updatedSelectedKecamatan()
+    public function updatedSelectedKecamatan(): void
     {
         $this->selectedKelurahan = [];
     }
 
-    public function resetFilter()
+    public function resetFilter(): void
     {
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+
         $this->dispatch('reset-filter')->to(InputSuaraPilwali::class);
     }
 
-    public function applyFilter()
+    public function applyFilter(): void
     {
         $event = $this->dispatch(
             'apply-filter',
