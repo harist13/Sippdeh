@@ -26,7 +26,7 @@ class ResumeSuaraPilbup extends Component
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KECAMATAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function mount()
@@ -37,7 +37,7 @@ class ResumeSuaraPilbup extends Component
             ->pluck('id')
             ->all();
         
-        $this->includedColumns = ['KECAMATAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
     }
 
     public function render()
@@ -122,7 +122,7 @@ class ResumeSuaraPilbup extends Component
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KECAMATAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
