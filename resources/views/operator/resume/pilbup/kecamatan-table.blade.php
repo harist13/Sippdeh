@@ -1,24 +1,10 @@
 @php
-    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
-
-@push('styles')
-    <style>
-        /* Disable spinner on number input */
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-    </style>
-@endpush
 
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
@@ -27,6 +13,9 @@
                 NO
             </th>
 			
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kabupaten
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kecamatan
             </th>
@@ -72,6 +61,11 @@
                 {{-- ID TPS --}}
                 <td class="py-3 px-4 border nomor">
                     {{ $datum->getThreeDigitsId() }}
+                </td>
+
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
