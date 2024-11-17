@@ -1,4 +1,4 @@
-@extends('admin.layout.app')
+@extends('operator.layout.app')
 
 @push('styles')
     <style>
