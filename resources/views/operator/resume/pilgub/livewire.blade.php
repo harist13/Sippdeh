@@ -42,10 +42,6 @@
                         <img class="w-full h-full object-cover" 
                             src="{{ Storage::disk('foto_calon_lokal')->url($calon->foto) }}" 
                             alt="{{ $calon->nama }} / {{ $calon->nama_wakil }}">
-                    @else
-                        <img class="w-full h-full object-cover" 
-                            src="{{ asset('assets/default.png') }}" 
-                            alt="Default Image">
                     @endif
                 </div>
                 <div class="p-4 text-center">
