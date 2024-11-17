@@ -1,5 +1,4 @@
 @php
-    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
@@ -27,6 +26,9 @@
                 NO
             </th>
 			
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+                Kabupaten
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kecamatan
             </th>
@@ -72,6 +74,11 @@
                 {{-- ID TPS --}}
                 <td class="py-3 px-4 border nomor">
                     {{ $datum->getThreeDigitsId() }}
+                </td>
+
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
