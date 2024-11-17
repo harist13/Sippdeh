@@ -6,7 +6,7 @@
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Ekspor Provinsi</h3>
 
 			{{-- Kabupaten --}}
-			{{-- <label for="exportProvinsiKabupaten" class="my-1 block">Kabupaten</label>
+			{{-- <label for="exportProvinsiKabupaten" class="my-1 block">Kabupaten/Kota</label>
 			<select id="exportProvinsiKabupaten" name="kabupaten_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
                 <option value="0">Semua</option>
 				@foreach ($kabupaten as $kab)

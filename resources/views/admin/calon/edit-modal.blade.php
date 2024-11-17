@@ -57,7 +57,7 @@
 			<span class="text-red-800">{{ $errors->first('provinsi_id_calon') }}</span>
 
             {{-- Kabupaten --}}
-			<label for="editCalonKabupaten" class="my-3 mb-1 block">Kabupaten</label>
+			<label for="editCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
 			<select
                 id="editCalonKabupaten"
                 name="kabupaten_id_calon"

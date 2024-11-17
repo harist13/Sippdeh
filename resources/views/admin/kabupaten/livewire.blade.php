@@ -2,7 +2,7 @@
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md mb-5">
         <div class="flex items-center space-x-2 w-full-mobile mb-5">
             <img src="{{ asset('assets/icon/kabupaten.svg') }}" class="mr-1" alt="Kabupaten">
-            <span class="font-bold">Kabupaten</span>
+            <span class="font-bold">Kabupaten/Kota</span>
         </div>
     
         <div class="flex flex-col-mobile justify-between items-center mb-4 space-y-2-mobile gap-y-5">

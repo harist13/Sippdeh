@@ -14,7 +14,7 @@
             
             @if (!$isKabupatenColumnIgnored)
                 <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
-                    Kabupaten
+                    Kabupaten/Kota
                 </th>
             @endif
 
