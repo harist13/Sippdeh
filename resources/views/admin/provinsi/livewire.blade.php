@@ -60,9 +60,9 @@
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             ID
                         </th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
+                        {{-- <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             Logo
-                        </th>
+                        </th> --}}
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider border-r border-white">
                             Provinsi
                         </th>
@@ -75,7 +75,7 @@
                     @forelse ($provinsi as $prov)
                         <tr wire:key="{{ $prov->id }}" class="hover:bg-gray-200">
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r" data-id="{{ $prov->id }}">{{ $prov->getThreeDigitsId() }}</td>
-                            <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
+                            {{-- <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 @if($prov->logo)
                                     <img src="{{ asset('storage/kabupaten_logo/' . $prov->logo) }}" 
                                         alt="Logo {{ $prov->nama }}" 
@@ -86,7 +86,7 @@
                                         <span class="text-gray-500 text-xs">No Logo</span>
                                     </div>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">{{ $prov->nama }}</td>
                             <td class="px-4 py-4 border-b border-gray-200 text-center text-sm-mobile border-r">
                                 <button class="edit-provinsi-btn text-blue-600 hover:text-blue-900 mr-2">
