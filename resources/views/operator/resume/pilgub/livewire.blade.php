@@ -69,7 +69,7 @@
                     </p> --}}
                     <div class="text-[#008bf9] font-medium">
                         @if ($calon->suara > 0 && $suaraSah > 0)
-                            {{ round(($calon->suara / $suaraSah) * 100, 1) }}% | {{ $calon->suara }} Suara
+                            {{ round(($calon->suara / $suaraSah) * 100, 1) }}% | {{ number_format($calon->suara, 0, '', '.') }} Suara
                         @else
                             0% | 0 Suara
                         @endif
@@ -98,7 +98,7 @@
                     @endif
                     <div class="text-[#008bf9] font-medium">
                         @if ($kotakKosong > 0 && $suaraSah > 0)
-                            {{ round(($kotakKosong / $suaraSah) * 100, 1) }}% | {{ $kotakKosong }} Suara
+                            {{ round(($kotakKosong / $suaraSah) * 100, 1) }}% | {{ number_format($kotakKosong, 0, '', '.') }} Suara
                         @else
                             0% | 0 Suara
                         @endif
