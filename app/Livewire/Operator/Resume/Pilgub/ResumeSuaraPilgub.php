@@ -59,8 +59,9 @@ class ResumeSuaraPilgub extends Component
         $scope = 'kelurahan';
 
         $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
+        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
         
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -70,8 +71,9 @@ class ResumeSuaraPilgub extends Component
         $scope = 'kecamatan';
         
         $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
+        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
         
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
     }
 
     private function getKabupatenTable()
@@ -81,8 +83,9 @@ class ResumeSuaraPilgub extends Component
         $scope = 'kabupaten';
         
         $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
+        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
         
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
     }
 
     private function getSuaraPerKelurahan()
@@ -178,6 +181,29 @@ class ResumeSuaraPilgub extends Component
         if ($provinsi->count() > 0) {
             $provinsi = $provinsi->first();
             return $provinsi->suara_sah;
+        }
+
+        return 0;
+    }
+
+    private function getKotakKosongOfOperatorProvinsi(): int
+    {
+        $provinsi = Provinsi::select([
+            'provinsi.id',
+            DB::raw('SUM(suara_tps.kotak_kosong) AS kotak_kosong'),
+        ])
+            ->leftJoin('kabupaten', 'kabupaten.provinsi_id', '=', 'provinsi.id')
+            ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
+            ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
+            ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
+            ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
+            ->where('suara_tps.posisi', $this->posisi)
+            ->where('provinsi.id', $this->getProvinsiIdOfOperator())
+            ->groupBy('provinsi.id');
+        
+        if ($provinsi->count() > 0) {
+            $provinsi = $provinsi->first();
+            return $provinsi->kotak_kosong;
         }
 
         return 0;

@@ -175,7 +175,6 @@ class ResumeSuaraPilwali extends Component
         return 0;
     }
 
-
     private function getCalon()
     {
         $builder = Calon::select([
