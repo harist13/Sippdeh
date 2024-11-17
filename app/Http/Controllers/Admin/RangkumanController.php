@@ -15,9 +15,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RangkumanController extends Controller
 {
-      public function resume(Request $request)
+    public function resume(Request $request, $wilayah = null)
     {
-        return view('admin.resume.index');
+        // Convert wilayah parameter to actual kabupaten_id
+        $kabupatenId = null;
+        if ($wilayah) {
+            $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
+            $kabupatenId = $kabupaten ? $kabupaten->id : null;
+        }
+        
+        return view('admin.resume.index', compact('wilayah', 'kabupatenId'));
     }
 
     public function pilgub(Request $request)

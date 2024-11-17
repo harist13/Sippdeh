@@ -335,37 +335,60 @@
 
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-5 gap-4 mb-8">
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Samarinda
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Balikpapan
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Bontang
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Kutai Kartanegara
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Kutai Timur
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Kutai Barat
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Berau
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Paser
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Penajam Paser Utara
-                </a>
-                <a href="{{ route('suara') }}" class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                    Mahakam Ulu
-                </a>
-            </div>
+            
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'samarinda']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Samarinda
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'balikpapan']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Balikpapan
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'bontang']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Bontang
+            </a>
+
+            
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'kutai-kartanegara']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Kutai Kartanegara
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'kutai-timur']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Kutai Timur
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'kutai-barat']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Kutai Barat
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'berau']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Berau
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'paser']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Paser
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'penajam-paser-utara']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Penajam Paser Utara
+            </a>
+            
+            <a href="{{ route('admin.resume', ['wilayah' => 'mahakam-ulu']) }}" 
+            class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
+                Mahakam Ulu
+            </a>
+        </div>
 
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                 <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Di Kalimantan Timur</h3>
