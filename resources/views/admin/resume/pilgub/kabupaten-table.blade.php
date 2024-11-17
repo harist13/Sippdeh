@@ -14,7 +14,7 @@
             </th>
 			
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
-                Kabupaten
+                Kabupaten/Kota
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 DPT

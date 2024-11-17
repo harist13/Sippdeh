@@ -11,7 +11,7 @@
                 placeholder="Nama provinsi" required>
             <span class="text-red-800">{{ $errors->first('name') }}</span>
 
-            <div class="mt-4">
+            {{-- <div class="mt-4">
                 <label class="block text-sm font-medium text-gray-700">Logo</label>
                 <div id="currentLogo" class="mt-2 mb-2">
                     <img src="" alt="Current Logo" class="w-20 h-20 object-cover rounded-full mx-auto hidden">
@@ -19,7 +19,7 @@
                 <input type="file" name="logo" accept="image/*"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500">
                 <span class="text-red-800">{{ $errors->first('logo') }}</span>
-            </div>
+            </div> --}}
 
             <hr class="h-1 my-3">
             <div class="flex items-center">
@@ -42,7 +42,7 @@
     }
 
     function getProvinsiName() {
-        return this.closest('tr').querySelector('td:nth-child(3)').textContent;
+        return this.closest('tr').querySelector('td:nth-child(2)').textContent;
     }
 
     function getProvinsiLogo() {
@@ -68,15 +68,15 @@
         const name = document.getElementById('editProvinsiName');
         name.value = getProvinsiName.call(this);
         
-        const currentLogo = document.querySelector('#currentLogo img');
-        const logoUrl = getProvinsiLogo.call(this);
+        // const currentLogo = document.querySelector('#currentLogo img');
+        // const logoUrl = getProvinsiLogo.call(this);
 
-        if (logoUrl) {
-            currentLogo.src = logoUrl;
-            currentLogo.classList.remove('hidden');
-        } else {
-            currentLogo.classList.add('hidden');
-        }
+        // if (logoUrl) {
+        //     currentLogo.src = logoUrl;
+        //     currentLogo.classList.remove('hidden');
+        // } else {
+        //     currentLogo.classList.add('hidden');
+        // }
         
         const editProvinsiForm = document.getElementById('editProvinsiForm');
         editProvinsiForm.action = getUpdateProvinsiUrl.call(this);
