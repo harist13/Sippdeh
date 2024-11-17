@@ -41,9 +41,3 @@
       )
   )
 </div>
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
-    </script>
-@endpush
