@@ -2,6 +2,28 @@
 
 @push('styles')
     <style>
+        .participation-button {
+            display: inline-block;
+            width: 100px;
+            padding: 3px 0;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .participation-red {
+            background-color: #ff7675;
+        }
+
+        .participation-yellow {
+            background-color: #feca57;
+        }
+
+        .participation-green {
+            background-color: #69d788;
+        }
         .dot {
             width: 8px;
             height: 8px;
@@ -515,146 +537,91 @@
                         $lastPilgubNumber = 0;
                     @endphp
 
+                    <!-- View Provinsi - tetap menampilkan Kalimantan Timur -->
                     <div class="candidate-slide" data-province="true" style="display: none;">
                         <div class="flex justify-center gap-[45px] min-w-[1080px]">
                             @foreach($provinsiData['candidates'] as $candidate)
-                                @php
-                                    $posisi = strtolower($candidate['posisi']);
-                                    
-                                    // Track the last PILGUB number
-                                    if (strpos($posisi, 'gubernur') !== false) {
-                                        $lastPilgubNumber = $candidate['nomor_urut'];
-                                    }
-                                    
-                                    // Reset counter when type changes
-                                    if (strpos($posisi, 'gubernur') !== false && $currentType != 'pilgub') {
-                                        $currentType = 'pilgub';
+                                @if(strtolower($candidate['posisi']) == 'gubernur')
+                                    @php
                                         $counter = $candidate['nomor_urut'];
-                                    } elseif (strpos($posisi, 'bupati') !== false && $currentType != 'pilbub') {
-                                        $currentType = 'pilbub';
-                                        $counter = 1;
-                                    } elseif (strpos($posisi, 'walikota') !== false && $currentType != 'pilwali') {
-                                        $currentType = 'pilwali';
-                                        $counter = 1;
-                                    } else {
-                                        $counter = $currentType == 'pilgub' ? $candidate['nomor_urut'] : $counter;
-                                    }
-                                @endphp
+                                    @endphp
 
-                                <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
-                                    <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
-                                        @if ($candidate['foto'])
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
-                                                alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
-                                        @else
-                                            <img class="w-full h-full object-cover" 
-                                                src="{{ asset('assets/default.png') }}" 
-                                                alt="Default Image">
-                                        @endif
-                                    </div>
-                                    <div class="p-4 text-center">
-                                        <h4 class="text-[#52526c] font-bold mb-1">
-                                            {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
-                                        </h4>
-                                        <p class="text-[#6b6b6b] mb-2">
-                                            {{ $candidate['wilayah'] }}
-                                        </p>
-                                        <p class="text-[#6b6b6b] mb-2">
-                                            @if (strpos($posisi, 'gubernur') !== false)
-                                                PASLON PILGUB {{ $counter }}
-                                            @elseif (strpos($posisi, 'bupati') !== false)
-                                                PASLON PILBUB {{ $counter }}
-                                            @elseif (strpos($posisi, 'walikota') !== false)
-                                                PASLON PILWALI {{ $counter }}
+                                    <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
+                                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
+                                            @if ($candidate['foto'])
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
+                                                    alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
+                                            @else
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ asset('assets/default.png') }}" 
+                                                    alt="Default Image">
                                             @endif
-                                        </p>
-                                        <div class="text-[#008bf9] font-medium">
-                                            {{ number_format($candidate['persentase'], 2) }}% | {{ number_format($candidate['total_suara']) }} Suara
+                                        </div>
+                                        <div class="p-4 text-center">
+                                            <h4 class="text-[#52526c] font-bold mb-1">
+                                                {{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
+                                            </h4>
+                                            <p class="text-[#6b6b6b] mb-2">
+                                                {{ $candidate['wilayah'] }}
+                                            </p>
+                                            <p class="text-[#6b6b6b] mb-2">
+                                                PASLON PILGUB {{ $counter }}
+                                            </p>
+                                            <div class="text-[#008bf9] font-medium">
+                                                {{ number_format($candidate['persentase'], 2) }}% | {{ number_format($candidate['total_suara']) }} Suara
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                @php
-                                    if ($currentType != 'pilgub') {
-                                        $counter++;
-                                    }
-                                @endphp
+                                @endif
                             @endforeach
                         </div>
                     </div>
 
+                    <!-- View Kabupaten - menampilkan nama kabupaten masing-masing -->
                     @foreach($kabupatenData as $kabupatenId => $kabupatenInfo)
                         @php
-                            $calon = $syncedCalonData[$kabupatenId];
-                            $totalSlides = ceil(count($calon) / 3);
-                            $currentType = '';
-                            $counter = 0;
+                            // Filter to only show gubernur candidates
+                            $gubernurCalon = array_filter($syncedCalonData[$kabupatenId], function($calon) {
+                                return strtolower($calon['posisi']) == 'gubernur';
+                            });
+                            $gubernurCalon = array_values($gubernurCalon); // Reset array keys
+                            $kabupatenNama = $kabupatenInfo['nama']; // Mengambil nama kabupaten
                         @endphp
 
-                        @for($slideIndex = 0; $slideIndex < $totalSlides; $slideIndex++)
-                            <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="{{ $slideIndex }}" style="display: none;">
-                                <div class="flex justify-center gap-[45px] min-w-[1080px]">
-                                    @for($i = $slideIndex * 3; $i < min(($slideIndex + 1) * 3, count($calon)); $i++)
-                                        @php
-                                            $posisi = strtolower($calon[$i]['posisi']);
-                                            
-                                            // Reset counter when type changes
-                                            if (strpos($posisi, 'gubernur') !== false && $currentType != 'pilgub') {
-                                                $currentType = 'pilgub';
-                                                $counter = $calon[$i]['nomor_urut'];
-                                            } elseif (strpos($posisi, 'bupati') !== false && $currentType != 'pilbub') {
-                                                $currentType = 'pilbub';
-                                                $counter = 1;
-                                            } elseif (strpos($posisi, 'walikota') !== false && $currentType != 'pilwali') {
-                                                $currentType = 'pilwali';
-                                                $counter = 1;
-                                            } else {
-                                                $counter = $currentType == 'pilgub' ? $calon[$i]['nomor_urut'] : $counter;
-                                            }
-                                        @endphp
-
-                                        <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
-                                            <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
-                                                @if ($calon[$i]['foto'])
-                                                    <img class="w-full h-full object-cover" 
-                                                        src="{{ Storage::disk('foto_calon_lokal')->url($calon[$i]['foto']) }}" 
-                                                        alt="{{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}">
-                                                @else
-                                                    <img class="w-full h-full object-cover" 
-                                                        src="{{ asset('assets/default.png') }}" 
-                                                        alt="Default Image">
-                                                @endif
-                                            </div>
-                                            <div class="p-4 text-center">
-                                                <h4 class="text-[#52526c] font-bold mb-1">
-                                                    {{ $calon[$i]['nama'] }} / {{ $calon[$i]['nama_wakil'] }}
-                                                </h4>
-                                                <p class="text-[#6b6b6b] mb-2">
-                                                    {{ $calon[$i]['wilayah'] }}
-                                                </p>
-                                                <p class="text-[#6b6b6b] mb-2">
-                                                    @if (strpos($posisi, 'gubernur') !== false)
-                                                        PASLON PILGUB {{ $counter }}
-                                                    @elseif (strpos($posisi, 'bupati') !== false)
-                                                        PASLON PILBUB {{ $counter }}
-                                                    @elseif (strpos($posisi, 'walikota') !== false)
-                                                        PASLON PILWALI {{ $counter }}
-                                                    @endif
-                                                </p>
-                                                <div class="text-[#008bf9] font-medium">
-                                                    {{ number_format($calon[$i]['persentase'], 2) }}% | {{ number_format($calon[$i]['total_suara']) }} Suara
-                                                </div>
+                        <div class="candidate-slide" data-kabupaten-id="{{ $kabupatenId }}" data-slide-index="0" style="display: none;">
+                            <div class="flex justify-center gap-[45px] min-w-[1080px]">
+                                @foreach($gubernurCalon as $index => $calon)
+                                    <div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
+                                        <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
+                                            @if ($calon['foto'])
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ Storage::disk('foto_calon_lokal')->url($calon['foto']) }}" 
+                                                    alt="{{ $calon['nama'] }} / {{ $calon['nama_wakil'] }}">
+                                            @else
+                                                <img class="w-full h-full object-cover" 
+                                                    src="{{ asset('assets/default.png') }}" 
+                                                    alt="Default Image">
+                                            @endif
+                                        </div>
+                                        <div class="p-4 text-center">
+                                            <h4 class="text-[#52526c] font-bold mb-1">
+                                                {{ $calon['nama'] }} / {{ $calon['nama_wakil'] }}
+                                            </h4>
+                                            <p class="text-[#6b6b6b] mb-2">
+                                                {{ $kabupatenNama }}
+                                            </p>
+                                            <p class="text-[#6b6b6b] mb-2">
+                                                PASLON PILGUB {{ $calon['nomor_urut'] }}
+                                            </p>
+                                            <div class="text-[#008bf9] font-medium">
+                                                {{ number_format($calon['persentase'], 2) }}% | {{ number_format($calon['total_suara']) }} Suara
                                             </div>
                                         </div>
-                                        @php
-                                            if ($currentType != 'pilgub') {
-                                                $counter++;
-                                            }
-                                        @endphp
-                                    @endfor
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endfor
+                        </div>
                     @endforeach
                     @endif
                 </div>
@@ -666,6 +633,38 @@
                     </svg>
                 </button>
                 <br>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
+                    <thead class="bg-[#3560a0] text-white">
+                        <tr>
+                            <th class="py-3 px-4 border-r border-white">NO</th>
+                            <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                            <th class="py-3 px-4 border-r border-white">DPT</th>
+                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon1_nama'] }} / {{ $tableData['paslon1_wakil'] }}</th>
+                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon2_nama'] }} / {{ $tableData['paslon2_wakil'] }}</th>
+                            <th class="py-3 px-4 border-r border-white">SUARA MASUK</th>
+                            <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-100">
+                        @foreach($tableData['data'] as $data)
+                        <tr class="border-b">
+                            <td class="py-3 px-4 border-r">{{ $data['no'] }}</td>
+                            <td class="py-3 px-4 border-r">{{ $data['kabupaten'] }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['dpt'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon1'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon2'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['suara_masuk'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">
+                                <div class="participation-button participation-{{ $data['warna_partisipasi'] }}">
+                                    {{ number_format($data['partisipasi'], 1) }}%
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
     </main>
 @endsection
