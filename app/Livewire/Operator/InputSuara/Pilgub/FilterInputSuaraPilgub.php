@@ -12,14 +12,20 @@ class FilterInputSuaraPilgub extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
+
+    public $availableColumns = [];
     public $includedColumns = [];
+
     public $partisipasi = [];
 
     public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi): void
     {
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
+
+        $this->availableColumns = $includedColumns;
         $this->includedColumns = $includedColumns;
+        
         $this->partisipasi = $partisipasi;
     }
 
@@ -59,6 +65,11 @@ class FilterInputSuaraPilgub extends Component
 
     public function resetFilter(): void
     {
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+
         $this->dispatch('reset-filter')->to(InputSuaraPilgub::class);
     }
 
