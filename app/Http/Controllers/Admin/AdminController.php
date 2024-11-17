@@ -70,8 +70,9 @@ class AdminController extends Controller
         $dptAbstainData = $this->getTotalDptAbstainData();
         $chartData = $this->getChartData();
         $provinsiData = $this->getProvinsiData();
+        $tableData = $this->getTableData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData', 'provinsiData'));
+        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData', 'provinsiData','tableData'));
     }
 
     private function getProvinsiData(): array
@@ -404,6 +405,68 @@ class AdminController extends Controller
         
         // Return the next range that would fully contain the max value
         return $steps * $baseStep;
+    }
+
+    private function getTableData(): array
+    {
+        $kabupatens = Kabupaten::orderBy('nama', 'asc')->get();
+        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
+        
+        if ($gubernurCalon->count() < 2) {
+            return [];
+        }
+        
+        $paslon1 = $gubernurCalon[0];
+        $paslon2 = $gubernurCalon[1];
+        
+        // Tambahkan informasi nama paslon ke array yang akan dikembalikan
+        $tableInfo = [
+            'paslon1_nama' => $paslon1->nama,
+            'paslon1_wakil' => $paslon1->nama_wakil,
+            'paslon2_nama' => $paslon2->nama,
+            'paslon2_wakil' => $paslon2->nama_wakil,
+            'data' => []
+        ];
+        
+        foreach ($kabupatens as $index => $kabupaten) {
+            // Get DPT
+            $resumeData = ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
+                $query->where('id', $kabupaten->id);
+            })->select(
+                \DB::raw('SUM(dpt) as total_dpt'),
+                \DB::raw('SUM(suara_sah + suara_tidak_sah) as suara_masuk')
+            )->first();
+
+            // Get votes for Paslon 1
+            $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
+                $query->where('id', $kabupaten->id);
+            })->where('calon_id', $paslon1->id)
+            ->sum('suara');
+            
+            // Get votes for Paslon 2
+            $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
+                $query->where('id', $kabupaten->id);
+            })->where('calon_id', $paslon2->id)
+            ->sum('suara');
+
+            // Calculate participation
+            $dpt = max(0, $resumeData->total_dpt ?? 0);
+            $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
+            $partisipasi = $this->hitungPartisipasi($suaraMasuk, $dpt);
+
+            $tableInfo['data'][] = [
+                'no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                'kabupaten' => $kabupaten->nama,
+                'dpt' => $dpt,
+                'paslon1' => $suaraPaslon1,
+                'paslon2' => $suaraPaslon2,
+                'suara_masuk' => $suaraMasuk,
+                'partisipasi' => $partisipasi,
+                'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi)
+            ];
+        }
+
+        return $tableInfo;
     }
 
     public function rekapitulasi()

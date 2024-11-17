@@ -2,6 +2,28 @@
 
 @push('styles')
     <style>
+        .participation-button {
+            display: inline-block;
+            width: 100px;
+            padding: 3px 0;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .participation-red {
+            background-color: #ff7675;
+        }
+
+        .participation-yellow {
+            background-color: #feca57;
+        }
+
+        .participation-green {
+            background-color: #69d788;
+        }
         .dot {
             width: 8px;
             height: 8px;
@@ -611,6 +633,38 @@
                     </svg>
                 </button>
                 <br>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
+                    <thead class="bg-[#3560a0] text-white">
+                        <tr>
+                            <th class="py-3 px-4 border-r border-white">NO</th>
+                            <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
+                            <th class="py-3 px-4 border-r border-white">DPT</th>
+                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon1_nama'] }} / {{ $tableData['paslon1_wakil'] }}</th>
+                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon2_nama'] }} / {{ $tableData['paslon2_wakil'] }}</th>
+                            <th class="py-3 px-4 border-r border-white">SUARA MASUK</th>
+                            <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-100">
+                        @foreach($tableData['data'] as $data)
+                        <tr class="border-b">
+                            <td class="py-3 px-4 border-r">{{ $data['no'] }}</td>
+                            <td class="py-3 px-4 border-r">{{ $data['kabupaten'] }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['dpt'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon1'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon2'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">{{ number_format($data['suara_masuk'], 0, ',', '.') }}</td>
+                            <td class="py-3 px-4 border-r">
+                                <div class="participation-button participation-{{ $data['warna_partisipasi'] }}">
+                                    {{ number_format($data['partisipasi'], 1) }}%
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
     </main>
 @endsection
