@@ -8,27 +8,26 @@
             <div class="mb-10">
                 @livewire('admin.resume.pilgub.resume-suara-pilgub', ['wilayah' => $wilayah])
             </div>
-        @endif
+        @else
+            @php
+                $kotaList = ['samarinda', 'balikpapan', 'bontang'];
+            @endphp
+            
+            @if(in_array($wilayah, $kotaList))
+                <div class="mb-10">
+                    @livewire('admin.resume.pilwali.resume-suara-pilwali', ['wilayah' => $wilayah])
+                </div>
+            @endif
 
-        @php
-            $kotaList = ['samarinda', 'balikpapan', 'bontang'];
-        @endphp
-        
-        @if(!$wilayah || in_array($wilayah, $kotaList))
-            <div class="mb-10">
-                @livewire('admin.resume.pilwali.resume-suara-pilwali', ['wilayah' => $wilayah])
-            </div>
-        @endif
-
-        @php
-            $kabupatenList = ['kutai-kartanegara', 'kutai-timur', 'kutai-barat', 'berau', 
-                             'paser', 'penajam-paser-utara', 'mahakam-ulu'];
-        @endphp
-        
-        @if(!$wilayah || in_array($wilayah, $kabupatenList))
-            <div class="mb-10">
-                @livewire('admin.resume.pilbup.resume-suara-pilbup', ['wilayah' => $wilayah])
-            </div>
+            @php
+                $kabupatenList = ['kutai-kartanegara', 'kutai-timur', 'kutai-barat', 'berau', 'paser', 'penajam-paser-utara', 'mahakam-ulu'];
+            @endphp
+            
+            @if(in_array($wilayah, $kabupatenList))
+                <div class="mb-10">
+                    @livewire('admin.resume.pilbup.resume-suara-pilbup', ['wilayah' => $wilayah])
+                </div>
+            @endif
         @endif
     </main>
 @endsection
