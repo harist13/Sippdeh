@@ -151,13 +151,12 @@ class AdminController extends Controller
     private function getTotalDptAbstainData(): array 
     {
         // Get sum of suara masuk (suara sah + tidak sah) and Abstain from all regions
-        $totalData = ResumeSuaraTPS::select(
-            \DB::raw('SUM(suara_sah + suara_tidak_sah) as total_suara_masuk'),
-            \DB::raw('SUM(abstain) as total_abstain')
-        )->first();
+        $totalData = ResumeSuaraPilgubProvinsi::query()
+            ->where('id', 23) // 23 itu Kalimantan Timur, liat ProvinsiSeeder.php
+            ->first();
         
-        $totalSuaraMasuk = max(0, $totalData->total_suara_masuk ?? 0);
-        $totalAbstain = max(0, $totalData->total_abstain ?? 0);
+        $totalSuaraMasuk = max(0, $totalData->suara_masuk ?? 0);
+        $totalAbstain = max(0, $totalData->abstain ?? 0);
         
         // Calculate total for percentage calculation
         $total = $totalSuaraMasuk + $totalAbstain;
