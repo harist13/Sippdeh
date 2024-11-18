@@ -15,6 +15,7 @@ use App\Models\SuaraCalon;
 use App\Models\ResumeSuaraTPS;
 use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
+use App\Models\ResumeSuaraPilgubProvinsi;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -86,9 +87,7 @@ class AdminController extends Controller
         }
 
         // Get summary data for the province by summing up all kabupaten
-        $ringkasanData = ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
-            $query->where('id', $provinsi->id);
-        })->select(
+        $ringkasanData = ResumeSuaraPilgubProvinsi::where('id', $provinsi->id)->select(
             \DB::raw('SUM(suara_sah) as suara_sah'),
             \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             \DB::raw('SUM(dpt) as dpt'),
