@@ -14,6 +14,7 @@ use App\Models\Calon;
 use App\Models\SuaraCalon;
 use App\Models\ResumeSuaraTPS;
 use App\Models\Provinsi;
+use App\Models\ResumeSuaraPilgubKabupaten;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -291,14 +292,18 @@ class AdminController extends Controller
 
     private function getRingkasanDataByKabupaten(int $kabupatenId): array
     {
-        return ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
-            $query->where('id', $kabupatenId);
-        })->select(
+        $ringkasan = ResumeSuaraPilgubKabupaten::where('id', $kabupatenId)->select(
             \DB::raw('SUM(suara_sah) as suara_sah'),
             \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             \DB::raw('SUM(dpt) as dpt'),
             \DB::raw('SUM(abstain) as abstain')
-        )->first()->toArray();
+        );
+
+        if ($ringkasan->count()) {
+            return $ringkasan->first()->toArray();
+        }
+
+        return [];
     }
 
     private function hitungPartisipasi(int $suaraMasuk, int $dpt): float
