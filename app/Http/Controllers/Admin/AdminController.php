@@ -244,14 +244,27 @@ class AdminController extends Controller
 
     private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
     {
-        $totalSuaraKabupaten = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
-            $query->where('id', $kabupatenId);
-        })->sum('suara');
+        $totalSuaraKabupaten = ResumeSuaraPilgubKabupaten::where('id', $kabupatenId);
 
-        if ($totalSuaraKabupaten === 0) return 0;
+        if ($totalSuaraKabupaten->count() <= 0) return 0;
+
+        $totalSuaraKabupaten = $totalSuaraKabupaten->first()->suara_sah;
+
+        if ($totalSuaraKabupaten <= 0) return 0;
 
         return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
     }
+
+    // private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
+    // {
+    //     $totalSuaraKabupaten = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+    //         $query->where('id', $kabupatenId);
+    //     })->sum('suara');
+
+    //     if ($totalSuaraKabupaten === 0) return 0;
+
+    //     return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
+    // }
 
     
     private function getKabupatenData(): array
