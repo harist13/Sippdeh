@@ -84,13 +84,13 @@
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    <span class="value">{{ $datum->dpt }}</span>
+                    {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
 
                 {{-- Kotak Kosong --}}
                 @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                     <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ $datum->kotak_kosong }}
+                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
                     </td>
                 @endif
 
@@ -101,29 +101,29 @@
                             $suara = $datum->getCalonSuaraByCalonId($calon->id);
                         @endphp
                         <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
-                            {{ $suara ? $suara->total_suara : 0 }}
+                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
                 @endif
 
                 {{-- Suara Sah --}}
                 <td class="py-3 px-4 text-xs border suara-sah">
-                    {{ $datum->suara_sah }}
+                    {{ number_format($datum->suara_sah, 0, '', '.') }}
                 </td>
 
                 {{-- Suara Tidak Sah --}}
                 <td class="py-3 px-4 text-xs border suara-tidak-sah">
-                    {{ $datum->suara_tidak_sah }}
+                    {{ number_format($datum->suara_tidak_sah, 0, '', '.') }}
                 </td>
 
                 {{-- Suara Masuk --}}
                 <td class="py-3 px-4 text-xs border suara-masuk">
-                    {{ $datum->suara_masuk }}
+                    {{ number_format($datum->suara_masuk, 0, '', '.') }}
                 </td>
 
                 {{-- Abstain --}}
                 <td class="py-3 px-4 text-xs border abstain">
-                    {{ $datum->abstain }}
+                    {{ number_format($datum->abstain, 0, '', '.') }}
                 </td>
 
                 {{-- Partisipasi --}}
