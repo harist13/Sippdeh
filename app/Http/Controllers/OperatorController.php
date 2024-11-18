@@ -8,6 +8,7 @@ use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
+use App\Models\ResumeSuaraPilgubProvinsi;
 use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\ResumeSuaraTPS;
 use App\Models\SuaraCalon;
@@ -86,9 +87,8 @@ class OperatorController extends Controller
         }
 
         // Get summary data for the province by summing up all kabupaten
-        $ringkasanData = ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
-            $query->where('id', $provinsi->id);
-        })->select(
+        $ringkasanData = ResumeSuaraPilgubProvinsi::where('id', $provinsi->id)
+        ->select(
             DB::raw('SUM(suara_sah) as suara_sah'),
             DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             DB::raw('SUM(dpt) as dpt'),
@@ -244,16 +244,17 @@ class OperatorController extends Controller
 
     private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
     {
-        $totalSuaraKabupaten = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
-            $query->where('id', $kabupatenId);
-        })->sum('suara');
+        $totalSuaraKabupaten = ResumeSuaraPilgubKabupaten::where('id', $kabupatenId);
 
-        if ($totalSuaraKabupaten === 0) return 0;
+        if ($totalSuaraKabupaten->count() <= 0) return 0;
+
+        $totalSuaraKabupaten = $totalSuaraKabupaten->first()->suara_sah;
+
+        if ($totalSuaraKabupaten <= 0) return 0;
 
         return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
     }
 
-    
     private function getKabupatenData(): array
     {
         $kabupatens = Kabupaten::all();
