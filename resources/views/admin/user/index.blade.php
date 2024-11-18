@@ -157,7 +157,17 @@
                         <i class="fas fa-plus"></i> Tambah User
                     </button>
 
-
+                    <div class="relative">
+                        <select id="roleFilter" class="bg-gray-100 rounded-md px-3 py-2 appearance-none pr-8 border border-gray-300 cursor-pointer">
+                            <option value="">Semua Role</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
 
                     <div class="relative w-full-mobile mt-4-mobile">
                         <input 
@@ -514,6 +524,7 @@
             const searchLoading = document.getElementById('searchLoading');
             const tpsTable = document.getElementById('tpsTable');
             const suaraTable = document.getElementById('suaraTable');
+            const roleFilter = document.getElementById('roleFilter');
             let searchTimeout;
 
             function showNoDataMessage(tableBody, message = 'Data yang dicari tidak ditemukan') {
@@ -521,25 +532,30 @@
                     <tr>
                         <td colspan="8" class="py-4 text-center">
                             <div class="flex flex-col items-center justify-center text-gray-500">
-                                
                                 <p class="text-lg font-medium">${message}</p>
-                                
                             </div>
                         </td>
                     </tr>
                 `;
             }
 
-            function updateContent(searchTerm) {
+            function updateContent(searchTerm, roleValue) {
                 // Show loading
                 searchLoading.classList.remove('hidden');
                 
-                // Build URL with search parameter
+                // Build URL with search and role parameters
                 const url = new URL(window.location.href);
                 if (searchTerm) {
                     url.searchParams.set('search', searchTerm);
                 } else {
                     url.searchParams.delete('search');
+                }
+
+                // Add role parameter
+                if (roleValue) {
+                    url.searchParams.set('role', roleValue);
+                } else {
+                    url.searchParams.delete('role');
                 }
 
                 // Make AJAX request
@@ -600,7 +616,7 @@
                     window.history.pushState({}, '', url.toString());
                 })
                 .catch(error => {
-                    console.error('Error fetching search results:', error);
+                    console.error('Error fetching results:', error);
                     // Show error message in both tables
                     const tpsTableBody = tpsTable.querySelector('tbody');
                     const suaraTableBody = suaraTable ? suaraTable.querySelector('tbody') : null;
@@ -621,15 +637,24 @@
                 clearTimeout(searchTimeout);
                 
                 const searchTerm = this.value.trim();
+                const roleValue = roleFilter.value; // Ambil nilai role saat ini
                 searchTimeout = setTimeout(() => {
-                    updateContent(searchTerm);
+                    updateContent(searchTerm, roleValue);
                 }, 1000);
+            });
+
+            // Role filter change event
+            roleFilter.addEventListener('change', function() {
+                const searchTerm = searchInput.value.trim();
+                const roleValue = this.value;
+                updateContent(searchTerm, roleValue);
             });
 
             // Clear search handler
             searchInput.addEventListener('search', function() {
                 if (this.value === '') {
-                    updateContent('');
+                    const roleValue = roleFilter.value;
+                    updateContent('', roleValue);
                 }
             });
 
@@ -637,8 +662,12 @@
             window.addEventListener('popstate', function(e) {
                 const urlParams = new URLSearchParams(window.location.search);
                 const searchTerm = urlParams.get('search') || '';
+                const roleValue = urlParams.get('role') || '';
+                
                 searchInput.value = searchTerm;
-                updateContent(searchTerm);
+                roleFilter.value = roleValue;
+                
+                updateContent(searchTerm, roleValue);
             });
         });
 

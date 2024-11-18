@@ -497,9 +497,10 @@ class AdminController extends Controller
     public function user(Request $request)
     {
         $search = $request->input('search');
+        $roleFilter = $request->input('role');
         $itemsPerPage = $request->input('itemsPerPage', 10);
 
-        // Query for users with search
+        // Query for users with search and role filter
         $usersQuery = Petugas::query();
         
         // Apply search if provided
@@ -513,6 +514,13 @@ class AdminController extends Controller
                     ->orWhereHas('roles', function($q) use ($search) {
                         $q->where('name', 'LIKE', '%' . $search . '%');
                     });
+            });
+        }
+
+        // Apply role filter if provided
+        if ($roleFilter) {
+            $usersQuery->whereHas('roles', function($query) use ($roleFilter) {
+                $query->where('name', $roleFilter);
             });
         }
 
