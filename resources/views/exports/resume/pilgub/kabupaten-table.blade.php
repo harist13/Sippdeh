@@ -103,15 +103,15 @@
                 <td style="text-align: center; border: 1px solid black;">
                     @if ($datum->partisipasi >= 80)
                         <span style="background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 3px;">
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @elseif ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
                         <span style="background-color: #FFEB3B; color: white; padding: 5px 10px; border-radius: 3px;">
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @else
                         <span style="background-color: #F44336; color: white; padding: 5px 10px; border-radius: 3px;">
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @endif
                 </td>

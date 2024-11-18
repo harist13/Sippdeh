@@ -130,19 +130,19 @@
                 <td class="py-3 px-4 text-xs border partisipasi">
 					@if ($datum->partisipasi >= 80)
 						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
-							{{ $datum->partisipasi }}%
+							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
 						</span>
 					@endif
 
 					@if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
 						<span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
-							{{ $datum->partisipasi }}%
+							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
 						</span>
 					@endif
 
 					@if ($datum->partisipasi < 60)
 						<span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
-							{{ $datum->partisipasi }}%
+							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
 						</span>
 					@endif
 				</td>
