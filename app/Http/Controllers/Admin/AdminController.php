@@ -448,12 +448,7 @@ class AdminController extends Controller
         
         foreach ($kabupatens as $index => $kabupaten) {
             // Get DPT
-            $resumeData = ResumeSuaraTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->select(
-                \DB::raw('SUM(dpt) as total_dpt'),
-                \DB::raw('SUM(suara_sah + suara_tidak_sah) as suara_masuk')
-            )->first();
+            $resumeData = ResumeSuaraPilgubKabupaten::where('id', $kabupaten->id)->first();
 
             // Get votes for Paslon 1
             $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
@@ -468,9 +463,9 @@ class AdminController extends Controller
             ->sum('suara');
 
             // Calculate participation
-            $dpt = max(0, $resumeData->total_dpt ?? 0);
+            $dpt = max(0, $resumeData->dpt ?? 0);
             $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
-            $partisipasi = $this->hitungPartisipasi($suaraMasuk, $dpt);
+            $partisipasi = $resumeData->partisipasi;
 
             $tableInfo['data'][] = [
                 'no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
