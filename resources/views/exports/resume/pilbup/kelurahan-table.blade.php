@@ -143,19 +143,19 @@
                 <td style="text-align: center; border: 1px solid black;">
                     @if ($datum->partisipasi >= 80)
                         <span>
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @endif
 
                     @if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
                         <span>
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @endif
 
                     @if ($datum->partisipasi < 60)
                         <span>
-                            {{ $datum->partisipasi }}%
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @endif
                 </td>
