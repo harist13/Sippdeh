@@ -47,7 +47,7 @@ class CalonController extends Controller
                 return $this->redirectBack($request);
             }
 
-            $calonQuery->whereLike('nama', "%$kataKunci%");
+            $calonQuery->whereLike('nama', "%$kataKunci%")->orWhereLike('nama_wakil', "%$kataKunci%");
         }
 
         if ($request->has('kabupaten')) {
