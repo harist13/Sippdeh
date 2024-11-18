@@ -445,6 +445,8 @@ class AdminController extends Controller
             'data' => []
         ];
         
+        $unsortedData = [];
+        
         foreach ($kabupatens as $index => $kabupaten) {
             // Get DPT
             $resumeData = ResumeSuaraPilgubKabupaten::where('id', $kabupaten->id)->first();
@@ -466,8 +468,7 @@ class AdminController extends Controller
             $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
             $partisipasi = $resumeData->partisipasi;
 
-            $tableInfo['data'][] = [
-                'no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+            $unsortedData[] = [
                 'kabupaten' => $kabupaten->nama,
                 'dpt' => $dpt,
                 'paslon1' => $suaraPaslon1,
@@ -476,6 +477,19 @@ class AdminController extends Controller
                 'partisipasi' => $partisipasi,
                 'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi)
             ];
+        }
+
+        // Sort data by partisipasi in descending order
+        usort($unsortedData, function($a, $b) {
+            return $b['partisipasi'] <=> $a['partisipasi'];
+        });
+
+        // Reindex with sorted numbers
+        foreach ($unsortedData as $index => $data) {
+            $tableInfo['data'][] = array_merge(
+                ['no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT)],
+                $data
+            );
         }
 
         return $tableInfo;
