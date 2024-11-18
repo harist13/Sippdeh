@@ -22,12 +22,9 @@
                 </div>
                 <div>
                     <label for="editRole" class="block text-sm">Role</label>
-                    <select id="editRole" name="role" class="w-full bg-gray-100 px-3 py-2 rounded-md" required>
-                        <option value="">Pilih Role</option>
-                        @foreach($roles as $role)
-                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" id="editRole" name="role" value="{{ $user->roles->first()->name ?? '' }}" 
+                        class="w-full bg-gray-100 px-3 py-2 rounded-md cursor-not-allowed" 
+                        readonly>
                 </div>
                 <div>
                     <label for="editPassword" class="block text-sm">Password (Leave blank to keep current)</label>

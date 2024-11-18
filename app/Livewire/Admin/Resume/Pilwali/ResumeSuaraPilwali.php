@@ -29,9 +29,13 @@ class ResumeSuaraPilwali extends Component
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
+    public string $wilayah;
+
     public function mount($wilayah = null)
     {
         if ($wilayah) {
+            $this->wilayah = $wilayah;
+
             $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
             if ($kabupaten) {
                 $this->selectedKecamatan = Kecamatan::where('kabupaten_id', $kabupaten->id)
@@ -168,9 +172,22 @@ class ResumeSuaraPilwali extends Component
             DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
+            ->where('calon.kabupaten_id', $this->getKabupatenIdOfWilayah())
             ->where('calon.posisi', $this->posisi)
             ->groupBy('calon.id')
             ->get();
+    }
+
+    private function getKabupatenIdOfWilayah(): int
+    {
+        $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $this->wilayah) . '%');
+
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->id;
+        }
+
+        return 0;
     }
 
     #[On('reset-filter')] 
