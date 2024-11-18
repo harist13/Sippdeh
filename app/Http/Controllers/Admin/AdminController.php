@@ -151,13 +151,12 @@ class AdminController extends Controller
     private function getTotalDptAbstainData(): array 
     {
         // Get sum of suara masuk (suara sah + tidak sah) and Abstain from all regions
-        $totalData = ResumeSuaraTPS::select(
-            \DB::raw('SUM(suara_sah + suara_tidak_sah) as total_suara_masuk'),
-            \DB::raw('SUM(abstain) as total_abstain')
-        )->first();
+        $totalData = ResumeSuaraPilgubProvinsi::query()
+            ->where('id', 23) // 23 itu Kalimantan Timur, liat ProvinsiSeeder.php
+            ->first();
         
-        $totalSuaraMasuk = max(0, $totalData->total_suara_masuk ?? 0);
-        $totalAbstain = max(0, $totalData->total_abstain ?? 0);
+        $totalSuaraMasuk = max(0, $totalData->suara_masuk ?? 0);
+        $totalAbstain = max(0, $totalData->abstain ?? 0);
         
         // Calculate total for percentage calculation
         $total = $totalSuaraMasuk + $totalAbstain;
@@ -445,6 +444,8 @@ class AdminController extends Controller
             'data' => []
         ];
         
+        $unsortedData = [];
+        
         foreach ($kabupatens as $index => $kabupaten) {
             // Get DPT
             $resumeData = ResumeSuaraPilgubKabupaten::where('id', $kabupaten->id)->first();
@@ -466,8 +467,7 @@ class AdminController extends Controller
             $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
             $partisipasi = $resumeData->partisipasi;
 
-            $tableInfo['data'][] = [
-                'no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+            $unsortedData[] = [
                 'kabupaten' => $kabupaten->nama,
                 'dpt' => $dpt,
                 'paslon1' => $suaraPaslon1,
@@ -476,6 +476,19 @@ class AdminController extends Controller
                 'partisipasi' => $partisipasi,
                 'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi)
             ];
+        }
+
+        // Sort data by partisipasi in descending order
+        usort($unsortedData, function($a, $b) {
+            return $b['partisipasi'] <=> $a['partisipasi'];
+        });
+
+        // Reindex with sorted numbers
+        foreach ($unsortedData as $index => $data) {
+            $tableInfo['data'][] = array_merge(
+                ['no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT)],
+                $data
+            );
         }
 
         return $tableInfo;
