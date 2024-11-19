@@ -71,10 +71,9 @@ class OperatorController extends Controller
         $kabupatenData = $this->getKabupatenData();
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
         $dptAbstainData = $this->getTotalDptAbstainData();
-        $chartData = $this->getChartData();
         $provinsiData = $this->getProvinsiData();
         
-        return view('operator.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData', 'provinsiData'));
+        return view('operator.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'provinsiData'));
     }
 
     private function getProvinsiData(): array
@@ -328,93 +327,7 @@ class OperatorController extends Controller
             return 'red';
         }
     }
-
-
-    private function getChartData(): array
-    {
-        $kabupatens = Kabupaten::orderBy('nama', 'asc')->get();
-        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
-        
-        if ($gubernurCalon->count() < 2) {
-            return [];
-        }
-        
-        $paslon1 = $gubernurCalon[0];
-        $paslon2 = $gubernurCalon[1];
-        
-        $labels = [];
-        $paslon1Data = [];
-        $paslon2Data = [];
-        $totalSuarahSahPerKabupaten = []; // Array untuk menyimpan total suara sah per kabupaten
-        
-        foreach ($kabupatens as $kabupaten) {
-            $namaKabupaten = str_replace(['Kota ', 'Kabupaten '], '', $kabupaten->nama);
-            $labels[] = $namaKabupaten;
-            
-            $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon1->id)->sum('suara');
-            
-            $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon2->id)->sum('suara');
-            
-            // Hitung total suara sah per kabupaten
-            $totalSuarahSahPerKabupaten[] = $suaraPaslon1 + $suaraPaslon2;
-            
-            $paslon1Data[] = $suaraPaslon1;
-            $paslon2Data[] = $suaraPaslon2;
-        }
-        
-        // Calculate the maximum value from both datasets
-        $maxValue = max(
-            max($paslon1Data ?: [0]),
-            max($paslon2Data ?: [0])
-        );
-        
-        // Calculate the dynamic max range
-        $dynamicMaxRange = $this->calculateDynamicMaxRange($maxValue);
-        
-        return [
-            'title' => "Perolehan Suara Gubernur Per Kabupaten/Kota",
-            'data' => [
-                'labels' => $labels,
-                'datasets' => [
-                    [
-                        'label' => "{$paslon1->nama}",
-                        'data' => $paslon1Data,
-                        'backgroundColor' => '#3560A0',
-                        'barPercentage' => 0.98,
-                        'categoryPercentage' => 0.5,
-                    ],
-                    [
-                        'label' => "{$paslon2->nama}",
-                        'data' => $paslon2Data,
-                        'backgroundColor' => '#F9D926',
-                        'barPercentage' => 0.98,
-                        'categoryPercentage' => 0.5,
-                    ]
-                ],
-                'maxRange' => $dynamicMaxRange,
-                'totalSuarahSah' => $totalSuarahSahPerKabupaten // Mengirim total suara sah ke frontend
-            ]
-        ];
-    }
-
-    private function calculateDynamicMaxRange($maxValue): int
-    {
-        // Base step size for ranges (e.g., 500, 1000, 1500, etc.)
-        $baseStep = 500;
-        
-        // Calculate how many steps we need to accommodate the max value
-        $steps = ceil($maxValue / $baseStep);
-        
-        // Return the next range that would fully contain the max value
-        return $steps * $baseStep;
-    }
-
-
-
+    
     public function updateoperator(Request $request)
     {
         $user = Auth::user();
