@@ -47,15 +47,15 @@
                 DPT
             </th>
 
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-                Kotak Kosong
-            </th>
-
             @foreach ($paslon as $calon)
                 <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
                     {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                 </th>
             @endforeach
+
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                Kotak Kosong
+            </th>
 
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 Suara Sah
@@ -111,12 +111,6 @@
                     <span class="value">{{ $datum->dpt }}</span>
                 </td>
 
-                {{-- Kotak Kosong --}}
-                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $datum->kotak_kosong }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-                    <span class="value">{{ $datum->kotak_kosong }}</span>
-                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $datum->kotak_kosong }}" data-default-value="{{ $datum->kotak_kosong }}" autocomplete="off">
-                </td>
-
                 {{-- Calon-calon --}}
                 @foreach ($paslon as $calon)
                     @php
@@ -128,6 +122,12 @@
                         <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $suara }}" data-default-value="{{ $suara }}" autocomplete="off">
                     </td>
                 @endforeach
+
+                {{-- Kotak Kosong --}}
+                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $datum->kotak_kosong }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                    <span class="value">{{ $datum->kotak_kosong }}</span>
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $datum->kotak_kosong }}" data-default-value="{{ $datum->kotak_kosong }}" autocomplete="off">
+                </td>
 
                 {{-- Suara Sah --}}
                 <td class="py-3 px-4 text-xs border suara-sah" data-value="{{ $datum->suara_sah }}">
