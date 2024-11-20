@@ -1,7 +1,6 @@
 @php
-    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
-    $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
@@ -20,18 +19,9 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kecamatan
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
-                Kelurahan
-            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
                 DPT
             </th>
-
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    Kotak Kosong
-                </th>
-            @endif
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
@@ -39,6 +29,12 @@
                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                     </th>
                 @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    Kotak Kosong
+                </th>
             @endif
 
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
@@ -69,16 +65,11 @@
 
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan?->kabupaten?->nama ?? '-' }}
+                    {{ $datum->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan?->nama ?? '-' }}
-                </td>
-
-                {{-- Kelurahan --}}
-                <td class="py-3 px-4 text-xs text-left border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 
@@ -86,13 +77,6 @@
                 <td class="py-3 px-4 text-xs border dpt">
                     {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
-
-                {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
-                    </td>
-                @endif
 
                 {{-- Calon-calon --}}
                 @if (!$isCalonColumnIgnored)
@@ -104,6 +88,13 @@
                             {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
+                @endif
+
+                {{-- Kotak Kosong --}}
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                    <td class="py-3 px-4 text-xs border kotak-kosong">
+                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                    </td>
                 @endif
 
                 {{-- Suara Sah --}}

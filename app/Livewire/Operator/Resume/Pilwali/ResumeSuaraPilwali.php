@@ -28,7 +28,7 @@ class ResumeSuaraPilwali extends Component
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function mount()
@@ -208,7 +208,7 @@ class ResumeSuaraPilwali extends Component
         $this->fillSelectedKecamatan();
         
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
