@@ -113,6 +113,7 @@
                     <thead>
                         <tr class="bg-[#3560A0] text-white">
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">No Urut</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nama Pasangan Calon</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Menjabat Sebagai</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Provinsi atau Kabupaten/Kota</th>
@@ -126,19 +127,18 @@
                                 <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                     {{ $cal->getThreeDigitsId() }}
                                 </td>
-
-                                <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-nama="{{ $cal->nama }}" data-nama-wakil="{{ $cal->nama_wakil }}">
+                                <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-id="{{ $cal->id }}" data-no-urut="{{ $cal->no_urut }}">
+                                    {{ $cal->no_urut ?? '-' }}
+                                </td>
+                                <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile" data-nama="{{ $cal->nama }}" data-nama-wakil="{{ $cal->nama_wakil }}">
                                     {{ $cal->nama }}/{{ $cal->nama_wakil }}
                                 </td>
-
                                 <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile capitalize" data-posisi="{{ $cal->posisi }}">
                                     {{ strtolower($cal->posisi) }}
                                 </td>
-
                                 <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile capitalize" data-provinsi-id="{{ $cal->provinsi?->id }}" data-kabupaten-id="{{ $cal->kabupaten?->id }}">
                                     {{ strtolower(($cal->posisi == 'GUBERNUR' ? $cal->provinsi?->nama : $cal->kabupaten?->nama) ?? '-') }}
                                 </td>
-
                                 <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile flex items-start">
                                     @if ($cal->foto != null)
                                         <img src="{{ $disk->url($cal->foto) }}" class="rounded-md mr-1" width="150" height="75" alt="{{ $cal->nama }}">
@@ -149,7 +149,7 @@
                                 <td class="px-4 py-4 border-b border-gray-200 text-sm-mobile">
                                     <div class="flex items-center">
                                         <button class="text-[#3560A0] hover:text-blue-900 edit-calon-btn"><i class="fas fa-edit"></i></button>
-                                        <button class="text-red-600 hover:text-red-900 ml-4 hapus-calon-btn"><i class="fas fa-trash-alt"></i></button>
+                                        <button class="text-red-600 hover:text-red-900 ml-4 hapus-calon-btn" data-id="{{ $cal->id }}"><i class="fas fa-trash-alt"></i></button>
                                         @if ($cal->foto != null)
                                             <button class="text-red-600 hover:text-red-900 ml-4 pt-1 hapus-gambar-calon-btn" data-url="{{ $disk->url($cal->foto) }}">
                                                 <img src="{{ asset('assets/icon/delete_image.svg') }}" alt="Hapus Gambar">
@@ -160,7 +160,7 @@
                             </tr>
                         @empty
                             <tr class="hover:bg-gray-200 text-center">
-                                <td class="py-5" colspan="6">
+                                <td class="py-5" colspan="7">
                                     @if (request()->has('cari'))
                                         <p>Tidak ada data calon dengan kata kunci "{{ request()->get('cari') }}"</p>
                                     @else

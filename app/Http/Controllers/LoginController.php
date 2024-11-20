@@ -49,7 +49,7 @@ class LoginController extends Controller
             if ($activeDevices >= $user->limit) {
                 Auth::logout();
                 return back()->withErrors([
-                    'username' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan.',
+                    'username' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan atau hubungi pihak admin.',
                 ])->withInput($request->only('username'));
             }
 
