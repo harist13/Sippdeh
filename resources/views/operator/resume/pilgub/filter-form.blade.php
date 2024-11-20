@@ -1,110 +1,7 @@
 <div>
-    <!-- Kabupaten Multiple Select -->
-    <div class="relative mb-5" x-data="{ open: false }" @click.away="open = false">
-        <label class="block text-sm font-semibold mb-3">Kab/Kota</label>
-
-        <div class="relative">
-            <button @click="open = !open" type="button" class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between">
-				
-                @if (count($selectedKabupaten) > 0)
-                    <span>{{ count($selectedKabupaten) }} dipilih</span>
-                @else
-                    <span>Pilih Kab/Kota</span>
-                @endif
-
-                <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-			
-            <div x-show="open" class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
-                <!-- Dropdown list -->
-                <div class="max-h-60 overflow-y-auto">
-                    @foreach($kabupaten as $kab)
-						<label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
-							<input type="checkbox" 
-								wire:model.live="selectedKabupaten" 
-								value="{{ $kab['id'] }}"
-								class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
-							<span class="ml-2">{{ $kab['name'] }}</span>
-						</label>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Kecamatan Multiple Select -->
-    <div class="relative mb-5" x-data="{ open: false }" @click.away="open = false">
-        <label class="block text-sm font-semibold mb-3">Kecamatan</label>
-        <div class="relative">
-            <button @click="open = !open"
-                    type="button"
-                    class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between"
-                    :class="{ 'opacity-50 cursor-not-allowed': {{ count($selectedKabupaten) === 0 ? 'true' : 'false' }} }"
-                    :disabled="{{ count($selectedKabupaten) === 0 ? 'true' : 'false' }}">
-                @if (count($selectedKecamatan) > 0)
-                    <span>{{ count($selectedKecamatan) }} dipilih</span>
-                @else
-                    <span>Pilih Kecamatan</span>
-                @endif
-                <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            <div x-show="open && {{ count($selectedKabupaten) > 0 ? 'true' : 'false' }}" 
-                 class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
-                <!-- Dropdown list -->
-                <div class="max-h-60 overflow-y-auto">
-                    @foreach($kecamatan as $kec)
-                    <label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                        <input type="checkbox" 
-                               wire:model.live="selectedKecamatan" 
-                               value="{{ $kec['id'] }}"
-                               class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
-                        <span class="ml-2">{{ $kec['name'] }}</span>
-                    </label>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Kelurahan Multiple Select -->
-    <div class="relative mb-5" x-data="{ open: false }" @click.away="open = false">
-        <label class="block text-sm font-semibold mb-3">Kelurahan</label>
-        <div class="relative">
-            <button @click="open = !open" 
-                    type="button"
-                    class="w-full h-10 px-3 text-sm border border-[#e0e0e0] rounded-lg focus:outline-none focus:border-[#3560a0] bg-white flex items-center justify-between"
-                    :class="{ 'opacity-50 cursor-not-allowed': {{ count($selectedKecamatan) === 0 ? 'true' : 'false' }} }"
-                    :disabled="{{ count($selectedKecamatan) === 0 ? 'true' : 'false' }}">
-                @if (count($selectedKelurahan) > 0)
-                    <span>{{ count($selectedKelurahan) }} dipilih</span>
-                @else
-                    <span>Pilih Kelurahan</span>
-                @endif
-                <svg class="w-4 h-4" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            <div x-show="open && {{ count($selectedKecamatan) > 0 ? 'true' : 'false' }}" 
-                 class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
-                <!-- Dropdown list -->
-                <div class="max-h-60 overflow-y-auto">
-                    @foreach($kelurahan as $kel)
-                    <label class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                        <input type="checkbox" 
-                               wire:model.live="selectedKelurahan" 
-                               value="{{ $kel['id'] }}"
-                               class="rounded border-gray-300 text-[#3560a0] focus:ring-[#3560a0]">
-                        <span class="ml-2">{{ $kel['name'] }}</span>
-                    </label>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('operator.resume.pilgub.select-kabupaten')
+    @include('operator.resume.pilgub.select-kecamatan')
+    @include('operator.resume.pilgub.select-kelurahan')
 
     <!-- Show Columns Section -->
     <div class="relative mb-5">
@@ -179,3 +76,13 @@
         </button>
     </div>
 </div>
+
+@assets
+    <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
+@endassets
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
+    </script>
+@endpush

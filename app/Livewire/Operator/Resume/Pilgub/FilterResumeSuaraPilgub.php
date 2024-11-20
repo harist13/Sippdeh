@@ -76,42 +76,28 @@ class FilterResumeSuaraPilgub extends Component
             ->toArray();
     }
 
-    private function syncAvailableColumnsByWilayah()
+    private function resetAvailableColumns()
     {
-        if (!empty($this->selectedKabupaten)) {
-            $this->availableColumns = ['KABUPATEN', 'CALON'];
-            $this->includedColumns = ['KABUPATEN', 'CALON'];
-        }
-
-        if (!empty($this->selectedKecamatan)) {
-            $this->availableColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
-            $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'CALON'];
-        }
-
-        if (!empty($this->selectedKelurahan)) {
-            $this->availableColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-            $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-        }
+        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     }
 
     public function updatedSelectedKabupaten()
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-
-        $this->syncAvailableColumnsByWilayah();
+        $this->resetAvailableColumns();
     }
 
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-
-        $this->syncAvailableColumnsByWilayah();
+        $this->resetAvailableColumns();
     }
 
     public function updatedSelectedKelurahan()
     {
-        $this->syncAvailableColumnsByWilayah();
+        $this->resetAvailableColumns();
     }
 
     public function resetFilter()

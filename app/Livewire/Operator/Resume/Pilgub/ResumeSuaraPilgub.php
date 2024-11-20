@@ -30,13 +30,13 @@ class ResumeSuaraPilgub extends Component
     public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function mount()
     {
         $this->fillSelectedKabupaten();
-        $this->includedColumns = ['KABUPATEN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'CALON'];
     }
 
     public function render()
@@ -245,7 +245,7 @@ class ResumeSuaraPilgub extends Component
 
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
