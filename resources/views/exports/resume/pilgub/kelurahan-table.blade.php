@@ -34,18 +34,18 @@
                 DPT
             </th>
 
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
-                    Kotak Kosong
-                </th>
-            @endif
-
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
                     <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                     </th>
                 @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
+                    Kotak Kosong
+                </th>
             @endif
 
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
@@ -100,13 +100,6 @@
                     {{ $datum->dpt }}
                 </td>
 
-                {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td style="text-align: center; border: 1px solid black;">
-                        {{ $datum->kotak_kosong }}
-                    </td>
-                @endif
-
                 {{-- Calon-calon --}}
                 @if (!$isCalonColumnIgnored)
                     @foreach ($paslon as $calon)
@@ -117,6 +110,13 @@
                             {{ $suara ? $suara->total_suara : 0 }}
                         </td>
                     @endforeach
+                @endif
+
+                {{-- Kotak Kosong --}}
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                    <td style="text-align: center; border: 1px solid black;">
+                        {{ $datum->kotak_kosong }}
+                    </td>
                 @endif
 
                 {{-- Suara Sah --}}

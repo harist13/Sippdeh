@@ -1,7 +1,7 @@
 <div>
-    @include('operator.resume.pilgub.select-kabupaten')
-    @include('operator.resume.pilgub.select-kecamatan')
-    @include('operator.resume.pilgub.select-kelurahan')
+    @include('operator.resume.pilgub.wilayah-selects.select-kabupaten')
+    @include('operator.resume.pilgub.wilayah-selects.select-kecamatan')
+    @include('operator.resume.pilgub.wilayah-selects.select-kelurahan')
 
     <!-- Show Columns Section -->
     <div class="relative mb-5">

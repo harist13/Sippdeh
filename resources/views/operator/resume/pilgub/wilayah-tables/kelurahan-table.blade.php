@@ -31,18 +31,18 @@
                 DPT
             </th>
 
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    Kotak Kosong
-                </th>
-            @endif
-
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
                     <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                     </th>
                 @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    Kotak Kosong
+                </th>
             @endif
 
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
@@ -91,13 +91,6 @@
                     {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
 
-                {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
-                    </td>
-                @endif
-
                 {{-- Calon-calon --}}
                 @if (!$isCalonColumnIgnored)
                     @foreach ($paslon as $calon)
@@ -108,6 +101,13 @@
                             {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
+                @endif
+
+                {{-- Kotak Kosong --}}
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                    <td class="py-3 px-4 text-xs border kotak-kosong">
+                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                    </td>
                 @endif
 
                 {{-- Suara Sah --}}
