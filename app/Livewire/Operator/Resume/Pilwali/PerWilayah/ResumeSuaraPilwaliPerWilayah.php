@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilwali;
+namespace App\Livewire\Operator\Resume\Pilwali\PerWilayah;
 
 use App\Exports\ResumePilwaliExport;
 use App\Models\Calon;
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ResumeSuaraPilwali extends Component
+class ResumeSuaraPilwaliPerWilayah extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
@@ -54,7 +54,7 @@ class ResumeSuaraPilwali extends Component
         $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
         $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
         
-        return view('operator.resume.pilwali.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -66,7 +66,7 @@ class ResumeSuaraPilwali extends Component
         $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
         $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
         
-        return view('operator.resume.pilwali.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
     }
 
     private function getSuaraPerKelurahan()

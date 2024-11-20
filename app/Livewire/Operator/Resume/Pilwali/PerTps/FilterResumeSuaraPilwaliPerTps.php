@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Livewire\Operator\InputSuara\Pilbup;
+namespace App\Livewire\Operator\Resume\Pilwali\PerTps;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Illuminate\Contracts\View\View;
-use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
-class FilterInputSuaraPilbup extends Component
+class FilterResumeSuaraPilwaliPerTps extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
@@ -33,7 +33,7 @@ class FilterInputSuaraPilbup extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.input-suara.pilbup.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilwali.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions(): array
@@ -70,7 +70,7 @@ class FilterInputSuaraPilbup extends Component
         $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
-        $this->dispatch('reset-filter')->to(InputSuaraPilbup::class);
+        $this->dispatch('reset-filter')->to(ResumeSuaraPilwaliPerTps::class);
     }
 
     public function applyFilter(): void
@@ -83,6 +83,6 @@ class FilterInputSuaraPilbup extends Component
             partisipasi: $this->partisipasi
         );
 
-        $event->to(InputSuaraPilbup::class);
+        $event->to(ResumeSuaraPilwaliPerTps::class);
     }
 }

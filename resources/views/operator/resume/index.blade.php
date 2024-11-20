@@ -14,7 +14,9 @@
 
 		@if ($calonWalikota->count())
 			<div class="mt-10">
-				@livewire('operator.resume.pilwali.resume-suara-pilwali')
+				@livewire('operator.resume.pilwali.per-wilayah.resume-suara-pilwali-per-wilayah')
+				@livewire('operator.resume.pilwali.per-tps.resume-suara-pilwali-per-tps')
+				@livewire('operator.paslon-pilwali')
 			</div>
 		@else
 			<div class="mt-10">

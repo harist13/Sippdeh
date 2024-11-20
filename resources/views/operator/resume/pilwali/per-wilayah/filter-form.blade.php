@@ -1,6 +1,6 @@
 <div>
-	@include('operator.resume.pilgub.per-tps.wilayah-selects.select-kecamatan')
-	@include('operator.resume.pilgub.per-tps.wilayah-selects.select-kelurahan')
+	@include('operator.resume.pilwali.per-wilayah.wilayah-selects.select-kecamatan')
+	@include('operator.resume.pilwali.per-wilayah.wilayah-selects.select-kelurahan')
 
 	<!-- Show Columns Section -->
 	<div class="relative mb-5">
@@ -20,27 +20,27 @@
 
 	<!-- Partisipasi Section -->
 	<div class="relative mb-5">
-			<label class="block text-sm font-semibold mb-3">Tingkat Partisipasi</label>
-			<div class="flex flex-wrap gap-2">
-					@foreach(['HIJAU', 'KUNING', 'MERAH'] as $color)
-					<label class="flex items-center cursor-pointer">
-							<input type="checkbox" 
-									wire:model.live="partisipasi" 
-									value="{{ $color }}" 
-									class="hidden">
-							<span class="px-3 py-1 rounded-full border text-sm font-medium transition-all duration-200"
-									:class="{ 
-											'bg-[#3560a0]': @js(in_array($color, $partisipasi)),
-											'text-[#69d788]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'HIJAU',
-											'text-[#ffe608]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'KUNING',
-											'text-[#fe756c]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'MERAH',
-											'text-gray-600 bg-white': !@js(in_array($color, $partisipasi))
-									}">
-									{{ ucfirst($color) }}
-							</span>
-					</label>
-					@endforeach
-			</div>
+		<label class="block text-sm font-semibold mb-3">Tingkat Partisipasi</label>
+		<div class="flex flex-wrap gap-2">
+			@foreach(['HIJAU', 'KUNING', 'MERAH'] as $color)
+				<label class="flex items-center cursor-pointer">
+					<input type="checkbox" 
+						wire:model.live="partisipasi" 
+						value="{{ $color }}" 
+						class="hidden">
+					<span class="px-3 py-1 rounded-full border text-sm font-medium transition-all duration-200"
+						:class="{ 
+							'bg-[#3560a0]': @js(in_array($color, $partisipasi)),
+							'text-[#69d788]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'HIJAU',
+							'text-[#ffe608]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'KUNING',
+							'text-[#fe756c]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'MERAH',
+							'text-gray-600 bg-white': !@js(in_array($color, $partisipasi))
+						}">
+						{{ ucfirst($color) }}
+					</span>
+				</label>
+			@endforeach
+		</div>
 	</div>
 
 	<hr class="h-1 my-3">

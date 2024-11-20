@@ -41,7 +41,7 @@
     {{-- Filter Button --}}
     <button 
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
-        id="openFilterPilwali"
+        id="openFilterPilwaliPerWilayah"
     >
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
@@ -50,33 +50,33 @@
 
 @push('scripts')
     <script>
-        function showFilterPilwaliModal() {
-            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
-            filterPilwaliModal.classList.remove('hidden');
+        function showFilterPilwaliPerWilayahModal() {
+            const filterPilwaliPerWilayahModal = document.getElementById('filterPilwaliPerWilayahModal');
+            filterPilwaliPerWilayahModal.classList.remove('hidden');
         }
 
-        function closeFilterPilwaliModal() {
-            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
-            filterPilwaliModal.classList.add('hidden');
+        function closeFilterPilwaliPerWilayahModal() {
+            const filterPilwaliPerWilayahModal = document.getElementById('filterPilwaliPerWilayahModal');
+            filterPilwaliPerWilayahModal.classList.add('hidden');
         }
         
-        function initializeFilter() {
-            document.getElementById('openFilterPilwali').addEventListener('click', showFilterPilwaliModal);
-            document.getElementById('cancelFilterPilwali').addEventListener('click', closeFilterPilwaliModal);
+        function initializeFilterPilwaliPerWilayah() {
+            document.getElementById('openFilterPilwaliPerWilayah').addEventListener('click', showFilterPilwaliPerWilayahModal);
+            document.getElementById('cancelFilterPilwaliPerWilayah').addEventListener('click', closeFilterPilwaliPerWilayahModal);
 
             document.addEventListener('keyup', function(event) {
                 if (event.key === "Escape") {
-                    closeFilterPilwaliModal();
+                    closeFilterPilwaliPerWilayahModal();
                 }
             });
 
             document.addEventListener('click', function(event) {
-                if (event.target == filterPilwaliModal) {
-                    closeFilterPilwaliModal();
+                if (event.target == filterPilwaliPerWilayahModal) {
+                    closeFilterPilwaliPerWilayahModal();
                 }
             });
         }
 
-        initializeFilter();
+        initializeFilterPilwaliPerWilayah();
     </script>
 @endpush

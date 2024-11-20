@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilwali;
+namespace App\Livewire\Operator\Resume\Pilwali\PerWilayah;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterResumeSuaraPilwali extends Component
+class FilterResumeSuaraPilwaliPerWilayah extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
@@ -32,7 +32,7 @@ class FilterResumeSuaraPilwali extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.resume.pilwali.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilwali.per-wilayah.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()
@@ -76,7 +76,7 @@ class FilterResumeSuaraPilwali extends Component
 
     public function resetFilter()
     {
-        $this->dispatch('reset-filter')->to(ResumeSuaraPilwali::class);
+        $this->dispatch('reset-filter')->to(ResumeSuaraPilwaliPerWilayah::class);
     }
 
     public function applyFilter()
@@ -89,6 +89,6 @@ class FilterResumeSuaraPilwali extends Component
             partisipasi: $this->partisipasi
         );
 
-        $event->to(ResumeSuaraPilwali::class);
+        $event->to(ResumeSuaraPilwaliPerWilayah::class);
     }
 }
