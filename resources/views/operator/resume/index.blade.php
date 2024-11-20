@@ -2,8 +2,10 @@
 
 @section('content')
 	<main class="container mx-auto px-4 py-8">
-		@livewire('operator.resume.pilgub.resume-suara-pilgub')
-
+		@livewire('operator.resume.pilgub.per-wilayah.resume-suara-pilgub-per-wilayah')
+		@livewire('operator.resume.pilgub.per-tps.resume-suara-pilgub-per-tps')
+		@livewire('operator.paslon-pilgub')
+		
 		@php
             $calonWalikota = App\Models\Calon::query()
                 ->wherePosisi('WALIKOTA')

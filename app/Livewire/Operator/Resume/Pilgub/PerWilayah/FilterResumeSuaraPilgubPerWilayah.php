@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilgub;
+namespace App\Livewire\Operator\Resume\Pilgub\PerWilayah;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
@@ -8,7 +8,7 @@ use App\Models\Kelurahan;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterResumeSuaraPilgub extends Component
+class FilterResumeSuaraPilgubPerWilayah extends Component
 {
     public $selectedKabupaten = [];
     public $selectedKecamatan = [];
@@ -36,7 +36,7 @@ class FilterResumeSuaraPilgub extends Component
         $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.resume.pilgub.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('operator.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getKabupatenOptions()
@@ -102,7 +102,7 @@ class FilterResumeSuaraPilgub extends Component
 
     public function resetFilter()
     {
-        $this->dispatch('reset-filter')->to(ResumeSuaraPilgub::class);
+        $this->dispatch('reset-filter')->to(ResumeSuaraPilgubPerWilayah::class);
     }
 
     public function applyFilter()
@@ -116,6 +116,6 @@ class FilterResumeSuaraPilgub extends Component
             partisipasi: $this->partisipasi
         );
 
-        $event->to(ResumeSuaraPilgub::class);
+        $event->to(ResumeSuaraPilgubPerWilayah::class);
     }
 }

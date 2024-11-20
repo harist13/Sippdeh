@@ -1,7 +1,7 @@
 <div>
-    @include('operator.resume.pilgub.wilayah-selects.select-kabupaten')
-    @include('operator.resume.pilgub.wilayah-selects.select-kecamatan')
-    @include('operator.resume.pilgub.wilayah-selects.select-kelurahan')
+    @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kabupaten')
+    @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kecamatan')
+    @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kelurahan')
 
     <!-- Show Columns Section -->
     <div class="relative mb-5">
@@ -77,7 +77,7 @@
     </div>
 </div>
 
-@assets
+{{-- @assets
     <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
 @endassets
 
@@ -85,4 +85,4 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
     </script>
-@endpush
+@endpush --}}

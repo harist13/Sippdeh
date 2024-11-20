@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Resume\Pilgub;
+namespace App\Livewire\Operator\Resume\Pilgub\PerWilayah;
 
 use App\Exports\ResumePilgubExport;
 use App\Models\Calon;
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ResumeSuaraPilgub extends Component
+class ResumeSuaraPilgubPerWilayah extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
@@ -57,11 +57,8 @@ class ResumeSuaraPilgub extends Component
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKelurahan();
         $scope = 'kelurahan';
-
-        $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
-        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
         
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -69,11 +66,9 @@ class ResumeSuaraPilgub extends Component
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKecamatan();
         $scope = 'kecamatan';
+    
         
-        $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
-        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
-        
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKabupatenTable()
@@ -81,11 +76,9 @@ class ResumeSuaraPilgub extends Component
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKabupaten();
         $scope = 'kabupaten';
+    
         
-        $suaraSah = $this->getSuaraSahOfOperatorProvinsi();
-        $kotakKosong = $this->getKotakKosongOfOperatorProvinsi();
-        
-        return view('operator.resume.pilgub.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getSuaraPerKelurahan()
@@ -144,69 +137,14 @@ class ResumeSuaraPilgub extends Component
         });
     }
 
-    private function getProvinsiIdOfOperator(): int
+    private function fillSelectedKabupaten()
     {
-        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
-
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->provinsi_id;
-        }
-
-        return 0;
-    }
-
-    private function getSuaraSahOfOperatorProvinsi(): int
-    {
-        $provinsi = Provinsi::select([
-            'provinsi.id',
-            'provinsi.nama',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara_sah')
-        ])
-        ->leftJoin('kabupaten', 'kabupaten.provinsi_id', '=', 'provinsi.id')
-        ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-        ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-        ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-        ->leftJoin('suara_calon', function ($join) {
-            $join->on('suara_calon.tps_id', '=', 'tps.id')
-                ->whereIn('suara_calon.calon_id', function ($query) {
-                    $query->select('id')
-                        ->from('calon')
-                        ->where('posisi', $this->posisi);
-                });
-        })
-        ->where('provinsi.id', $this->getProvinsiIdOfOperator())
-        ->groupBy('provinsi.id');
-        
-        if ($provinsi->count() > 0) {
-            $provinsi = $provinsi->first();
-            return $provinsi->suara_sah;
-        }
-
-        return 0;
-    }
-
-    private function getKotakKosongOfOperatorProvinsi(): int
-    {
-        $provinsi = Provinsi::select([
-            'provinsi.id',
-            DB::raw('SUM(suara_tps.kotak_kosong) AS kotak_kosong'),
-        ])
-            ->leftJoin('kabupaten', 'kabupaten.provinsi_id', '=', 'provinsi.id')
-            ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-            ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-            ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-            ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
-            ->where('suara_tps.posisi', $this->posisi)
-            ->where('provinsi.id', $this->getProvinsiIdOfOperator())
-            ->groupBy('provinsi.id');
-        
-        if ($provinsi->count() > 0) {
-            $provinsi = $provinsi->first();
-            return $provinsi->kotak_kosong;
-        }
-
-        return 0;
+        $this->selectedKabupaten = Kabupaten::query()
+            ->whereHas('provinsi', function (Builder $builder) {
+                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            })
+            ->pluck('id')
+            ->all();
     }
 
     private function getCalon()
@@ -228,16 +166,18 @@ class ResumeSuaraPilgub extends Component
         return $builder->get();
     }
 
-    private function fillSelectedKabupaten()
+    private function getProvinsiIdOfOperator(): int
     {
-        $this->selectedKabupaten = Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
-            ->pluck('id')
-            ->all();
-    }
+        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
 
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->provinsi_id;
+        }
+
+        return 0;
+    }
+    
     #[On('reset-filter')] 
     public function resetFilter()
     {
