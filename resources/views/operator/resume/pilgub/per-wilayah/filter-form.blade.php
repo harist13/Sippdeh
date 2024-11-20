@@ -77,7 +77,7 @@
     </div>
 </div>
 
-{{-- @assets
+@assets
     <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
 @endassets
 
@@ -85,4 +85,4 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
     </script>
-@endpush --}}
+@endpush
