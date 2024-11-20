@@ -5,7 +5,8 @@ class WilayahSelect {
 
         this.state = {
             selectedValues: new Set(),
-            isOpen: false
+            isOpen: false,
+            originalValues: new Set()
         };
 
         this.initializeEventListeners();
@@ -20,47 +21,33 @@ class WilayahSelect {
             optionsContainer: this.container.querySelector('.options-container'),
             searchInput: this.container.querySelector('.search-input'),
             selectAllButton: this.container.querySelector('.select-all-button'),
-            options: this.container.querySelectorAll('.option'),
-            applyButton: this.container.querySelector('.apply-button')
+            options: this.container.querySelectorAll('.option')
         };
     }
 
     initializeEventListeners() {
-        // Button click
-        this.elements.button.addEventListener('click', () => this.toggleDropdown());
+        this.elements.button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleDropdown();
+        });
 
-        // Search functionality
         this.initializeSearch();
-
-        // Select all functionality
         this.initializeSelectAll();
-
-        // Options selection
         this.initializeOptions();
-
-        // Apply button
-        this.elements.applyButton.addEventListener('click', () => this.applySelection());
-
-        // Outside click
         this.initializeOutsideClick();
     }
 
     initializeSearch() {
-        const {
-            searchInput,
-            options
-        } = this.elements;
+        const { searchInput } = this.elements;
 
-        // Prevent Ctrl+A propagation
-        searchInput.addEventListener('keydown', (event) => {
-            if (event.ctrlKey && event.key === "a") {
-                event.stopPropagation();
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === "a") {
+                e.stopPropagation();
             }
         });
 
-        // Search functionality
-        searchInput.addEventListener('keyup', (event) => {
-            this.filterOptions(event.target.value);
+        searchInput.addEventListener('keyup', (e) => {
+            this.filterOptions(e.target.value);
         });
     }
 
@@ -75,13 +62,11 @@ class WilayahSelect {
     }
 
     initializeSelectAll() {
-        const {
-            selectAllButton
-        } = this.elements;
+        const { selectAllButton } = this.elements;
         if (!selectAllButton) return;
 
-        selectAllButton.addEventListener('click', (event) => {
-            event.stopPropagation();
+        selectAllButton.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.toggleSelectAll();
         });
     }
@@ -95,13 +80,16 @@ class WilayahSelect {
         });
 
         this.updateSelectAllButton();
+        this.updateSelectedText();
     }
 
     initializeOptions() {
         this.elements.options.forEach(option => {
-            option.addEventListener('click', () => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.toggleOption(option);
                 this.updateSelectAllButton();
+                this.updateSelectedText();
             });
         });
     }
@@ -127,35 +115,70 @@ class WilayahSelect {
     toggleDropdown() {
         if (this.elements.button.disabled) return;
 
-        this.state.isOpen = !this.state.isOpen;
-        WilayahSelect.closeAllDropdowns();
+        if (!this.state.isOpen) {
+            // Opening dropdown
+            this.state.originalValues = new Set(this.state.selectedValues);
+            this.openDropdown();
+        } else {
+            // Closing dropdown
+            this.closeDropdown();
+        }
 
-        if (this.state.isOpen) {
-            this.elements.optionsContainer.classList.remove('hidden');
-            this.elements.optionsContainer.classList.add('block');
+        this.state.isOpen = !this.state.isOpen;
+    }
+
+    openDropdown() {
+        // Close other dropdowns first
+        document.querySelectorAll('.options-container').forEach(container => {
+            if (container !== this.elements.optionsContainer) {
+                container.classList.remove('block');
+                container.classList.add('hidden');
+            }
+        });
+
+        // Open this dropdown
+        this.elements.optionsContainer.classList.remove('hidden');
+        this.elements.optionsContainer.classList.add('block');
+
+        // Reset search
+        if (this.elements.searchInput) {
+            this.elements.searchInput.value = '';
+            this.filterOptions('');
         }
     }
 
     initializeOutsideClick() {
-        const handleOutsideClick = (e) => {
-            if (!this.container.contains(e.target)) {
+        document.addEventListener('click', (e) => {
+            if (this.state.isOpen && !this.container.contains(e.target)) {
                 this.closeDropdown();
+                this.state.isOpen = false;
             }
-        };
-
-        document.addEventListener('click', handleOutsideClick);
+        });
     }
 
     closeDropdown() {
-        this.state.isOpen = false;
+        const hasChanges = this.hasSelectionChanged();
+        
         this.elements.optionsContainer.classList.remove('block');
         this.elements.optionsContainer.classList.add('hidden');
+        
+        if (hasChanges) {
+            this.updateHiddenSelect();
+        }
     }
 
-    applySelection() {
-        this.updateSelectedText();
-        this.updateHiddenSelect();
-        this.closeDropdown();
+    hasSelectionChanged() {
+        if (this.state.selectedValues.size !== this.state.originalValues.size) {
+            return true;
+        }
+
+        for (const value of this.state.selectedValues) {
+            if (!this.state.originalValues.has(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     updateSelectedText() {
@@ -179,9 +202,11 @@ class WilayahSelect {
 
     initializeSelectedOptions() {
         this.state.selectedValues.clear();
+        this.state.originalValues.clear();
 
         Array.from(this.elements.hiddenSelect.selectedOptions).forEach(option => {
             this.state.selectedValues.add(option.value);
+            this.state.originalValues.add(option.value);
 
             const optionEl = this.elements.optionsContainer
                 .querySelector(`.option[data-value="${option.value}"]`);
@@ -212,15 +237,8 @@ class WilayahSelect {
         const visibleOptions = this.getVisibleOptions();
         const allSelected = this.areAllVisibleOptionsSelected(visibleOptions);
 
-        this.elements.selectAllButton.textContent =
+        this.elements.selectAllButton.textContent = 
             allSelected ? 'Batal Pilih Semua' : 'Pilih Semua';
-    }
-
-    static closeAllDropdowns() {
-        document.querySelectorAll('.options-container').forEach(container => {
-            container.classList.remove('block');
-            container.classList.add('hidden');
-        });
     }
 }
 
@@ -238,9 +256,7 @@ function initializeWilayahSelects(selectQuery) {
     initializeSelects();
 
     // Re-initialize on Livewire updates
-    Livewire.hook('morph.updated', ({
-        el
-    }) => {
+    Livewire.hook('morph.updated', ({ el }) => {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
             initializeSelects();

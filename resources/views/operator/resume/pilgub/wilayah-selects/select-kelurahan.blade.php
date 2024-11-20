@@ -54,13 +54,6 @@
 						@endif
 					@endif
 				</div>
-
-				<!-- Apply button section -->
-				<div class="border-t border-gray-200 bg-gray-50 px-3 py-2">
-					<button wire:loading.attr="disabled" wire:target="selectedKelurahan" type="button" class="apply-button w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:bg-blue-200">
-						Terapkan
-					</button>
-				</div>
 			</div>
 		</div>
 
