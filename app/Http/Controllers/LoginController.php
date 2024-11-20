@@ -56,6 +56,13 @@ class LoginController extends Controller
             $request->session()->regenerate();
             session(['user_wilayah' => $user->wilayah?->nama ?? '-']);
 
+            if ($user->role == 'operator') {
+                session(['operator_data' => [
+                    'provinsi_id' => $user->kabupaten->provinsi_id,
+                    'kabupaten_id' => $user->kabupaten_id
+                ]]);
+            }
+
             // Simpan riwayat login
             LoginHistory::create([
                 'user_id' => $user->id,
