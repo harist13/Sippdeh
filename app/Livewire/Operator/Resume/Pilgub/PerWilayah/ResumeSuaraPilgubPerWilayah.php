@@ -9,6 +9,7 @@ use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
+use App\Traits\SortResumeColumns;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -19,7 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResumeSuaraPilgubPerWilayah extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'GUBERNUR';
 
@@ -86,6 +87,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $builder = ResumeSuaraPilgubKelurahan::whereIn('id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -99,6 +101,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $builder = ResumeSuaraPilgubKecamatan::whereIn('id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -112,6 +115,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $builder = ResumeSuaraPilgubKabupaten::whereIn('id', $this->selectedKabupaten);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
