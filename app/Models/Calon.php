@@ -13,7 +13,7 @@ class Calon extends Model
 
     protected $table = 'calon';
 
-    protected $fillable = ['nama', 'nama_wakil', 'posisi', 'provinsi_id', 'kabupaten_id', 'foto'];
+    protected $fillable = ['no_urut','nama', 'nama_wakil', 'posisi', 'provinsi_id', 'kabupaten_id', 'foto'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
