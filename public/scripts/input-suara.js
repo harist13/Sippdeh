@@ -177,7 +177,7 @@ class InputSuaraUIManager {
     lastCheckedCheckbox = null;
 
     saveActiveEditableCellInputs = () =>
-        this.caches.components.activeInputs = Array.from(document.querySelectorAll('input[type=number]:not(.hidden)'));
+        this.caches.components.activeInputs = Array.from(document.querySelectorAll('table.input-suara-table input[type=number]:not(.hidden)'));
 
     checksCheckAllCheckboxes = () => this.caches.components.checkAllCheckbox.checked = true;
     unchecksCheckAllCheckboxes = () => this.caches.components.checkAllCheckbox.checked = false;

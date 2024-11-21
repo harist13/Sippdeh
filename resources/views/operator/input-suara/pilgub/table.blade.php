@@ -21,7 +21,7 @@
     </style>
 @endpush
 
-<table class="min-w-full divide-y divide-gray-200">
+<table class="min-w-full divide-y divide-gray-200 input-suara-table">
     <thead class="bg-[#3560A0] text-white">
         <tr>
             <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">

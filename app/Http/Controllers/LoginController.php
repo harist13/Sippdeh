@@ -57,10 +57,10 @@ class LoginController extends Controller
             session(['user_wilayah' => $user->wilayah?->nama ?? '-']);
 
             if ($user->role == 'operator') {
-                session(['operator_data' => [
-                    'provinsi_id' => $user->kabupaten->provinsi_id,
-                    'kabupaten_id' => $user->kabupaten_id
-                ]]);
+                session(['operator_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['operator_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['operator_kabupaten_id' => $user->kabupaten->id]);
+                session(['operator_kabupaten_name' => $user->kabupaten->nama]);
             }
 
             // Simpan riwayat login

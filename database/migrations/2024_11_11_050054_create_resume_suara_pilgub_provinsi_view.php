@@ -22,9 +22,9 @@ return new class extends Migration
                 COALESCE(SUM(resume_suara_pilgub_tps.suara_tidak_sah), 0) AS suara_tidak_sah,
                 COALESCE(SUM(resume_suara_pilgub_tps.suara_masuk), 0) AS suara_masuk,
                 COALESCE(SUM(resume_suara_pilgub_tps.abstain), 0) AS abstain,
-                CASE 
-                    WHEN COALESCE(SUM(resume_suara_pilgub_tps.dpt), 0) > 0
-                    THEN ROUND(((COALESCE(SUM(resume_suara_pilgub_tps.suara_sah), 0) + COALESCE(SUM(resume_suara_pilgub_tps.suara_tidak_sah), 0)) / COALESCE(SUM(resume_suara_pilgub_tps.dpt), 0)) * 100, 1)
+                CASE
+                    WHEN COALESCE(SUM(resume_suara_pilgub_tps.dpt), 0) > 0 
+                    THEN ROUND(((COALESCE(SUM(resume_suara_pilgub_tps.suara_sah), 0) + COALESCE(SUM(resume_suara_pilgub_tps.suara_tidak_sah), 0)) / (COALESCE(SUM(resume_suara_pilgub_tps.dpt), 0) + COALESCE(SUM(daftar_pemilih.dptb), 0) + COALESCE(SUM(daftar_pemilih.dpk), 0))) * 100, 1)
                     ELSE 0 
                 END AS partisipasi
             FROM 
@@ -39,6 +39,8 @@ return new class extends Migration
                 tps ON tps.kelurahan_id = kelurahan.id
             LEFT JOIN 
                 resume_suara_pilgub_tps ON resume_suara_pilgub_tps.id = tps.id
+            LEFT JOIN 
+                daftar_pemilih ON daftar_pemilih.kabupaten_id = kabupaten.id
             GROUP BY 
                 provinsi.id;
         ");
