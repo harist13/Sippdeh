@@ -25,4 +25,24 @@ class TamuController extends Controller
     {
         return view('Tamu.dashboard');
     }
+
+    public function updatetamu(Request $request)
+    {
+        $user = Auth::user();
+        
+        $validatedData = $request->validate([
+            'email' => 'required|email|unique:petugas,email,'.$user->id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        $user->email = $validatedData['email'];
+        
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
 }
