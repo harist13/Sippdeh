@@ -76,6 +76,8 @@ class LoginController extends Controller
                 return redirect()->route('Dashboard')->with('success', 'Login berhasil!');
             } elseif ($user->hasRole('operator')) {
                 return redirect()->route('operator.dashboard')->with('success', 'Login berhasil!');
+            } elseif ($user->hasRole('tamu')) {
+                return redirect()->route('tamu.dashboard')->with('success', 'Login berhasil!');
             }
 
             return redirect()->intended('/')->with('success', 'Login berhasil!');

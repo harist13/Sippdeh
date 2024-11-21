@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
         // Ensure the roles are created with the correct guard
         Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         Role::firstOrCreate(['name' => 'operator', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'tamu', 'guard_name' => 'web']);
 
         foreach (Kabupaten::all() as $kabupaten) {
             $namaKabupaten = preg_replace('/\s+/', '', strtolower($kabupaten->nama));
@@ -48,6 +49,20 @@ class UserSeeder extends Seeder
                 // Berikan role operator kepada pengguna tersebut
                 $operator->assignRole('operator');
             }
+
+            // Buat pengguna tamu
+            $tamu = Petugas::create([
+                'username' => "tamu$namaKabupaten",
+                'password' => bcrypt('12345678'),
+                'email' => "tamu$namaKabupaten@sipppdeh.designforus.id",
+                'kabupaten_id' => $kabupaten->id,
+                'role' => 'tamu',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    
+            // Berikan role tamu kepada pengguna tersebut
+            $tamu->assignRole('tamu');
         }
     }
 }
