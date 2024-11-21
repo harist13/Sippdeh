@@ -15,6 +15,9 @@
                     @endif
                 </div>
                 <div class="p-4 text-center">
+                    <div class="text-[#52526c] text-xl font-bold mb-2">
+                         {{ $calon->getFormattedNoUrut() }}
+                    </div>
                     <h4 class="text-[#52526c] font-bold mb-1">
                         {{ $calon->nama }} / {{ $calon->nama_wakil }}
                     </h4>
@@ -44,6 +47,9 @@
                 <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
                 </div>
                 <div class="p-4 text-center">
+                    <div class="text-[#52526c] text-xl font-bold mb-2">
+                        Kotak Kosong
+                    </div>
                     <h4 class="text-[#52526c] font-bold mb-1">
                         Kotak Kosong
                     </h4>

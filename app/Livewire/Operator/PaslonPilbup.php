@@ -18,7 +18,7 @@ class PaslonPilbup extends Component
         $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
         $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
 
-        return view('livewire.operator.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
+        return view('livewire.operator.paslon-pilbup', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
     
     private function getKabupatenIdOfOperator(): int
@@ -92,12 +92,14 @@ class PaslonPilbup extends Component
             'calon.nama_wakil',
             'calon.foto',
             'calon.kabupaten_id',
+            'calon.no_urut',
             DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
             ->where('calon.kabupaten_id', $this->getKabupatenIdOfOperator())
-            ->groupBy('calon.id');
+            ->groupBy('calon.id')
+            ->orderBy('calon.no_urut', 'asc');
 
         return $builder->get();
     }

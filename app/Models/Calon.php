@@ -30,6 +30,21 @@ class Calon extends Model
         return $id;
     }
 
+    public function getFormattedNoUrut(): string {
+        $no = $this->no_urut;
+        $digits = strlen($no);
+
+        if ($digits == 1) {
+            return "0$no";
+        }
+
+        if ($digits == 2) {
+            return "0$no";
+        }
+
+        return $no;
+    }
+
     public function provinsi(): BelongsTo {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }

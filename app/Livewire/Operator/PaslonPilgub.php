@@ -95,12 +95,14 @@ class PaslonPilgub extends Component
             'calon.foto',
             'calon.provinsi_id',
             'calon.kabupaten_id',
+            'calon.no_urut',
             DB::raw('SUM(suara_calon.suara) AS suara'),
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
             ->where('calon.provinsi_id', $this->getProvinsiIdOfOperator())
-            ->groupBy('calon.id');
+            ->groupBy('calon.id')
+            ->orderBy('calon.no_urut', 'asc');
 
         return $builder->get();
     }
