@@ -11,6 +11,9 @@ trait SortResumeColumns {
     public ?string $suaraMasukSort = null;
     public ?string $abstainSort = null;
     public ?string $partisipasiSort = null;
+
+    public ?int $paslonIdSort = null;
+    public ?string $paslonSort = null;
     
     private function sortColumns(Builder $builder): void
     {
@@ -36,6 +39,51 @@ trait SortResumeColumns {
 
         if ($this->partisipasiSort) {
             $builder->orderBy('partisipasi', $this->partisipasiSort);
+        }
+    }
+
+    public function sortPaslonById(int $paslonId)
+    {
+        if ($this->paslonIdSort == null) {
+            $this->paslonIdSort = $paslonId;
+        }
+
+        if ($this->paslonSort == null) {
+            $this->paslonSort = 'asc';
+        } else if ($this->paslonSort == 'asc') {
+            $this->paslonSort = 'desc';
+        } else if ($this->paslonSort == 'desc') {
+            $this->paslonIdSort = null;
+            $this->paslonSort = null;
+        }
+    }
+
+    private function sortResumeSuaraPilgubKabupatenPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'resume_suara_pilgub_kabupaten.id')
+                ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilgub_kabupaten.id',
+                    'resume_suara_pilgub_kabupaten.nama',
+                    'resume_suara_pilgub_kabupaten.provinsi_id',
+                    'resume_suara_pilgub_kabupaten.dpt',
+                    'resume_suara_pilgub_kabupaten.kotak_kosong',
+                    'resume_suara_pilgub_kabupaten.suara_sah',
+                    'resume_suara_pilgub_kabupaten.suara_tidak_sah',
+                    'resume_suara_pilgub_kabupaten.suara_masuk',
+                    'resume_suara_pilgub_kabupaten.abstain',
+                    'resume_suara_pilgub_kabupaten.partisipasi'
+                );
         }
     }
 

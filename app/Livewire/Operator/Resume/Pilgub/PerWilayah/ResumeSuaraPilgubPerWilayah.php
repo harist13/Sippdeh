@@ -34,6 +34,8 @@ class ResumeSuaraPilgubPerWilayah extends Component
     public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
+    public $paslonSorts = [];
+
     public function mount()
     {
         $this->fillSelectedKabupaten();
@@ -77,8 +79,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $paslon = $this->getCalon();
         $suara = $this->getSuaraPerKabupaten();
         $scope = 'kabupaten';
-    
-        
+
         return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
@@ -112,10 +113,24 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
     private function getSuaraPerKabupaten()
     {
-        $builder = ResumeSuaraPilgubKabupaten::whereIn('id', $this->selectedKabupaten);
+        $builder = ResumeSuaraPilgubKabupaten::query()
+            ->selectRaw('
+                resume_suara_pilgub_kabupaten.id,
+                resume_suara_pilgub_kabupaten.nama,
+                resume_suara_pilgub_kabupaten.provinsi_id,
+                resume_suara_pilgub_kabupaten.dpt,
+                resume_suara_pilgub_kabupaten.kotak_kosong,
+                resume_suara_pilgub_kabupaten.suara_sah,
+                resume_suara_pilgub_kabupaten.suara_tidak_sah,
+                resume_suara_pilgub_kabupaten.suara_masuk,
+                resume_suara_pilgub_kabupaten.abstain,
+                resume_suara_pilgub_kabupaten.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kabupaten.id', $this->selectedKabupaten);
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKabupatenPaslon($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
