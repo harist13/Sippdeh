@@ -23,14 +23,29 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kelurahan
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                DPT
-            </th>
+            
+            <th wire:click="sortDpt" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>DPT</span>
+                @if ($dptSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($dptSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($dptSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
+            </th>            
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
-                    <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
-                        {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                    <th wire:key="{{ $calon->id }}" wire:click="sortPaslonById({{ $calon->id }})" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
+                        @if ($paslonIdSort != $calon->id)
+                            <i class="fas fa-sort ml-2"></i>
+                        @elseif ($paslonSort === 'asc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-up ml-2"></i>
+                        @elseif ($paslonSort === 'desc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-down ml-2"></i>
+                        @endif
                     </th>
                 @endforeach
             @endif
@@ -41,20 +56,55 @@
                 </th>
             @endif
 
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Sah
+            <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Sah</span>
+                @if ($suaraSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Tidak Sah
+            <th wire:click="sortSuaraTidakSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Tidak Sah</span>
+                @if ($suaraTidakSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Masuk
+            <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Masuk</span>
+                @if ($suaraMasukSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraMasukSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraMasukSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Abstain
+            <th wire:click="sortAbstain" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Abstain</span>
+                @if ($abstainSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($abstainSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($abstainSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Partisipasi
+            <th wire:click="sortPartisipasi" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Partisipasi</span>
+                @if ($partisipasiSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($partisipasiSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($partisipasiSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
         </tr>
     </thead>

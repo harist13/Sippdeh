@@ -26,12 +26,13 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Exports\InputSuaraPilwaliExport;
+use App\Traits\SortResumeColumns;
 use Sentry\SentrySdk;
 use Exception;
 
 class ResumeSuaraPilwaliPerTps extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'WALIKOTA';
 
@@ -67,6 +68,8 @@ class ResumeSuaraPilwaliPerTps extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+            $this->sortResumeSuaraPilwaliTpsPaslon($builder);
+            $this->sortColumns($builder);
     
             return $builder->paginate($this->perPage);
         } catch (Exception $exception) {
@@ -80,15 +83,27 @@ class ResumeSuaraPilwaliPerTps extends Component
     private function getBaseTPSBuilder(): Builder
     {
         try {
-            return ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereNama(session('user_wilayah'));
+            return ResumeSuaraPilwaliTPS::query()
+                ->selectRaw('
+                    resume_suara_pilwali_tps.id,
+                    resume_suara_pilwali_tps.nama,
+                    resume_suara_pilwali_tps.dpt,
+                    resume_suara_pilwali_tps.kotak_kosong,
+                    resume_suara_pilwali_tps.suara_sah,
+                    resume_suara_pilwali_tps.suara_tidak_sah,
+                    resume_suara_pilwali_tps.suara_masuk,
+                    resume_suara_pilwali_tps.abstain,
+                    resume_suara_pilwali_tps.partisipasi
+                ')
+                ->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            $builder->whereHas('kabupaten', function (Builder $builder) {
+                                $builder->whereId(session('operator_kabupaten_id'));
+                            });
                         });
                     });
                 });
-            });
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
