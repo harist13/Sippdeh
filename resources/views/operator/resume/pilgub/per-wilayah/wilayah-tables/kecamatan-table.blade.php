@@ -19,6 +19,8 @@
     foreach ($paslon as $calon) {
         $totalsPerCalon[$calon->id] = $suara->sum(fn($datum) => $datum->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0);
     }
+
+    $totalKotakKosong = $suara->sum(fn ($datum) => $datum->kotak_kosong ?? 0);
 @endphp
 
 <table class="min-w-full divide-y divide-gray-200">
@@ -145,7 +147,7 @@
             {{-- Kotak Kosong --}}
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                 <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{-- Add total calculation for kotak kosong if needed --}}
+                    {{ $totalKotakKosong }}
                 </th>
             @endif
         
@@ -162,7 +164,7 @@
                 {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalPartisipasi, 0, '.', '.') }}%
+                {{ number_format($totalPartisipasi, 1, '.', '.') }}%
             </th>
         </tr>
     </thead>
