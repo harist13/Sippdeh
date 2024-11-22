@@ -87,6 +87,61 @@ trait SortResumeColumns {
         }
     }
 
+    private function sortResumeSuaraPilgubKecamatanPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'resume_suara_pilgub_kecamatan.id')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilgub_kecamatan.id',
+                    'resume_suara_pilgub_kecamatan.nama',
+                    'resume_suara_pilgub_kecamatan.kabupaten_id',
+                    'resume_suara_pilgub_kecamatan.dpt',
+                    'resume_suara_pilgub_kecamatan.kotak_kosong',
+                    'resume_suara_pilgub_kecamatan.suara_sah',
+                    'resume_suara_pilgub_kecamatan.suara_tidak_sah',
+                    'resume_suara_pilgub_kecamatan.suara_masuk',
+                    'resume_suara_pilgub_kecamatan.abstain',
+                    'resume_suara_pilgub_kecamatan.partisipasi'
+                );
+        }
+    }
+
+    private function sortResumeSuaraPilgubKelurahanPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'resume_suara_pilgub_kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilgub_kelurahan.id',
+                    'resume_suara_pilgub_kelurahan.nama',
+                    'resume_suara_pilgub_kelurahan.kecamatan_id',
+                    'resume_suara_pilgub_kelurahan.dpt',
+                    'resume_suara_pilgub_kelurahan.kotak_kosong',
+                    'resume_suara_pilgub_kelurahan.suara_sah',
+                    'resume_suara_pilgub_kelurahan.suara_tidak_sah',
+                    'resume_suara_pilgub_kelurahan.suara_masuk',
+                    'resume_suara_pilgub_kelurahan.abstain',
+                    'resume_suara_pilgub_kelurahan.partisipasi'
+                );
+        }
+    }
+
     public function sortDpt()
     {
         if ($this->dptSort == null) {

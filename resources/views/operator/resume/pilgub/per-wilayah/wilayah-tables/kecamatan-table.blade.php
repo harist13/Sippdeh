@@ -33,12 +33,19 @@
                 @elseif ($dptSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
-            </th>    
+            </th>            
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
-                    <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
-                        {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                    <th wire:key="{{ $calon->id }}" wire:click="sortPaslonById({{ $calon->id }})" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
+                        @if ($paslonIdSort != $calon->id)
+                            <i class="fas fa-sort ml-2"></i>
+                        @elseif ($paslonSort === 'asc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-up ml-2"></i>
+                        @elseif ($paslonSort === 'desc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-down ml-2"></i>
+                        @endif
                     </th>
                 @endforeach
             @endif

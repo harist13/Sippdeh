@@ -85,10 +85,24 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPilgubKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilgubKelurahan::query()
+            ->selectRaw('
+                resume_suara_pilgub_kelurahan.id,
+                resume_suara_pilgub_kelurahan.nama,
+                resume_suara_pilgub_kelurahan.kecamatan_id,
+                resume_suara_pilgub_kelurahan.dpt,
+                resume_suara_pilgub_kelurahan.kotak_kosong,
+                resume_suara_pilgub_kelurahan.suara_sah,
+                resume_suara_pilgub_kelurahan.suara_tidak_sah,
+                resume_suara_pilgub_kelurahan.suara_masuk,
+                resume_suara_pilgub_kelurahan.abstain,
+                resume_suara_pilgub_kelurahan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kelurahan.id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKelurahanPaslon($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -99,10 +113,24 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraPilgubKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilgubKecamatan::query()
+            ->selectRaw('
+                resume_suara_pilgub_kecamatan.id,
+                resume_suara_pilgub_kecamatan.nama,
+                resume_suara_pilgub_kecamatan.kabupaten_id,
+                resume_suara_pilgub_kecamatan.dpt,
+                resume_suara_pilgub_kecamatan.kotak_kosong,
+                resume_suara_pilgub_kecamatan.suara_sah,
+                resume_suara_pilgub_kecamatan.suara_tidak_sah,
+                resume_suara_pilgub_kecamatan.suara_masuk,
+                resume_suara_pilgub_kecamatan.abstain,
+                resume_suara_pilgub_kecamatan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kecamatan.id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKecamatanPaslon($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
