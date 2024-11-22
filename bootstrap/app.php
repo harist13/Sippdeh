@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'checkForcedLogout' => \App\Http\Middleware\CheckForcedLogout::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'livewire/*'
+        ]);
+
         $middleware->web(append: [
             \App\Http\Middleware\CheckForcedLogout::class,
         ]);
