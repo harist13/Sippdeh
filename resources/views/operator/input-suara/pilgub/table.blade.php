@@ -37,7 +37,7 @@
     </style>
 @endpush
 
-<table class="min-w-full divide-y divide-gray-200 input-suara-table">
+<table class="min-w-full divide-y divide-gray-200 sticky-table input-suara-table">
     <thead class="bg-[#3560A0] text-white">
         <tr>
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
@@ -46,7 +46,7 @@
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
             </th>
-			
+            
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kabupaten/Kota
             </th>
@@ -205,24 +205,24 @@
 
                 {{-- Partisipasi --}}
                 <td class="py-3 px-4 text-xs border partisipasi {{ strtolower($datum->partisipasi) }}">
-					@if ($datum->partisipasi >= 80)
-						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
+                    @if ($datum->partisipasi >= 80)
+                        <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
 
-					@if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
-						<span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
+                    @if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
+                        <span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
 
-					@if ($datum->partisipasi < 60)
-						<span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
-				</td>
+                    @if ($datum->partisipasi < 60)
+                        <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
+                </td>
             </tr>
         @empty
             <tr>

@@ -1,5 +1,5 @@
 <div>
-	<div class="bg-white sticky top-20 p-4 z-20 rounded-t-[20px]">
+	<div class="bg-white p-4 z-20 rounded-t-[20px]">
 		<div class="container mx-auto">
             <button wire:click="submit"
                 class="bg-[#58DA91] disabled:bg-[#58da906c] text-white py-2 px-5 rounded-lg flex items-center justify-center text-sm font-medium sm:w-auto" wire:loading.attr="disabled" wire:target="submit">
