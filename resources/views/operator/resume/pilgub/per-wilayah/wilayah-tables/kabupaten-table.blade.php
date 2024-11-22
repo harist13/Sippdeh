@@ -6,14 +6,28 @@
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
+@php
+    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
+    $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
+    $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
+    $totalAbstain = $suara->sum(fn ($datum) => $datum->abstain ?? 0);
+    $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
+
+    $totalsPerCalon = [];
+    foreach ($paslon as $calon) {
+        $totalsPerCalon[$calon->id] = $suara->sum(fn($datum) => $datum->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0);
+    }
+@endphp
+
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
             </th>
 			
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 300px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 300px;">
                 Kabupaten/Kota
             </th>
             
@@ -105,6 +119,43 @@
                 @elseif ($partisipasiSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
+            </th>
+        </tr>
+        <tr>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalDpt, 0, '.', '.') }}
+            </th>
+        
+            {{-- Calon Totals --}}
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                    </th>
+                @endforeach
+            @endif
+        
+            {{-- Kotak Kosong --}}
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                    {{-- Add total calculation for kotak kosong if needed --}}
+                </th>
+            @endif
+        
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraSah, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalAbstain, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalPartisipasi, 0, '.', '.') }}%
             </th>
         </tr>
     </thead>
