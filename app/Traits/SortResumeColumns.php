@@ -62,7 +62,7 @@ trait SortResumeColumns {
     {
         if ($this->paslonIdSort != null && $this->paslonSort != null) {
             $builder
-                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
                 ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'resume_suara_pilgub_kabupaten.id')
                 ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
                 ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
@@ -91,7 +91,7 @@ trait SortResumeColumns {
     {
         if ($this->paslonIdSort != null && $this->paslonSort != null) {
             $builder
-                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
                 ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'resume_suara_pilgub_kecamatan.id')
                 ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
                 ->leftJoin('suara_calon', function($joinBuilder) {
@@ -119,7 +119,7 @@ trait SortResumeColumns {
     {
         if ($this->paslonIdSort != null && $this->paslonSort != null) {
             $builder
-                ->selectRaw('MAX(suara_calon.suara) AS suara')
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
                 ->leftJoin('tps', 'tps.kelurahan_id', '=', 'resume_suara_pilgub_kelurahan.id')
                 ->leftJoin('suara_calon', function($joinBuilder) {
                     $joinBuilder
@@ -138,6 +138,31 @@ trait SortResumeColumns {
                     'resume_suara_pilgub_kelurahan.suara_masuk',
                     'resume_suara_pilgub_kelurahan.abstain',
                     'resume_suara_pilgub_kelurahan.partisipasi'
+                );
+        }
+    }
+
+    private function sortResumeSuaraPilgubTpsPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'resume_suara_pilgub_tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilgub_tps.id',
+                    'resume_suara_pilgub_tps.nama',
+                    'resume_suara_pilgub_tps.dpt',
+                    'resume_suara_pilgub_tps.kotak_kosong',
+                    'resume_suara_pilgub_tps.suara_sah',
+                    'resume_suara_pilgub_tps.suara_tidak_sah',
+                    'resume_suara_pilgub_tps.suara_masuk',
+                    'resume_suara_pilgub_tps.abstain',
+                    'resume_suara_pilgub_tps.partisipasi'
                 );
         }
     }
