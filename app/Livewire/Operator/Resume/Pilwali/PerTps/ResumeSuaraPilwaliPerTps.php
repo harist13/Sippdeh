@@ -70,6 +70,7 @@ class ResumeSuaraPilwaliPerTps extends Component
             $this->filterPartisipasi($builder);
             $this->sortResumeSuaraPilwaliTpsPaslon($builder);
             $this->sortColumns($builder);
+            $this->sortResumeSuaraKotakKosong($builder);
     
             return $builder->paginate($this->perPage);
         } catch (Exception $exception) {

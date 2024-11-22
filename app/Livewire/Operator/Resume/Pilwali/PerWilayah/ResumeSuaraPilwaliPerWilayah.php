@@ -90,6 +90,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraPilwaliKelurahanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -118,6 +119,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraPilwaliKecamatanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);

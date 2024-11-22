@@ -51,8 +51,15 @@
             @endif
 
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    Kotak Kosong
+                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    <span>Kotak Kosong</span>
+                    @if ($kotakKosongSort === null)
+                        <i class="fas fa-sort ml-2"></i>
+                    @elseif ($kotakKosongSort === 'asc')
+                        <i class="fas fa-sort-up ml-2"></i>
+                    @elseif ($kotakKosongSort === 'desc')
+                        <i class="fas fa-sort-down ml-2"></i>
+                    @endif
                 </th>
             @endif
 

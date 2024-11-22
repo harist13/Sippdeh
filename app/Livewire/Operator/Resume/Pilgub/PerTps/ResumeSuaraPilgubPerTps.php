@@ -64,6 +64,7 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->filterPartisipasi($builder);
         $this->sortResumeSuaraPilgubTpsPaslon($builder);
         $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         return $builder->paginate($this->perPage);
     }

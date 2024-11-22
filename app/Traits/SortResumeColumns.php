@@ -14,6 +14,8 @@ trait SortResumeColumns {
 
     public ?int $paslonIdSort = null;
     public ?string $paslonSort = null;
+
+    public ?string $kotakKosongSort = null;
     
     private function sortColumns(Builder $builder): void
     {
@@ -121,6 +123,24 @@ trait SortResumeColumns {
         } else if ($this->paslonSort == 'desc') {
             $this->paslonIdSort = null;
             $this->paslonSort = null;
+        }
+    }
+
+    public function sortKotakKosong()
+    {
+        if ($this->kotakKosongSort == null) {
+            $this->kotakKosongSort = 'asc';
+        } else if ($this->kotakKosongSort == 'asc') {
+            $this->kotakKosongSort = 'desc';
+        } else if ($this->kotakKosongSort == 'desc') {
+            $this->kotakKosongSort = null;
+        }
+    }
+
+    private function sortResumeSuaraKotakKosong(Builder $builder): void
+    {
+        if ($this->kotakKosongSort != null) {
+            $builder->orderBy('kotak_kosong', $this->kotakKosongSort);
         }
     }
 
