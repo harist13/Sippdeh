@@ -26,12 +26,13 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Exports\InputSuaraPilbupExport;
+use App\Traits\SortResumeColumns;
 use Sentry\SentrySdk;
 use Exception;
 
 class ResumeSuaraPilbupPerTps extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'BUPATI';
 
@@ -67,6 +68,8 @@ class ResumeSuaraPilbupPerTps extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+            $this->sortResumeSuaraPilbupTpsPaslon($builder);
+            $this->sortColumns($builder);
     
             return $builder->paginate($this->perPage);
         } catch (Exception $exception) {
@@ -80,11 +83,23 @@ class ResumeSuaraPilbupPerTps extends Component
     private function getBaseTPSBuilder(): Builder
     {
         try {
-            return ResumeSuaraPilbupTPS::whereHas('tps', function(Builder $builder) {
+            return ResumeSuaraPilbupTPS::query()
+            ->selectRaw('
+                resume_suara_pilbup_tps.id,
+                resume_suara_pilbup_tps.nama,
+                resume_suara_pilbup_tps.dpt,
+                resume_suara_pilbup_tps.kotak_kosong,
+                resume_suara_pilbup_tps.suara_sah,
+                resume_suara_pilbup_tps.suara_tidak_sah,
+                resume_suara_pilbup_tps.suara_masuk,
+                resume_suara_pilbup_tps.abstain,
+                resume_suara_pilbup_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
                 $builder->whereHas('kelurahan', function (Builder $builder) {
                     $builder->whereHas('kecamatan', function(Builder $builder) {
                         $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereNama(session('user_wilayah'));
+                            $builder->whereId(session('operator_kabupaten_id'));
                         });
                     });
                 });

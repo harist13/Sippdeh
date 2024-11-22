@@ -341,4 +341,113 @@ trait SortResumeColumns {
                 );
         }
     }
+
+    private function sortResumeSuaraPilbupKabupatenPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
+                ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'resume_suara_pilbup_kabupaten.id')
+                ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilbup_kabupaten.id',
+                    'resume_suara_pilbup_kabupaten.nama',
+                    'resume_suara_pilbup_kabupaten.provinsi_id',
+                    'resume_suara_pilbup_kabupaten.dpt',
+                    'resume_suara_pilbup_kabupaten.kotak_kosong',
+                    'resume_suara_pilbup_kabupaten.suara_sah',
+                    'resume_suara_pilbup_kabupaten.suara_tidak_sah',
+                    'resume_suara_pilbup_kabupaten.suara_masuk',
+                    'resume_suara_pilbup_kabupaten.abstain',
+                    'resume_suara_pilbup_kabupaten.partisipasi'
+                );
+        }
+    }
+
+    private function sortResumeSuaraPilbupKecamatanPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
+                ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'resume_suara_pilbup_kecamatan.id')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilbup_kecamatan.id',
+                    'resume_suara_pilbup_kecamatan.nama',
+                    'resume_suara_pilbup_kecamatan.kabupaten_id',
+                    'resume_suara_pilbup_kecamatan.dpt',
+                    'resume_suara_pilbup_kecamatan.kotak_kosong',
+                    'resume_suara_pilbup_kecamatan.suara_sah',
+                    'resume_suara_pilbup_kecamatan.suara_tidak_sah',
+                    'resume_suara_pilbup_kecamatan.suara_masuk',
+                    'resume_suara_pilbup_kecamatan.abstain',
+                    'resume_suara_pilbup_kecamatan.partisipasi'
+                );
+        }
+    }
+
+    private function sortResumeSuaraPilbupKelurahanPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
+                ->leftJoin('tps', 'tps.kelurahan_id', '=', 'resume_suara_pilbup_kelurahan.id')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilbup_kelurahan.id',
+                    'resume_suara_pilbup_kelurahan.nama',
+                    'resume_suara_pilbup_kelurahan.kecamatan_id',
+                    'resume_suara_pilbup_kelurahan.dpt',
+                    'resume_suara_pilbup_kelurahan.kotak_kosong',
+                    'resume_suara_pilbup_kelurahan.suara_sah',
+                    'resume_suara_pilbup_kelurahan.suara_tidak_sah',
+                    'resume_suara_pilbup_kelurahan.suara_masuk',
+                    'resume_suara_pilbup_kelurahan.abstain',
+                    'resume_suara_pilbup_kelurahan.partisipasi'
+                );
+        }
+    }
+
+    private function sortResumeSuaraPilbupTpsPaslon(Builder $builder): void
+    {
+        if ($this->paslonIdSort != null && $this->paslonSort != null) {
+            $builder
+                ->selectRaw('SUM(suara_calon.suara) AS suara')
+                ->leftJoin('suara_calon', function($joinBuilder) {
+                    $joinBuilder
+                        ->on('suara_calon.tps_id', '=', 'resume_suara_pilbup_tps.id')
+                        ->where('suara_calon.calon_id', $this->paslonIdSort);
+                })
+                ->orderBy('suara', $this->paslonSort)
+                ->groupBy(
+                    'resume_suara_pilbup_tps.id',
+                    'resume_suara_pilbup_tps.nama',
+                    'resume_suara_pilbup_tps.dpt',
+                    'resume_suara_pilbup_tps.kotak_kosong',
+                    'resume_suara_pilbup_tps.suara_sah',
+                    'resume_suara_pilbup_tps.suara_tidak_sah',
+                    'resume_suara_pilbup_tps.suara_masuk',
+                    'resume_suara_pilbup_tps.abstain',
+                    'resume_suara_pilbup_tps.partisipasi'
+                );
+        }
+    }
 }
