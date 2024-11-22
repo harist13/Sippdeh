@@ -15,6 +15,9 @@
                     @endif
                 </div>
                 <div class="p-4 text-center">
+                    <div class="text-[#52526c] text-xl font-bold mb-2">
+                         {{ $calon->getFormattedNoUrut() }}
+                    </div>
                     <h4 class="text-[#52526c] font-bold mb-1">
                         {{ $calon->nama }} / {{ $calon->nama_wakil }}
                     </h4>
@@ -28,9 +31,6 @@
                             {{ $calon->provinsi->nama }}
                         </p>
                     @endif
-                    <p class="text-[#6b6b6b] mb-2">
-                        No. Urut {{ $calon->getFormattedNoUrut() }}
-                    </p>
                     <div class="text-[#008bf9] font-medium">
                         @if ($calon->suara > 0 && $suaraSah > 0)
                             {{ round(($calon->suara / $suaraSah) * 100, 1) }}% | {{ number_format($calon->suara, 0, '', '.') }} Suara
