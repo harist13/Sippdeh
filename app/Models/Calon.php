@@ -13,7 +13,7 @@ class Calon extends Model
 
     protected $table = 'calon';
 
-    protected $fillable = ['nama', 'nama_wakil', 'posisi', 'provinsi_id', 'kabupaten_id', 'foto'];
+    protected $fillable = ['no_urut','nama', 'nama_wakil', 'posisi', 'provinsi_id', 'kabupaten_id', 'foto'];
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
@@ -28,6 +28,21 @@ class Calon extends Model
         }
 
         return $id;
+    }
+
+    public function getFormattedNoUrut(): string {
+        $no = $this->no_urut;
+        $digits = strlen($no);
+
+        if ($digits == 1) {
+            return "0$no";
+        }
+
+        if ($digits == 2) {
+            return "0$no";
+        }
+
+        return $no;
     }
 
     public function provinsi(): BelongsTo {

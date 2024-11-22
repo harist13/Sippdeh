@@ -1,5 +1,5 @@
 @php
-    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
@@ -22,18 +22,18 @@
                 DPT
             </th>
 
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
-                    Kotak Kosong
-                </th>
-            @endif
-
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
                     <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
                         {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
                     </th>
                 @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
+                    Kotak Kosong
+                </th>
             @endif
 
             <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
@@ -71,12 +71,6 @@
                     <span>{{ $datum->dpt }}</span>
                 </td>
 
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td style="text-align: center; border: 1px solid black;">
-                        {{ $datum->kotak_kosong }}
-                    </td>
-                @endif
-
                 @if (!$isCalonColumnIgnored)
                     @foreach ($paslon as $calon)
                         @php
@@ -86,6 +80,12 @@
                             {{ $suara ? $suara->total_suara : 0 }}
                         </td>
                     @endforeach
+                @endif
+
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                    <td style="text-align: center; border: 1px solid black;">
+                        {{ $datum->kotak_kosong }}
+                    </td>
                 @endif
 
                 <td style="text-align: center; border: 1px solid black;">

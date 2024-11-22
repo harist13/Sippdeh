@@ -51,7 +51,7 @@ class InputSuaraPilgub extends Component
     {
         $paslon = $this->getCalon();
         $tps = $this->getTps();
-        return view('operator.input-suara.pilgub.livewire', compact('tps', 'paslon'));
+        return view('operator.input-suara.pilgub.input-suara', compact('tps', 'paslon'));
     }
 
     private function getTps()

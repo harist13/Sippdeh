@@ -39,4 +39,9 @@ class Petugas extends Authenticatable
     {
         return $this->belongsTo(Kabupaten::class, 'kabupaten_id');
     }
+
+    public function kabupaten(): BelongsTo
+    {
+        return $this->belongsTo(Kabupaten::class, 'kabupaten_id');
+    }
 }

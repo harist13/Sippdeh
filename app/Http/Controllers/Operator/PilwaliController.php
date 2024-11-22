@@ -9,7 +9,6 @@ class PilwaliController extends Controller
     //
     public function index()
     {
-        $userWilayah = session('user_wilayah');
-        return view('operator.input-suara.pilwali.index', compact('userWilayah'));
+        return view('operator.input-suara.pilwali.index');
     }
 }

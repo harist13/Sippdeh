@@ -2,8 +2,10 @@
 
 @section('content')
 	<main class="container mx-auto px-4 py-8">
-		@livewire('operator.resume.pilgub.resume-suara-pilgub')
-
+		@livewire('operator.resume.pilgub.per-wilayah.resume-suara-pilgub-per-wilayah')
+		@livewire('operator.resume.pilgub.per-tps.resume-suara-pilgub-per-tps')
+		@livewire('operator.paslon-pilgub')
+		
 		@php
             $calonWalikota = App\Models\Calon::query()
                 ->wherePosisi('WALIKOTA')
@@ -12,11 +14,15 @@
 
 		@if ($calonWalikota->count())
 			<div class="mt-10">
-				@livewire('operator.resume.pilwali.resume-suara-pilwali')
+				@livewire('operator.resume.pilwali.per-wilayah.resume-suara-pilwali-per-wilayah')
+				@livewire('operator.resume.pilwali.per-tps.resume-suara-pilwali-per-tps')
+				@livewire('operator.paslon-pilwali')
 			</div>
-		@else
+			@else
 			<div class="mt-10">
-				@livewire('operator.resume.pilbup.resume-suara-pilbup')
+				@livewire('operator.resume.pilbup.per-wilayah.resume-suara-pilbup-per-wilayah')
+				@livewire('operator.resume.pilbup.per-tps.resume-suara-pilbup-per-tps')
+				@livewire('operator.paslon-pilbup')
 			</div>
 		@endif
 	</main>

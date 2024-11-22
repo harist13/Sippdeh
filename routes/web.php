@@ -15,6 +15,8 @@ use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\Operator\PilgubController;
 use App\Http\Controllers\Operator\PilwaliController;
 use App\Http\Controllers\Operator\ResumeController;
+use App\Http\Controllers\Tamu\TamuController;
+use App\Http\Controllers\Tamu\TamuResumeController;
 
 Route::get('/', [LoginController::class, 'index'])->name('index');
 
@@ -92,5 +94,12 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::get('/operator/pilbup', [PilbupController::class, 'index'])->name('operator.input-suara.pilbup');
 
         Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
+    });
+
+    // Middleware untuk tamu
+    Route::middleware(['auth', 'role:tamu'])->group(function () {
+        Route::get('/tamu/dashboard', [TamuController::class, 'Dashboard'])->name('tamu.dashboard');
+        Route::get('/tamu/resume', TamuResumeController::class)->name('tamu.resume');
+        Route::post('/updatetamu', [TamuController::class, 'updatetamu'])->name('updatetamu');
     });
 });

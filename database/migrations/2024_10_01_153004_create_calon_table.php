@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('calon', function (Blueprint $table) {
             $table->id();
+            $table->integer('no_urut');
             $table->string('nama');
             $table->string('nama_wakil');
             $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI']);

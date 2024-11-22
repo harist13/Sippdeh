@@ -50,6 +50,10 @@ return [
             'driver' => 'session',
             'provider' => 'petugas', // Sesuaikan dengan provider yang Anda gunakan
         ],
+        'tamu' => [
+            'driver' => 'session',
+            'provider' => 'petugas', // Sesuaikan dengan provider yang Anda gunakan
+        ],
     ],
 
     /*

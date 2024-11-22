@@ -15,15 +15,19 @@ class ResumeSuaraPilgubKabupaten extends Model
         $id = $this->getKey();
         $digits = strlen($id);
 
-        if ($digits == 1) {
-            return "00$id";
+        if ($id) {
+            if ($digits == 1) {
+                return "00$id";
+            }
+    
+            if ($digits == 2) {
+                return "0$id";
+            }
+    
+            return $id;
         }
 
-        if ($digits == 2) {
-            return "0$id";
-        }
-
-        return $id;
+        return '0';
     }
 
     public function provinsi(): BelongsTo {

@@ -70,7 +70,7 @@ class CalonController extends Controller
         return redirect()->route('calon');
     }
 
-    /**
+   /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCalonRequest $request)
@@ -79,6 +79,7 @@ class CalonController extends Controller
             $validated = $request->validated();
 
             $calon = new Calon();
+            $calon->no_urut = $validated['no_urut'];
             $calon->nama = $validated['nama_calon_baru'];
             $calon->nama_wakil = $validated['nama_calon_wakil_baru'];
             $calon->posisi = $validated['posisi'];
@@ -113,6 +114,7 @@ class CalonController extends Controller
             $validated = $request->validated();
 
             $calon = Calon::find($id);
+            $calon->no_urut = $validated['no_urut'];
             $calon->nama = $validated['nama_calon'];
             $calon->nama_wakil = $validated['nama_calon_wakil'];
             $calon->posisi = $validated['posisi'];
@@ -138,7 +140,7 @@ class CalonController extends Controller
 
             return redirect()->back()->with('pesan_sukses', 'Berhasil mengedit pasangan calon.');
         } catch (Exception $exception) {
-            dd($exception);
+            \Log::error('Error updating calon: ' . $exception->getMessage());
             return redirect()->back()->with('pesan_gagal', 'Gagal mengedit pasangan calon.');
         }
     }

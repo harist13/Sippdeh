@@ -33,7 +33,7 @@ class FilterInputSuaraPilwali extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.input-suara.pilgub.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.input-suara.pilwali.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions(): array

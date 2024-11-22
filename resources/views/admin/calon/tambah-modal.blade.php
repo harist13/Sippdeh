@@ -5,7 +5,20 @@
             @csrf
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Tambah Calon</h3>
 
-			{{-- Nama calon --}}
+            {{-- No Urut --}}
+            <label for="addCalonNoUrut" class="mb-2 block">Nomor Urut</label>
+            <input
+                type="number"
+                id="addCalonNoUrut"
+                name="no_urut"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nomor Urut"
+                min="1"
+                required
+            >
+            <span class="text-red-800">{{ $errors->first('no_urut') }}</span>
+
+            {{-- Nama calon --}}
             <label for="addCalonName" class="mb-2 block">Nama Calon</label>
             <input
                 type="text"
@@ -27,9 +40,9 @@
             >
             <span class="text-red-800">{{ $errors->first('nama_calon_wakil_baru') }}</span>
 
-			{{-- Mencalon Sebagai --}}
-			<label for="addCalonAs" class="my-3 mb-1 block">Mencalon Sebagai</label>
-			<select
+            {{-- Mencalon Sebagai --}}
+            <label for="addCalonAs" class="my-3 mb-1 block">Mencalon Sebagai</label>
+            <select
                 id="addCalonAs"
                 name="posisi"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -38,39 +51,39 @@
                 <option value="GUBERNUR">Gubernur/Wakil Gubernur</option>
                 <option value="WALIKOTA">Walikota/Wakil Walikota</option>
                 <option value="BUPATI">Bupati/Wakil Bupati</option>
-			</select>
-			<span class="text-red-800">{{ $errors->first('posisi') }}</span>
+            </select>
+            <span class="text-red-800">{{ $errors->first('posisi') }}</span>
 
             {{-- Provinsi --}}
-			<label for="addCalonProvinsi" class="my-3 mb-1 block">Provinsi</label>
-			<select
+            <label for="addCalonProvinsi" class="my-3 mb-1 block">Provinsi</label>
+            <select
                 id="addCalonProvinsi"
                 name="provinsi_id_calon_baru"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
             >
                 <option value="" selected disabled>Pilih</option>
-				@foreach ($provinsi as $prov)
-					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('provinsi_id_calon_baru') }}</span>
+                @foreach ($provinsi as $prov)
+                    <option value="{{ $prov->id }}">{{ $prov->nama }}</option>
+                @endforeach
+            </select>
+            <span class="text-red-800">{{ $errors->first('provinsi_id_calon_baru') }}</span>
 
             {{-- Kabupaten --}}
-			<label for="addCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
-			<select
+            <label for="addCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
+            <select
                 id="addCalonKabupaten"
                 name="kabupaten_id_calon_baru"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
             >
                 <option value="" selected disabled>Pilih</option>
-				@foreach ($kabupaten as $kab)
-					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon_baru') }}</span>
+                @foreach ($kabupaten as $kab)
+                    <option value="{{ $kab->id }}">{{ $kab->nama }}</option>
+                @endforeach
+            </select>
+            <span class="text-red-800">{{ $errors->first('kabupaten_id_calon_baru') }}</span>
 
             {{-- Foto --}}
-            <label for="addCalonPhoto" class="mt-3 mb-1 block">Foto  <span class="text-xs text-gray-500 my-2">
+            <label for="addCalonPhoto" class="mt-3 mb-1 block">Foto <span class="text-xs text-gray-500 my-2">
                 Foto (Ukuran foto harus 200X300)
             </label>
             <input
@@ -80,7 +93,7 @@
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Foto calon"
             >
-			<span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
+            <span class="text-red-800">{{ $errors->first('foto_calon_baru') }}</span>
 
             <p class="text-xs text-gray-500 my-2">
                 Catatan: Foto harus tidak memiliki latar belakang.
@@ -90,26 +103,26 @@
 
             <div class="flex items-center">
                 <button type="button" id="cancelAddCalon" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
-					Batalkan
-				</button>
+                    Batalkan
+                </button>
                 <button type="submit" id="confirmAddCalon" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
-					Tambah
-				</button>
+                    Tambah
+                </button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-	function showAddCalonModal() {
-		const addCalonModal = document.getElementById('addCalonModal');
-		addCalonModal.classList.remove('hidden');
-	}
+    function showAddCalonModal() {
+        const addCalonModal = document.getElementById('addCalonModal');
+        addCalonModal.classList.remove('hidden');
+    }
 
-	function closeAddCalonModal() {
-		const addCalonModal = document.getElementById('addCalonModal');
-		addCalonModal.classList.add('hidden');
-	}
+    function closeAddCalonModal() {
+        const addCalonModal = document.getElementById('addCalonModal');
+        addCalonModal.classList.add('hidden');
+    }
 
     function enableProvinsiSelectors() {
         const provinsiSelector = document.getElementById('addCalonProvinsi');
@@ -149,12 +162,11 @@
     disableKabupatenSelectors();
 
     document.getElementById('addCalonAs').addEventListener('change', handlePosisiCalon);
-
     document.getElementById('addCalonBtn').addEventListener('click', showAddCalonModal);
     document.getElementById('cancelAddCalon').addEventListener('click', closeAddCalonModal);
 </script>
 
-@error('nama_calon_baru', 'kabupaten_id_calon_baru', 'foto_calon_baru')
+@error('no_urut', 'nama_calon_baru', 'nama_calon_wakil_baru', 'kabupaten_id_calon_baru', 'provinsi_id_calon_baru', 'foto_calon_baru')
     <script>
         showAddCalonModal();
     </script>

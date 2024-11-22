@@ -5,8 +5,21 @@
             @method('PUT')
             <h3 class="text-lg text-center leading-6 font-medium text-gray-900 mb-5">Edit Calon</h3>
 
-			{{-- Nama calon --}}
-			<label for="editCalonName" class="mb-2 block">Nama Calon</label>
+            {{-- No Urut --}}
+            <label for="editCalonNoUrut" class="mb-2 block">Nomor Urut</label>
+            <input
+                type="number"
+                id="editCalonNoUrut"
+                name="no_urut"
+                class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nomor Urut"
+                min="1"
+                required
+            >
+            <span class="text-red-800">{{ $errors->first('no_urut') }}</span>
+
+            {{-- Nama calon --}}
+            <label for="editCalonName" class="mb-2 block">Nama Calon</label>
             <input
                 type="text"
                 id="editCalonName"
@@ -27,9 +40,9 @@
             >
             <span class="text-red-800">{{ $errors->first('nama_calon_wakil') }}</span>
 
-			{{-- Mencalon Sebagai --}}
-			<label for="editCalonAs" class="my-3 mb-1 block">Mencalon Sebagai</label>
-			<select
+            {{-- Mencalon Sebagai --}}
+            <label for="editCalonAs" class="my-3 mb-1 block">Mencalon Sebagai</label>
+            <select
                 id="editCalonAs"
                 name="posisi"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -38,38 +51,38 @@
                 <option value="GUBERNUR">Gubernur/Wakil Gubernur</option>
                 <option value="WALIKOTA">Walikota/Wakil Walikota</option>
                 <option value="BUPATI">Bupati/Wakil Bupati</option>
-			</select>
-			<span class="text-red-800">{{ $errors->first('posisi') }}</span>
+            </select>
+            <span class="text-red-800">{{ $errors->first('posisi') }}</span>
 
             {{-- Provinsi --}}
-			<label for="editCalonProvinsi" class="my-3 mb-1 block">Provinsi</label>
-			<select
+            <label for="editCalonProvinsi" class="my-3 mb-1 block">Provinsi</label>
+            <select
                 id="editCalonProvinsi"
                 name="provinsi_id_calon"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
                 disabled
             >
                 <option value="" selected disabled>Pilih</option>
-				@foreach ($provinsi as $prov)
-					<option value="{{ $prov->id }}">{{ $prov->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('provinsi_id_calon') }}</span>
+                @foreach ($provinsi as $prov)
+                    <option value="{{ $prov->id }}">{{ $prov->nama }}</option>
+                @endforeach
+            </select>
+            <span class="text-red-800">{{ $errors->first('provinsi_id_calon') }}</span>
 
             {{-- Kabupaten --}}
-			<label for="editCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
-			<select
+            <label for="editCalonKabupaten" class="my-3 mb-1 block">Kabupaten/Kota</label>
+            <select
                 id="editCalonKabupaten"
                 name="kabupaten_id_calon"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-300"
                 disabled
             >
                 <option value="" selected disabled>Pilih</option>
-				@foreach ($kabupaten as $kab)
-					<option value="{{ $kab->id }}">{{ $kab->nama }}</option>
-				@endforeach
-			</select>
-			<span class="text-red-800">{{ $errors->first('kabupaten_id_calon') }}</span>
+                @foreach ($kabupaten as $kab)
+                    <option value="{{ $kab->id }}">{{ $kab->nama }}</option>
+                @endforeach
+            </select>
+            <span class="text-red-800">{{ $errors->first('kabupaten_id_calon') }}</span>
 
             {{-- Foto --}}
             <label for="editCalonPhoto" class="my-3 mb-1 block">Foto</label>
@@ -80,7 +93,7 @@
                 class="w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Foto calon"
             >
-			<span class="text-red-800">{{ $errors->first('foto_calon') }}</span>
+            <span class="text-red-800">{{ $errors->first('foto_calon') }}</span>
 
             <p class="text-xs text-gray-500 my-3">
                 Catatan: Pastikan gambar pasangan calon yang diunggah memiliki ukuran dimensi 300x200.
@@ -90,11 +103,11 @@
 
             <div class="flex items-center">
                 <button type="button" id="cancelEditCalon" class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 mr-2">
-					Batalkan
-				</button>
+                    Batalkan
+                </button>
                 <button type="submit" id="confirmEditCalon" class="flex-1 px-4 py-2 bg-[#3560A0] text-white rounded-md hover:bg-blue-700">
-					Edit
-				</button>
+                    Edit
+                </button>
             </div>
         </form>
     </div>
@@ -111,28 +124,32 @@
         editCalonModal.classList.add('hidden');
     }
 
+    function getNoUrut() {
+        return this.closest('tr').querySelector('td:nth-child(2)').dataset.noUrut;
+    }
+
     function getCalonId() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.id;
+        return this.closest('tr').querySelector('td:nth-child(3)').dataset.id;
     }
 
     function getNamaCalon() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.nama;
+        return this.closest('tr').querySelector('td:nth-child(3)').dataset.nama;
     }
 
     function getNamaCalonWakil() {
-        return this.closest('tr').querySelector('td:nth-child(2)').dataset.namaWakil;
+        return this.closest('tr').querySelector('td:nth-child(3)').dataset.namaWakil;
     }
 
     function getPosisiCalon() {
-        return this.closest('tr').querySelector('td:nth-child(3)').dataset.posisi;
+        return this.closest('tr').querySelector('td:nth-child(4)').dataset.posisi;
     }
 
     function getProvinsiId() {
-        return this.closest('tr').querySelector('td:nth-child(4)').dataset.provinsiId;
+        return this.closest('tr').querySelector('td:nth-child(5)').dataset.provinsiId;
     }
 
     function getKabupatenId() {
-        return this.closest('tr').querySelector('td:nth-child(4)').dataset.kabupatenId;
+        return this.closest('tr').querySelector('td:nth-child(5)').dataset.kabupatenId;
     }
 
     function getUpdateCalonUrl() {
@@ -176,7 +193,7 @@
             enableKabupatenSelector();
         }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function () {
         disableProvinsiSelector();
         disableKabupatenSelector();
@@ -186,6 +203,9 @@
         document.querySelectorAll('.edit-calon-btn')
             .forEach(btn => btn.addEventListener('click', function() {
                 showEditCalonModal();
+
+                const editCalonNoUrut = document.getElementById('editCalonNoUrut');
+                editCalonNoUrut.value = getNoUrut.call(this);
 
                 const editCalonName = document.getElementById('editCalonName');
                 editCalonName.value = getNamaCalon.call(this);
@@ -207,11 +227,11 @@
                 editCalonForm.action = getUpdateCalonUrl.call(this);
             }));
         
-        document.getElementById('cancelEditCalon').addEventListener('click', closeAddCalonModal);
+        document.getElementById('cancelEditCalon').addEventListener('click', closeEditCalonModal);
     });
 </script>
 
-@error('nama_calon'. 'nama_calon_wakil', 'posisi', 'kabupaten_id_calon', 'provinsi_id_calon', 'foto_calon')
+@error('no_urut', 'nama_calon', 'nama_calon_wakil', 'posisi', 'kabupaten_id_calon', 'provinsi_id_calon', 'foto_calon')
     <script>
         showEditCalonModal();
     </script>

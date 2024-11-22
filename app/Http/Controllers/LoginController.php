@@ -49,12 +49,19 @@ class LoginController extends Controller
             if ($activeDevices >= $user->limit) {
                 Auth::logout();
                 return back()->withErrors([
-                    'username' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan.',
+                    'username' => 'Maaf, Anda telah mencapai batas maksimum login (' . $user->limit . ' device). Silakan logout dari salah satu device untuk melanjutkan atau hubungi pihak admin.',
                 ])->withInput($request->only('username'));
             }
 
             $request->session()->regenerate();
             session(['user_wilayah' => $user->wilayah?->nama ?? '-']);
+
+            if ($user->role == 'operator') {
+                session(['operator_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['operator_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['operator_kabupaten_id' => $user->kabupaten->id]);
+                session(['operator_kabupaten_name' => $user->kabupaten->nama]);
+            }
 
             // Simpan riwayat login
             LoginHistory::create([
@@ -69,6 +76,8 @@ class LoginController extends Controller
                 return redirect()->route('Dashboard')->with('success', 'Login berhasil!');
             } elseif ($user->hasRole('operator')) {
                 return redirect()->route('operator.dashboard')->with('success', 'Login berhasil!');
+            } elseif ($user->hasRole('tamu')) {
+                return redirect()->route('tamu.dashboard')->with('success', 'Login berhasil!');
             }
 
             return redirect()->intended('/')->with('success', 'Login berhasil!');
