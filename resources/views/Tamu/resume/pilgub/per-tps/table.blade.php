@@ -8,53 +8,167 @@
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
+@php
+    $totalDpt = $tps->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalSuaraSah = $tps->sum(fn ($datum) => $datum->suara_sah ?? 0);
+    $totalSuaraTidakSah = $tps->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
+    $totalSuaraMasuk = $tps->sum(fn ($datum) => $datum->suara_masuk ?? 0);
+    $totalAbstain = $tps->sum(fn ($datum) => $datum->abstain ?? 0);
+    $totalPartisipasi = $tps->avg(fn ($datum) => $datum->partisipasi ?? 0);
+
+    $totalsPerCalon = [];
+    foreach ($paslon as $calon) {
+        $totalsPerCalon[$calon->id] = $tps->sum(fn($datum) => $datum->suaraCalonByCalonId($calon->id)?->first()?->suara ?? 0);
+    }
+
+    $totalKotakKosong = $tps->sum(fn ($datum) => $datum->kotak_kosong ?? 0);
+@endphp
+
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
             </th>
 			
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kabupaten/Kota
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kecamatan
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kelurahan
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 TPS
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                DPT
-            </th>
 
-            @foreach ($paslon as $calon)
-                <th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+            <th wire:click="sortDpt" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>DPT</span>
+                @if ($dptSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($dptSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($dptSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
+            </th>            
+
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="{{ $calon->id }}" wire:click="sortPaslonById({{ $calon->id }})" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
+                        @if ($paslonIdSort != $calon->id)
+                            <i class="fas fa-sort ml-2"></i>
+                        @elseif ($paslonSort === 'asc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-up ml-2"></i>
+                        @elseif ($paslonSort === 'desc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-down ml-2"></i>
+                        @endif
+                    </th>
+                @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    <span>Kotak Kosong</span>
+                    @if ($kotakKosongSort === null)
+                        <i class="fas fa-sort ml-2"></i>
+                    @elseif ($kotakKosongSort === 'asc')
+                        <i class="fas fa-sort-up ml-2"></i>
+                    @elseif ($kotakKosongSort === 'desc')
+                        <i class="fas fa-sort-down ml-2"></i>
+                    @endif
                 </th>
-            @endforeach
+            @endif
 
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-                Kotak Kosong
+            <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Sah</span>
+                @if ($suaraSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Sah
+            <th wire:click="sortSuaraTidakSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Tidak Sah</span>
+                @if ($suaraTidakSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Tidak Sah
+            <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Masuk</span>
+                @if ($suaraMasukSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraMasukSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraMasukSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Suara Masuk
+            <th wire:click="sortAbstain" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Abstain</span>
+                @if ($abstainSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($abstainSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($abstainSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Abstain
+            <th wire:click="sortPartisipasi" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Partisipasi</span>
+                @if ($partisipasiSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($partisipasiSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($partisipasiSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
-                Partisipasi
+        </tr>
+        <tr>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalDpt, 0, '.', '.') }}
+            </th>
+        
+            {{-- Calon Totals --}}
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                    </th>
+                @endforeach
+            @endif
+        
+            {{-- Kotak Kosong --}}
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                    {{ $totalKotakKosong }}
+                </th>
+            @endif
+        
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraSah, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalAbstain, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalPartisipasi, 1, '.', '.') }}%
             </th>
         </tr>
     </thead>

@@ -8,6 +8,7 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\ResumeSuaraPilbupKecamatan;
 use App\Models\ResumeSuaraPilbupKelurahan;
+use App\Traits\SortResumeColumns;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
@@ -18,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResumeSuaraPilbupPerWilayah extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'BUPATI';
 
@@ -77,9 +78,25 @@ class ResumeSuaraPilbupPerWilayah extends Component
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPilbupKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilbupKelurahan::query()
+            ->selectRaw('
+                resume_suara_pilbup_kelurahan.id,
+                resume_suara_pilbup_kelurahan.nama,
+                resume_suara_pilbup_kelurahan.kecamatan_id,
+                resume_suara_pilbup_kelurahan.dpt,
+                resume_suara_pilbup_kelurahan.kotak_kosong,
+                resume_suara_pilbup_kelurahan.suara_sah,
+                resume_suara_pilbup_kelurahan.suara_tidak_sah,
+                resume_suara_pilbup_kelurahan.suara_masuk,
+                resume_suara_pilbup_kelurahan.abstain,
+                resume_suara_pilbup_kelurahan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilbup_kelurahan.id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilbupKelurahanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -90,9 +107,25 @@ class ResumeSuaraPilbupPerWilayah extends Component
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraPilbupKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilbupKecamatan::query()
+            ->selectRaw('
+                resume_suara_pilbup_kecamatan.id,
+                resume_suara_pilbup_kecamatan.nama,
+                resume_suara_pilbup_kecamatan.kabupaten_id,
+                resume_suara_pilbup_kecamatan.dpt,
+                resume_suara_pilbup_kecamatan.kotak_kosong,
+                resume_suara_pilbup_kecamatan.suara_sah,
+                resume_suara_pilbup_kecamatan.suara_tidak_sah,
+                resume_suara_pilbup_kecamatan.suara_masuk,
+                resume_suara_pilbup_kecamatan.abstain,
+                resume_suara_pilbup_kecamatan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilbup_kecamatan.id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilbupKecamatanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
