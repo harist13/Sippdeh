@@ -203,6 +203,7 @@
                         <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Walikota Di {{ session('operator_kabupaten_name') }}</h3>
 
                         @livewire('operator.dashboard.rekap-pilwali')
+                        @livewire('operator.dashboard.resume-suara-pilwali.resume-suara-pilwali')
                         @livewire('operator.paslon-pilwali', ['withCard' => false])
                     </section>
                 @else
@@ -211,6 +212,7 @@
                         <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Bupati Di {{ session('operator_kabupaten_name') }}</h3>
 
                         @livewire('operator.dashboard.rekap-pilbup')
+                        @livewire('operator.dashboard.resume-suara-pilbup.resume-suara-pilbup')
                         @livewire('operator.paslon-pilbup', ['withCard' => false])
                     </section>
                 @endif
