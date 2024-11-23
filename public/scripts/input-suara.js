@@ -322,7 +322,6 @@ class InputSuaraUIManager {
 
     repairInputValues() {
         this.caches.components.inputs.forEach(function(input) {
-            console.log(input.parentElement)
             if (input.value < 0 || input.value == '' || isNaN(input.value)) {
                 input.value = input.dataset.defaultValue || 0;
             }
@@ -882,6 +881,7 @@ class InputSuaraUIManager {
         this.syncTableDataWithSelectedTPS();
         this.syncTableInputWithSelectedTPS();
         this.syncSelectedRowsBackgroundColor();
+        this.syncTableHeadersWithSelectedTPS();
 
         this.syncTableMode();
 
