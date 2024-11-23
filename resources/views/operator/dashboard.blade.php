@@ -182,6 +182,7 @@
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Gubernur Di {{ session('operator_kabupaten_name') }}</h3>
     
                     @livewire('operator.dashboard.rekap-pilgub')
+                    @livewire('operator.dashboard.resume-suara-pilgub.resume-suara-pilgub')
                     @livewire('operator.paslon-pilgub', ['withCard' => false])
                 </section>
             </div>
