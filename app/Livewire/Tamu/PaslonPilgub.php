@@ -4,7 +4,6 @@ namespace App\Livewire\Tamu;
 
 use App\Models\Calon;
 use App\Models\Kabupaten;
-use App\Models\Provinsi;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -12,35 +11,34 @@ class PaslonPilgub extends Component
 {
     public string $posisi = 'GUBERNUR';
 
+    public bool $withCard;
+
+    public function mount($withCard = true)
+    {
+        $this->withCard = $withCard;
+    }
+
     public function render()
     {
         $paslon = $this->getPaslon();
-        $suaraSah = $this->getSuaraSahOfTamuProvinsi();
-        $kotakKosong = $this->getKotakKosongOfTamuProvinsi();
+        $suaraSah = $this->getSuaraSahOfTamuKabupaten();
+        $kotakKosong = $this->getKotakKosongOfTamuKabupaten();
 
         return view('livewire.Tamu.paslon-pilgub', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
-    private function getProvinsiIdOfTamu(): int
+    private function getKabupatenIdOfTamu(): int
     {
-        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
-
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->provinsi_id;
-        }
-
-        return 0;
+        return session('Tamu_kabupaten_id');
     }
 
-    private function getSuaraSahOfTamuProvinsi(): int
+    private function getSuaraSahOfTamuKabupaten(): int
     {
-        $provinsi = Provinsi::select([
-            'provinsi.id',
-            'provinsi.nama',
+        $kabupaten = Kabupaten::select([
+            'kabupaten.id',
+            'kabupaten.nama',
             DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara_sah')
         ])
-        ->leftJoin('kabupaten', 'kabupaten.provinsi_id', '=', 'provinsi.id')
         ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
         ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
         ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
@@ -52,35 +50,34 @@ class PaslonPilgub extends Component
                         ->where('posisi', $this->posisi);
                 });
         })
-        ->where('provinsi.id', $this->getProvinsiIdOfTamu())
-        ->groupBy('provinsi.id');
+        ->where('kabupaten.id', $this->getKabupatenIdOfTamu())
+        ->groupBy('kabupaten.id');
         
-        if ($provinsi->count() > 0) {
-            $provinsi = $provinsi->first();
-            return $provinsi->suara_sah;
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->suara_sah;
         }
 
         return 0;
     }
 
-    private function getKotakKosongOfTamuProvinsi(): int
+    private function getKotakKosongOfTamuKabupaten(): int
     {
-        $provinsi = Provinsi::select([
-            'provinsi.id',
+        $kabupaten = Kabupaten::select([
+            'kabupaten.id',
             DB::raw('SUM(suara_tps.kotak_kosong) AS kotak_kosong'),
         ])
-            ->leftJoin('kabupaten', 'kabupaten.provinsi_id', '=', 'provinsi.id')
             ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
             ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
             ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
             ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
             ->where('suara_tps.posisi', $this->posisi)
-            ->where('provinsi.id', $this->getProvinsiIdOfTamu())
-            ->groupBy('provinsi.id');
+            ->where('kabupaten.id', $this->getKabupatenIdOfTamu())
+            ->groupBy('kabupaten.id');
         
-        if ($provinsi->count() > 0) {
-            $provinsi = $provinsi->first();
-            return $provinsi->kotak_kosong;
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->kotak_kosong;
         }
 
         return 0;
@@ -88,20 +85,38 @@ class PaslonPilgub extends Component
 
     private function getPaslon()
     {
-        $builder = Calon::select([
+        return Calon::select([
             'calon.id',
             'calon.nama',
             'calon.nama_wakil',
             'calon.foto',
             'calon.provinsi_id',
             'calon.kabupaten_id',
-            DB::raw('SUM(suara_calon.suara) AS suara'),
+            'calon.no_urut',
+            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
         ])
-            ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
-            ->where('calon.posisi', $this->posisi)
-            ->where('calon.provinsi_id', $this->getProvinsiIdOfTamu())
-            ->groupBy('calon.id');
-
-        return $builder->get();
+        ->join('tps', function($join) {
+            $join->join('kelurahan', 'kelurahan.id', '=', 'tps.kelurahan_id')
+                ->join('kecamatan', 'kecamatan.id', '=', 'kelurahan.kecamatan_id')
+                ->where('kecamatan.kabupaten_id', session('Tamu_kabupaten_id'));
+        })
+        ->leftJoin('suara_calon', function($join) {
+            $join->on('suara_calon.calon_id', '=', 'calon.id')
+                ->on('suara_calon.tps_id', '=', 'tps.id');
+        })
+        ->where([
+            ['calon.posisi', '=', $this->posisi],
+            ['calon.provinsi_id', '=', session('Tamu_provinsi_id')]
+        ])
+        ->groupBy([
+            'calon.id',
+            'calon.nama',
+            'calon.nama_wakil',
+            'calon.foto',
+            'calon.provinsi_id',
+            'calon.kabupaten_id',
+            'calon.no_urut'
+        ])
+        ->get();
     }
 }

@@ -12,6 +12,13 @@ class PaslonPilwali extends Component
 {
     public string $posisi = 'WALIKOTA';
 
+    public bool $withCard;
+
+    public function mount($withCard = true)
+    {
+        $this->withCard = $withCard;
+    }
+
     public function render()
     {
         $paslon = $this->getPaslon();
@@ -92,12 +99,14 @@ class PaslonPilwali extends Component
             'calon.nama_wakil',
             'calon.foto',
             'calon.kabupaten_id',
+            'calon.no_urut',
             DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
             ->where('calon.kabupaten_id', $this->getKabupatenIdOfTamu())
-            ->groupBy('calon.id');
+            ->groupBy('calon.id')
+            ->orderBy('calon.no_urut', 'asc');
 
         return $builder->get();
     }

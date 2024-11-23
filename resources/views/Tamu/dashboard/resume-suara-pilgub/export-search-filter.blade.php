@@ -1,6 +1,4 @@
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-    
-
     {{-- Search Input --}}
     <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
         {{-- Loading Icon --}}
@@ -28,7 +26,7 @@
     {{-- Filter Button --}}
     <button 
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
-        id="openFilterPilwaliPerWilayah"
+        id="openFilterPilgubPerWilayah"
     >
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
@@ -37,33 +35,33 @@
 
 @push('scripts')
     <script>
-        function showFilterPilwaliPerWilayahModal() {
-            const filterPilwaliPerWilayahModal = document.getElementById('filterPilwaliPerWilayahModal');
-            filterPilwaliPerWilayahModal.classList.remove('hidden');
+        function showFilterPilgubPerWilayahModal() {
+            const filterPilgubPerWilayahModal = document.getElementById('filterPilgubPerWilayahModal');
+            filterPilgubPerWilayahModal.classList.remove('hidden');
         }
 
-        function closeFilterPilwaliPerWilayahModal() {
-            const filterPilwaliPerWilayahModal = document.getElementById('filterPilwaliPerWilayahModal');
-            filterPilwaliPerWilayahModal.classList.add('hidden');
+        function closeFilterPilgubPerWilayahModal() {
+            const filterPilgubPerWilayahModal = document.getElementById('filterPilgubPerWilayahModal');
+            filterPilgubPerWilayahModal.classList.add('hidden');
         }
         
-        function initializeFilterPilwaliPerWilayah() {
-            document.getElementById('openFilterPilwaliPerWilayah').addEventListener('click', showFilterPilwaliPerWilayahModal);
-            document.getElementById('cancelFilterPilwaliPerWilayah').addEventListener('click', closeFilterPilwaliPerWilayahModal);
+        function initializeFilterResumeSuaraPerWilayah() {
+            document.getElementById('openFilterPilgubPerWilayah').addEventListener('click', showFilterPilgubPerWilayahModal);
+            document.getElementById('cancelFilterPilgub').addEventListener('click', closeFilterPilgubPerWilayahModal);
 
             document.addEventListener('keyup', function(event) {
                 if (event.key === "Escape") {
-                    closeFilterPilwaliPerWilayahModal();
+                    closeFilterPilgubPerWilayahModal();
                 }
             });
 
             document.addEventListener('click', function(event) {
-                if (event.target == filterPilwaliPerWilayahModal) {
-                    closeFilterPilwaliPerWilayahModal();
+                if (event.target == filterPilgubPerWilayahModal) {
+                    closeFilterPilgubPerWilayahModal();
                 }
             });
         }
 
-        initializeFilterPilwaliPerWilayah();
+        initializeFilterResumeSuaraPerWilayah();
     </script>
 @endpush

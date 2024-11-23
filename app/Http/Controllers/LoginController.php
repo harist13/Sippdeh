@@ -72,6 +72,21 @@ class LoginController extends Controller
                 session(['operator_kabupaten_name' => $user->kabupaten->nama]);
             }
 
+            if ($user->role == 'tamu') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['Tamu_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['Tamu_jenis_wilayah' => 'kabupaten']);
+                }
+
+                session(['Tamu_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['Tamu_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['Tamu_kabupaten_id' => $user->kabupaten->id]);
+                session(['Tamu_kabupaten_name' => $user->kabupaten->nama]);
+            }
+
             // Simpan riwayat login
             LoginHistory::create([
                 'user_id' => $user->id,
