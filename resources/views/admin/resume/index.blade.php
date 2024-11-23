@@ -1,33 +1,23 @@
-@extends('admin.layout.app')
+@extends('Admin.layout.app')
 
 @section('content')
-    <main class="container mx-auto px-4 py-8">
+<main class="container mx-auto px-4 py-8">
+    @if($showPilgub)
+        @livewire('Admin.resume.pilgub.per-wilayah.resume-suara-pilgub-per-wilayah')
+        @livewire('Admin.resume.pilgub.per-tps.resume-suara-pilgub-per-tps')
+        @livewire('Admin.paslon-pilgub')
+    @endif
 
-        {{-- Tampilkan Pilgub hanya jika tidak ada wilayah yang dipilih --}}
-        @if(!$wilayah)
-            <div class="mb-10">
-                @livewire('admin.resume.pilgub.resume-suara-pilgub', ['wilayah' => $wilayah])
-            </div>
-        @else
-            @php
-                $kotaList = ['samarinda', 'balikpapan', 'bontang'];
-            @endphp
-            
-            @if(in_array($wilayah, $kotaList))
-                <div class="mb-10">
-                    @livewire('admin.resume.pilwali.resume-suara-pilwali', ['wilayah' => $wilayah])
-                </div>
-            @endif
+    @if($showPilwali)
+        @livewire('Admin.resume.pilwali.per-wilayah.resume-suara-pilwali-per-wilayah', ['kabupatenId' => $kabupatenId])
+        @livewire('Admin.resume.pilwali.per-tps.resume-suara-pilwali-per-tps', ['kabupatenId' => $kabupatenId])
+        @livewire('Admin.paslon-pilwali', ['kabupatenId' => $kabupatenId])
+    @endif
 
-            @php
-                $kabupatenList = ['kutai-kartanegara', 'kutai-timur', 'kutai-barat', 'berau', 'paser', 'penajam-paser-utara', 'mahakam-ulu'];
-            @endphp
-            
-            @if(in_array($wilayah, $kabupatenList))
-                <div class="mb-10">
-                    @livewire('admin.resume.pilbup.resume-suara-pilbup', ['wilayah' => $wilayah])
-                </div>
-            @endif
-        @endif
-    </main>
+    @if($showPilbup)
+        @livewire('Admin.resume.pilbup.per-wilayah.resume-suara-pilbup-per-wilayah', ['kabupatenId' => $kabupatenId])
+        @livewire('Admin.resume.pilbup.per-tps.resume-suara-pilbup-per-tps', ['kabupatenId' => $kabupatenId])
+        @livewire('Admin.paslon-pilbup', ['kabupatenId' => $kabupatenId])
+    @endif
+</main>
 @endsection
