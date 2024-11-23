@@ -26,15 +26,11 @@ class RangkumanController extends Controller
             ]);
         }
 
-        // Convert wilayah parameter to actual kabupaten_id and determine type
-        $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
-        
-        if (!$kabupaten) {
-            abort(404);
-        }
+        // Get kabupaten by slug
+        $kabupaten = Kabupaten::where('slug', $wilayah)->firstOrFail();
 
         // Determine if it's a city (kota) or regency (kabupaten)
-        $isKota = stripos($kabupaten->nama, 'kota') !== false;
+        $isKota = $kabupaten->isKota();
 
         return view('admin.resume.index', [
             'wilayah' => $wilayah,

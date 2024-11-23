@@ -81,7 +81,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::get('/admin/pilgub', [RangkumanController::class, 'pilgub'])->name('admin.input-suara.pilgub');
         Route::get('/admin/pilwali', [RangkumanController::class, 'pilwali'])->name('admin.input-suara.pilwali');
         Route::get('/admin/pilbup', [RangkumanController::class, 'pilbub'])->name('admin.input-suara.pilbup');
-        Route::get('/admin/resume/{wilayah?}', [RangkumanController::class, 'resume'])->name('admin.resume');
+        Route::get('resume/{wilayah}', [RangkumanController::class, 'resume'])->name('admin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
     });
 
     // Middleware untuk operator
