@@ -90,14 +90,14 @@
             </th>
         </tr>
         <tr>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-dpt">
                 {{ number_format($totalDpt, 0, '.', '.') }}
             </th>
         
             {{-- Calon Totals --}}
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
-                    <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                    <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950 total-calon">
                         {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
                     </th>
                 @endforeach
@@ -105,24 +105,24 @@
         
             {{-- Kotak Kosong --}}
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-kotak-kosong bg-blue-950">
                     {{ $totalKotakKosong }}
                 </th>
             @endif
         
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-sah">
                 {{ number_format($totalSuaraSah, 0, '.', '.') }}
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-tidak-sah">
                 {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-masuk">
                 {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-abstain">
                 {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none rata-rata-paritisipasi">
                 {{ number_format($totalPartisipasi, 1, '.', '.') }}%
             </th>
         </tr>
