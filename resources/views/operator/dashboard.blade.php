@@ -163,7 +163,7 @@
 
 @section('content')
     <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
-        <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Gubernur dan Wakil Gubernur Se-Kalimantan Timur</h1>
+        {{-- <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Gubernur dan Wakil Gubernur Se-Kalimantan Timur</h1> --}}
 
         <div class="container mx-auto">
             {{-- Diagram Batang --}}
@@ -175,11 +175,18 @@
                 @livewire('operator.dashboard.diagram-bar-pilgub')
             </section>
             
-            {{-- Rekap Partisipasi --}}
-            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Di Kalimantan Timur</h3>
+            {{-- Rekap Partisipasi Pilgub --}}
+            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Gubernur Di Kalimantan Timur</h3>
 
                 @livewire('operator.dashboard.rekap-pilgub')
+            </section>
+
+            {{-- Rekap Partisipasi Pilwali --}}
+            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Walikota Di {{ session('operator_kabupaten_name') }}</h3>
+
+                @livewire('operator.dashboard.rekap-pilwali')
             </section>
         </div>
     </main>
