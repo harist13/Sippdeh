@@ -322,7 +322,6 @@ class InputSuaraUIManager {
 
     repairInputValues() {
         this.caches.components.inputs.forEach(function(input) {
-            console.log(input.parentElement)
             if (input.value < 0 || input.value == '' || isNaN(input.value)) {
                 input.value = input.dataset.defaultValue || 0;
             }
@@ -548,6 +547,184 @@ class InputSuaraUIManager {
         }
     }
 
+    syncTableHeadersWithSelectedTPS() {
+        if (this.isEditMode()) {
+            // Initialize totals
+            let totals = {
+                dpt: 0,
+                suaraSah: 0,
+                suaraTidakSah: 0,
+                suaraMasuk: 0,
+                abstain: 0,
+                partisipasiTotal: 0, // Changed to track total partisipasi
+                rowCount: 0, // To track number of rows for average calculation
+                calonVotes: {} // To store votes per candidate
+            };
+    
+            // Get all rows except those being edited
+            document.querySelectorAll('.input-suara-table tbody tr.tps').forEach(row => {
+                const tpsId = row.dataset.id;
+                
+                // Skip if this TPS is being edited
+                if (!TPS.exists(tpsId)) {
+                    totals.rowCount++; // Increment row counter
+    
+                    // Add DPT
+                    const dpt = parseInt(row.querySelector('.dpt').dataset.value) || 0;
+                    totals.dpt += dpt;
+    
+                    // Add Suara Sah
+                    const suaraSah = parseInt(row.querySelector('.suara-sah').dataset.value) || 0;
+                    totals.suaraSah += suaraSah;
+    
+                    // Add Suara Tidak Sah
+                    const suaraTidakSah = parseInt(row.querySelector('.suara-tidak-sah').dataset.value) || 0;
+                    totals.suaraTidakSah += suaraTidakSah;
+    
+                    // Add Suara Masuk
+                    const suaraMasuk = parseInt(row.querySelector('.suara-masuk').dataset.value) || 0;
+                    totals.suaraMasuk += suaraMasuk;
+    
+                    // Add Abstain
+                    const abstain = parseInt(row.querySelector('.abstain').dataset.value) || 0;
+                    totals.abstain += abstain;
+    
+                    // Calculate and add individual row's participation to total
+                    if (dpt > 0) {
+                        const rowPartisipasi = (suaraMasuk / dpt) * 100;
+                        totals.partisipasiTotal += rowPartisipasi;
+                    }
+    
+                    // Add candidate votes
+                    row.querySelectorAll('.paslon').forEach(paslonCell => {
+                        const calonId = paslonCell.dataset.id;
+                        const suara = parseInt(paslonCell.dataset.suara) || 0;
+                        totals.calonVotes[calonId] = (totals.calonVotes[calonId] || 0) + suara;
+                    });
+    
+                    // Add kotak kosong if exists
+                    const kotakKosongCell = row.querySelector('.kotak-kosong');
+                    if (kotakKosongCell && !kotakKosongCell.hasAttribute('hidden')) {
+                        const kotakKosong = parseInt(kotakKosongCell.dataset.value) || 0;
+                        totals.calonVotes['kotak_kosong'] = (totals.calonVotes['kotak_kosong'] || 0) + kotakKosong;
+                    }
+                }
+            });
+    
+            // Add values from edited TPS data
+            TPS.getAll().forEach(tps => {
+                totals.rowCount++; // Increment row counter
+                
+                totals.dpt += parseInt(tps.dpt) || 0;
+                totals.suaraSah += parseInt(tps.calculatedSuaraSah) || 0;
+                totals.suaraTidakSah += parseInt(tps.suaraTidakSah) || 0;
+                totals.suaraMasuk += parseInt(tps.suaraMasuk) || 0;
+                totals.abstain += parseInt(tps.abstain) || 0;
+    
+                // Add this TPS's participation to total
+                if (parseInt(tps.dpt) > 0) {
+                    const tpsPartisipasi = (parseInt(tps.suaraMasuk) / parseInt(tps.dpt)) * 100;
+                    totals.partisipasiTotal += tpsPartisipasi;
+                }
+    
+                // Add candidate votes from TPS
+                tps.suaraCalon.forEach(sc => {
+                    totals.calonVotes[sc.id] = (totals.calonVotes[sc.id] || 0) + (parseInt(sc.suara) || 0);
+                });
+    
+                // Add kotak kosong if it exists
+                if (tps.kotakKosong !== undefined) {
+                    totals.calonVotes['kotak_kosong'] = (totals.calonVotes['kotak_kosong'] || 0) + (parseInt(tps.kotakKosong) || 0);
+                }
+            });
+    
+            // Calculate average participation
+            totals.partisipasi = totals.rowCount > 0 
+                ? (totals.partisipasiTotal / totals.rowCount).toFixed(1) 
+                : "0.0";
+    
+            // Update the header cells
+            this.updateHeaderTotals(totals);
+        }
+    }
+    
+    updateHeaderTotals(totals) {
+        // Function to update a set of header cells
+        const updateHeaders = (headerContainer) => {
+            if (!headerContainer) return;
+    
+            // Update DPT
+            const dptTotal = headerContainer.querySelector('.total-dpt');
+            if (dptTotal) dptTotal.textContent = this.formatNumber(totals.dpt);
+    
+            // Update candidate totals
+            Object.entries(totals.calonVotes).forEach(([calonId, total]) => {
+                if (calonId === 'kotak_kosong') {
+                    const kotakKosongTotal = headerContainer.querySelector('.total-kotak-kosong');
+                    if (kotakKosongTotal) kotakKosongTotal.textContent = this.formatNumber(total);
+                } else {
+                    const calonTotal = headerContainer.querySelector(`th[wire\\:key="total-${calonId}"].total-calon`);
+                    if (calonTotal) calonTotal.textContent = this.formatNumber(total);
+                }
+            });
+    
+            // Update other totals
+            const suaraSahTotal = headerContainer.querySelector('.total-suara-sah');
+            if (suaraSahTotal) suaraSahTotal.textContent = this.formatNumber(totals.suaraSah);
+    
+            const suaraTidakSahTotal = headerContainer.querySelector('.total-suara-tidak-sah');
+            if (suaraTidakSahTotal) suaraTidakSahTotal.textContent = this.formatNumber(totals.suaraTidakSah);
+    
+            const suaraMasukTotal = headerContainer.querySelector('.total-suara-masuk');
+            if (suaraMasukTotal) suaraMasukTotal.textContent = this.formatNumber(totals.suaraMasuk);
+    
+            const abstainTotal = headerContainer.querySelector('.total-abstain');
+            if (abstainTotal) abstainTotal.textContent = this.formatNumber(totals.abstain);
+    
+            const partisipasiTotal = headerContainer.querySelector('.rata-rata-paritisipasi');
+            if (partisipasiTotal) partisipasiTotal.textContent = `${totals.partisipasi}%`;
+    
+            // For totals that don't have specific classes, update by position
+            const secondRow = headerContainer.querySelector('tr:last-child');
+            if (secondRow) {
+                // Update all numeric cells in the second row that don't have specific classes
+                const updateCell = (cell, value) => {
+                    if (cell && !cell.classList.contains('total-dpt') && 
+                        !cell.classList.contains('total-calon') && 
+                        !cell.classList.contains('total-kotak-kosong') && 
+                        !cell.classList.contains('total-suara-sah') && 
+                        !cell.classList.contains('total-suara-tidak-sah') && 
+                        !cell.classList.contains('total-suara-masuk') && 
+                        !cell.classList.contains('total-abstain') && 
+                        !cell.classList.contains('rata-rata-paritisipasi')) {
+                        
+                        cell.textContent = this.formatNumber(value);
+                    }
+                };
+    
+                // Update cells in order
+                const cells = Array.from(secondRow.querySelectorAll('th')).filter(cell => !cell.hasAttribute('rowspan'));
+                
+                // Update candidate totals that might not have classes
+                Object.values(totals.calonVotes).forEach((total, index) => {
+                    const cell = cells[index + 1]; // +1 to skip DPT
+                    if (cell) updateCell(cell, total);
+                });
+            }
+        };
+    
+        // Update main table headers
+        updateHeaders(document.querySelector('.input-suara-table thead'));
+    
+        // Update sticky reference headers
+        updateHeaders(document.querySelector('#stickyReferenceHeader thead'));
+    }
+    
+    // Helper method to format numbers with thousand separators
+    formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     syncTableInputWithSelectedTPS() {
         if (this.isEditMode()) {
             this.caches.components.rows.forEach(row => {
@@ -649,6 +826,7 @@ class InputSuaraUIManager {
 
                     TPS.update(tpsId, { kotakKosong: parseInt(value) });
                     this.syncTableDataWithSelectedTPS();
+                    this.syncTableHeadersWithSelectedTPS();
                 }
             });
 
@@ -662,6 +840,7 @@ class InputSuaraUIManager {
 
                     TPS.updateSuaraCalon(tpsId, cellDataset.id, value);
                     this.syncTableDataWithSelectedTPS();
+                    this.syncTableHeadersWithSelectedTPS();
                 }
             });
 
@@ -675,6 +854,7 @@ class InputSuaraUIManager {
                     
                     TPS.update(tpsId, { suaraTidakSah: parseInt(value) });
                     this.syncTableDataWithSelectedTPS();
+                    this.syncTableHeadersWithSelectedTPS();
                 }
             });
         });
@@ -701,6 +881,7 @@ class InputSuaraUIManager {
         this.syncTableDataWithSelectedTPS();
         this.syncTableInputWithSelectedTPS();
         this.syncSelectedRowsBackgroundColor();
+        this.syncTableHeadersWithSelectedTPS();
 
         this.syncTableMode();
 
