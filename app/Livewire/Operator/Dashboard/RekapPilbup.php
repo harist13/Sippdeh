@@ -3,18 +3,14 @@
 namespace App\Livewire\Operator\Dashboard;
 
 use App\Models\Calon;
-use App\Models\Kabupaten;
-use App\Models\Provinsi;
-use App\Models\ResumeSuaraPilgubKabupaten;
-use App\Models\ResumeSuaraPilgubProvinsi;
-use App\Models\ResumeSuaraTPS;
+use App\Models\ResumeSuaraPilbupKabupaten;
 use App\Models\SuaraCalon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Lazy]
-class RekapPilgub extends Component
+class RekapPilbup extends Component
 {
     public function placeholder()
     {
@@ -30,14 +26,14 @@ class RekapPilgub extends Component
 
     public function render()
     {
-        $provinsiData = $this->getProvinsiData();
-        return view('operator.dashboard.rekap-pilgub', compact('provinsiData'));
+        $kabupatenData = $this->getKabupatenData();
+        return view('operator.dashboard.rekap-pilbup', compact('kabupatenData'));
     }
 
-    private function getProvinsiData(): array
+    private function getKabupatenData(): array
     {
         // Get summary data for the province by summing up all kabupaten
-        $ringkasanData = ResumeSuaraPilgubKabupaten::whereId(session('operator_kabupaten_id'))->first();
+        $ringkasanData = ResumeSuaraPilbupKabupaten::whereId(session('operator_kabupaten_id'))->first();
 
         // Ensure no negative values
         $suaraSah = max(0, $ringkasanData->suara_sah ?? 0);

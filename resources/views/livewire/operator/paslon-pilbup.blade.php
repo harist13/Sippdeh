@@ -1,4 +1,4 @@
-<div class="bg-white rounded-[20px] w-[70%] mx-auto p-8">
+<div class="{{ $withCard ? 'bg-white rounded-[20px] py-8' : '' }} w-[70%] mx-auto px-8">
     <div class="grid grid-cols-2 gap-5 mx-auto">
         @php
             $isPilkadaTunggal = count($paslon) == 1;

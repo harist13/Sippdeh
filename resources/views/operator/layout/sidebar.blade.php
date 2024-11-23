@@ -48,13 +48,7 @@
             <span class="ml-2">Input Suara Pilgub</span>
         </a>
 
-        @php
-            $calonWalikota = App\Models\Calon::query()
-                ->wherePosisi('WALIKOTA')
-                ->whereHas('kabupaten', fn ($builder) => $builder->whereNama(session('user_wilayah')));
-        @endphp
-
-        @if ($calonWalikota->count())
+        @if (session('operator_jenis_wilayah') == 'kota')
             <a href="{{ route('operator.input-suara.pilwali') }}"
                 class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('operator.input-suara.pilwali') ? 'active' : '' }}">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

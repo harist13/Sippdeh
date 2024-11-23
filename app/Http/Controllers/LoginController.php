@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Calon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\LoginHistory;
@@ -57,6 +58,14 @@ class LoginController extends Controller
             session(['user_wilayah' => $user->wilayah?->nama ?? '-']);
 
             if ($user->role == 'operator') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['operator_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['operator_jenis_wilayah' => 'kabupaten']);
+                }
+
                 session(['operator_provinsi_id' => $user->kabupaten->provinsi->id]);
                 session(['operator_provinsi_name' => $user->kabupaten->provinsi->nama]);
                 session(['operator_kabupaten_id' => $user->kabupaten->id]);
