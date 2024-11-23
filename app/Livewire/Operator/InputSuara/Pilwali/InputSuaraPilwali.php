@@ -49,7 +49,7 @@ class InputSuaraPilwali extends Component
         try {
             $paslon = $this->getCalon();
             $tps = $this->getTps();
-            return view('operator.input-suara.pilwali.livewire', compact('tps', 'paslon'));
+            return view('operator.input-suara.pilwali.input-suara', compact('tps', 'paslon'));
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);

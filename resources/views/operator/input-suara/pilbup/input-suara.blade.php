@@ -75,10 +75,10 @@
                 {{-- Actionable --}}
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.input-suara.pilgub.action-buttons')
+                    @include('operator.input-suara.pilbup.action-buttons')
                     
                     {{-- Cari dan Filter --}}
-                    @include('operator.input-suara.pilgub.export-search-filter')
+                    @include('operator.input-suara.pilbup.export-search-filter')
                 </div>
                 
                 {{-- Success Message --}}
@@ -98,7 +98,7 @@
                 @endisset
 
                 {{-- Loading --}}
-                @include('operator.input-suara.pilgub.loading-alert')
+                @include('operator.input-suara.pilbup.loading-alert')
 
 				{{-- Sticky Reference Header --}}
 				<div id="stickyReferenceHeader" class="hidden">
@@ -180,7 +180,7 @@
                 <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                 <div class="px-4">
-                    @include('operator.input-suara.pilgub.table', compact('tps', 'paslon', 'includedColumns'))
+                    @include('operator.input-suara.pilbup.table', compact('tps', 'paslon', 'includedColumns'))
                 </div>
             </div>
         </div>
@@ -191,9 +191,9 @@
         {{ $tps->links('vendor.livewire.simple', data: ['scrollTo' => false]) }}
     </div>
 
-    {{-- Filter Pilgub Modal --}}
+    {{-- Filter Pilbup Modal --}}
     @include(
-        'operator.input-suara.pilgub.filter-modal',
+        'operator.input-suara.pilbup.filter-modal',
         compact('selectedKecamatan','selectedKelurahan','includedColumns','partisipasi')
     )
 </div>
