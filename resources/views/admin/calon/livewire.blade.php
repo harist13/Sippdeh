@@ -32,16 +32,7 @@
             </div>
 
             <div class="flex flex-col-mobile gap-x-2 space-y-2-mobile w-full-mobile">
-                <div class="flex gap-2">
-                    <button id="importCalonBtn" class="bg-[#58DA91] text-white py-2 px-4 rounded-lg w-full-mobile">
-                        <i class="fas fa-file-import me-1"></i>
-                        <span>Impor</span>
-                    </button>
-                    <button id="exportCalonBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
-                        <i class="fas fa-file-export me-1"></i>
-                        <span>Ekspor</span>
-                    </button>
-                </div>
+               
                 <button id="addCalonBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
                     <i class="fas fa-plus me-1"></i>
                     <span>Tambah Calon</span>
