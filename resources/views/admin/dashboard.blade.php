@@ -196,58 +196,8 @@
                 $paslon1Wins = $paslon1->total_suara >= $paslon2->total_suara;
             @endphp
 
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center">
-                    <img src="{{ Storage::disk('foto_calon_lokal')->url($paslon1->foto) }}" 
-                        alt="{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}" 
-                        class="rounded-full mr-4 w-20 h-20 object-cover">
-                    <div class="flex flex-col">
-                        <span class="font-semibold text-lg">{{ $paslon1->nama }}/{{ $paslon1->nama_wakil }}</span>
-                        <span class="text-sm text-gray-600">{{ number_format($paslon1->persentase, 1) }}%</span>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex flex-col items-end">
-                        <span class="font-semibold text-lg">{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}</span>
-                        <span class="text-sm text-gray-600">{{ number_format($paslon2->persentase, 1) }}%</span>
-                    </div>
-                    <img src="{{ Storage::disk('foto_calon_lokal')->url($paslon2->foto) }}" 
-                        alt="{{ $paslon2->nama }}/{{ $paslon2->nama_wakil }}" 
-                        class="rounded-full ml-4 w-20 h-20 object-cover">
-                </div>
-            </div>
-
-            <div class="bg-gray-200 h-10 rounded-full overflow-hidden relative">
-                @if($paslon1Wins)
-                    {{-- Jika paslon 1 menang, warna biru mengisi dari kiri --}}
-                    <div class="absolute inset-y-0 left-0 bg-[#3560A0] transition-all duration-500"
-                        style="width: {{ $paslon1->persentase }}%">
-                        <span class="text-white text-sm font-semibold ml-4 leading-10">
-                            {{ number_format($paslon1->total_suara, 0, ',', '.') }} Suara
-                        </span>
-                    </div>
-                    <div class="absolute inset-y-0 right-0 bg-yellow-400 transition-all duration-500"
-                        style="width: {{ $paslon2->persentase }}%">
-                        <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
-                            {{ number_format($paslon2->total_suara, 0, ',', '.') }} Suara
-                        </span>
-                    </div>
-                @else
-                    {{-- Jika paslon 2 menang, warna kuning mengisi dari kanan --}}
-                    <div class="absolute inset-y-0 right-0 bg-yellow-400 transition-all duration-500"
-                        style="width: {{ $paslon2->persentase }}%">
-                        <span class="text-white text-sm font-semibold mr-4 leading-10 float-right">
-                            {{ number_format($paslon2->total_suara, 0, ',', '.') }} Suara
-                        </span>
-                    </div>
-                    <div class="absolute inset-y-0 left-0 bg-[#3560A0] transition-all duration-500"
-                        style="width: {{ $paslon1->persentase }}%">
-                        <span class="text-white text-sm font-semibold ml-4 leading-10">
-                            {{ number_format($paslon1->total_suara, 0, ',', '.') }} Suara
-                        </span>
-                    </div>
-                @endif
-            </div>
+            @livewire('admin.dashboard.score-bar')
+            
         </section>
 
         <div class="container mx-auto px-4">
@@ -289,34 +239,7 @@
                 </section>
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Suara Masuk Dan Abstain Se-Kalimantan Timur</h3>
-                    <div class="p-4">
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div class="bg-white p-4 rounded-lg text-center">
-                                <h4 class="font-semibold text-gray-600">Total Suara Masuk</h4>
-                                <p class="text-2xl font-bold text-[#3560A0]">{{ $dptAbstainData['total_suara_masuk'] }}</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg text-center">
-                                <h4 class="font-semibold text-gray-600">Total Abstain</h4>
-                                <p class="text-2xl font-bold text-[#1E3A8A]">{{ $dptAbstainData['total_abstain'] }}</p>
-                            </div>
-                        </div>
-                        <div class="mb-4 relative">
-                            <canvas id="participationChart"></canvas>
-                            <!-- Legend di pojok kiri bawah -->
-                            <div class="absolute mt-5 left-2 bg-white p-2 rounded-lg shadow">
-                                <div class="flex flex-col">
-                                    <div class="flex items-center mb-1">
-                                        <div class="w-4 h-4 bg-[#66AFFF] mr-2"></div>
-                                        <span class="text-sm">Suara Masuk</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-4 h-4 bg-[#004999] mr-2"></div>
-                                        <span class="text-sm">Abstain</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @livewire('admin.dashboard.diagram-pie-chart')
                 </section>
             </div>
 
@@ -324,28 +247,16 @@
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                 <h3 class="bg-[#3560A0] text-white text-center py-2 chart-title">Perolehan Suara Gubernur Per Kabupaten/Kota</h3>
 
-                <div class="chart-container">
-
-                    <div class="canvas-wrapper">
-                        <canvas id="voteCountChart" width="800" height="300"></canvas>
-                    </div>
-                </div>
+                @livewire('admin.dashboard.diagram-bar-pilgub')
             </section>
         </div>
 
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-5 gap-4 mb-8">
                 @php
                     $kabupatens = App\Models\Kabupaten::orderBy('nama')->get();
                 @endphp
-                
-                @foreach($kabupatens as $kabupaten)
-                    <a href="{{ route('admin.resume', ['wilayah' => $kabupaten->slug]) }}" 
-                    class="bg-[#3560A0] text-white py-2 px-4 rounded text-center hover:bg-[#2a4d8a] transition-colors duration-200">
-                        {{ str_replace(['Kabupaten ', 'Kota '], '', $kabupaten->nama) }}
-                    </a>
-                @endforeach
-            </div>
+                @livewire('admin.dashboard.kabupaten-buttons')
+            
 
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                 <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Di Kalimantan Timur</h3>
@@ -614,38 +525,7 @@
                 </button>
                 <br>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse text-center">
-                    <thead class="bg-[#3560a0] text-white">
-                        <tr>
-                            <th class="py-3 px-4 border-r border-white">NO</th>
-                            <th class="py-3 px-4 border-r border-white">KAB/KOTA</th>
-                            <th class="py-3 px-4 border-r border-white">DPT</th>
-                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon1_nama'] }} / {{ $tableData['paslon1_wakil'] }}</th>
-                            <th class="py-3 px-4 border-r border-white">{{ $tableData['paslon2_nama'] }} / {{ $tableData['paslon2_wakil'] }}</th>
-                            <th class="py-3 px-4 border-r border-white">SUARA MASUK</th>
-                            <th class="py-3 px-4 border-r border-white">PARTISIPASI</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-gray-100">
-                        @foreach($tableData['data'] as $data)
-                        <tr class="border-b">
-                            <td class="py-3 px-4 border-r">{{ $data['no'] }}</td>
-                            <td class="py-3 px-4 border-r">{{ $data['kabupaten'] }}</td>
-                            <td class="py-3 px-4 border-r">{{ number_format($data['dpt'], 0, ',', '.') }}</td>
-                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon1'], 0, ',', '.') }}</td>
-                            <td class="py-3 px-4 border-r">{{ number_format($data['paslon2'], 0, ',', '.') }}</td>
-                            <td class="py-3 px-4 border-r">{{ number_format($data['suara_masuk'], 0, ',', '.') }}</td>
-                            <td class="py-3 px-4 border-r">
-                                <div class="participation-button participation-{{ $data['warna_partisipasi'] }}">
-                                    {{ number_format($data['partisipasi'], 1) }}%
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @livewire('admin.dashboard.table-pilgub')
     </main>
 @endsection
 
@@ -995,170 +875,7 @@
         });
 
 
-        // diagram bar
-        document.addEventListener('DOMContentLoaded', function() {
-            window.gubernurData = @json($chartData['data']);
-            const ctx = document.getElementById('voteCountChart').getContext('2d');
-            const titleElement = document.getElementById('chartTitle');
-            let isHovering = false;
-
-            const chartData = {
-                title: "Perolehan Suara Gubernur Per Kabupaten/Kota",
-                data: window.gubernurData
-            };
-
-            // Get the dynamic max range from the data
-            const MAX_VALUE = chartData.data.maxRange;
-            // Calculate step size based on MAX_VALUE
-            const STEP_SIZE = MAX_VALUE / 5; // This will create 5 steps on the y-axis
-
-            let chart = new Chart(ctx, {
-                type: 'bar',
-                data: chartData.data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                font: { size: 9 },
-                                maxRotation: 0,
-                                minRotation: 0,
-                                autoSkip: false
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            max: MAX_VALUE,
-                            ticks: {
-                                stepSize: STEP_SIZE,
-                                callback: function(value) {
-                                    return value.toLocaleString();
-                                }
-                            },
-                            grid: { color: '#E0E0E0' }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.raw;
-                                    const index = context.dataIndex;
-                                    const totalSuarahSah = chartData.data.totalSuarahSah[index];
-                                    const percentage = totalSuarahSah > 0 ? ((value / totalSuarahSah) * 100).toFixed(1) : 0;
-                                    return `${context.dataset.label}: ${value.toLocaleString()} suara (${percentage}%)`;
-                                }
-                            }
-                        },
-                        legend: {
-                            display: true,
-                            position: 'bottom',
-                            align: 'center',
-                            labels: {
-                                boxWidth: 15,
-                                padding: 15,
-                                font: { size: 12 }
-                            }
-                        }
-                    },
-                    layout: {
-                        padding: { left: 10, right: 10, top: 10, bottom: 10 }
-                    },
-                    onHover: (event, activeElements) => {
-                        const previousState = isHovering;
-                        isHovering = activeElements.length > 0;
-                        
-                        if (previousState !== isHovering) {
-                            chart.update('none');
-                        }
-                    },
-                    animation: {
-                        duration: 1,
-                        onComplete: function(animation) {
-                            if (isHovering) return;
-
-                            const chartInstance = animation.chart;
-                            const ctx = chartInstance.ctx;
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            ctx.font = 'bold 14px Arial';
-                            
-                            chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
-                                const meta = chartInstance.getDatasetMeta(datasetIndex);
-                                
-                                meta.data.forEach((bar, index) => {
-                                    const data = dataset.data[index];
-                                    const totalSuarahSah = chartData.data.totalSuarahSah[index];
-                                    let percentage;
-                                    
-                                    // Hitung persentase berdasarkan total suara sah
-                                    if (totalSuarahSah > 0) {
-                                        percentage = ((data / totalSuarahSah) * 100).toFixed(1);
-                                    } else {
-                                        percentage = 0;
-                                    }
-                                    
-                                    const barWidth = bar.width;
-                                    const barHeight = bar.height;
-                                    const barX = bar.x;
-                                    const barY = bar.y;
-                                    
-                                    if (barHeight > 30) {
-                                        ctx.save();
-                                        ctx.translate(barX, barY + barHeight/2);
-                                        ctx.rotate(-Math.PI / 2);
-                                        ctx.fillStyle = '#FFFFFF';
-                                        
-                                        const percentageText = `${percentage}%`;
-                                        
-                                        ctx.fillText(percentageText, 0, 0);
-                                        ctx.restore();
-                                    }
-                                });
-                            });
-                        }
-                    }
-                }
-            });
-        });
         
-        
-        // diagram pie
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const pieData = @json($dptAbstainData);
-            const colors = ['#66AFFF', '#004999'];
-
-            const ctx = document.getElementById('participationChart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: pieData.labels,
-                    datasets: [{
-                        data: pieData.percentages,
-                        backgroundColor: colors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}%`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
         
         
         
