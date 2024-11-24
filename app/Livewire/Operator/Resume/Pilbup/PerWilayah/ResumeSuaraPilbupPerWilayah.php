@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResumeSuaraPilbupPerWilayah extends Component
@@ -53,6 +55,66 @@ class ResumeSuaraPilbupPerWilayah extends Component
         $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKelurahan();
         return view('operator.resume.pilbup.per-wilayah.livewire', compact('suara', 'paslon'));
+    }
+
+    public function exportPdf()
+    {
+        try {
+            // Get data based on current view without pagination
+            if (!empty($this->selectedKelurahan)) {
+                $data = ResumeSuaraPilbupKelurahan::query()
+                    ->whereIn('id', $this->selectedKelurahan)
+                    ->where(function($query) {
+                        if ($this->keyword) {
+                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+                        }
+                    })->get();
+            } else {
+                $data = ResumeSuaraPilbupKecamatan::query()
+                    ->whereIn('id', $this->selectedKecamatan)
+                    ->where(function($query) {
+                        if ($this->keyword) {
+                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+                        }
+                    })->get();
+            }
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereId(session('operator_kabupaten_id'))->first();
+            $paslon = $this->getPaslon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilbup-wilayah-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+                'isPilkadaTunggal' => count($paslon) === 1,
+                'isKelurahanView' => !empty($this->selectedKelurahan)
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pemilihan-bupati.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
+        }
     }
 
     private function getKecamatanTable()
