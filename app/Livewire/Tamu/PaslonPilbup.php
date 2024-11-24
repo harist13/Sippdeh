@@ -12,13 +12,20 @@ class PaslonPilbup extends Component
 {
     public string $posisi = 'BUPATI';
 
+    public bool $withCard;
+
+    public function mount($withCard = true)
+    {
+        $this->withCard = $withCard;
+    }
+
     public function render()
     {
         $paslon = $this->getPaslon();
         $suaraSah = $this->getSuaraSahOfTamuKabupaten();
         $kotakKosong = $this->getKotakKosongOfTamuKabupaten();
 
-        return view('livewire.Tamu.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
+        return view('livewire.Tamu.paslon-pilbup', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
     
     private function getKabupatenIdOfTamu(): int
@@ -92,12 +99,14 @@ class PaslonPilbup extends Component
             'calon.nama_wakil',
             'calon.foto',
             'calon.kabupaten_id',
+            'calon.no_urut',
             DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
             ->where('calon.kabupaten_id', $this->getKabupatenIdOfTamu())
-            ->groupBy('calon.id');
+            ->groupBy('calon.id')
+            ->orderBy('calon.no_urut', 'asc');
 
         return $builder->get();
     }

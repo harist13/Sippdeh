@@ -5,20 +5,14 @@
 		@livewire('Tamu.resume.pilgub.per-wilayah.resume-suara-pilgub-per-wilayah')
 		@livewire('Tamu.resume.pilgub.per-tps.resume-suara-pilgub-per-tps')
 		@livewire('Tamu.paslon-pilgub')
-		
-		@php
-            $calonWalikota = App\Models\Calon::query()
-                ->wherePosisi('WALIKOTA')
-                ->whereHas('kabupaten', fn ($builder) => $builder->whereNama(session('user_wilayah')));
-        @endphp
 
-		@if ($calonWalikota->count())
+		@if (session('Tamu_jenis_wilayah') == 'kota')
 			<div class="mt-10">
 				@livewire('Tamu.resume.pilwali.per-wilayah.resume-suara-pilwali-per-wilayah')
 				@livewire('Tamu.resume.pilwali.per-tps.resume-suara-pilwali-per-tps')
 				@livewire('Tamu.paslon-pilwali')
 			</div>
-			@else
+		@else
 			<div class="mt-10">
 				@livewire('Tamu.resume.pilbup.per-wilayah.resume-suara-pilbup-per-wilayah')
 				@livewire('Tamu.resume.pilbup.per-tps.resume-suara-pilbup-per-tps')

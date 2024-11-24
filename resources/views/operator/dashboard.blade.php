@@ -162,25 +162,61 @@
 @endpush
 
 @section('content')
-    <main class="bg-white shadow-lg rounded-lg p-8 max-w-7xl mx-auto my-8">
-        <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Gubernur dan Wakil Gubernur Se-Kalimantan Timur</h1>
+    <main class="max-w-7xl mx-auto">
+        {{-- Pilgub --}}
+        <div class="bg-white shadow-lg rounded-lg p-8 my-8">
+            <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Gubernur dan Wakil Gubernur Se-{{ session('operator_provinsi_name') }}</h1>
+    
+            <div class="container mx-auto">
+                {{-- Diagram Batang --}}
+                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
+                    <h3 class="bg-[#3560A0] text-white text-center py-2 chart-title">
+                        Jumlah Perolehan Suara Gubernur Per Kabupaten/Kota
+                    </h3>
+    
+                    @livewire('operator.dashboard.diagram-bar-pilgub')
+                </section>
+                
+                {{-- Rekap Partisipasi Pilgub --}}
+                <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden pb-8 mb-8">
+                    <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Gubernur Di {{ session('operator_kabupaten_name') }}</h3>
+    
+                    @livewire('operator.dashboard.rekap-pilgub')
+                    @livewire('operator.dashboard.resume-suara-pilgub.resume-suara-pilgub')
+                    @livewire('operator.paslon-pilgub', ['withCard' => false])
+                </section>
+            </div>
+        </div>
 
-        <div class="container mx-auto">
-            {{-- Diagram Batang --}}
-            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
-                <h3 class="bg-[#3560A0] text-white text-center py-2 chart-title">
-                    Jumlah Perolehan Suara Gubernur Per Kabupaten/Kota
-                </h3>
+        {{-- Pilwali/Pilbup --}}
+        <div class="bg-white shadow-lg rounded-lg p-8 my-8">
+            @if (session('operator_jenis_wilayah') == 'kota')
+                <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Walikota dan Wakil Walikota Di {{ session('operator_kabupaten_name') }}</h1>
+            @else
+                <h1 class="bg-gray-100 rounded-lg font-bold text-center text-2xl mb-3 p-3">Data Perolehan Suara Calon Bupati dan Wakil Bupati Di {{ session('operator_kabupaten_name') }}</h1>
+            @endif
+    
+            <div class="container mx-auto">
+                @if (session('operator_jenis_wilayah') == 'kota')
+                    {{-- Rekap Partisipasi Pilwali --}}
+                    <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden pb-8">
+                        <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Walikota Di {{ session('operator_kabupaten_name') }}</h3>
 
-                @livewire('operator.dashboard.diagram-bar-pilgub')
-            </section>
-            
-            {{-- Rekap Partisipasi --}}
-            <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
-                <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Di Kalimantan Timur</h3>
+                        @livewire('operator.dashboard.rekap-pilwali')
+                        @livewire('operator.dashboard.resume-suara-pilwali.resume-suara-pilwali')
+                        @livewire('operator.paslon-pilwali', ['withCard' => false])
+                    </section>
+                @else
+                    {{-- Rekap Partisipasi Pilbup --}}
+                    <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden pb-8">
+                        <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Tingkat Partisipasi Pemilihan Bupati Di {{ session('operator_kabupaten_name') }}</h3>
 
-                @livewire('operator.dashboard.rekap-pilgub')
-            </section>
+                        @livewire('operator.dashboard.rekap-pilbup')
+                        @livewire('operator.dashboard.resume-suara-pilbup.resume-suara-pilbup')
+                        @livewire('operator.paslon-pilbup', ['withCard' => false])
+                    </section>
+                @endif
+            </div>
         </div>
     </main>
 @endsection

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 
 // Export
 use App\Exports\InputSuaraPilgubExport;
-
+use App\Traits\SortResumeColumns;
 // Packages
 use Sentry\SentrySdk;
 use Maatwebsite\Excel\Facades\Excel;
@@ -34,7 +34,7 @@ use Exception;
 
 class ResumeSuaraPilgubPerTps extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'GUBERNUR';
 
@@ -62,21 +62,36 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+        $this->sortResumeSuaraPilgubTpsPaslon($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         return $builder->paginate($this->perPage);
     }
 
     private function getBaseTPSBuilder(): Builder
     {
-        return ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
-            $builder->whereHas('kelurahan', function (Builder $builder) {
-                $builder->whereHas('kecamatan', function(Builder $builder) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) {
-                        $builder->whereNama(session('user_wilayah'));
+        return ResumeSuaraPilgubTPS::query()
+            ->selectRaw('
+                resume_suara_pilgub_tps.id,
+                resume_suara_pilgub_tps.nama,
+                resume_suara_pilgub_tps.dpt,
+                resume_suara_pilgub_tps.kotak_kosong,
+                resume_suara_pilgub_tps.suara_sah,
+                resume_suara_pilgub_tps.suara_tidak_sah,
+                resume_suara_pilgub_tps.suara_masuk,
+                resume_suara_pilgub_tps.abstain,
+                resume_suara_pilgub_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereId(session('Tamu_kabupaten_id'));
+                        });
                     });
                 });
             });
-        });
     }
 
     private function filterKelurahan(Builder $builder): void

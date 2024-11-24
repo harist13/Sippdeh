@@ -13,6 +13,6 @@ class CalonScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderBy('no_urut', 'ASC');
+        $builder->orderByRaw('calon.no_urut ASC');
     }
 }

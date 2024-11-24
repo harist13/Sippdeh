@@ -10,21 +10,35 @@ use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Exports\RangkumanExport;
-use Maatwebsite\Excel\Facades\Excel;
 
 class RangkumanController extends Controller
 {
     public function resume(Request $request, $wilayah = null)
     {
-        // Convert wilayah parameter to actual kabupaten_id
-        $kabupatenId = null;
-        if ($wilayah) {
-            $kabupaten = Kabupaten::where('nama', 'LIKE', '%' . str_replace('-', ' ', $wilayah) . '%')->first();
-            $kabupatenId = $kabupaten ? $kabupaten->id : null;
+        // Default to showing only Gubernur data when no wilayah is specified
+        if (!$wilayah) {
+            return view('admin.resume.index', [
+                'wilayah' => null,
+                'kabupatenId' => null,
+                'showPilgub' => true,
+                'showPilwali' => false,
+                'showPilbup' => false
+            ]);
         }
-        
-        return view('admin.resume.index', compact('wilayah', 'kabupatenId'));
+
+        // Get kabupaten by slug
+        $kabupaten = Kabupaten::where('slug', $wilayah)->firstOrFail();
+
+        // Determine if it's a city (kota) or regency (kabupaten)
+        $isKota = $kabupaten->isKota();
+
+        return view('admin.resume.index', [
+            'wilayah' => $wilayah,
+            'kabupatenId' => $kabupaten->id,
+            'showPilgub' => false,
+            'showPilwali' => $isKota,
+            'showPilbup' => !$isKota
+        ]);
     }
 
     public function pilgub(Request $request)
@@ -37,11 +51,8 @@ class RangkumanController extends Controller
         return view('admin.input-suara.pilwali.index');
     }
 
-     public function pilbub(Request $request)
+    public function pilbub(Request $request)
     {
         return view('admin.input-suara.pilbub.index');
     }
-    
-
-   
 }

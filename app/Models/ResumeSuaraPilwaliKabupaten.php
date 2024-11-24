@@ -30,6 +30,10 @@ class ResumeSuaraPilwaliKabupaten extends Model
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
 
+    public function kabupaten(): BelongsTo {
+        return $this->belongsTo(Kabupaten::class, 'id');
+    }
+
     public function kecamatan(): HasMany {
         return $this->hasMany(Kecamatan::class, 'kabupaten_id');
     }

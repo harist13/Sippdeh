@@ -8,6 +8,7 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\ResumeSuaraPilwaliKecamatan;
 use App\Models\ResumeSuaraPilwaliKelurahan;
+use App\Traits\SortResumeColumns;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
@@ -18,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResumeSuaraPilwaliPerWilayah extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use SortResumeColumns, WithPagination, WithoutUrlPagination;
 
     public string $posisi = 'WALIKOTA';
 
@@ -71,9 +72,25 @@ class ResumeSuaraPilwaliPerWilayah extends Component
 
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPilwaliKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilwaliKelurahan::query()
+            ->selectRaw('
+                resume_suara_pilwali_kelurahan.id,
+                resume_suara_pilwali_kelurahan.nama,
+                resume_suara_pilwali_kelurahan.kecamatan_id,
+                resume_suara_pilwali_kelurahan.dpt,
+                resume_suara_pilwali_kelurahan.kotak_kosong,
+                resume_suara_pilwali_kelurahan.suara_sah,
+                resume_suara_pilwali_kelurahan.suara_tidak_sah,
+                resume_suara_pilwali_kelurahan.suara_masuk,
+                resume_suara_pilwali_kelurahan.abstain,
+                resume_suara_pilwali_kelurahan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilwali_kelurahan.id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilwaliKelurahanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -84,9 +101,25 @@ class ResumeSuaraPilwaliPerWilayah extends Component
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraPilwaliKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilwaliKecamatan::query()
+            ->selectRaw('
+                resume_suara_pilwali_kecamatan.id,
+                resume_suara_pilwali_kecamatan.nama,
+                resume_suara_pilwali_kecamatan.kabupaten_id,
+                resume_suara_pilwali_kecamatan.dpt,
+                resume_suara_pilwali_kecamatan.kotak_kosong,
+                resume_suara_pilwali_kecamatan.suara_sah,
+                resume_suara_pilwali_kecamatan.suara_tidak_sah,
+                resume_suara_pilwali_kecamatan.suara_masuk,
+                resume_suara_pilwali_kecamatan.abstain,
+                resume_suara_pilwali_kecamatan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilwali_kecamatan.id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilwaliKecamatanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);

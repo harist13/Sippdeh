@@ -12,6 +12,13 @@ class PaslonPilwali extends Component
 {
     public string $posisi = 'WALIKOTA';
 
+    public bool $withCard;
+
+    public function mount($withCard = true)
+    {
+        $this->withCard = $withCard;
+    }
+
     public function render()
     {
         $paslon = $this->getPaslon();

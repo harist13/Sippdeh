@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Calon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\LoginHistory;
@@ -57,10 +58,48 @@ class LoginController extends Controller
             session(['user_wilayah' => $user->wilayah?->nama ?? '-']);
 
             if ($user->role == 'operator') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['operator_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['operator_jenis_wilayah' => 'kabupaten']);
+                }
+
                 session(['operator_provinsi_id' => $user->kabupaten->provinsi->id]);
                 session(['operator_provinsi_name' => $user->kabupaten->provinsi->nama]);
                 session(['operator_kabupaten_id' => $user->kabupaten->id]);
                 session(['operator_kabupaten_name' => $user->kabupaten->nama]);
+            }
+
+            if ($user->role == 'tamu') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['Tamu_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['Tamu_jenis_wilayah' => 'kabupaten']);
+                }
+
+                session(['Tamu_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['Tamu_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['Tamu_kabupaten_id' => $user->kabupaten->id]);
+                session(['Tamu_kabupaten_name' => $user->kabupaten->nama]);
+            }
+
+             if ($user->role == 'admin') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['Admin_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['Admin_jenis_wilayah' => 'kabupaten']);
+                }
+
+                session(['Admin_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['Admin_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['Admin_kabupaten_id' => $user->kabupaten->id]);
+                session(['Admin_kabupaten_name' => $user->kabupaten->nama]);
             }
 
             // Simpan riwayat login

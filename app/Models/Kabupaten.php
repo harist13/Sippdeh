@@ -2,18 +2,37 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\KabupatenScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
+#[ScopedBy([KabupatenScope::class])]
 class Kabupaten extends Model
 {
     use HasFactory;
 
     protected $table = 'kabupaten';
     
-    protected $fillable = ['nama', 'logo', 'provinsi_id'];
+    protected $fillable = ['nama', 'logo', 'provinsi_id', 'slug'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($kabupaten) {
+            $kabupaten->slug = Str::slug($kabupaten->nama);
+        });
+
+        static::updating(function ($kabupaten) {
+            if ($kabupaten->isDirty('nama')) {
+                $kabupaten->slug = Str::slug($kabupaten->nama);
+            }
+        });
+    }
 
     public function getThreeDigitsId(): string {
         $id = $this->getKey();
@@ -40,5 +59,10 @@ class Kabupaten extends Model
     
     public function paslon(): HasMany {
         return $this->hasMany(Calon::class, 'kabupaten_id');
+    }
+
+    public function isKota(): bool
+    {
+        return str_contains(strtolower($this->nama), 'kota');
     }
 }

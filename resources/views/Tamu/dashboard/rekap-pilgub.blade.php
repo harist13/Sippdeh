@@ -11,19 +11,19 @@
 							<div class="flex-grow pl-10">
 								<div class="space-y-2">
 									<div class="flex justify-between items-center border-b pb-2">
-										<h2 class="text-sm font-semibold text-gray-600">Total Suara Sah Kabupaten</h2>
+										<h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_sah']) }} Suara</p>
 									</div>
 									<div class="flex justify-between items-center border-b pb-2">
-										<h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah Kabupaten</h2>
+										<h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_tidak_sah']) }} Suara</p>
 									</div>
 									<div class="flex justify-between items-center border-b pb-2">
-										<h2 class="text-sm font-semibold text-gray-600">Total DPT Kabupaten</h2>
+										<h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['dpt']) }} Orang</p>
 									</div>
 									<div class="flex justify-between items-center">
-										<h2 class="text-sm font-semibold text-gray-600">Total Abstain Kabupaten</h2>
+										<h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['abstain']) }} Orang</p>
 									</div>
 								</div>
@@ -47,7 +47,7 @@
 								</div>
 							</div>
 							<div class="text-center w-1/3">
-								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat Provinsi {{ $provinsiData['nama'] }}</h2>
+								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{ $provinsiData['nama'] }}</h2>
 							</div>
 							<div class="text-right w-1/3">
 								<div class="text-4xl font-bold {{ $provinsiData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
@@ -56,45 +56,6 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			@endif
-		</div>
-	</div>
-
-	{{-- Foto Paslon Pilgub --}}
-	<div class="relative overflow-hidden w-[1080px] mx-auto mb-8">
-		<div class="w-[1080px] mx-auto">
-			@if ($provinsiData && !empty($provinsiData['candidates']))
-				<div data-province="true">
-					<div class="flex justify-center gap-[45px]">
-						@foreach($provinsiData['candidates'] as $candidate)
-							@if (strtolower($candidate['posisi']) == 'gubernur')
-								<div class="w-[330px] bg-white rounded-lg shadow overflow-hidden">
-									<div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
-										@if ($candidate['foto'])
-											<img class="w-full h-full object-cover" 
-												src="{{ Storage::disk('foto_calon_lokal')->url($candidate['foto']) }}" 
-												alt="{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}">
-										@endif
-									</div>
-									<div class="p-4 text-center">
-										<h4 class="text-[#52526c] font-bold mb-1">
-											{{ $candidate['nama'] }} / {{ $candidate['nama_wakil'] }}
-										</h4>
-										<p class="text-[#6b6b6b] mb-2">
-											{{ $candidate['wilayah'] }}
-										</p>
-										<p class="text-[#6b6b6b] mb-2">
-											PASLON PILGUB {{ $candidate['nomor_urut'] }}
-										</p>
-										<div class="text-[#008bf9] font-medium">
-											{{ number_format($candidate['persentase'], 2) }}% | {{ number_format($candidate['total_suara']) }} Suara
-										</div>
-									</div>
-								</div>
-							@endif
-						@endforeach
 					</div>
 				</div>
 			@endif

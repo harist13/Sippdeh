@@ -12,6 +12,13 @@ class PaslonPilbup extends Component
 {
     public string $posisi = 'BUPATI';
 
+    public bool $withCard;
+
+    public function mount($withCard = true)
+    {
+        $this->withCard = $withCard;
+    }
+
     public function render()
     {
         $paslon = $this->getPaslon();

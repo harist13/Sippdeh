@@ -17,6 +17,7 @@ use Livewire\Attributes\On;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ResumeSuaraPilgubPerWilayah extends Component
 {
@@ -53,6 +54,72 @@ class ResumeSuaraPilgubPerWilayah extends Component
         }
         
         return $this->getKabupatenTable();
+    }
+
+     public function exportPdf()
+    {
+        try {
+            // Ambil data tanpa paginasi
+            if (!empty($this->selectedKelurahan)) {
+                $data = ResumeSuaraPilgubKelurahan::query()
+                    ->whereIn('id', $this->selectedKelurahan)
+                    ->where(function($query) {
+                        if ($this->keyword) {
+                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+                        }
+                    })->get();
+            } elseif (!empty($this->selectedKecamatan)) {
+                $data = ResumeSuaraPilgubKecamatan::query()
+                    ->whereIn('id', $this->selectedKecamatan)
+                    ->where(function($query) {
+                        if ($this->keyword) {
+                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+                        }
+                    })->get();
+            } else {
+                $data = ResumeSuaraPilgubKabupaten::query()
+                    ->whereIn('id', $this->selectedKabupaten)
+                    ->where(function($query) {
+                        if ($this->keyword) {
+                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+                        }
+                    })->get();
+            }
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereNama(session('user_wilayah'))->first();
+            $paslon = $this->getCalon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilgub-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pilgub.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
+        }
     }
 
     private function getKelurahanTable()
