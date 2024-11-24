@@ -1,6 +1,6 @@
 @php
     $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
-    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
