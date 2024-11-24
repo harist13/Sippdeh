@@ -38,7 +38,7 @@ class FilterResumeSuaraPilbupPerWilayah extends Component
     private function getKecamatanOptions()
     {
         return Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
+            ->whereKabupatenId(session('operator_kabupaten_id'))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();

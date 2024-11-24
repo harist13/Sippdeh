@@ -35,7 +35,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
     public function mount()
     {
         $this->selectedKecamatan = Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
+            ->whereKabupatenId(session('operator_kabupaten_id'))
             ->get()
             ->pluck('id')
             ->all();
@@ -150,18 +150,6 @@ class ResumeSuaraPilbupPerWilayah extends Component
             }
         });
     }
-    
-    private function getKabupatenIdOfOperator(): int
-    {
-        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
-
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->id;
-        }
-
-        return 0;
-    }
 
     private function getSuaraSahOfOperatorKabupaten(): int
     {
@@ -181,7 +169,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
                         ->where('posisi', $this->posisi);
                 });
         })
-        ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
+        ->where('kabupaten.id', session('operator_kabupaten_id'))
         ->groupBy('kabupaten.id');
         
         if ($kabupaten->count() > 0) {
@@ -203,7 +191,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
             ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
             ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
             ->where('suara_tps.posisi', $this->posisi)
-            ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
+            ->where('kabupaten.id', session('operator_kabupaten_id'))
             ->groupBy('kabupaten.id');
         
         if ($kabupaten->count() > 0) {
@@ -226,7 +214,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
-            ->where('calon.kabupaten_id', $this->getKabupatenIdOfOperator())
+            ->where('calon.kabupaten_id', session('operator_kabupaten_id'))
             ->groupBy('calon.id');
 
         return $builder->get();
