@@ -4,12 +4,15 @@ namespace App\Livewire\Admin;
 
 use App\Models\Kabupaten;
 use App\Models\Provinsi as Model;
+use App\Models\Scopes\ProvinsiScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 
+#[ScopedBy([ProvinsiScope::class])]
 class Provinsi extends Component
 {
     use WithPagination, WithoutUrlPagination;
