@@ -17,14 +17,63 @@
             margin: 0;
             padding: 0;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
+        .letterhead {
+            position: relative;
+            margin-bottom: 30px;
+            border-bottom: 2px solid black;
+            padding-bottom: 20px;
+        }
+        .logo-container {
+            position: absolute;
+            left: 0;
+            top: 0;
         }
         .logo {
-            max-width: 100px;
-            margin: 10px auto;
-            display: block;
+            width: 80px;
+            height: auto;
+        }
+        .header-text {
+            margin-left: 90px;
+            text-align: center;
+        }
+        .header-text h2 {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 0;
+            padding: 5px 0;
+            text-transform: uppercase;
+        }
+        .header-text h3 {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 0;
+            padding: 5px 0;
+            text-transform: uppercase;
+        }
+        .header-text p {
+            font-size: 9pt;
+            margin: 0;
+            padding: 2px 0;
+        }
+        .header-text .contact {
+            font-size: 9pt;
+            margin: 0;
+            padding: 2px 0;
+        }
+        .header-text a {
+            color: #000;
+            text-decoration: none;
+        }
+        .document-info {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .document-info p {
+            margin: 3px 0;
+        }
+        .date-info {
+            text-align: right;
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
@@ -42,61 +91,158 @@
         }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bg-green { background-color: #4ade80; }
+        .bg-yellow { background-color: #facc15; }
+        .bg-red { background-color: #f87171; }
+        .text-white { color: white; }
+        .bg-blue-950 { background-color: #172554; }
     </style>
 </head>
 <body>
-    <div class="header">
-        @if($logo && file_exists(public_path('storage/' . $logo)))
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        @endif
-        <h3>HASIL REKAPITULASI SUARA</h3>
-        <h4>PEMILIHAN GUBERNUR DAN WAKIL GUBERNUR</h4>
-        <h4>{{ strtoupper($kabupaten->nama) }}</h4>
+    <div class="letterhead">
+        <div class="logo-container">
+            @if($logo && file_exists(public_path('storage/' . $logo)))
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            @endif
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH PROVINSI KALIMANTAN TIMUR</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Jalan Jenderal Sudirman Nomor 1, Samarinda, Kalimantan Timur 75121 Telepon (0541) 733333; Faksimile (0541) 733453</p>
+            <p class="contact">Pos-el: <a href="mailto:kesbangpolkaltim@gmail.com">kesbangpolkaltim@gmail.com</a>; Laman <a href="http://kesbangpol.kaltimprov.go.id">http://kesbangpol.kaltimprov.go.id</a></p>
+        </div>
     </div>
 
-    <table autosize="1">
+    <div class="date-info">
+        <p>Samarinda, {{ now()->isoFormat('D MMMM Y') }}</p>
+    </div>
+
+    <div class="document-info">
+        <p>Nomor : 200.1.5/1461/Kesbangpol.</p>
+        <p>Sifat : Penting</p>
+        <p>Lampiran : 1 (satu) berkas</p>
+        <p>Hal : Rekapitulasi perolehan suara Pemilihan Gubernur (Pilgub) tahun 2024</p>
+    </div>
+
+     <table autosize="1">
         <thead>
             <tr>
-                <th width="5%" class="text-center">NO</th>
-                @if(in_array('KABUPATEN/KOTA', $includedColumns))
-                    <th width="20%">KABUPATEN/KOTA</th>
+                <th rowspan="2" width="5%" class="text-center">NO</th>
+                
+                @if(in_array('PROVINSI', $includedColumns))
+                    <th rowspan="2" width="15%" class="text-center">PROVINSI</th>
                 @endif
+                
+                @if(in_array('KABUPATEN/KOTA', $includedColumns))
+                    <th rowspan="2" width="15%" class="text-center">KABUPATEN/KOTA</th>
+                @endif
+                
+                @if(in_array('KECAMATAN', $includedColumns))
+                    <th rowspan="2" width="15%" class="text-center">KECAMATAN</th>
+                @endif
+                
+                @if(in_array('KELURAHAN', $includedColumns))
+                    <th rowspan="2" width="15%" class="text-center">KELURAHAN</th>
+                @endif
+                
                 <th width="10%" class="text-center">DPT</th>
-                @foreach($paslon as $calon)
-                    <th class="text-center">{{ $calon->nama }}<br>{{ $calon->nama_wakil }}</th>
-                @endforeach
+                
+                @if(in_array('CALON', $includedColumns))
+                    @foreach($paslon as $calon)
+                        <th class="text-center bg-blue-950">{{ $calon->nama }}<br>{{ $calon->nama_wakil }}</th>
+                    @endforeach
+                    
+                    @if(count($paslon) == 1)
+                        <th class="text-center bg-blue-950">KOTAK KOSONG</th>
+                    @endif
+                @endif
+
                 <th width="10%" class="text-center">SUARA SAH</th>
                 <th width="10%" class="text-center">SUARA TIDAK SAH</th>
+                <th width="10%" class="text-center">SUARA MASUK</th>
+                <th width="10%" class="text-center">ABSTAIN</th>
                 <th width="10%" class="text-center">PARTISIPASI</th>
+            </tr>
+            <tr>
+                <th class="text-center">{{ number_format($data->sum('dpt'), 0, ',', '.') }}</th>
+                
+                @if(in_array('CALON', $includedColumns))
+                    @foreach($paslon as $calon)
+                        @php
+                            $totalSuara = $data->sum(function($item) use ($calon) {
+                                $suara = $item->getCalonSuaraByCalonId($calon->id);
+                                return $suara ? $suara->total_suara : 0;
+                            });
+                        @endphp
+                        <th class="text-center bg-blue-950">{{ number_format($totalSuara, 0, ',', '.') }}</th>
+                    @endforeach
+                    
+                    @if(count($paslon) == 1)
+                        <th class="text-center bg-blue-950">{{ number_format($data->sum('kotak_kosong'), 0, ',', '.') }}</th>
+                    @endif
+                @endif
+
+                <th class="text-center">{{ number_format($data->sum('suara_sah'), 0, ',', '.') }}</th>
+                <th class="text-center">{{ number_format($data->sum('suara_tidak_sah'), 0, ',', '.') }}</th>
+                <th class="text-center">{{ number_format($data->sum('suara_masuk'), 0, ',', '.') }}</th>
+                <th class="text-center">{{ number_format($data->sum('abstain'), 0, ',', '.') }}</th>
+                <th class="text-center">{{ number_format($data->avg('partisipasi'), 1, ',', '.') }}%</th>
             </tr>
         </thead>
         <tbody>
             @forelse($data as $index => $item)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    @if(in_array('KABUPATEN/KOTA', $includedColumns))
-                        <td>{{ $item->nama }}</td>
+                    
+                    @if(in_array('PROVINSI', $includedColumns))
+                        <td class="text-left">{{ $item->provinsi?->nama ?? $item->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}</td>
                     @endif
+                    
+                    @if(in_array('KABUPATEN/KOTA', $includedColumns))
+                        <td class="text-left">{{ $item->kabupaten?->nama ?? $item->kecamatan?->kabupaten?->nama ?? '-' }}</td>
+                    @endif
+                    
+                    @if(in_array('KECAMATAN', $includedColumns))
+                        <td class="text-left">{{ $item->kecamatan?->nama ?? $item->nama ?? '-' }}</td>
+                    @endif
+                    
+                    @if(in_array('KELURAHAN', $includedColumns))
+                        <td class="text-left">{{ $item->nama }}</td>
+                    @endif
+                    
                     <td class="text-right">{{ number_format($item->dpt, 0, ',', '.') }}</td>
-                    @foreach($paslon as $calon)
-                        @php
-                            $suara = $item->getCalonSuaraByCalonId($calon->id);
-                            $totalSuara = $suara ? $suara->total_suara : 0;
-                        @endphp
-                        <td class="text-right">
-                            {{ number_format($totalSuara, 0, ',', '.') }}
-                        </td>
-                    @endforeach
+                    
+                    @if(in_array('CALON', $includedColumns))
+                        @foreach($paslon as $calon)
+                            @php
+                                $suara = $item->getCalonSuaraByCalonId($calon->id);
+                            @endphp
+                            <td class="text-right">{{ number_format($suara ? $suara->total_suara : 0, 0, ',', '.') }}</td>
+                        @endforeach
+                        
+                        @if(count($paslon) == 1)
+                            <td class="text-right">{{ number_format($item->kotak_kosong, 0, ',', '.') }}</td>
+                        @endif
+                    @endif
+
                     <td class="text-right">{{ number_format($item->suara_sah, 0, ',', '.') }}</td>
                     <td class="text-right">{{ number_format($item->suara_tidak_sah, 0, ',', '.') }}</td>
-                    <td class="text-center">{{ number_format($item->partisipasi, 1, ',', '.') }}%</td>
+                    <td class="text-right">{{ number_format($item->suara_masuk, 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item->abstain, 0, ',', '.') }}</td>
+                    <td class="text-center {{ $item->partisipasi >= 80 ? 'bg-green' : ($item->partisipasi >= 60 ? 'bg-yellow' : 'bg-red') }} text-white">
+                        {{ number_format($item->partisipasi, 1, ',', '.') }}%
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="{{ 5 + count($paslon) }}" class="text-center">Data tidak tersedia</td>
+                    <td colspan="{{ 7 + count($paslon) + (in_array('PROVINSI', $includedColumns) ? 1 : 0) + (in_array('KABUPATEN/KOTA', $includedColumns) ? 1 : 0) + (in_array('KECAMATAN', $includedColumns) ? 1 : 0) + (in_array('KELURAHAN', $includedColumns) ? 1 : 0) }}" class="text-center">
+                        Data tidak tersedia.
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
+
 </body>
 </html>
