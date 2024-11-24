@@ -12,6 +12,7 @@ use Livewire\Attributes\Lazy;
 use Sentry\SentrySdk;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 #[Lazy]
 class DiagramBarPilgub extends Component
@@ -19,7 +20,7 @@ class DiagramBarPilgub extends Component
     public function placeholder()
     {
         return <<<'HTML'
-            <div class="flex justify-center my-20 w-[1080px]">
+            <div class="flex justify-center my-20 w-[1080px] mx-auto">
                 <svg class="animate-spin h-8 w-8 text-[#3560A0]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -147,4 +148,42 @@ class DiagramBarPilgub extends Component
         // Return the next range that would fully contain the max value
         return $steps * $baseStep;
     }
+
+    // TODO: Method ini rencananya akan dipakai kalau paslon yang mau ditampilkan di Diagram Bar itu lebih dari 2 paslon
+    // private function getPaslon()
+    // {
+    //     return Calon::select([
+    //         'calon.id',
+    //         'calon.nama',
+    //         'calon.nama_wakil',
+    //         'calon.foto',
+    //         'calon.provinsi_id',
+    //         'calon.kabupaten_id',
+    //         'calon.no_urut',
+    //         DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
+    //     ])
+    //     ->join('tps', function($join) {
+    //         $join->join('kelurahan', 'kelurahan.id', '=', 'tps.kelurahan_id')
+    //             ->join('kecamatan', 'kecamatan.id', '=', 'kelurahan.kecamatan_id')
+    //             ->where('kecamatan.kabupaten_id', session('operator_kabupaten_id'));
+    //     })
+    //     ->leftJoin('suara_calon', function($join) {
+    //         $join->on('suara_calon.calon_id', '=', 'calon.id')
+    //             ->on('suara_calon.tps_id', '=', 'tps.id');
+    //     })
+    //     ->where([
+    //         ['calon.posisi', '=', $this->posisi],
+    //         ['calon.provinsi_id', '=', session('operator_provinsi_id')]
+    //     ])
+    //     ->groupBy([
+    //         'calon.id',
+    //         'calon.nama',
+    //         'calon.nama_wakil',
+    //         'calon.foto',
+    //         'calon.provinsi_id',
+    //         'calon.kabupaten_id',
+    //         'calon.no_urut'
+    //     ])
+    //     ->get();
+    // }
 }

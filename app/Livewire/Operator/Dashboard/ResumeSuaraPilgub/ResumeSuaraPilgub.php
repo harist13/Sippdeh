@@ -94,8 +94,8 @@ class ResumeSuaraPilgub extends Component
                 return;
             }
 
-            $kabupaten = Kabupaten::whereNama(session('user_wilayah'))->first();
-            $paslon = $this->getCalon();
+            $kabupaten = Kabupaten::find(session('operator_kabupaten_id'));
+            $paslon = $this->getPaslon();
 
             $pdf = PDF::loadView('exports.resume-suara-pilgub-pdf', [
                 'data' => $data,
@@ -124,7 +124,7 @@ class ResumeSuaraPilgub extends Component
 
     private function getKelurahanTable()
     {
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKelurahan();
         $scope = 'kelurahan';
         
@@ -133,7 +133,7 @@ class ResumeSuaraPilgub extends Component
 
     private function getKecamatanTable()
     {
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKecamatan();
         $scope = 'kecamatan';
     
@@ -143,7 +143,7 @@ class ResumeSuaraPilgub extends Component
 
     private function getKabupatenTable()
     {
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKabupaten();
         $scope = 'kabupaten';
 
@@ -257,14 +257,12 @@ class ResumeSuaraPilgub extends Component
     private function fillSelectedKabupaten()
     {
         $this->selectedKabupaten = Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
+            ->whereHas('provinsi', fn (Builder $builder) => $builder->whereId(session('operator_provinsi_id')))
             ->pluck('id')
             ->all();
     }
 
-    private function getCalon()
+    private function getPaslon()
     {
         $builder = Calon::select([
             'calon.id',
@@ -275,24 +273,12 @@ class ResumeSuaraPilgub extends Component
             'calon.kabupaten_id',
             DB::raw('SUM(suara_calon.suara) AS suara'),
         ])
-            ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
-            ->where('calon.posisi', $this->posisi)
-            ->where('calon.provinsi_id', $this->getProvinsiIdOfOperator())
-            ->groupBy('calon.id');
+        ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
+        ->where('calon.posisi', $this->posisi)
+        ->where('calon.provinsi_id', session('operator_provinsi_id'))
+        ->groupBy('calon.id');
 
         return $builder->get();
-    }
-
-    private function getProvinsiIdOfOperator(): int
-    {
-        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
-
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->provinsi_id;
-        }
-
-        return 0;
     }
     
     #[On('reset-filter')] 
@@ -314,19 +300,5 @@ class ResumeSuaraPilgub extends Component
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
-    }
-
-    public function export()
-    {
-        $sheet = new ResumePilgubExport(
-            $this->keyword,
-            $this->selectedKabupaten,
-            $this->selectedKecamatan,
-            $this->selectedKelurahan,
-            $this->includedColumns,
-            $this->partisipasi
-        );
-
-        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
     }
 }

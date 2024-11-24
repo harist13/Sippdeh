@@ -235,24 +235,4 @@ class ResumeSuaraPilbup extends Component
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
     }
-
-    public function export(): BinaryFileResponse
-    {
-        try {
-            $sheet = new InputSuaraPilbupExport(
-                $this->keyword,
-                $this->selectedKecamatan,
-                $this->selectedKelurahan,
-                $this->includedColumns,
-                $this->partisipasi
-            );
-    
-            return Excel::download($sheet, 'resume-suara-pemilihan-bupkota.xlsx');
-        } catch (Exception $exception) {
-            Log::error($exception);
-            SentrySdk::getCurrentHub()->captureException($exception);
-
-            throw $exception;
-        }
-    }
 }

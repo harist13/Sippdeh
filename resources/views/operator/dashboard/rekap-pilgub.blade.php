@@ -1,30 +1,30 @@
 <div>
 	<div class="w-full mb-5">
 		<div class="flex flex-col p-6">
-			@if ($provinsiData)
+			@if ($resumeData)
 				<div>
 					<div class="mb-6 rounded-lg">
 						<div class="flex items-start mb-6">
-							<img src="{{ asset('storage/' . $provinsiData['logo']) }}" 
-								alt="Logo {{ $provinsiData['nama'] }}" 
+							<img src="{{ asset('storage/' . $resumeData['logo']) }}" 
+								alt="Logo {{ $resumeData['nama'] }}" 
 								class="mr-8 w-40 h-45">
 							<div class="flex-grow pl-10">
 								<div class="space-y-2">
 									<div class="flex justify-between items-center border-b pb-2">
 										<h2 class="text-sm font-semibold text-gray-600">Total Suara Sah</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_sah']) }} Suara</p>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['suara_sah']) }} Suara</p>
 									</div>
 									<div class="flex justify-between items-center border-b pb-2">
 										<h2 class="text-sm font-semibold text-gray-600">Total Suara Tidak Sah</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['suara_tidak_sah']) }} Suara</p>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['suara_tidak_sah']) }} Suara</p>
 									</div>
 									<div class="flex justify-between items-center border-b pb-2">
 										<h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['dpt']) }} Orang</p>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dpt']) }} Orang</p>
 									</div>
 									<div class="flex justify-between items-center">
 										<h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($provinsiData['abstain']) }} Orang</p>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['abstain']) }} Orang</p>
 									</div>
 								</div>
 							</div>
@@ -47,12 +47,12 @@
 								</div>
 							</div>
 							<div class="text-center w-1/3">
-								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{ $provinsiData['nama'] }}</h2>
+								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{ $resumeData['nama'] }}</h2>
 							</div>
 							<div class="text-right w-1/3">
-								<div class="text-4xl font-bold {{ $provinsiData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
-									($provinsiData['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
-									{{ number_format($provinsiData['partisipasi'], 1) }}%
+								<div class="text-4xl font-bold {{ $resumeData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
+									($resumeData['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
+									{{ number_format($resumeData['partisipasi'], 1) }}%
 								</div>
 							</div>
 						</div>

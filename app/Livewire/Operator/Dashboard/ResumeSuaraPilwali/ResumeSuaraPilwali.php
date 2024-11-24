@@ -235,24 +235,4 @@ class ResumeSuaraPilwali extends Component
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
     }
-
-    public function export(): BinaryFileResponse
-    {
-        try {
-            $sheet = new InputSuaraPilwaliExport(
-                $this->keyword,
-                $this->selectedKecamatan,
-                $this->selectedKelurahan,
-                $this->includedColumns,
-                $this->partisipasi
-            );
-    
-            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
-        } catch (Exception $exception) {
-            Log::error($exception);
-            SentrySdk::getCurrentHub()->captureException($exception);
-
-            throw $exception;
-        }
-    }
 }
