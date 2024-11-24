@@ -18,8 +18,13 @@
                         {{-- Loading Overlay --}}
                         <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
                         
-                        @include("operator.resume.pilgub.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
-                        'includedColumns'))
+                        @if (!empty($selectedKelurahan))
+                            @include("operator.resume.pilgub.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKecamatan))
+                            @include("operator.resume.pilgub.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKabupaten))
+                            @include("operator.resume.pilgub.per-wilayah.wilayah-tables.kabupaten-table", compact('suara', 'paslon', 'includedColumns'))
+                        @endif
                     </div>
                 </div>
             </div>

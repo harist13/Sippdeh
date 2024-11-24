@@ -5,6 +5,7 @@ namespace App\Exports;
 // Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
+use App\Traits\SortResumeColumns;
 
 // Laravel Facades
 use Illuminate\Support\Facades\Log;
@@ -19,20 +20,51 @@ use Exception;
 
 class InputSuaraPilwaliExport implements FromView
 {
+    use SortResumeColumns;
+    
+    public string $posisi = 'WALIKOTA';
+
     public string $keyword = '';
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
+
     public array $includedColumns = [];
     public array $partisipasi = [];
     
-    public function __construct($keyword, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function __construct(
+        $keyword,
+        $selectedKecamatan,
+        $selectedKelurahan,
+        $includedColumns,
+        $partisipasi,
+
+        $dptSort,
+        $suaraSahSort,
+        $suaraTidakSahSort,
+        $suaraMasukSort,
+        $abstainSort,
+        $partisipasiSort,
+
+        $paslonIdSort,
+        $paslonSort
+    )
     {
         $this->keyword = $keyword;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
+
+        $this->dptSort = $dptSort;
+        $this->suaraSahSort = $suaraSahSort;
+        $this->suaraTidakSahSort = $suaraTidakSahSort;
+        $this->suaraMasukSort = $suaraMasukSort;
+        $this->abstainSort = $abstainSort;
+        $this->partisipasiSort = $partisipasiSort;
+
+        $this->paslonIdSort = $paslonIdSort;
+        $this->paslonSort = $paslonSort;
     }
 
     /**
@@ -41,7 +73,7 @@ class InputSuaraPilwaliExport implements FromView
     public function view(): View
     {
         $includedColumns = $this->includedColumns;
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $tps = $this->getTPS();
         
         return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
@@ -56,6 +88,10 @@ class InputSuaraPilwaliExport implements FromView
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+
+            $this->sortResumeSuaraPilwaliTpsPaslon($builder);
+            $this->sortColumns($builder);
+            $this->sortResumeSuaraKotakKosong($builder);
     
             return $builder->get();
         } catch (Exception $exception) {
@@ -69,15 +105,27 @@ class InputSuaraPilwaliExport implements FromView
     private function getBaseTPSBuilder(): Builder
     {
         try {
-            return ResumeSuaraPilwaliTPS::whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereNama(session('user_wilayah'));
+            return ResumeSuaraPilwaliTPS::query()
+                ->selectRaw('
+                    resume_suara_pilwali_tps.id,
+                    resume_suara_pilwali_tps.nama,
+                    resume_suara_pilwali_tps.dpt,
+                    resume_suara_pilwali_tps.kotak_kosong,
+                    resume_suara_pilwali_tps.suara_sah,
+                    resume_suara_pilwali_tps.suara_tidak_sah,
+                    resume_suara_pilwali_tps.suara_masuk,
+                    resume_suara_pilwali_tps.abstain,
+                    resume_suara_pilwali_tps.partisipasi
+                ')
+                ->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            $builder->whereHas('kabupaten', function (Builder $builder) {
+                                $builder->whereId(session('operator_kabupaten_id'));
+                            });
                         });
                     });
                 });
-            });
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
@@ -176,11 +224,12 @@ class InputSuaraPilwaliExport implements FromView
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
         try {
-            $builder = Calon::with('suaraCalon')->wherePosisi('WALIKOTA');
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            $builder = Calon::with('suaraCalon')
+                ->whereKabupatenId(session('operator_kabupaten_id'))
+                ->wherePosisi($this->posisi);
     
             return $builder->get();
         } catch (Exception $exception) {

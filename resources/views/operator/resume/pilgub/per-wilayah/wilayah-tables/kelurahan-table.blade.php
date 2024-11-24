@@ -3,8 +3,8 @@
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
-    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
@@ -181,9 +181,14 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
+                {{-- Provinsi --}}
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}
+                </td>
+
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan->kabupaten->nama }}
+                    {{ $datum->kecamatan?->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}

@@ -37,18 +37,18 @@ class ResumeSuaraPilwaliPerTps extends Component
     public string $posisi = 'WALIKOTA';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render(): View
     {
         try {
-            $paslon = $this->getCalon();
+            $paslon = $this->getPaslon();
             $tps = $this->getTps();
             return view('operator.resume.pilwali.per-tps.livewire', compact('tps', 'paslon'));
         } catch (Exception $exception) {
@@ -68,6 +68,7 @@ class ResumeSuaraPilwaliPerTps extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+
             $this->sortResumeSuaraPilwaliTpsPaslon($builder);
             $this->sortColumns($builder);
             $this->sortResumeSuaraKotakKosong($builder);
@@ -203,7 +204,7 @@ class ResumeSuaraPilwaliPerTps extends Component
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
         try {
             $builder = Calon::with('suaraCalon')
@@ -222,7 +223,7 @@ class ResumeSuaraPilwaliPerTps extends Component
     #[On('reset-filter')] 
     public function resetFilter(): void
     {
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
@@ -245,7 +246,17 @@ class ResumeSuaraPilwaliPerTps extends Component
                 $this->selectedKecamatan,
                 $this->selectedKelurahan,
                 $this->includedColumns,
-                $this->partisipasi
+                $this->partisipasi,
+
+                $this->dptSort,
+                $this->suaraSahSort,
+                $this->suaraTidakSahSort,
+                $this->suaraMasukSort,
+                $this->abstainSort,
+                $this->partisipasiSort,
+
+                $this->paslonIdSort,
+                $this->paslonSort,
             );
     
             return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');

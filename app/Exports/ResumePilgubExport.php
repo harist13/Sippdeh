@@ -6,23 +6,46 @@ use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
+use App\Traits\SortResumeColumns;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 
 class ResumePilgubExport implements FromView, WithStyles
 {
+    use SortResumeColumns;
+
+    public string $posisi = 'GUBERNUR';
+
     public string $keyword = '';
 
     public array $selectedKabupaten = [];
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     
-    public function __construct($keyword, $selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function __construct(
+        $keyword,
+        $selectedKabupaten,
+        $selectedKecamatan,
+        $selectedKelurahan,
+        $includedColumns,
+        $partisipasi,
+
+        $dptSort,
+        $suaraSahSort,
+        $suaraTidakSahSort,
+        $suaraMasukSort,
+        $abstainSort,
+        $partisipasiSort,
+
+        $paslonIdSort,
+        $paslonSort
+    )
     {
         $this->keyword = $keyword;
         $this->selectedKabupaten = $selectedKabupaten;
@@ -30,6 +53,16 @@ class ResumePilgubExport implements FromView, WithStyles
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
+
+        $this->dptSort = $dptSort;
+        $this->suaraSahSort = $suaraSahSort;
+        $this->suaraTidakSahSort = $suaraTidakSahSort;
+        $this->suaraMasukSort = $suaraMasukSort;
+        $this->abstainSort = $abstainSort;
+        $this->partisipasiSort = $partisipasiSort;
+
+        $this->paslonIdSort = $paslonIdSort;
+        $this->paslonSort = $paslonSort;
     }
 
     /**
@@ -38,8 +71,7 @@ class ResumePilgubExport implements FromView, WithStyles
     public function view(): View
     {
         $includedColumns = $this->includedColumns;
-        $paslon = $this->getCalon();
-
+        $paslon = $this->getPaslon();
         
         if (!empty($this->selectedKelurahan)) {
             $suara = $this->getSuaraPerKelurahan();
@@ -54,12 +86,28 @@ class ResumePilgubExport implements FromView, WithStyles
         $suara = $this->getSuaraPerKabupaten();
         return view('exports.resume.pilgub.kabupaten-table', compact('suara', 'paslon', 'includedColumns'));
     }
-
+    
     private function getSuaraPerKelurahan()
     {
-        $builder = ResumeSuaraPilgubKelurahan::whereIn('id', $this->selectedKelurahan);
+        $builder = ResumeSuaraPilgubKelurahan::query()
+            ->selectRaw('
+                resume_suara_pilgub_kelurahan.id,
+                resume_suara_pilgub_kelurahan.nama,
+                resume_suara_pilgub_kelurahan.kecamatan_id,
+                resume_suara_pilgub_kelurahan.dpt,
+                resume_suara_pilgub_kelurahan.kotak_kosong,
+                resume_suara_pilgub_kelurahan.suara_sah,
+                resume_suara_pilgub_kelurahan.suara_tidak_sah,
+                resume_suara_pilgub_kelurahan.suara_masuk,
+                resume_suara_pilgub_kelurahan.abstain,
+                resume_suara_pilgub_kelurahan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kelurahan.id', $this->selectedKelurahan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKelurahanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -70,9 +118,25 @@ class ResumePilgubExport implements FromView, WithStyles
 
     private function getSuaraPerKecamatan()
     {
-        $builder = ResumeSuaraPilgubKecamatan::whereIn('id', $this->selectedKecamatan);
+        $builder = ResumeSuaraPilgubKecamatan::query()
+            ->selectRaw('
+                resume_suara_pilgub_kecamatan.id,
+                resume_suara_pilgub_kecamatan.nama,
+                resume_suara_pilgub_kecamatan.kabupaten_id,
+                resume_suara_pilgub_kecamatan.dpt,
+                resume_suara_pilgub_kecamatan.kotak_kosong,
+                resume_suara_pilgub_kecamatan.suara_sah,
+                resume_suara_pilgub_kecamatan.suara_tidak_sah,
+                resume_suara_pilgub_kecamatan.suara_masuk,
+                resume_suara_pilgub_kecamatan.abstain,
+                resume_suara_pilgub_kecamatan.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kecamatan.id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKecamatanPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -83,9 +147,25 @@ class ResumePilgubExport implements FromView, WithStyles
 
     private function getSuaraPerKabupaten()
     {
-        $builder = ResumeSuaraPilgubKabupaten::whereIn('id', $this->selectedKabupaten);
+        $builder = ResumeSuaraPilgubKabupaten::query()
+            ->selectRaw('
+                resume_suara_pilgub_kabupaten.id,
+                resume_suara_pilgub_kabupaten.nama,
+                resume_suara_pilgub_kabupaten.provinsi_id,
+                resume_suara_pilgub_kabupaten.dpt,
+                resume_suara_pilgub_kabupaten.kotak_kosong,
+                resume_suara_pilgub_kabupaten.suara_sah,
+                resume_suara_pilgub_kabupaten.suara_tidak_sah,
+                resume_suara_pilgub_kabupaten.suara_masuk,
+                resume_suara_pilgub_kabupaten.abstain,
+                resume_suara_pilgub_kabupaten.partisipasi
+            ')
+            ->whereIn('resume_suara_pilgub_kabupaten.id', $this->selectedKabupaten);
 
         $this->addPartisipasiFilter($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraPilgubKabupatenPaslon($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -111,12 +191,21 @@ class ResumePilgubExport implements FromView, WithStyles
         });
     }
 
-    private function getCalon()
+    private function getPaslon()
     {
-        $builder = Calon::wherePosisi('GUBERNUR');
-        $builder->whereHas('provinsi', function (Builder $builder) {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-        });
+        $builder = Calon::select([
+            'calon.id',
+            'calon.nama',
+            'calon.nama_wakil',
+            'calon.foto',
+            'calon.provinsi_id',
+            'calon.kabupaten_id',
+            DB::raw('SUM(suara_calon.suara) AS suara'),
+        ])
+            ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
+            ->where('calon.posisi', $this->posisi)
+            ->where('calon.provinsi_id', session('operator_provinsi_id'))
+            ->groupBy('calon.id');
 
         return $builder->get();
     }
