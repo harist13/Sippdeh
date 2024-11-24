@@ -17,6 +17,8 @@ use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubProvinsi;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -69,12 +71,17 @@ class AdminController extends Controller
 
         $kabupatenData = $this->getKabupatenData();
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
-        $dptAbstainData = $this->getTotalDptAbstainData();
-        $chartData = $this->getChartData();
         $provinsiData = $this->getProvinsiData();
-        $tableData = $this->getTableData();
         
-        return view('admin.dashboard', compact('calon', 'total_suara', 'suaraPerKabupaten', 'kabupatens', 'kabupatenData', 'syncedCalonData', 'dptAbstainData', 'chartData', 'provinsiData','tableData'));
+        return view('admin.dashboard', compact(
+            'calon', 
+            'total_suara', 
+            'suaraPerKabupaten', 
+            'kabupatens', 
+            'kabupatenData', 
+            'syncedCalonData', 
+            'provinsiData'
+        ));
     }
 
     private function getProvinsiData(): array
@@ -88,10 +95,10 @@ class AdminController extends Controller
 
         // Get summary data for the province by summing up all kabupaten
         $ringkasanData = ResumeSuaraPilgubProvinsi::where('id', $provinsi->id)->select(
-            \DB::raw('SUM(suara_sah) as suara_sah'),
-            \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
-            \DB::raw('SUM(dpt) as dpt'),
-            \DB::raw('SUM(abstain) as abstain')
+            DB::raw('SUM(suara_sah) as suara_sah'),
+            DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
+            DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(abstain) as abstain')
         )->first();
 
         // Ensure no negative values
@@ -148,32 +155,6 @@ class AdminController extends Controller
         ];
     }
 
-    private function getTotalDptAbstainData(): array 
-    {
-        // Get sum of suara masuk (suara sah + tidak sah) and Abstain from all regions
-        $totalData = ResumeSuaraPilgubProvinsi::query()
-            ->where('id', 23) // 23 itu Kalimantan Timur, liat ProvinsiSeeder.php
-            ->first();
-        
-        $totalSuaraMasuk = max(0, $totalData->suara_masuk ?? 0);
-        $totalAbstain = max(0, $totalData->abstain ?? 0);
-        
-        // Calculate total for percentage calculation
-        $total = $totalSuaraMasuk + $totalAbstain;
-
-        return [
-            'labels' => ['Suara Masuk', 'Abstain'],
-            'values' => [$totalSuaraMasuk, $totalAbstain],
-            'percentages' => [
-                round(($total > 0 ? $totalSuaraMasuk / $total * 100 : 0), 1),
-                round(($total > 0 ? $totalAbstain / $total * 100 : 0), 1)
-            ],
-            'total_suara_masuk' => number_format($totalSuaraMasuk, 0, ',', '.'),
-            'total_abstain' => number_format($totalAbstain, 0, ',', '.')
-        ];
-    }
-
-    
     private function getCalonDataByWilayah($kabupatens): array
     {
         $syncedData = [];
@@ -212,7 +193,7 @@ class AdminController extends Controller
         return $syncedData;
     }
 
-    private function getCalonByPosisi(string|array $posisi, ?int $provinsiId = null, ?int $kabupatenId = null)
+    private function getCalonByPosisi(string|array $posisi, ?int $provinsiId = null, ?int $kabupatenId = null): Collection
     {
         $query = Calon::query();
         
@@ -253,18 +234,6 @@ class AdminController extends Controller
         return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
     }
 
-    // private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
-    // {
-    //     $totalSuaraKabupaten = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
-    //         $query->where('id', $kabupatenId);
-    //     })->sum('suara');
-
-    //     if ($totalSuaraKabupaten === 0) return 0;
-
-    //     return round(($totalSuara / $totalSuaraKabupaten) * 100, 2);
-    // }
-
-    
     private function getKabupatenData(): array
     {
         $kabupatens = Kabupaten::all();
@@ -304,10 +273,10 @@ class AdminController extends Controller
     private function getRingkasanDataByKabupaten(int $kabupatenId): array
     {
         $ringkasan = ResumeSuaraPilgubKabupaten::where('id', $kabupatenId)->select(
-            \DB::raw('SUM(suara_sah) as suara_sah'),
-            \DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
-            \DB::raw('SUM(dpt) as dpt'),
-            \DB::raw('SUM(abstain) as abstain')
+            DB::raw('SUM(suara_sah) as suara_sah'),
+            DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
+            DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(abstain) as abstain')
         );
 
         if ($ringkasan->count()) {
@@ -337,161 +306,6 @@ class AdminController extends Controller
         } else {
             return 'red';
         }
-    }
-
-
-    private function getChartData(): array
-    {
-        $kabupatens = Kabupaten::orderBy('nama', 'asc')->get();
-        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
-        
-        if ($gubernurCalon->count() < 2) {
-            return [];
-        }
-        
-        $paslon1 = $gubernurCalon[0];
-        $paslon2 = $gubernurCalon[1];
-        
-        $labels = [];
-        $paslon1Data = [];
-        $paslon2Data = [];
-        $totalSuarahSahPerKabupaten = []; // Array untuk menyimpan total suara sah per kabupaten
-        
-        foreach ($kabupatens as $kabupaten) {
-            $namaKabupaten = str_replace(['Kota ', 'Kabupaten '], '', $kabupaten->nama);
-            $labels[] = $namaKabupaten;
-            
-            $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon1->id)->sum('suara');
-            
-            $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon2->id)->sum('suara');
-            
-            // Hitung total suara sah per kabupaten
-            $totalSuarahSahPerKabupaten[] = $suaraPaslon1 + $suaraPaslon2;
-            
-            $paslon1Data[] = $suaraPaslon1;
-            $paslon2Data[] = $suaraPaslon2;
-        }
-        
-        // Calculate the maximum value from both datasets
-        $maxValue = max(
-            max($paslon1Data ?: [0]),
-            max($paslon2Data ?: [0])
-        );
-        
-        // Calculate the dynamic max range
-        $dynamicMaxRange = $this->calculateDynamicMaxRange($maxValue);
-        
-        return [
-            'title' => "Perolehan Suara Gubernur Per Kabupaten/Kota",
-            'data' => [
-                'labels' => $labels,
-                'datasets' => [
-                    [
-                        'label' => "{$paslon1->nama}",
-                        'data' => $paslon1Data,
-                        'backgroundColor' => '#3560A0',
-                        'barPercentage' => 0.98,
-                        'categoryPercentage' => 0.5,
-                    ],
-                    [
-                        'label' => "{$paslon2->nama}",
-                        'data' => $paslon2Data,
-                        'backgroundColor' => '#F9D926',
-                        'barPercentage' => 0.98,
-                        'categoryPercentage' => 0.5,
-                    ]
-                ],
-                'maxRange' => $dynamicMaxRange,
-                'totalSuarahSah' => $totalSuarahSahPerKabupaten // Mengirim total suara sah ke frontend
-            ]
-        ];
-    }
-
-    private function calculateDynamicMaxRange($maxValue): int
-    {
-        // Base step size for ranges (e.g., 500, 1000, 1500, etc.)
-        $baseStep = 500;
-        
-        // Calculate how many steps we need to accommodate the max value
-        $steps = ceil($maxValue / $baseStep);
-        
-        // Return the next range that would fully contain the max value
-        return $steps * $baseStep;
-    }
-
-    private function getTableData(): array
-    {
-        $kabupatens = Kabupaten::orderBy('nama', 'asc')->get();
-        $gubernurCalon = Calon::where('posisi', 'GUBERNUR')->get();
-        
-        if ($gubernurCalon->count() < 2) {
-            return [];
-        }
-        
-        $paslon1 = $gubernurCalon[0];
-        $paslon2 = $gubernurCalon[1];
-        
-        // Tambahkan informasi nama paslon ke array yang akan dikembalikan
-        $tableInfo = [
-            'paslon1_nama' => $paslon1->nama,
-            'paslon1_wakil' => $paslon1->nama_wakil,
-            'paslon2_nama' => $paslon2->nama,
-            'paslon2_wakil' => $paslon2->nama_wakil,
-            'data' => []
-        ];
-        
-        $unsortedData = [];
-        
-        foreach ($kabupatens as $index => $kabupaten) {
-            // Get DPT
-            $resumeData = ResumeSuaraPilgubKabupaten::where('id', $kabupaten->id)->first();
-
-            // Get votes for Paslon 1
-            $suaraPaslon1 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon1->id)
-            ->sum('suara');
-            
-            // Get votes for Paslon 2
-            $suaraPaslon2 = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupaten) {
-                $query->where('id', $kabupaten->id);
-            })->where('calon_id', $paslon2->id)
-            ->sum('suara');
-
-            // Calculate participation
-            $dpt = max(0, $resumeData->dpt ?? 0);
-            $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
-            $partisipasi = $resumeData->partisipasi;
-
-            $unsortedData[] = [
-                'kabupaten' => $kabupaten->nama,
-                'dpt' => $dpt,
-                'paslon1' => $suaraPaslon1,
-                'paslon2' => $suaraPaslon2,
-                'suara_masuk' => $suaraMasuk,
-                'partisipasi' => $partisipasi,
-                'warna_partisipasi' => $this->getWarnaPartisipasi($partisipasi)
-            ];
-        }
-
-        // Sort data by partisipasi in descending order
-        usort($unsortedData, function($a, $b) {
-            return $b['partisipasi'] <=> $a['partisipasi'];
-        });
-
-        // Reindex with sorted numbers
-        foreach ($unsortedData as $index => $data) {
-            $tableInfo['data'][] = array_merge(
-                ['no' => str_pad($index + 1, 2, '0', STR_PAD_LEFT)],
-                $data
-            );
-        }
-
-        return $tableInfo;
     }
 
     public function rekapitulasi()

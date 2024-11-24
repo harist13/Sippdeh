@@ -42,9 +42,7 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
     private function getKabupatenOptions()
     {
         return Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
+            ->whereProvinsiId(session('operator_provinsi_id'))
             ->get()
             ->map(fn (Kabupaten $kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
             ->toArray();

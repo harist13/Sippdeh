@@ -18,6 +18,7 @@ class CalonSeeder extends Seeder
             'nama_wakil' => 'Hadi Mulyadi',
             'posisi' => 'GUBERNUR',
             'provinsi_id' => 23, // Kalimantan Timur
+            'no_urut' => 1
         ]);
 
         Calon::create([
@@ -25,6 +26,7 @@ class CalonSeeder extends Seeder
             'nama_wakil' => 'Seno Aji',
             'posisi' => 'GUBERNUR',
             'provinsi_id' => 23, // Kalimantan Timur
+            'no_urut' => 2
         ]);
 
         // Pilkada Samarinda

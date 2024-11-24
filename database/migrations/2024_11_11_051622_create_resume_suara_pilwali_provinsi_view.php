@@ -40,7 +40,7 @@ return new class extends Migration
             LEFT JOIN 
                 resume_suara_pilwali_tps ON resume_suara_pilwali_tps.id = tps.id
             LEFT JOIN 
-                daftar_pemilih ON daftar_pemilih.kabupaten_id = kabupaten.id
+                daftar_pemilih ON daftar_pemilih.kabupaten_id = kabupaten.id AND daftar_pemilih.posisi = 'WALIKOTA'
             GROUP BY 
                 provinsi.id;
         ");

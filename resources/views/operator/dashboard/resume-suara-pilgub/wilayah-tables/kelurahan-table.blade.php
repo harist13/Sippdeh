@@ -80,26 +80,6 @@
                 </th>
             @endif
 
-            <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Suara Sah</span>
-                @if ($suaraSahSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($suaraSahSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($suaraSahSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
-            <th wire:click="sortSuaraTidakSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Suara Tidak Sah</span>
-                @if ($suaraTidakSahSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($suaraTidakSahSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($suaraTidakSahSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
             <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
                 <span>Suara Masuk</span>
                 @if ($suaraMasukSort === null)
@@ -107,16 +87,6 @@
                 @elseif ($suaraMasukSort === 'asc')
                     <i class="fas fa-sort-up ml-2"></i>
                 @elseif ($suaraMasukSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
-            <th wire:click="sortAbstain" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Abstain</span>
-                @if ($abstainSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($abstainSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($abstainSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
             </th>
@@ -151,18 +121,9 @@
                     {{ $totalKotakKosong }}
                 </th>
             @endif
-        
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalSuaraSah, 0, '.', '.') }}
-            </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
-            </th>
+            
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
-            </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalPartisipasi, 1, '.', '.') }}%
@@ -217,24 +178,9 @@
                     </td>
                 @endif
 
-                {{-- Suara Sah --}}
-                <td class="py-3 px-4 text-xs border suara-sah">
-                    {{ number_format($datum->suara_sah, 0, '', '.') }}
-                </td>
-
-                {{-- Suara Tidak Sah --}}
-                <td class="py-3 px-4 text-xs border suara-tidak-sah">
-                    {{ number_format($datum->suara_tidak_sah, 0, '', '.') }}
-                </td>
-
                 {{-- Suara Masuk --}}
                 <td class="py-3 px-4 text-xs border suara-masuk">
                     {{ number_format($datum->suara_masuk, 0, '', '.') }}
-                </td>
-
-                {{-- Abstain --}}
-                <td class="py-3 px-4 text-xs border abstain">
-                    {{ number_format($datum->abstain, 0, '', '.') }}
                 </td>
 
                 {{-- Partisipasi --}}

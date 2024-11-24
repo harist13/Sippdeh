@@ -158,11 +158,9 @@ class ResumeSuaraPilgubPerTps extends Component
 
     private function getCalon(): Collection
     {
-        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-
-        $builder->whereHas('provinsi', function (Builder $builder) {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-        });
+        $builder = Calon::with('suaraCalon')
+            ->whereProvinsiId(session('operator_provinsi_id'))
+            ->wherePosisi($this->posisi);
 
         return $builder->get();
     }

@@ -38,10 +38,10 @@
 						<i class="fas fa-file-import me-1"></i>
 						<span>Impor</span>
 					</button>
-					<button id="exportTPSBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
+					{{-- <button id="exportTPSBtn" class="bg-[#EE3C46] text-white py-2 px-4 rounded-lg w-full-mobile">
 						<i class="fas fa-file-export me-1"></i>
 						<span>Ekspor</span>
-					</button>
+					</button> --}}
 				</div>
 				<button id="addTPSBtn" class="bg-[#0070FF] text-white py-2 px-4 rounded-lg w-full-mobile">
 					<i class="fas fa-plus me-1"></i>

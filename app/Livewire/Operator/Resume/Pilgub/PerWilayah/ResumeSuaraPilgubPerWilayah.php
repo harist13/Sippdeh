@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class ResumeSuaraPilgubPerWilayah extends Component
 {
@@ -94,7 +95,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
                 return;
             }
 
-            $kabupaten = Kabupaten::whereNama(session('user_wilayah'))->first();
+            $kabupaten = Kabupaten::whereId(session('operator_kabupaten_id'))->first();
             $paslon = $this->getCalon();
 
             $pdf = PDF::loadView('exports.resume-suara-pilgub-pdf', [
@@ -114,7 +115,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('PDF Export Error: ' . $e->getMessage());
+            Log::error('PDF Export Error: ' . $e->getMessage());
             $this->dispatch('showAlert', [
                 'type' => 'error',
                 'message' => 'Gagal mengekspor PDF'
@@ -257,9 +258,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
     private function fillSelectedKabupaten()
     {
         $this->selectedKabupaten = Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
+            ->whereProvinsiId(session('operator_provinsi_id'))
             ->pluck('id')
             ->all();
     }
@@ -285,7 +284,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
     private function getProvinsiIdOfOperator(): int
     {
-        $kabupaten = Kabupaten::whereNama(session('user_wilayah'));
+        $kabupaten = Kabupaten::whereId(session('operator_kabupaten_id'));
 
         if ($kabupaten->count() > 0) {
             $kabupaten = $kabupaten->first();

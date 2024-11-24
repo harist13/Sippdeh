@@ -68,15 +68,7 @@ class InputSuaraPilgub extends Component
 
     private function getBaseTPSBuilder(): Builder
     {
-        return ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
-            $builder->whereHas('kelurahan', function (Builder $builder) {
-                $builder->whereHas('kecamatan', function(Builder $builder) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) {
-                        $builder->whereNama(session('user_wilayah'));
-                    });
-                });
-            });
-        });
+        return ResumeSuaraPilgubTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', fn (Builder $builder) => $builder->whereId(session('operator_kabupaten_id')));
     }
 
     private function filterKelurahan(Builder $builder): void
@@ -143,11 +135,9 @@ class InputSuaraPilgub extends Component
 
     private function getCalon(): Collection
     {
-        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-
-        $builder->whereHas('provinsi', function (Builder $builder) {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-        });
+        $builder = Calon::with('suaraCalon')
+            ->whereProvinsiId(session('operator_provinsi_id'))
+            ->wherePosisi($this->posisi);
 
         return $builder->get();
     }

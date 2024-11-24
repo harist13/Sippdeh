@@ -73,15 +73,7 @@ class InputSuaraPilbup extends Component
     private function getBaseTPSBuilder(): Builder
     {
         try {
-            return ResumeSuaraPilbupTPS::whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereNama(session('user_wilayah'));
-                        });
-                    });
-                });
-            });
+            return ResumeSuaraPilbupTPS::whereHas('tps.kelurahan.kecamatan.kabupaten', fn (Builder $builder) => $builder->whereId(session('operator_kabupaten_id')));
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
@@ -183,8 +175,9 @@ class InputSuaraPilbup extends Component
     private function getCalon(): Collection
     {
         try {
-            $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            $builder = Calon::with('suaraCalon')
+                ->whereKabupatenId(session('operator_kabupaten_id'))
+                ->wherePosisi($this->posisi);
             
             return $builder->get();
         } catch (Exception $exception) {
