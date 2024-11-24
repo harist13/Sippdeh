@@ -1,8 +1,8 @@
 @php
     $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
-    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
@@ -29,6 +29,9 @@
                 NO
             </th>
 			
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+                Provinsi
+            </th>
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 300px;">
                 Kabupaten/Kota
             </th>
@@ -168,6 +171,11 @@
                 {{-- ID TPS --}}
                 <td class="py-3 px-4 border nomor">
                     {{ $datum->getThreeDigitsId() }}
+                </td>
+
+                {{-- Provinsi --}}
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->provinsi?->nama ?? '-' }}
                 </td>
 
                 {{-- Kabupaten --}}

@@ -14,8 +14,10 @@ use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResumeSuaraPilwaliPerWilayah extends Component
 {
@@ -24,11 +26,11 @@ class ResumeSuaraPilwaliPerWilayah extends Component
     public string $posisi = 'WALIKOTA';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
+    
     public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
@@ -48,26 +50,16 @@ class ResumeSuaraPilwaliPerWilayah extends Component
 
     private function getKelurahanTable()
     {
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKelurahan();
-        $scope = 'kelurahan';
-        
-        $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
-        $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
-        
-        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon'));
     }
 
     private function getKecamatanTable()
     {
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKecamatan();
-        $scope = 'kecamatan';
-        
-        $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
-        $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
-        
-        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope'));
+        return view('operator.resume.pilwali.per-wilayah.livewire', compact('suara', 'paslon'));
     }
 
     private function getSuaraPerKelurahan()
@@ -145,58 +137,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         });
     }
 
-    private function getSuaraSahOfOperatorKabupaten(): int
-    {
-        $kabupaten = Kabupaten::select([
-            'kabupaten.id',
-            'kabupaten.nama',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara_sah')
-        ])
-        ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-        ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-        ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-        ->leftJoin('suara_calon', function ($join) {
-            $join->on('suara_calon.tps_id', '=', 'tps.id')
-                ->whereIn('suara_calon.calon_id', function ($query) {
-                    $query->select('id')
-                        ->from('calon')
-                        ->where('posisi', $this->posisi);
-                });
-        })
-        ->where('kabupaten.id', session('operator_kabupaten_id'))
-        ->groupBy('kabupaten.id');
-        
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->suara_sah;
-        }
-
-        return 0;
-    }
-
-    private function getKotakKosongOfOperatorKabupaten(): int
-    {
-        $kabupaten = Kabupaten::select([
-            'kabupaten.id',
-            DB::raw('SUM(suara_tps.kotak_kosong) AS kotak_kosong'),
-        ])
-            ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-            ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-            ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-            ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
-            ->where('suara_tps.posisi', $this->posisi)
-            ->where('kabupaten.id', session('operator_kabupaten_id'))
-            ->groupBy('kabupaten.id');
-        
-        if ($kabupaten->count() > 0) {
-            $kabupaten = $kabupaten->first();
-            return $kabupaten->kotak_kosong;
-        }
-
-        return 0;
-    }
-
-    private function getCalon()
+    private function getPaslon(): Collection
     {
         $builder = Calon::select([
             'calon.id',
@@ -214,7 +155,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         return $builder->get();
     }
 
-    private function fillSelectedKecamatan()
+    private function fillSelectedKecamatan(): void
     {
         $this->selectedKecamatan = Kecamatan::query()
             ->whereKabupatenId(session('operator_kabupaten_id'))
@@ -224,7 +165,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
     }
 
     #[On('reset-filter')] 
-    public function resetFilter()
+    public function resetFilter(): void
     {
         $this->fillSelectedKecamatan();
         
@@ -234,7 +175,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
     }
 
     #[On('apply-filter')]
-    public function applyFilter($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function applyFilter($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi): void
     {
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
@@ -242,13 +183,24 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    public function export()
+    public function export(): BinaryFileResponse
     {
         $sheet = new ResumePilwaliExport(
+            $this->keyword,
             $this->selectedKecamatan,
             $this->selectedKelurahan,
             $this->includedColumns,
-            $this->partisipasi
+            $this->partisipasi,
+
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
         );
 
         return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');

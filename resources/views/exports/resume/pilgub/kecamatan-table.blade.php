@@ -1,129 +1,213 @@
 @php
+    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
+    $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
-<table>
+@php
+    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
+    $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
+    $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
+    $totalAbstain = $suara->sum(fn ($datum) => $datum->abstain ?? 0);
+    $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
+
+    $totalsPerCalon = [];
+    foreach ($paslon as $calon) {
+        $totalsPerCalon[$calon->id] = $suara->sum(fn($datum) => $datum->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0);
+    }
+
+    $totalKotakKosong = $suara->sum(fn ($datum) => $datum->kotak_kosong ?? 0);
+@endphp
+
+<table class="voting-table">
     <thead>
         <tr>
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="50px">
+            <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
                 NO
             </th>
 
+            @if (!$isProvinsiColumnIgnored)
+                <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">
+                    Provinsi
+                </th>
+            @endif
+			
             @if (!$isKabupatenColumnIgnored)
-                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
+                <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">
                     Kabupaten/Kota
                 </th>
             @endif
+            
             @if (!$isKecamatanColumnIgnored)
-                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
+                <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">
                     Kecamatan
                 </th>
             @endif
-
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                DPT
-            </th>
+            
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>DPT</span>
+            </th>            
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
-                    <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
-                        {{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
                     </th>
                 @endforeach
+
+                @if ($isPilkadaTunggal)
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        <span>Kotak Kosong</span>
+                    </th>
+                @endif
             @endif
 
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="200px">
-                    Kotak Kosong
-                </th>
-            @endif
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>Suara Sah</span>
+            </th>
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>Suara Tidak Sah</span>
+            </th>
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>Suara Masuk</span>
+            </th>
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>Abstain</span>
+            </th>
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                <span>Partisipasi</span>
+            </th>
+        </tr>
+        <tr>
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalDpt, 0, '.', '.') }}
+            </th>
+        
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                    </th>
+                @endforeach
 
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                Suara Sah
+                @if ($isPilkadaTunggal)
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        {{ $totalKotakKosong }}
+                    </th>
+                @endif
+            @endif
+        
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalSuaraSah, 0, '.', '.') }}
             </th>
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                Suara Tidak Sah
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
             </th>
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                Suara Masuk
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
             </th>
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                Abstain
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
-            <th style="text-align: center; vertical-align: center; font-weight: bold; border: 1px solid black;" width="100px">
-                Partisipasi
+            <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                {{ number_format($totalPartisipasi, 1, '.', '.') }}%
             </th>
         </tr>
     </thead>
-    <tbody style="background-color: #F5F5F5;">
-        @foreach ($suara as $datum)
-            <tr style="border-bottom: 1px solid;">
-                <td style="text-align: center; border: 1px solid black;">
+
+    <tbody>
+        @forelse ($suara as $datum)
+            <tr>
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
+                @if (!$isProvinsiColumnIgnored)
+                    <td style="border: 1px solid black; vertical-align: middle; text-align: left;">
+                        {{ $datum->kabupaten?->provinsi?->nama ?? '-' }}
+                    </td>
+                @endif
+
                 @if (!$isKabupatenColumnIgnored)
-                    <td style="border: 1px solid black;">
+                    <td style="border: 1px solid black; vertical-align: middle; text-align: left;">
                         {{ $datum->kabupaten?->nama ?? '-' }}
                     </td>
                 @endif
+
                 @if (!$isKecamatanColumnIgnored)
-                    <td style="border: 1px solid black;">
+                    <td style="border: 1px solid black; vertical-align: middle; text-align: left;">
                         {{ $datum->nama }}
                     </td>
                 @endif
-                
-                <td style="text-align: center; border: 1px solid black;">
-                    <span>{{ $datum->dpt }}</span>
+
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                    {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
-                
+
                 @if (!$isCalonColumnIgnored)
                     @foreach ($paslon as $calon)
-                        @php $suara = $datum->getCalonSuaraByCalonId($calon->id); @endphp
-                        <td style="text-align: center; border: 1px solid black;">
-                            {{ $suara ? $suara->total_suara : 0 }}
+                        @php
+                            $suara = $datum->getCalonSuaraByCalonId($calon->id);
+                        @endphp
+                        <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
+
+                    @if ($isPilkadaTunggal)
+                        <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                            {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                        </td>
+                    @endif
                 @endif
 
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td style="text-align: center; border: 1px solid black;">
-                        {{ $datum->kotak_kosong }}
-                    </td>
-                @endif
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                    {{ number_format($datum->suara_sah, 0, '', '.') }}
+                </td>
 
-                <td style="text-align: center; border: 1px solid black;">
-                    {{ $datum->suara_sah }}
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                    {{ number_format($datum->suara_tidak_sah, 0, '', '.') }}
                 </td>
-                <td style="text-align: center; border: 1px solid black;">
-                    {{ $datum->suara_tidak_sah }}
+
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                    {{ number_format($datum->suara_masuk, 0, '', '.') }}
                 </td>
-                <td style="text-align: center; border: 1px solid black;">
-                    {{ $datum->suara_masuk }}
+
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                    {{ number_format($datum->abstain, 0, '', '.') }}
                 </td>
-                <td style="text-align: center; border: 1px solid black;">
-                    {{ $datum->abstain }}
-                </td>
-                <td style="text-align: center; border: 1px solid black;">
+
+                <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
                     @if ($datum->partisipasi >= 80)
-                        <span style="background-color: #68D391; display: block; color: white; padding: 4px 14px; border-radius: 4px;">
+                        <span class="partisipasi-high">
                             {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
-                    @elseif ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
-                        <span style="background-color: #F6E05E; display: block; color: white; padding: 4px 14px; border-radius: 4px;">
+                    @endif
+
+                    @if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
+                        <span class="partisipasi-medium">
                             {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
-                    @else
-                        <span style="background-color: #FC8181; display: block; color: white; padding: 4px 14px; border-radius: 4px;">
+                    @endif
+
+                    @if ($datum->partisipasi < 60)
+                        <span class="partisipasi-low">
                             {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
                     @endif
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="15" class="empty-message">
+                    Data tidak tersedia.
+                </td>
+            </tr>
+        @endforelse
     </tbody>
 </table>
