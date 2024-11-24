@@ -39,19 +39,26 @@ class ResumeSuaraPilgubPerTps extends Component
     public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
     {
-        $paslon = $this->getCalon();
-        $tps = $this->getTps();
-        return view('operator.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
+        try {
+            $paslon = $this->getPaslon();
+            $tps = $this->getTps();
+            return view('operator.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
     }
 
     private function getTps()
@@ -62,6 +69,7 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+
         $this->sortResumeSuaraPilgubTpsPaslon($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraKotakKosong($builder);
@@ -156,7 +164,7 @@ class ResumeSuaraPilgubPerTps extends Component
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
         $builder = Calon::with('suaraCalon')
             ->whereProvinsiId(session('operator_provinsi_id'))
@@ -170,7 +178,7 @@ class ResumeSuaraPilgubPerTps extends Component
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
@@ -183,24 +191,6 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    private function insertSuaraCalon(int $tpsId, int $calonId, int $suara): void
-    {
-        try {
-            SuaraCalon::updateOrCreate(
-                [
-                    'tps_id' => $tpsId,
-                    'calon_id' => $calonId,
-                ],
-                [
-                    'suara' => $suara,
-                    'operator_id' => Auth::id()
-                ]
-            );
-        } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
     public function export(): BinaryFileResponse
     {
         $sheet = new InputSuaraPilgubExport(
@@ -208,7 +198,17 @@ class ResumeSuaraPilgubPerTps extends Component
             $this->selectedKecamatan,
             $this->selectedKelurahan,
             $this->includedColumns,
-            $this->partisipasi
+            $this->partisipasi,
+
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
         );
 
         return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');

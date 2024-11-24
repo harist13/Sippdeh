@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubTPS;
+use App\Traits\SortResumeColumns;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -11,20 +12,51 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class InputSuaraPilgubExport implements FromView
 {
+    use SortResumeColumns;
+
+    public string $posisi = 'GUBERNUR';
+
     public string $keyword = '';
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
+
     public array $includedColumns = [];
     public array $partisipasi = [];
     
-    public function __construct($keyword, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function __construct(
+        $keyword,
+        $selectedKecamatan,
+        $selectedKelurahan,
+        $includedColumns,
+        $partisipasi,
+
+        $dptSort,
+        $suaraSahSort,
+        $suaraTidakSahSort,
+        $suaraMasukSort,
+        $abstainSort,
+        $partisipasiSort,
+
+        $paslonIdSort,
+        $paslonSort
+    )
     {
         $this->keyword = $keyword;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
+
+        $this->dptSort = $dptSort;
+        $this->suaraSahSort = $suaraSahSort;
+        $this->suaraTidakSahSort = $suaraTidakSahSort;
+        $this->suaraMasukSort = $suaraMasukSort;
+        $this->abstainSort = $abstainSort;
+        $this->partisipasiSort = $partisipasiSort;
+
+        $this->paslonIdSort = $paslonIdSort;
+        $this->paslonSort = $paslonSort;
     }
 
     /**
@@ -33,7 +65,7 @@ class InputSuaraPilgubExport implements FromView
     public function view(): View
     {
         $includedColumns = $this->includedColumns;
-        $paslon = $this->getCalon();
+        $paslon = $this->getPaslon();
         $tps = $this->getTps();
         
         return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
@@ -47,21 +79,37 @@ class InputSuaraPilgubExport implements FromView
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+        
+        $this->sortResumeSuaraPilgubTpsPaslon($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
 
         return $builder->get();
     }
 
     private function getBaseTPSBuilder(): Builder
     {
-        return ResumeSuaraPilgubTPS::whereHas('tps', function(Builder $builder) {
-            $builder->whereHas('kelurahan', function (Builder $builder) {
-                $builder->whereHas('kecamatan', function(Builder $builder) {
-                    $builder->whereHas('kabupaten', function (Builder $builder) {
-                        $builder->whereNama(session('user_wilayah'));
+        return ResumeSuaraPilgubTPS::query()
+            ->selectRaw('
+                resume_suara_pilgub_tps.id,
+                resume_suara_pilgub_tps.nama,
+                resume_suara_pilgub_tps.dpt,
+                resume_suara_pilgub_tps.kotak_kosong,
+                resume_suara_pilgub_tps.suara_sah,
+                resume_suara_pilgub_tps.suara_tidak_sah,
+                resume_suara_pilgub_tps.suara_masuk,
+                resume_suara_pilgub_tps.abstain,
+                resume_suara_pilgub_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereId(session('operator_kabupaten_id'));
+                        });
                     });
                 });
             });
-        });
     }
 
     private function filterKelurahan(Builder $builder): void
@@ -126,13 +174,11 @@ class InputSuaraPilgubExport implements FromView
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
-        $builder = Calon::with('suaraCalon')->wherePosisi('GUBERNUR');
-
-        $builder->whereHas('provinsi', function (Builder $builder) {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-        });
+        $builder = Calon::with('suaraCalon')
+            ->whereProvinsiId(session('operator_provinsi_id'))
+            ->wherePosisi($this->posisi);
 
         return $builder->get();
     }

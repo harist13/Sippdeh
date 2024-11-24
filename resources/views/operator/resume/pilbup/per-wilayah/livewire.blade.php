@@ -18,10 +18,11 @@
                     <div wire:loading.delay wire:target.except="export"
                         class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
-                    <div class="px-4">
-                        @include("operator.resume.pilbup.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
-                        'includedColumns'))
-                    </div>
+                    @if (!empty($selectedKelurahan))
+                        @include("operator.resume.pilbup.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
+                    @else
+                        @include("operator.resume.pilbup.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
+                    @endif
                 </div>
             </div>
         </div>
