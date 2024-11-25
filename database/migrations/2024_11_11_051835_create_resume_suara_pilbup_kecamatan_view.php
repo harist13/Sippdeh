@@ -36,6 +36,8 @@ return new class extends Migration
                 tps ON tps.kelurahan_id = kelurahan.id
             LEFT JOIN 
                 resume_suara_pilbup_tps ON resume_suara_pilbup_tps.id = tps.id
+            LEFT JOIN 
+                daftar_pemilih ON daftar_pemilih.kecamatan_id = kecamatan.id AND daftar_pemilih.posisi = 'BUPATI'
             GROUP BY 
                 kecamatan.id;
         ");

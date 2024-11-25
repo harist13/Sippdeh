@@ -18,9 +18,9 @@ return new class extends Migration
             $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
             $table->timestamps();
 
-            $table->foreignId('kabupaten_id')
+            $table->foreignId('kecamatan_id')
                 ->nullable()
-                ->constrained('kabupaten')
+                ->constrained('kecamatan')
                 ->nullOnDelete();
         });
     }
