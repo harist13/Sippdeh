@@ -6,7 +6,7 @@
         </div>
 
         @livewire(
-            'Admin.resume.pilgub.per-wilayah.filter-resume-suara-pilgub-per-wilayah',
+            'admin.resume.pilgub.per-wilayah.filter-resume-suara-pilgub-per-wilayah',
             compact(
                 'selectedKabupaten',
                 'selectedKecamatan',

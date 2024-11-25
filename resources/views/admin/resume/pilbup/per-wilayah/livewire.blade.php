@@ -33,7 +33,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'Admin.resume.pilbup.per-wilayah.filter-modal',
+        'admin.resume.pilbup.per-wilayah.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',

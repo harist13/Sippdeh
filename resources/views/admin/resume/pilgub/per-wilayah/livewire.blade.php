@@ -32,7 +32,7 @@
 
     {{-- Filter Pilgub Modal --}}
     @include(
-        'Admin.resume.pilgub.per-wilayah.filter-modal',
+        'admin.resume.pilgub.per-wilayah.filter-modal',
         compact(
             'selectedKabupaten',
             'selectedKecamatan',

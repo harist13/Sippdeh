@@ -33,7 +33,7 @@
 
 	{{-- Filter Pilgub Modal --}}
 	@include(
-		'Admin.resume.pilbup.per-tps.filter-modal',
+		'admin.resume.pilbup.per-tps.filter-modal',
 		compact('selectedKecamatan','selectedKelurahan','includedColumns','partisipasi')
 	)
 </div>

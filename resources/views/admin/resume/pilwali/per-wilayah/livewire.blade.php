@@ -102,7 +102,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'Admin.resume.pilwali.per-wilayah.filter-modal',
+        'admin.resume.pilwali.per-wilayah.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',
