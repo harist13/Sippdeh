@@ -18,7 +18,7 @@
                         {{-- Loading Overlay --}}
                         <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
                         
-                        @include("Tamu.dashboard.resume-suara-pilgub.wilayah-tables.$scope-table", compact('suara', 'paslon',
+                        @include("operator.dashboard.resume-suara-pilgub.wilayah-tables.$scope-table", compact('suara', 'paslon',
                         'includedColumns'))
                     </div>
                 </div>
@@ -32,7 +32,7 @@
 
     {{-- Filter Pilgub Modal --}}
     @include(
-        'Tamu.dashboard.resume-suara-pilgub.filter-modal',
+        'operator.dashboard.resume-suara-pilgub.filter-modal',
         compact(
             'selectedKabupaten',
             'selectedKecamatan',

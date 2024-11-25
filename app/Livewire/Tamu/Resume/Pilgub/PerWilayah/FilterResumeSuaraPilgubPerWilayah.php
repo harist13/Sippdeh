@@ -42,9 +42,7 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
     private function getKabupatenOptions()
     {
         return Kabupaten::query()
-            ->whereHas('provinsi', function (Builder $builder) {
-                $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-            })
+            ->whereProvinsiId(session('Tamu_provinsi_id'))
             ->get()
             ->map(fn (Kabupaten $kabupaten) => ['id' => $kabupaten->id, 'name' => $kabupaten->nama])
             ->toArray();
@@ -78,26 +76,19 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     private function resetAvailableColumns()
     {
-        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
     }
 
     public function updatedSelectedKabupaten()
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->resetAvailableColumns();
     }
 
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-        $this->resetAvailableColumns();
-    }
-
-    public function updatedSelectedKelurahan()
-    {
-        $this->resetAvailableColumns();
     }
 
     public function resetFilter()

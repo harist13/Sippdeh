@@ -12,6 +12,7 @@ use Livewire\Attributes\Lazy;
 use Sentry\SentrySdk;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 #[Lazy]
 class DiagramBarPilgub extends Component
@@ -147,4 +148,42 @@ class DiagramBarPilgub extends Component
         // Return the next range that would fully contain the max value
         return $steps * $baseStep;
     }
+
+    // TODO: Method ini rencananya akan dipakai kalau paslon yang mau ditampilkan di Diagram Bar itu lebih dari 2 paslon
+    // private function getPaslon()
+    // {
+    //     return Calon::select([
+    //         'calon.id',
+    //         'calon.nama',
+    //         'calon.nama_wakil',
+    //         'calon.foto',
+    //         'calon.provinsi_id',
+    //         'calon.kabupaten_id',
+    //         'calon.no_urut',
+    //         DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
+    //     ])
+    //     ->join('tps', function($join) {
+    //         $join->join('kelurahan', 'kelurahan.id', '=', 'tps.kelurahan_id')
+    //             ->join('kecamatan', 'kecamatan.id', '=', 'kelurahan.kecamatan_id')
+    //             ->where('kecamatan.kabupaten_id', session('Tamu_kabupaten_id'));
+    //     })
+    //     ->leftJoin('suara_calon', function($join) {
+    //         $join->on('suara_calon.calon_id', '=', 'calon.id')
+    //             ->on('suara_calon.tps_id', '=', 'tps.id');
+    //     })
+    //     ->where([
+    //         ['calon.posisi', '=', $this->posisi],
+    //         ['calon.provinsi_id', '=', session('Tamu_provinsi_id')]
+    //     ])
+    //     ->groupBy([
+    //         'calon.id',
+    //         'calon.nama',
+    //         'calon.nama_wakil',
+    //         'calon.foto',
+    //         'calon.provinsi_id',
+    //         'calon.kabupaten_id',
+    //         'calon.no_urut'
+    //     ])
+    //     ->get();
+    // }
 }

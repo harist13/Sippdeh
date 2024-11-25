@@ -1,8 +1,8 @@
 @php
     $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
-    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
@@ -25,10 +25,13 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            {{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
-            </th>
+            </th> --}}
 			
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+                Provinsi
+            </th>
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 300px;">
                 Kabupaten/Kota
             </th>
@@ -166,8 +169,13 @@
         @forelse ($suara as $datum)
             <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none tps">
                 {{-- ID TPS --}}
-                <td class="py-3 px-4 border nomor">
+                {{-- <td class="py-3 px-4 border nomor">
                     {{ $datum->getThreeDigitsId() }}
+                </td> --}}
+
+                {{-- Provinsi --}}
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->provinsi?->nama ?? '-' }}
                 </td>
 
                 {{-- Kabupaten --}}

@@ -2,17 +2,15 @@
 
 namespace App\Livewire\Tamu\Dashboard;
 
-use App\Models\Calon;
 use App\Models\ResumeSuaraPilbupKabupaten;
-use App\Models\SuaraCalon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Lazy]
 class RekapPilbup extends Component
 {
-    public function placeholder()
+    public function placeholder(): string
     {
         return <<<'HTML'
             <div class="flex justify-center my-20 w-[1080px] mx-auto">
@@ -24,30 +22,34 @@ class RekapPilbup extends Component
         HTML;
     }
 
-    public function render()
+    public function render(): View
     {
-        $kabupatenData = $this->getKabupatenData();
-        return view('Tamu.dashboard.rekap-pilbup', compact('kabupatenData'));
+        $resumeData = $this->getResumeData();
+        return view('Tamu.dashboard.rekap-pilbup', compact('resumeData'));
     }
 
-    private function getKabupatenData(): array
+    private function getResumeData(): array
     {
         // Get summary data for the province by summing up all kabupaten
-        $ringkasanData = ResumeSuaraPilbupKabupaten::whereId(session('Tamu_kabupaten_id'))->first();
+        $resumeData = ResumeSuaraPilbupKabupaten::query()
+            ->whereId(session('Tamu_kabupaten_id'))
+            ->first();
+
+        if ($resumeData == null) {
+            return [];
+        }
 
         // Ensure no negative values
-        $suaraSah = max(0, $ringkasanData->suara_sah ?? 0);
-        $suaraTidakSah = max(0, $ringkasanData->suara_tidak_sah ?? 0);
-        $suaraMasuk = max(0, $ringkasanData->suara_masuk ?? 0);
-        $dpt = max(0, $ringkasanData->dpt ?? 0);
-        $abstain = max(0, $ringkasanData->abstain ?? 0);
-
-        // Calculate participation percentage
-        $partisipasi = $this->hitungPartisipasi($suaraMasuk, $dpt);
+        $suaraSah = max(0, $resumeData->suara_sah ?? 0);
+        $suaraTidakSah = max(0, $resumeData->suara_tidak_sah ?? 0);
+        $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
+        $dpt = max(0, $resumeData->dpt ?? 0);
+        $abstain = max(0, $resumeData->abstain ?? 0);
+        $partisipasi = max(0, $resumeData->partisipasi ?? 0);
 
         return [
-            'logo' => '',
-            'nama' => session('Tamu_kabupaten_name'),
+            'logo' => $resumeData->kabupaten->logo,
+            'nama' => $resumeData->kabupaten->nama,
             'suara_sah' => $suaraSah,
             'suara_tidak_sah' => $suaraTidakSah,
             'dpt' => $dpt,
@@ -58,23 +60,10 @@ class RekapPilbup extends Component
         ];
     }
 
-    private function hitungPartisipasi(int $suaraMasuk, int $dpt): float
-    {
-        if ($dpt === 0) return 0;
-        
-        // Calculate participation percentage
-        $partisipasi = ($suaraMasuk / $dpt) * 100;
-        
-        // Clamp the value between 0 and 100
-        return max(0, min(100, round($partisipasi, 1)));
-    }
-
     private function getWarnaPartisipasi(float $partisipasi): string
     {
-        if ($partisipasi >= 70) {
+        if ($partisipasi >= 77.5) {
             return 'green';
-        } elseif ($partisipasi >= 50) {
-            return 'yellow';
         } else {
             return 'red';
         }

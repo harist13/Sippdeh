@@ -1,5 +1,5 @@
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-    
+   
 
     {{-- Search Input --}}
     <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">

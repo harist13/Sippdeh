@@ -39,7 +39,7 @@ class FilterResumeSuaraPilbup extends Component
     private function getKecamatanOptions(): array
     {
         return Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')))
+            ->whereKabupatenId(session('Tamu_kabupaten_id'))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
@@ -67,7 +67,7 @@ class FilterResumeSuaraPilbup extends Component
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
         $this->dispatch('reset-filter')->to(ResumeSuaraPilbup::class);

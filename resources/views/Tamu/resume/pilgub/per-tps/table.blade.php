@@ -1,10 +1,11 @@
 @php
-    $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
-    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
@@ -31,6 +32,9 @@
                 NO
             </th>
 			
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
+                Provinsi
+            </th>
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kabupaten/Kota
             </th>
@@ -181,23 +185,30 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
+                {{-- Provinsi --}}
+                <td class="py-3 px-4 text-xs text-left border provinsi {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}
+                </td>
+
                 {{-- Kabupaten --}}
-                <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" data-kabupaten-id="{{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->id ?? '-' }}">
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" data-kecamatan-id="{{ $datum->tps?->kelurahan?->kecamatan?->id ?? '-' }}">
+                <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}
-                <td class="py-3 px-4 text-xs text-left border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" data-kelurahan-id="{{ $datum->tps?->kelurahan?->id ?? '-' }}">
+                <td class="py-3 px-4 text-xs text-left border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->tps?->kelurahan?->nama ?? '-' }}
                 </td>
 
                 {{-- Nama TPS --}}
-                <td class="py-3 px-4 border text-xs text-left tps {{ $isTPSColumnIgnored ? 'hidden' : '' }}">{{ $datum->nama }}</td>
+                <td class="py-3 px-4 border text-xs text-left tps {{ $isTPSColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->nama }}
+                </td>
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt" data-value="{{ $datum->dpt }}">
@@ -210,36 +221,35 @@
                         $suaraCalon = $datum->suaraCalonByCalonId($calon->id)->first();
                         $suara = $suaraCalon != null ? $suaraCalon->suara : 0;
                     @endphp
-                    <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-id="{{ $calon->id }}" data-suara="{{ $suara }}">
+                    <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon {{ $isCalonColumnIgnored ? 'hidden' : '' }}">
                         <span class="value">{{ $suara }}</span>
-                        <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $suara }}" data-default-value="{{ $suara }}" autocomplete="off">
                     </td>
                 @endforeach
 
                 {{-- Kotak Kosong --}}
-                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isCalonColumnIgnored ? 'hidden' : '' }}" data-value="{{ $datum->kotak_kosong }}" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isPilkadaTunggal && !$isCalonColumnIgnored ? '' : 'hidden' }}">
                     <span class="value">{{ $datum->kotak_kosong }}</span>
                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $datum->kotak_kosong }}" data-default-value="{{ $datum->kotak_kosong }}" autocomplete="off">
                 </td>
 
                 {{-- Suara Sah --}}
-                <td class="py-3 px-4 text-xs border suara-sah" data-value="{{ $datum->suara_sah }}">
+                <td class="py-3 px-4 text-xs border suara-sah">
                     {{ $datum->suara_sah }}
                 </td>
 
                 {{-- Suara Tidak Sah --}}
-                <td class="py-3 px-4 text-xs border suara-tidak-sah" data-value="{{ $datum->suara_tidak_sah }}">
+                <td class="py-3 px-4 text-xs border suara-tidak-sah">
                     <span class="value">{{ $datum->suara_tidak_sah }}</span>
                     <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" data-default-value="{{ $datum->suara_tidak_sah }}" data-value="{{ $datum->suara_tidak_sah }}">
                 </td>
 
                 {{-- Suara Masuk --}}
-                <td class="py-3 px-4 text-xs border suara-masuk" data-value="{{ $datum->suara_masuk }}">
+                <td class="py-3 px-4 text-xs border suara-masuk">
                     {{ $datum->suara_masuk }}
                 </td>
 
                 {{-- Abstain --}}
-                <td class="py-3 px-4 text-xs border abstain" data-value="{{ $datum->abstain }}">
+                <td class="py-3 px-4 text-xs border abstain">
                     {{ $datum->abstain }}
                 </td>
 
