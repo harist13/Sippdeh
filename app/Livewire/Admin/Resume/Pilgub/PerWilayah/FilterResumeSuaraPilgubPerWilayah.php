@@ -36,7 +36,7 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
         $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('Admin.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('admin.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getKabupatenOptions()

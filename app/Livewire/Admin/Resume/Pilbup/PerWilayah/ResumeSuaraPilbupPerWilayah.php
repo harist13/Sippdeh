@@ -59,7 +59,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('Admin.resume.pilbup.per-wilayah.livewire', 
+        return view('admin.resume.pilbup.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }
@@ -73,7 +73,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('Admin.resume.pilbup.per-wilayah.livewire', 
+        return view('admin.resume.pilbup.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }

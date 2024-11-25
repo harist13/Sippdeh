@@ -57,7 +57,7 @@ class ResumeSuaraPilgubPerTps extends Component
         try {
             $paslon = $this->getCalon();
             $tps = $this->getTps();
-            return view('Admin.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
+            return view('admin.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
