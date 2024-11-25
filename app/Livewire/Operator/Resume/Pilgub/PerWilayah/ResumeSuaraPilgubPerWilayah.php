@@ -8,6 +8,7 @@ use App\Models\Kabupaten;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
+use App\Models\ResumeSuaraPilgubTPS;
 use App\Traits\SortResumeColumns;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\Component;
@@ -32,7 +33,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
 
-    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public $paslonSorts = [];
@@ -40,11 +41,15 @@ class ResumeSuaraPilgubPerWilayah extends Component
     public function mount()
     {
         $this->fillSelectedKabupaten();
-        $this->includedColumns = ['KABUPATEN/KOTA', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
     }
 
     public function render()
     {
+        if (in_array('TPS', $this->includedColumns)) {
+            return $this->getTpsTable();
+        }
+
         if (!empty($this->selectedKelurahan)) {
             return $this->getKelurahanTable();
         }
@@ -124,6 +129,13 @@ class ResumeSuaraPilgubPerWilayah extends Component
         }
     }
 
+    private function getTpsTable()
+    {
+        $paslon = $this->getPaslon();
+        $suara = $this->getSuaraPerTps();
+        return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon'));
+    }
+
     private function getKelurahanTable()
     {
         $paslon = $this->getPaslon();
@@ -143,6 +155,55 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKabupaten();
         return view('operator.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon'));
+    }
+
+    private function getSuaraPerTps()
+    {
+        $builder = ResumeSuaraPilgubTPS::query()
+            ->selectRaw('
+                resume_suara_pilgub_tps.id,
+                resume_suara_pilgub_tps.nama,
+                resume_suara_pilgub_tps.dpt,
+                resume_suara_pilgub_tps.kotak_kosong,
+                resume_suara_pilgub_tps.suara_sah,
+                resume_suara_pilgub_tps.suara_tidak_sah,
+                resume_suara_pilgub_tps.suara_masuk,
+                resume_suara_pilgub_tps.abstain,
+                resume_suara_pilgub_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    if (!empty($this->selectedKelurahan)) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    }
+
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        if (!empty($this->selectedKecamatan)) {
+                            $builder->whereIn('id', $this->selectedKecamatan);
+                        }
+
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            if (!empty($this->selectedKabupaten)) {
+                                $builder->whereIn('id', $this->selectedKabupaten);
+                            }
+
+                            // TODO: Tidak pakai kabupaten dari operator itu sendiri
+                            // $builder->whereId(session('operator_kabupaten_id'));
+                        });
+                    });
+                });
+            });
+
+        $this->addPartisipasiFilter($builder);
+        $this->sortResumeSuaraPilgubTpsPaslon($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->paginate($this->perPage);
     }
 
     private function getSuaraPerKelurahan()
@@ -283,7 +344,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN/KOTA', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
