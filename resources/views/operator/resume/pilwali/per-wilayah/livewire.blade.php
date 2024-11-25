@@ -3,7 +3,7 @@
         <div class="bg-white p-4">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
-                    <h1 class="font-bold text-xl">Data Suara Pemilihan Walikota Per Wilayah</h1>
+                    <h1 class="font-bold text-xl">Data Suara Pemilihan Walikota</h1>
                     {{-- Cari dan Filter --}}
                     @include('operator.resume.pilwali.per-wilayah.export-search-filter')
                 </div>
@@ -16,10 +16,16 @@
                     <!-- Loading Overlay -->
                     <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
-                    @if (!empty($selectedKelurahan))
-                        @include("operator.resume.pilwali.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
+                    @if (in_array('TPS', $includedColumns))
+                        @include("operator.resume.pilwali.per-wilayah.wilayah-tables.tps-table", compact('suara', 'paslon', 'includedColumns'))
                     @else
-                        @include("operator.resume.pilwali.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @if (!empty($selectedKelurahan))
+                            @include("operator.resume.pilwali.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKecamatan))
+                            @include("operator.resume.pilwali.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKabupaten))
+                            @include("operator.resume.pilwali.per-wilayah.wilayah-tables.kabupaten-table", compact('suara', 'paslon', 'includedColumns'))
+                        @endif
                     @endif
                 </div>
             </div>

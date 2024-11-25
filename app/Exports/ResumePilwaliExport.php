@@ -3,9 +3,9 @@
 namespace App\Exports;
 
 use App\Models\Calon;
-use App\Models\ResumeSuaraPilwaliKabupaten;
 use App\Models\ResumeSuaraPilwaliKecamatan;
 use App\Models\ResumeSuaraPilwaliKelurahan;
+use App\Models\ResumeSuaraPilwaliTPS;
 use App\Traits\SortResumeColumns;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Contracts\View\View;
@@ -25,7 +25,7 @@ class ResumePilwaliExport implements FromView, WithStyles
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KECAMATAN', 'KELURAHAN', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     
     public function __construct(
@@ -70,6 +70,11 @@ class ResumePilwaliExport implements FromView, WithStyles
     {
         $includedColumns = $this->includedColumns;
         $paslon = $this->getPaslon();
+
+        if (in_array('TPS', $includedColumns)) {
+            $tps = $this->getSuaraPerTps();
+            return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
+        }
         
         if (!empty($this->selectedKelurahan)) {
             $suara = $this->getSuaraPerKelurahan();
@@ -78,6 +83,50 @@ class ResumePilwaliExport implements FromView, WithStyles
         
         $suara = $this->getSuaraPerKecamatan();
         return view('exports.resume.pilwali.kecamatan-table', compact('suara', 'paslon', 'includedColumns'));
+    }
+
+    private function getSuaraPerTps()
+    {
+        $builder = ResumeSuaraPilwaliTPS::query()
+            ->selectRaw('
+                resume_suara_pilwali_tps.id,
+                resume_suara_pilwali_tps.nama,
+                resume_suara_pilwali_tps.dpt,
+                resume_suara_pilwali_tps.kotak_kosong,
+                resume_suara_pilwali_tps.suara_sah,
+                resume_suara_pilwali_tps.suara_tidak_sah,
+                resume_suara_pilwali_tps.suara_masuk,
+                resume_suara_pilwali_tps.abstain,
+                resume_suara_pilwali_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    if (!empty($this->selectedKelurahan)) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    }
+
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        if (!empty($this->selectedKecamatan)) {
+                            $builder->whereIn('id', $this->selectedKecamatan);
+                        }
+
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereId(session('operator_kabupaten_id'));
+                        });
+                    });
+                });
+            });
+
+        $this->addPartisipasiFilter($builder);
+        $this->sortResumeSuaraPilwaliTpsPaslon($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->get();
     }
 
     private function getSuaraPerKelurahan()
