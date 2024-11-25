@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
+use App\Models\Kabupaten;
 
 // Livewire
 use Livewire\Component;
@@ -37,18 +39,18 @@ class ResumeSuaraPilwaliPerTps extends Component
     public string $posisi = 'WALIKOTA';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render(): View
     {
         try {
-            $paslon = $this->getCalon();
+            $paslon = $this->getPaslon();
             $tps = $this->getTps();
             return view('Tamu.resume.pilwali.per-tps.livewire', compact('tps', 'paslon'));
         } catch (Exception $exception) {
@@ -68,6 +70,7 @@ class ResumeSuaraPilwaliPerTps extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+
             $this->sortResumeSuaraPilwaliTpsPaslon($builder);
             $this->sortColumns($builder);
             $this->sortResumeSuaraKotakKosong($builder);
@@ -110,6 +113,56 @@ class ResumeSuaraPilwaliPerTps extends Component
             SentrySdk::getCurrentHub()->captureException($exception);
 
             throw $exception;
+        }
+    }
+
+     public function exportPdf()
+    {
+        try {
+            // Get all data without pagination
+            $builder = $this->getBaseTPSBuilder();
+            
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+
+            $data = $builder->get();
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereId(session('Tamu_kabupaten_id'))->first();
+            $paslon = $this->getPaslon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilwali-tps-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+                'isPilkadaTunggal' => count($paslon) === 1
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pilwali-per-tps.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
         }
     }
 
@@ -203,11 +256,12 @@ class ResumeSuaraPilwaliPerTps extends Component
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
         try {
-            $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            $builder = Calon::with('suaraCalon')
+                ->whereKabupatenId(session('Tamu_kabupaten_id'))
+                ->wherePosisi($this->posisi);
     
             return $builder->get();
         } catch (Exception $exception) {
@@ -221,7 +275,7 @@ class ResumeSuaraPilwaliPerTps extends Component
     #[On('reset-filter')] 
     public function resetFilter(): void
     {
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
@@ -244,7 +298,17 @@ class ResumeSuaraPilwaliPerTps extends Component
                 $this->selectedKecamatan,
                 $this->selectedKelurahan,
                 $this->includedColumns,
-                $this->partisipasi
+                $this->partisipasi,
+
+                $this->dptSort,
+                $this->suaraSahSort,
+                $this->suaraTidakSahSort,
+                $this->suaraMasukSort,
+                $this->abstainSort,
+                $this->partisipasiSort,
+
+                $this->paslonIdSort,
+                $this->paslonSort,
             );
     
             return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');

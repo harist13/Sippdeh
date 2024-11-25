@@ -3,19 +3,23 @@
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
     $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
-    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
+    $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
 
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
 @php
     $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
+    $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
+    $totalAbstain = $suara->sum(fn ($datum) => $datum->abstain ?? 0);
     $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
 
     $totalsPerCalon = [];
     foreach ($paslon as $calon) {
-        $totalsPerCalon[$calon->id] = $suara->sum(fn($datum) => $datum->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0);
+        $totalsPerCalon[$calon->id] = $suara->sum(fn($datum) => $datum->suaraCalonByCalonId($calon->id)?->first()?->suara ?? 0);
     }
 
     $totalKotakKosong = $suara->sum(fn ($datum) => $datum->kotak_kosong ?? 0);
@@ -24,23 +28,26 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            {{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
-            </th>
+            </th> --}}
 			
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Provinsi
             </th>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kabupaten/Kota
             </th>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kecamatan
             </th>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
                 Kelurahan
             </th>
-            
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="width: 120px;">
+                TPS
+            </th>
+
             <th wire:click="sortDpt" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
                 <span>DPT</span>
                 @if ($dptSort === null)
@@ -80,6 +87,26 @@
                 </th>
             @endif
 
+            <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Sah</span>
+                @if ($suaraSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
+            </th>
+            <th wire:click="sortSuaraTidakSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Suara Tidak Sah</span>
+                @if ($suaraTidakSahSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($suaraTidakSahSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
+            </th>
             <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
                 <span>Suara Masuk</span>
                 @if ($suaraMasukSort === null)
@@ -87,6 +114,16 @@
                 @elseif ($suaraMasukSort === 'asc')
                     <i class="fas fa-sort-up ml-2"></i>
                 @elseif ($suaraMasukSort === 'desc')
+                    <i class="fas fa-sort-down ml-2"></i>
+                @endif
+            </th>
+            <th wire:click="sortAbstain" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
+                <span>Abstain</span>
+                @if ($abstainSort === null)
+                    <i class="fas fa-sort ml-2"></i>
+                @elseif ($abstainSort === 'asc')
+                    <i class="fas fa-sort-up ml-2"></i>
+                @elseif ($abstainSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
             </th>
@@ -121,9 +158,18 @@
                     {{ $totalKotakKosong }}
                 </th>
             @endif
-            
+        
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraSah, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
+            </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
+            </th>
+            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+                {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalPartisipasi, 1, '.', '.') }}%
@@ -133,58 +179,82 @@
 
     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
         @forelse ($suara as $datum)
-            <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none tps">
+            <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none cursor-pointer tps" data-id="{{ $datum->id }}">
                 {{-- ID TPS --}}
-                <td class="py-3 px-4 border nomor">
+                {{-- <td class="py-3 px-4 border nomor" data-id="{{ $datum->id }}">
                     {{ $datum->getThreeDigitsId() }}
+                </td> --}}
+
+                {{-- Provinsi --}}
+                <td class="py-3 px-4 text-xs text-left border provinsi {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}
                 </td>
 
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan->kabupaten->nama }}
+                    {{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
                 </td>
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kecamatan?->nama ?? '-' }}
+                    {{ $datum->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
                 </td>
 
                 {{-- Kelurahan --}}
                 <td class="py-3 px-4 text-xs text-left border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->tps?->kelurahan?->nama ?? '-' }}
+                </td>
+
+                {{-- Nama TPS --}}
+                <td class="py-3 px-4 border text-xs text-left tps {{ $isTPSColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 
                 {{-- DPT --}}
-                <td class="py-3 px-4 text-xs border dpt">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                <td class="py-3 px-4 text-xs border dpt" data-value="{{ $datum->dpt }}">
+                    <span class="value">{{ $datum->dpt }}</span>
                 </td>
 
                 {{-- Calon-calon --}}
-                @if (!$isCalonColumnIgnored)
-                    @foreach ($paslon as $calon)
-                        @php
-                            $suara = $datum->getCalonSuaraByCalonId($calon->id);
-                        @endphp
-                        <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
-                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
-                        </td>
-                    @endforeach
-                @endif
+                @foreach ($paslon as $calon)
+                    @php
+                        $suaraCalon = $datum->suaraCalonByCalonId($calon->id)->first();
+                        $suara = $suaraCalon != null ? $suaraCalon->suara : 0;
+                    @endphp
+                    <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon {{ $isCalonColumnIgnored ? 'hidden' : '' }}">
+                        <span class="value">{{ $suara }}</span>
+                    </td>
+                @endforeach
 
                 {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
-                    </td>
-                @endif
+                <td class="py-3 px-4 text-xs border kotak-kosong {{ $isPilkadaTunggal && !$isCalonColumnIgnored ? '' : 'hidden' }}">
+                    <span class="value">{{ $datum->kotak_kosong }}</span>
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" value="{{ $datum->kotak_kosong }}" data-default-value="{{ $datum->kotak_kosong }}" autocomplete="off">
+                </td>
+
+                {{-- Suara Sah --}}
+                <td class="py-3 px-4 text-xs border suara-sah">
+                    {{ $datum->suara_sah }}
+                </td>
+
+                {{-- Suara Tidak Sah --}}
+                <td class="py-3 px-4 text-xs border suara-tidak-sah">
+                    <span class="value">{{ $datum->suara_tidak_sah }}</span>
+                    <input type="number" placeholder="Jumlah" class="bg-[#ECEFF5] text-gray-600 border border-gray-600 rounded-lg ml-2 px-4 py-2 w-16 focus:outline-none hidden" data-default-value="{{ $datum->suara_tidak_sah }}" data-value="{{ $datum->suara_tidak_sah }}">
+                </td>
 
                 {{-- Suara Masuk --}}
                 <td class="py-3 px-4 text-xs border suara-masuk">
-                    {{ number_format($datum->suara_masuk, 0, '', '.') }}
+                    {{ $datum->suara_masuk }}
+                </td>
+
+                {{-- Abstain --}}
+                <td class="py-3 px-4 text-xs border abstain">
+                    {{ $datum->abstain }}
                 </td>
 
                 {{-- Partisipasi --}}
-                <td class="py-3 px-4 text-xs border partisipasi">
+                <td class="py-3 px-4 text-xs border partisipasi {{ strtolower($datum->partisipasi) }}">
 					@if ($datum->partisipasi >= 80)
 						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
 							{{ number_format($datum->partisipasi, 1, '.', '.') }}%

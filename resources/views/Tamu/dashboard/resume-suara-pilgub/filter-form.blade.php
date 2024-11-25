@@ -77,9 +77,9 @@
     </div>
 </div>
 
-@assets
+{{-- @assets
     <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
-@endassets
+@endassets --}}
 
 @push('scripts')
     <script>

@@ -3,16 +3,14 @@
 namespace App\Livewire\Tamu\Resume\Pilbup\PerTps;
 
 // Laravel Facades
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilbupTPS;
-use App\Models\SuaraCalon;
-use App\Models\SuaraTPS;
+use App\Models\Kabupaten;
 
 // Livewire
 use Livewire\Component;
@@ -37,18 +35,18 @@ class ResumeSuaraPilbupPerTps extends Component
     public string $posisi = 'BUPATI';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render(): View
     {
         try {
-            $paslon = $this->getCalon();
+            $paslon = $this->getPaslon();
             $tps = $this->getTps();
             return view('Tamu.resume.pilbup.per-tps.livewire', compact('tps', 'paslon'));
         } catch (Exception $exception) {
@@ -68,6 +66,7 @@ class ResumeSuaraPilbupPerTps extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+
             $this->sortResumeSuaraPilbupTpsPaslon($builder);
             $this->sortColumns($builder);
             $this->sortResumeSuaraKotakKosong($builder);
@@ -81,30 +80,80 @@ class ResumeSuaraPilbupPerTps extends Component
         }
     }
 
+     public function exportPdf()
+    {
+        try {
+            // Get all data without pagination
+            $builder = $this->getBaseTPSBuilder();
+            
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+
+            $data = $builder->get();
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereId(session('Tamu_kabupaten_id'))->first();
+            $paslon = $this->getPaslon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilbup-tps-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+                'isPilkadaTunggal' => count($paslon) === 1
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pilbup-per-tps.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
+        }
+    }
+
     private function getBaseTPSBuilder(): Builder
     {
         try {
             return ResumeSuaraPilbupTPS::query()
-            ->selectRaw('
-                resume_suara_pilbup_tps.id,
-                resume_suara_pilbup_tps.nama,
-                resume_suara_pilbup_tps.dpt,
-                resume_suara_pilbup_tps.kotak_kosong,
-                resume_suara_pilbup_tps.suara_sah,
-                resume_suara_pilbup_tps.suara_tidak_sah,
-                resume_suara_pilbup_tps.suara_masuk,
-                resume_suara_pilbup_tps.abstain,
-                resume_suara_pilbup_tps.partisipasi
-            ')
-            ->whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereId(session('Tamu_kabupaten_id'));
+                ->selectRaw('
+                    resume_suara_pilbup_tps.id,
+                    resume_suara_pilbup_tps.nama,
+                    resume_suara_pilbup_tps.dpt,
+                    resume_suara_pilbup_tps.kotak_kosong,
+                    resume_suara_pilbup_tps.suara_sah,
+                    resume_suara_pilbup_tps.suara_tidak_sah,
+                    resume_suara_pilbup_tps.suara_masuk,
+                    resume_suara_pilbup_tps.abstain,
+                    resume_suara_pilbup_tps.partisipasi
+                ')
+                ->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            $builder->whereHas('kabupaten', function (Builder $builder) {
+                                $builder->whereId(session('Tamu_kabupaten_id'));
+                            });
                         });
                     });
                 });
-            });
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
@@ -203,11 +252,12 @@ class ResumeSuaraPilbupPerTps extends Component
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
         try {
-            $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            $builder = Calon::with('suaraCalon')
+                ->whereKabupatenId(session('Tamu_kabupaten_id'))
+                ->wherePosisi($this->posisi);
     
             return $builder->get();
         } catch (Exception $exception) {
@@ -221,7 +271,7 @@ class ResumeSuaraPilbupPerTps extends Component
     #[On('reset-filter')] 
     public function resetFilter(): void
     {
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
@@ -244,10 +294,20 @@ class ResumeSuaraPilbupPerTps extends Component
                 $this->selectedKecamatan,
                 $this->selectedKelurahan,
                 $this->includedColumns,
-                $this->partisipasi
+                $this->partisipasi,
+
+                $this->dptSort,
+                $this->suaraSahSort,
+                $this->suaraTidakSahSort,
+                $this->suaraMasukSort,
+                $this->abstainSort,
+                $this->partisipasiSort,
+
+                $this->paslonIdSort,
+                $this->paslonSort,
             );
     
-            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
+            return Excel::download($sheet, 'resume-suara-pemilihan-bupkota.xlsx');
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
