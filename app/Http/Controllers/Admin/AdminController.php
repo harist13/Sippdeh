@@ -450,6 +450,7 @@ class AdminController extends Controller
                 'password' => 'required|min:6',
                 'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
+                'limit' => 'required|integer|min:1|max:10',
             ]);
 
             $kabupaten = Kabupaten::findOrFail($validated['wilayah']);
@@ -461,6 +462,7 @@ class AdminController extends Controller
                 'kabupaten_id' => $kabupaten->id, // Store the kabupaten name instead of ID
                 'role' => $validated['role'],
                 'is_forced_logout' => false,
+                'limit' => $validated['limit'],
             ]);
 
             $user->assignRole($validated['role']);
@@ -481,6 +483,7 @@ class AdminController extends Controller
                 'email' => ['required', 'email', Rule::unique('petugas')->ignore($user->id)],
                 'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
+                'limit' => 'required|integer|min:1|max:10',
             ]);
 
             $kabupaten = Kabupaten::findOrFail($validated['wilayah']);
@@ -489,6 +492,7 @@ class AdminController extends Controller
                 'username' => $validated['username'],
                 'email' => $validated['email'],
                 'kabupaten_id' => $kabupaten->id, // Store the kabupaten name instead of ID
+                'limit' => $validated['limit'],
             ]);
 
             if ($request->filled('password')) {

@@ -31,7 +31,7 @@
                     <input type="password" id="editPassword" name="password"
                         class="w-full bg-gray-100 px-3 py-2 rounded-md" placeholder="New Password">
                 </div>
-                <div class="col-span-1 sm:col-span-2">
+                <div>
                     <label for="editWilayah" class="block text-sm">Wilayah</label>
                     <select id="editWilayah" name="wilayah" class="w-full bg-gray-100 px-3 py-2 rounded-md" required>
                         <option value="">Pilih Wilayah</option>
@@ -39,6 +39,13 @@
                         <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
                         @endforeach
                     </select>
+                </div>
+                <div>
+                    <label for="editLimit" class="block text-sm">Batas Device</label>
+                    <input type="number" id="editLimit" name="limit" 
+                        class="w-full bg-gray-100 px-3 py-2 rounded-md"
+                        placeholder="Batas device login" 
+                        min="1" max="10" required>
                 </div>
             </div>
             <div class="mt-4 text-right">
