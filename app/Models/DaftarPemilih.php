@@ -9,7 +9,7 @@ class DaftarPemilih extends Model
 {
     protected $table = 'daftar_pemilih';
 
-    protected $fillable = ['dptb', 'dpk', 'posisi', 'kabupaten_id'];
+    protected $fillable = ['dptb', 'dpk', 'posisi', 'kecamatan_id'];
 
     public function kabupaten(): BelongsTo
     {

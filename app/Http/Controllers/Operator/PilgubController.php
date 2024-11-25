@@ -11,4 +11,9 @@ class PilgubController extends Controller
     {
         return view('operator.input-suara.pilgub.index');
     }
+
+    public function daftarPemilih()
+    {
+        return view('operator.input-daftar-pemilih.pilgub.index');
+    }
 }
