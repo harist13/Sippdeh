@@ -11,23 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daftar_pemilih', function (Blueprint $table) {
+        Schema::create('suara_calon_daftar_pemilih', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dptb')->default(0);
-            $table->unsignedBigInteger('dpk')->default(0);
-            $table->unsignedBigInteger('kotak_kosong')->default(0);
-            $table->unsignedBigInteger('suara_tidak_sah')->default(0);
-            $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
+            $table->unsignedBigInteger('suara')->default(0);
             $table->timestamps();
-
-            $table->foreignId('kecamatan_id')
-                ->nullable()
-                ->constrained('kecamatan')
-                ->nullOnDelete();
 
             $table->foreignId('operator_id')
                 ->nullable()
                 ->constrained('petugas')
+                ->nullOnDelete();
+            
+            $table->foreignId('kecamatan_id')
+                ->nullable()
+                ->constrained('kecamatan')
+                ->nullOnDelete();
+            
+            $table->foreignId('calon_id')
+                ->nullable()
+                ->constrained('calon')
                 ->nullOnDelete();
         });
     }
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daftar_pemilih');
+        Schema::dropIfExists('suara_calon_daftar_pemilih');
     }
 };

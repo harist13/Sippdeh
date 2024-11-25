@@ -246,8 +246,16 @@ class InputSuaraUIManager {
     cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
 
     addTPS(id, dpt, kotakKosong, suaraSah, suaraTidakSah, suaraCalon) {
-        const tps = new TPS(id, parseInt(dpt), parseInt(kotakKosong), parseInt(suaraSah), parseInt(suaraTidakSah));
+        const tps = new TPS(
+            id,
+            parseInt(dpt),
+            parseInt(kotakKosong),
+            parseInt(suaraSah),
+            parseInt(suaraTidakSah)
+        );
+
         suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+        
         tps.save();
     }
 

@@ -1,6 +1,6 @@
 <div>
-	@include('operator.input-suara.pilbup.wilayah-selects.select-kecamatan')
-	@include('operator.input-suara.pilbup.wilayah-selects.select-kelurahan')
+	@include('operator.input-suara.pilgub.wilayah-selects.select-kecamatan')
+	@include('operator.input-suara.pilgub.wilayah-selects.select-kelurahan')
 
 	<!-- Show Columns Section -->
 	<div class="relative mb-5">

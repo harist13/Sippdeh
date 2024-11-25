@@ -6,7 +6,7 @@
         </div>
     
         @livewire(
-            'operator.input-suara.pilwali.filter-input-suara-pilwali',
+            'operator.input-suara.pilgub.filter-input-suara-pilgub',
             compact('selectedKecamatan','selectedKelurahan','includedColumns','partisipasi')
         )
     </div>

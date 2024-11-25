@@ -1,3 +1,30 @@
+@php
+    // $isKabupatenColumnIgnored = !in_array('KABUPATEN', $includedColumns);
+    // $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
+    // $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
+    // $isTPSColumnIgnored = !in_array('TPS', $includedColumns);
+
+    // $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
+    $isPilkadaTunggal = count($paslon) == 1;
+@endphp
+
+@php
+    $totalDptb = $kecamatan->sum(fn ($datum) => $datum->dptb ?? 0);
+    $totalDpk = $kecamatan->sum(fn ($datum) => $datum->dpk ?? 0);
+    $totalSuaraSah = $kecamatan->sum(fn ($datum) => $datum->suara_sah ?? 0);
+    $totalSuaraTidakSah = $kecamatan->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
+    $totalSuaraMasuk = $kecamatan->sum(fn ($datum) => $datum->suara_masuk ?? 0);
+    $totalAbstain = $kecamatan->sum(fn ($datum) => $datum->abstain ?? 0);
+    $totalPartisipasi = $kecamatan->avg(fn ($datum) => $datum->partisipasi ?? 0);
+
+    $totalsPerCalon = [];
+    foreach ($paslon as $calon) {
+        $totalsPerCalon[$calon->id] = $kecamatan->sum(fn($datum) => $datum->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0);
+    }
+
+    $totalKotakKosong = $kecamatan->sum(fn ($datum) => $datum->kotak_kosong ?? 0);
+@endphp
+
 <div>
     <div class="bg-white sticky top-20 z-20 rounded-t-[20px] shadow-lg">
         {{-- Action Buttons Section --}}
@@ -33,18 +60,88 @@
 
 				{{-- Sticky Reference Header --}}
 				<div id="stickyReferenceHeader" class="hidden">
-					<div class="overflow-x-auto">
+					<div class="overflow-x-auto mt-4">
 						<table class="min-w-full divide-y divide-gray-200">
 							<thead class="bg-[#3560A0] text-white">
 								<tr>
-									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
-										<input type="checkbox" disabled class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="width: 30px;">
+										<input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
 									</th>
 									
-									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 100px;">Kecamatan</th>
-
-									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">DPTb</th>
-									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">DPK</th>
+									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 300px">
+										Kecamatan
+									</th>
+									
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 100px">
+										DPTb
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 100px">
+										DPK
+									</th>
+						
+									@foreach ($paslon as $calon)
+										<th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
+											{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
+										</th>
+									@endforeach
+						
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+										Kotak Kosong
+									</th>
+						
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+										Suara Sah
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+										Suara Tidak Sah
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+										Suara Masuk
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+										Abstain
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
+										Partisipasi
+									</th>
+								</tr>
+								<tr>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-dptb">
+										{{ number_format($totalDptb, 0, '.', '.') }}
+									</th>
+						
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-dpk">
+										{{ number_format($totalDpk, 0, '.', '.') }}
+									</th>
+						
+									@foreach ($paslon as $calon)
+										<th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950 total-calon">
+											{{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+										</th>
+									@endforeach
+								
+									{{-- Kotak Kosong --}}
+									@if ($isPilkadaTunggal)
+										<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-kotak-kosong bg-blue-950">
+											{{ $totalKotakKosong }}
+										</th>
+									@endif
+								
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-sah">
+										{{ number_format($totalSuaraSah, 0, '.', '.') }}
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-tidak-sah">
+										{{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-masuk">
+										{{ number_format($totalSuaraMasuk, 0, '.', '.') }}
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-abstain">
+										{{ number_format($totalAbstain, 0, '.', '.') }}
+									</th>
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none rata-rata-paritisipasi">
+										{{ number_format($totalPartisipasi, 1, '.', '.') }}%
+									</th>
 								</tr>
 							</thead>
 						</table>
