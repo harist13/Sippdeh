@@ -32,28 +32,23 @@
 					</div>
 					<div class="p-3 text-white bg-blue-900 rounded-lg">
 						<div class="flex items-center justify-between">
-							<div class="flex flex-col items-start w-1/3">
-								<div class="flex items-center mb-1">
-									<div class="w-4 h-4 mr-2 bg-green-500"></div>
-									<span>70,00% - 100,00% DPT » Hijau</span>
-								</div>
-								<div class="flex items-center mb-1">
-									<div class="w-4 h-4 mr-2 bg-yellow-500"></div>
-									<span>50,00% - 69,99% DPT » Kuning</span>
-								</div>
-								<div class="flex items-center">
-									<div class="w-4 h-4 mr-2 bg-red-500"></div>
-									<span>0,00% - 49,99% DPT » Merah</span>
-								</div>
-							</div>
+                            <div class="flex flex-col items-start w-1/3">
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 mr-2 bg-green-500"></div>
+                                    <span>77,50% - 100,00% DPT » Hijau</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 mr-2 bg-red-500"></div>
+                                    <span>0,00% - 77,49% DPT » Merah</span>
+                                </div>
+                            </div>
 							<div class="text-center w-1/3">
 								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{ $resumeData['nama'] }}</h2>
 							</div>
 							<div class="text-right w-1/3">
-								<div class="text-4xl font-bold {{ $resumeData['warna_partisipasi'] === 'green' ? 'text-green-400' : 
-									($resumeData['warna_partisipasi'] === 'yellow' ? 'text-yellow-400' : 'text-red-400') }}">
-									{{ number_format($resumeData['partisipasi'], 1) }}%
-								</div>
+								<div class="text-4xl font-bold {{ $resumeData['warna_partisipasi'] === 'green' ? 'text-green-400' : 'text-red-400' }}">
+                                    {{ number_format($resumeData['partisipasi'], 1) }}%
+                                </div>
 							</div>
 						</div>
 					</div>

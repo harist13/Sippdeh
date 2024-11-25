@@ -60,10 +60,8 @@ class RekapPilgub extends Component
 
     private function getWarnaPartisipasi(float $partisipasi): string
     {
-        if ($partisipasi >= 80) {
+        if ($partisipasi >= 77.5) {
             return 'green';
-        } elseif ($partisipasi >= 60) {
-            return 'yellow';
         } else {
             return 'red';
         }
