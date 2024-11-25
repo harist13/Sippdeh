@@ -490,7 +490,7 @@ class InputSuaraUIManager {
     syncTableDataWithSelectedTPS() {
         if (this.isEditMode()) {
             this.caches.components.rows.forEach(row => {
-                const tpsId = row.querySelector('td.nomor').dataset.id;
+                const tpsId = row.dataset.id;
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
@@ -728,7 +728,7 @@ class InputSuaraUIManager {
     syncTableInputWithSelectedTPS() {
         if (this.isEditMode()) {
             this.caches.components.rows.forEach(row => {
-                const tpsId = row.querySelector('td.nomor').dataset.id;
+                const tpsId = row.dataset.id;
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
@@ -789,7 +789,7 @@ class InputSuaraUIManager {
         cellQuery,
         onChange
     }) {
-        const rowDataset = row.querySelector('td.nomor').dataset;
+        const rowDataset = row.dataset;
         const tpsId = rowDataset.id;
 
         row.querySelectorAll(cellQuery).forEach(cell => {
