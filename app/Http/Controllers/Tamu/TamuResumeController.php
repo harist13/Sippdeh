@@ -9,6 +9,6 @@ class TamuResumeController extends Controller
 {
     public function __invoke()
     {
-        return view('tamu.resume.index');
+        return view('Tamu.resume.index');
     }
 }
