@@ -1,16 +1,4 @@
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-    {{-- Export Button --}}
-    {{-- <button wire:click="export" wire:loading.attr="disabled" wire:target="export" class="flex items-center bg-[#EE3C46] disabled:bg-[#EE3C406c] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full">
-        <i wire:loading.remove wire:target="export" class="fas fa-file-export w-4 h-4 mr-2"></i>
-
-        <svg wire:loading wire:target="export" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-
-        <span>Ekspor</span>
-    </button> --}}
-    
     {{-- Search Input --}}
     <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">
         {{-- Loading Icon --}}
@@ -36,44 +24,44 @@
     </div>
 
     {{-- Filter Button --}}
-    <button 
+    {{-- <button
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
-        id="openFilterPilwali"
+        id="openFilterPilgub"
     >
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
-    </button>
+    </button> --}}
 </div>
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
-        function showFilterPilwaliModal() {
-            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
-            filterPilwaliModal.classList.remove('hidden');
+        function showFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.remove('hidden');
         }
 
-        function closeFilterPilwaliModal() {
-            const filterPilwaliModal = document.getElementById('filterPilwaliModal');
-            filterPilwaliModal.classList.add('hidden');
+        function closeFilterPilgubModal() {
+            const filterPilgubModal = document.getElementById('filterPilgubModal');
+            filterPilgubModal.classList.add('hidden');
         }
         
         function initializeFilter() {
-            document.getElementById('openFilterPilwali').addEventListener('click', showFilterPilwaliModal);
-            document.getElementById('cancelFilterPilwali').addEventListener('click', closeFilterPilwaliModal);
+            document.getElementById('openFilterPilgub').addEventListener('click', showFilterPilgubModal);
+            document.getElementById('cancelFilterPilgub').addEventListener('click', closeFilterPilgubModal);
 
             document.addEventListener('keyup', function(event) {
                 if (event.key === "Escape") {
-                    closeFilterPilwaliModal();
+                    closeFilterPilgubModal();
                 }
             });
 
             document.addEventListener('click', function(event) {
-                if (event.target == filterPilwaliModal) {
-                    closeFilterPilwaliModal();
+                if (event.target == filterPilgubModal) {
+                    closeFilterPilgubModal();
                 }
             });
         }
 
         initializeFilter();
     </script>
-@endpush
+@endpush --}}

@@ -3,7 +3,7 @@
 namespace App\Livewire\Operator\InputDaftarPemilih;
 
 use App\Models\DaftarPemilih;
-use App\Models\DaftarPemilihPilgubKecamatan;
+use App\Models\DaftarPemilihPilbupKecamatan;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Sentry\SentrySdk;
@@ -12,9 +12,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 
-class InputDaftarPemilihPilgub extends Component
+class InputDaftarPemilihPilbup extends Component
 {
-    public string $posisi = 'GUBERNUR';
+    public string $posisi = 'BUPATI';
     
     public string $keyword = '';
     public int $perPage = 10;
@@ -22,13 +22,13 @@ class InputDaftarPemilihPilgub extends Component
     public function render()
     {
         $kecamatan = $this->getKecamatan();
-        return view('operator.input-daftar-pemilih.pilgub.livewire', compact('kecamatan'));
+        return view('operator.input-daftar-pemilih.pilbup.livewire', compact('kecamatan'));
     }
 
     private function getKecamatan(): LengthAwarePaginator
     {
         try {
-            return DaftarPemilihPilgubKecamatan::query()
+            return DaftarPemilihPilbupKecamatan::query()
                 ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
                 ->paginate($this->perPage);
         } catch (Exception $exception) {
