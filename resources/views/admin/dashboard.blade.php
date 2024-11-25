@@ -269,7 +269,7 @@
                             <div id="slideProvinsi" class="slide101">
                                 <div class="mb-6 rounded-lg">
                                     <div class="flex items-start mb-6">
-                                        <img src="{{ asset('storage/' . $provinsiData['logo']) }}" 
+                                        <img src="{{ asset('assets/Kaltim.png') }}" 
                                             alt="Logo {{ $provinsiData['nama'] }}" 
                                             class="mr-8 w-40 h-45">
                                         <div class="flex-grow pl-10">
