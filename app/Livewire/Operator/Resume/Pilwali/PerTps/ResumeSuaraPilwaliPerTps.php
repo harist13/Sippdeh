@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Models
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
+use App\Models\Kabupaten;
 
 // Livewire
 use Livewire\Component;
@@ -111,6 +113,56 @@ class ResumeSuaraPilwaliPerTps extends Component
             SentrySdk::getCurrentHub()->captureException($exception);
 
             throw $exception;
+        }
+    }
+
+     public function exportPdf()
+    {
+        try {
+            // Get all data without pagination
+            $builder = $this->getBaseTPSBuilder();
+            
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+
+            $data = $builder->get();
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereId(session('operator_kabupaten_id'))->first();
+            $paslon = $this->getPaslon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilwali-tps-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+                'isPilkadaTunggal' => count($paslon) === 1
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pilwali-per-tps.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
         }
     }
 
