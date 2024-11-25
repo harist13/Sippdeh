@@ -36,7 +36,7 @@ class UpdateCalonRequest extends FormRequest
                 'max:300'
             ],
             'posisi' => 'required|in:GUBERNUR,WALIKOTA,BUPATI',
-            'foto_calon' => 'nullable|image|mimes:jpeg,png,jpg|dimensions:width=200,height=300'
+            'foto_calon' => 'nullable|image|mimes:jpeg,png,jpg'
         ];
 
         if ($posisi == 'GUBERNUR') {
