@@ -117,13 +117,14 @@
 									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isTPSColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">TPS</th>
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">DPT</th>
 		
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>Kotak Kosong</th>
+									
 									@foreach ($paslon as $calon)
 										<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
 											{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
 										</th>
 									@endforeach
-		
-									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>Kotak Kosong</th>
+									
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Sah</th>
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Tidak Sah</th>
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">Suara Masuk</th>
@@ -134,6 +135,13 @@
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-dpt">
 										{{ number_format($totalDpt, 0, '.', '.') }}
 									</th>
+
+									{{-- Kotak Kosong --}}
+									@if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+										<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-kotak-kosong bg-blue-950">
+											{{ $totalKotakKosong }}
+										</th>
+									@endif
 								
 									{{-- Calon Totals --}}
 									@if (!$isCalonColumnIgnored)
@@ -142,13 +150,6 @@
 												{{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
 											</th>
 										@endforeach
-									@endif
-								
-									{{-- Kotak Kosong --}}
-									@if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-										<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-kotak-kosong bg-blue-950">
-											{{ $totalKotakKosong }}
-										</th>
 									@endif
 								
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-sah">
