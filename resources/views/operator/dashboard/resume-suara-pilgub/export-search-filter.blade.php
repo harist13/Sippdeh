@@ -24,16 +24,16 @@
     </div>
 
     {{-- Filter Button --}}
-    <button 
+    {{-- <button 
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
         id="openFilterPilgubPerWilayah"
     >
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
-    </button>
+    </button> --}}
 </div>
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         function showFilterPilgubPerWilayahModal() {
             const filterPilgubPerWilayahModal = document.getElementById('filterPilgubPerWilayahModal');
@@ -64,4 +64,4 @@
 
         initializeFilterResumeSuaraPerWilayah();
     </script>
-@endpush
+@endpush --}}

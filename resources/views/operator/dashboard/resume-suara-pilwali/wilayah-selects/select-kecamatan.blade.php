@@ -3,9 +3,12 @@
   <div class="wilayah-select" wire:key="kecamatan-select">
       <div class="relative w-full">
           <button type="button" 
-              class="select-button relative w-full bg-white cursor-pointer rounded-md border border-gray-300 py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              class="select-button relative w-full {{ empty($selectedKabupaten) ? 'bg-gray-300 cursor-no-drop' : 'bg-white cursor-pointer' }} rounded-md border border-gray-300 py-2 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              @empty($selectedKabupaten) disabled @endempty>
               <span class="selected-text block truncate">
-                  @if(empty($selectedKecamatan))
+                  @if(empty($selectedKabupaten))
+                      Pilih kabupaten terlebih dahulu...
+                  @else
                       Pilih kecamatan...
                   @endif
               </span>
@@ -44,8 +47,10 @@
                           </div>
                       @endforeach
                   @else
-                      @if(!empty($selectedKecamatan))
+                      @if(!empty($selectedKabupaten))
                           <div class="py-3 px-3 text-sm text-gray-500 text-center">Tidak ada data kecamatan</div>
+                      @else
+                          <div class="py-3 px-3 text-sm text-gray-500 text-center">Pilih kabupaten terlebih dahulu</div>
                       @endif
                   @endif
               </div>
@@ -60,13 +65,3 @@
       </select>
   </div>
 </div>
-
-@assets
-    <script src="{{ asset('scripts/wilayah-select.js') }}"></script>
-@endassets
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => initializeWilayahSelects('.wilayah-select'));
-    </script>
-@endpush
