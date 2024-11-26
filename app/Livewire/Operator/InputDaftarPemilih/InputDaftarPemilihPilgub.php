@@ -34,6 +34,7 @@ class InputDaftarPemilihPilgub extends Component
     {
         try {
             return DaftarPemilihPilgubKecamatan::query()
+                ->whereKabupatenId(session('operator_kabupaten_id'))
                 ->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
                 ->paginate($this->perPage);
         } catch (Exception $exception) {
