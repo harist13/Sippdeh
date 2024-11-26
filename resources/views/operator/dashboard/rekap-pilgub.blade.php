@@ -20,15 +20,12 @@
 									</div>
 									<div class="flex justify-between items-center border-b pb-2">
 										<h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dpt']) }} Orang</p>
-									</div>
-                                    <div class="flex justify-between items-center border-b pb-2">
-										<h2 class="text-sm font-semibold text-gray-600">Total DPTb</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dptb']) }} Orang</p>
-									</div>
-									<div class="flex justify-between items-center border-b pb-2">
-										<h2 class="text-sm font-semibold text-gray-600">Total DPK</h2>
-										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dpk']) }} Orang</p>
+
+                                        @php
+                                            $totalDpt = $resumeData['dpt'] + $resumeData['dptb'] + $resumeData['dpk'];
+                                        @endphp
+
+										<p class="text-lg font-bold text-gray-800">{{ number_format($totalDpt) }} Orang</p>
 									</div>
 									<div class="flex justify-between items-center">
 										<h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
