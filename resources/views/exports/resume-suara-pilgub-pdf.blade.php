@@ -23,17 +23,7 @@
             border-bottom: 2px solid black;
             padding-bottom: 20px;
         }
-        .logo-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        .logo {
-            width: 80px;
-            height: auto;
-        }
         .header-text {
-            margin-left: 90px;
             text-align: center;
         }
         .header-text h2 {
@@ -55,15 +45,6 @@
             margin: 0;
             padding: 2px 0;
         }
-        .header-text .contact {
-            font-size: 9pt;
-            margin: 0;
-            padding: 2px 0;
-        }
-        .header-text a {
-            color: #000;
-            text-decoration: none;
-        }
         .document-info {
             text-align: left;
             margin: 20px 0;
@@ -79,107 +60,119 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 9pt;
         }
         th, td {
             border: 0.5px solid black;
             padding: 5px;
-            font-size: 9pt;
+            text-align: center;
         }
         th {
             background-color: #3560A0;
             color: white;
+            font-weight: bold;
+            vertical-align: middle;
         }
+        .text-left { text-align: left; }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
-        .text-left { text-align: left; }
+        .text-white { color: white; }
+        
+        .bg-blue-950 { background-color: #172554; }
         .bg-green { background-color: #4ade80; }
         .bg-yellow { background-color: #facc15; }
         .bg-red { background-color: #f87171; }
-        .text-white { color: white; }
-        .bg-blue-950 { background-color: #172554; }
+
+        .footer {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 10pt;
+        }
+
+        .filter-info {
+            margin: 10px 0;
+            font-size: 9pt;
+        }
     </style>
 </head>
 <body>
     <div class="letterhead">
-        <div class="logo-container">
-            @if($logo && file_exists(public_path('storage/' . $logo)))
-                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-            @endif
-        </div>
         <div class="header-text">
             <h2>PEMERINTAH PROVINSI KALIMANTAN TIMUR</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
-            <p>Jalan Jenderal Sudirman Nomor 1, Samarinda, Kalimantan Timur 75121 Telepon (0541) 733333; Faksimile (0541) 733453</p>
-            <p class="contact">Pos-el: <a href="mailto:kesbangpolkaltim@gmail.com">kesbangpolkaltim@gmail.com</a>; Laman <a href="http://kesbangpol.kaltimprov.go.id">http://kesbangpol.kaltimprov.go.id</a></p>
+            <p>Jalan Jenderal Sudirman No.1 Samarinda 75119</p>
         </div>
     </div>
 
-    <div class="date-info">
-        <p>Samarinda, {{ now()->isoFormat('D MMMM Y') }}</p>
+    <div class="filter-info">
+        @if($keyword)
+            <p>Filter Pencarian: {{ $keyword }}</p>
+        @endif
+        
+        @if(count($partisipasi) < 3)
+            <p>Filter Partisipasi: {{ implode(', ', $partisipasi) }}</p>
+        @endif
     </div>
 
-    <div class="document-info">
-        <p>Nomor : 200.1.5/1461/Kesbangpol.</p>
-        <p>Sifat : Penting</p>
-        <p>Lampiran : 1 (satu) berkas</p>
-        <p>Hal : Rekapitulasi perolehan suara Pemilihan Gubernur (Pilgub) tahun 2024</p>
-    </div>
-
-     <table autosize="1">
+    <table autosize="1">
         <thead>
             <tr>
-                <th rowspan="2" width="5%" class="text-center">NO</th>
+                <th rowspan="2" width="5%">NO</th>
                 
-                @if(in_array('PROVINSI', $includedColumns))
-                    <th rowspan="2" width="15%" class="text-center">PROVINSI</th>
+                @if(!$isProvinsiColumnIgnored)
+                    <th rowspan="2" width="12%">PROVINSI</th>
                 @endif
                 
-                @if(in_array('KABUPATEN/KOTA', $includedColumns))
-                    <th rowspan="2" width="15%" class="text-center">KABUPATEN/KOTA</th>
+                @if(!$isKabupatenColumnIgnored)
+                    <th rowspan="2" width="12%">KABUPATEN/KOTA</th>
                 @endif
                 
-                @if(in_array('KECAMATAN', $includedColumns))
-                    <th rowspan="2" width="15%" class="text-center">KECAMATAN</th>
+                @if(!$isKecamatanColumnIgnored)
+                    <th rowspan="2" width="12%">KECAMATAN</th>
                 @endif
                 
-                @if(in_array('KELURAHAN', $includedColumns))
-                    <th rowspan="2" width="15%" class="text-center">KELURAHAN</th>
+                @if(!$isKelurahanColumnIgnored)
+                    <th rowspan="2" width="12%">KELURAHAN</th>
                 @endif
                 
-                <th width="10%" class="text-center">DPT</th>
+                @if($isTpsView && !$isTPSColumnIgnored)
+                    <th rowspan="2" width="12%">TPS</th>
+                @endif
                 
-                @if(in_array('CALON', $includedColumns))
+                <th rowspan="1" width="8%">DPT</th>
+                
+                @if(!$isCalonColumnIgnored)
                     @foreach($paslon as $calon)
-                        <th class="text-center bg-blue-950">{{ $calon->nama }}<br>{{ $calon->nama_wakil }}</th>
+                        <th class="bg-blue-950 text-white">{{ $calon->nama }}<br>{{ $calon->nama_wakil }}</th>
                     @endforeach
-                    
-                    @if(count($paslon) == 1)
-                        <th class="text-center bg-blue-950">KOTAK KOSONG</th>
+                    @if($isPilkadaTunggal)
+                        <th class="bg-blue-950 text-white">KOTAK KOSONG</th>
                     @endif
                 @endif
 
-                <th width="10%" class="text-center">SUARA SAH</th>
-                <th width="10%" class="text-center">SUARA TIDAK SAH</th>
-                <th width="10%" class="text-center">SUARA MASUK</th>
-                <th width="10%" class="text-center">ABSTAIN</th>
-                <th width="10%" class="text-center">PARTISIPASI</th>
+                <th width="8%">SUARA SAH</th>
+                <th width="8%">SUARA TIDAK SAH</th>
+                <th width="8%">SUARA MASUK</th>
+                <th width="8%">ABSTAIN</th>
+                <th width="8%">PARTISIPASI</th>
             </tr>
             <tr>
                 <th class="text-center">{{ number_format($data->sum('dpt'), 0, ',', '.') }}</th>
                 
-                @if(in_array('CALON', $includedColumns))
+                @if(!$isCalonColumnIgnored)
                     @foreach($paslon as $calon)
-                        @php
-                            $totalSuara = $data->sum(function($item) use ($calon) {
-                                $suara = $item->getCalonSuaraByCalonId($calon->id);
-                                return $suara ? $suara->total_suara : 0;
-                            });
-                        @endphp
-                        <th class="text-center bg-blue-950">{{ number_format($totalSuara, 0, ',', '.') }}</th>
+                        <th class="text-center bg-blue-950 text-white">
+                            @if($isTpsView)
+                                {{ number_format($data->sum(fn($item) => $item->suaraCalonByCalonId($calon->id)?->first()?->suara ?? 0), 0, ',', '.') }}
+                            @else
+                                {{ number_format($data->sum(fn($item) => $item->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0), 0, ',', '.') }}
+                            @endif
+                        </th>
                     @endforeach
-                    
-                    @if(count($paslon) == 1)
-                        <th class="text-center bg-blue-950">{{ number_format($data->sum('kotak_kosong'), 0, ',', '.') }}</th>
+                    @if($isPilkadaTunggal)
+                        <th class="text-center bg-blue-950 text-white">
+                            {{ number_format($data->sum('kotak_kosong'), 0, ',', '.') }}
+                        </th>
                     @endif
                 @endif
 
@@ -195,33 +188,74 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     
-                    @if(in_array('PROVINSI', $includedColumns))
-                        <td class="text-left">{{ $item->provinsi?->nama ?? $item->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}</td>
+                    @if(!$isProvinsiColumnIgnored)
+                        <td class="text-left">
+                            @if($isTpsView)
+                                {{ $item->tps?->kelurahan?->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}
+                            @elseif($isKelurahanView)
+                                {{ $item->kecamatan?->kabupaten?->provinsi?->nama ?? '-' }}
+                            @elseif($isKecamatanView)
+                                {{ $item->kabupaten?->provinsi?->nama ?? '-' }}
+                            @else
+                                {{ $item->provinsi?->nama ?? '-' }}
+                            @endif
+                        </td>
                     @endif
                     
-                    @if(in_array('KABUPATEN/KOTA', $includedColumns))
-                        <td class="text-left">{{ $item->kabupaten?->nama ?? $item->kecamatan?->kabupaten?->nama ?? '-' }}</td>
+                    @if(!$isKabupatenColumnIgnored)
+                        <td class="text-left">
+                            @if($isTpsView)
+                                {{ $item->tps?->kelurahan?->kecamatan?->kabupaten?->nama ?? '-' }}
+                            @elseif($isKelurahanView)
+                                {{ $item->kecamatan?->kabupaten?->nama ?? '-' }}
+                            @elseif($isKecamatanView)
+                                {{ $item->kabupaten?->nama ?? '-' }}
+                            @else
+                                {{ $item->nama }}
+                            @endif
+                        </td>
                     @endif
                     
-                    @if(in_array('KECAMATAN', $includedColumns))
-                        <td class="text-left">{{ $item->kecamatan?->nama ?? $item->nama ?? '-' }}</td>
+                    @if(!$isKecamatanColumnIgnored)
+                        <td class="text-left">
+                            @if($isTpsView)
+                                {{ $item->tps?->kelurahan?->kecamatan?->nama ?? '-' }}
+                            @elseif($isKelurahanView)
+                                {{ $item->kecamatan?->nama ?? '-' }}
+                            @else
+                                {{ $item->nama }}
+                            @endif
+                        </td>
                     @endif
                     
-                    @if(in_array('KELURAHAN', $includedColumns))
+                    @if(!$isKelurahanColumnIgnored)
+                        <td class="text-left">
+                            @if($isTpsView)
+                                {{ $item->tps?->kelurahan?->nama ?? '-' }}
+                            @else
+                                {{ $item->nama }}
+                            @endif
+                        </td>
+                    @endif
+                    
+                    @if($isTpsView && !$isTPSColumnIgnored)
                         <td class="text-left">{{ $item->nama }}</td>
                     @endif
-                    
+
                     <td class="text-right">{{ number_format($item->dpt, 0, ',', '.') }}</td>
-                    
-                    @if(in_array('CALON', $includedColumns))
+
+                    @if(!$isCalonColumnIgnored)
                         @foreach($paslon as $calon)
-                            @php
-                                $suara = $item->getCalonSuaraByCalonId($calon->id);
-                            @endphp
-                            <td class="text-right">{{ number_format($suara ? $suara->total_suara : 0, 0, ',', '.') }}</td>
+                            <td class="text-right">
+                                @if($isTpsView)
+                                    {{ number_format($item->suaraCalonByCalonId($calon->id)?->first()?->suara ?? 0, 0, ',', '.') }}
+                                @else
+                                    {{ number_format($item->getCalonSuaraByCalonId($calon->id)?->total_suara ?? 0, 0, ',', '.') }}
+                                @endif
+                            </td>
                         @endforeach
                         
-                        @if(count($paslon) == 1)
+                        @if($isPilkadaTunggal)
                             <td class="text-right">{{ number_format($item->kotak_kosong, 0, ',', '.') }}</td>
                         @endif
                     @endif
@@ -230,13 +264,19 @@
                     <td class="text-right">{{ number_format($item->suara_tidak_sah, 0, ',', '.') }}</td>
                     <td class="text-right">{{ number_format($item->suara_masuk, 0, ',', '.') }}</td>
                     <td class="text-right">{{ number_format($item->abstain, 0, ',', '.') }}</td>
-                    <td class="text-center {{ $item->partisipasi >= 80 ? 'bg-green' : ($item->partisipasi >= 60 ? 'bg-yellow' : 'bg-red') }} text-white">
+                    <td class="text-center {{ $item->partisipasi >= 80 ? 'bg-green' : ($item->partisipasi >= 60 ? 'bg-yellow' : 'bg-red') }}">
                         {{ number_format($item->partisipasi, 1, ',', '.') }}%
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="{{ 7 + count($paslon) + (in_array('PROVINSI', $includedColumns) ? 1 : 0) + (in_array('KABUPATEN/KOTA', $includedColumns) ? 1 : 0) + (in_array('KECAMATAN', $includedColumns) ? 1 : 0) + (in_array('KELURAHAN', $includedColumns) ? 1 : 0) }}" class="text-center">
+                    <td colspan="{{ 7 + count($paslon) + 
+                        (!$isProvinsiColumnIgnored ? 1 : 0) +
+                        (!$isKabupatenColumnIgnored ? 1 : 0) + 
+                        (!$isKecamatanColumnIgnored ? 1 : 0) + 
+                        (!$isKelurahanColumnIgnored ? 1 : 0) +
+                        ($isTpsView && !$isTPSColumnIgnored ? 1 : 0) }}" 
+                        class="text-center">
                         Data tidak tersedia.
                     </td>
                 </tr>
@@ -244,5 +284,12 @@
         </tbody>
     </table>
 
+    <div class="footer">
+        <p>Samarinda, {{ now()->isoFormat('D MMMM Y') }}<br>
+        Kepala Badan Kesbangpol<br>
+        Provinsi Kalimantan Timur<br><br><br><br>
+        <u>...................................</u><br>
+        NIP. ...........................</p>
+    </div>
 </body>
 </html>
