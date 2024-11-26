@@ -22,7 +22,7 @@
 	<div class="relative mb-5">
 			<label class="block text-sm font-semibold mb-3">Tingkat Partisipasi</label>
 			<div class="flex flex-wrap gap-2">
-					@foreach(['HIJAU', 'KUNING', 'MERAH'] as $color)
+					@foreach(['HIJAU', 'MERAH'] as $color)
 					<label class="flex items-center cursor-pointer">
 							<input type="checkbox" 
 									wire:model.live="partisipasi" 
@@ -32,7 +32,6 @@
 									:class="{ 
 											'bg-[#3560a0]': @js(in_array($color, $partisipasi)),
 											'text-[#69d788]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'HIJAU',
-											'text-[#ffe608]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'KUNING',
 											'text-[#fe756c]': @js(in_array($color, $partisipasi)) && '{{ $color }}' === 'MERAH',
 											'text-gray-600 bg-white': !@js(in_array($color, $partisipasi))
 									}">
