@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FilterResumeSuaraPilgubPerWilayah extends Component
 {
-    public $selectedKabupaten = [];
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
 
@@ -19,9 +18,8 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     public $partisipasi = [];
 
-    public function mount($selectedKabupaten, $selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
+    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi)
     {
-        $this->selectedKabupaten = $selectedKabupaten;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
 
@@ -33,12 +31,13 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     public function render()
     {
-        $kabupaten = $this->getKabupatenOptions();
+        // $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('operator.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('operator.resume.pilgub.per-wilayah.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
+    // NOTE: Ini ga dipakai
     private function getKabupatenOptions()
     {
         return Kabupaten::query()
@@ -50,12 +49,8 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     private function getKecamatanOptions()
     {
-        if (empty($this->selectedKabupaten)) {
-            return [];
-        }
-
         return Kecamatan::query()
-            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKabupaten))
+            ->whereHas('kabupaten', fn (Builder $builder) => $builder->whereId(session('operator_kabupaten_id')))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
@@ -93,6 +88,9 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     public function resetFilter()
     {
+        $this->selectedKecamatan = [];
+        $this->selectedKelurahan = [];
+        
         $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
         $this->partisipasi = ['HIJAU', 'MERAH'];
         
@@ -103,7 +101,6 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
     {
         $event = $this->dispatch(
             'apply-filter',
-            selectedKabupaten: $this->selectedKabupaten,
             selectedKecamatan: $this->selectedKecamatan,
             selectedKelurahan: $this->selectedKelurahan,
             includedColumns: $this->includedColumns,

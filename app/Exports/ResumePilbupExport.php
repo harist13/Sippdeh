@@ -98,33 +98,44 @@ class ResumePilbupExport implements FromView, WithStyles
                 resume_suara_pilbup_tps.suara_masuk,
                 resume_suara_pilbup_tps.abstain,
                 resume_suara_pilbup_tps.partisipasi
-            ')
-            ->whereHas('tps', function(Builder $builder) {
-                $builder->whereHas('kelurahan', function (Builder $builder) {
-                    if (!empty($this->selectedKelurahan)) {
-                        $builder->whereIn('id', $this->selectedKelurahan);
+            ');
+
+        $builder->whereHas('tps', function(Builder $builder) {
+            $builder->whereHas('kelurahan', function (Builder $builder) {
+                if (!empty($this->selectedKelurahan)) {
+                    $builder->whereIn('id', $this->selectedKelurahan);
+                }
+
+                $builder->whereHas('kecamatan', function(Builder $builder) {
+                    if (!empty($this->selectedKecamatan)) {
+                        $builder->whereIn('id', $this->selectedKecamatan);
                     }
 
-                    $builder->whereHas('kecamatan', function(Builder $builder) {
-                        if (!empty($this->selectedKecamatan)) {
-                            $builder->whereIn('id', $this->selectedKecamatan);
-                        }
+                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereId(session('operator_kabupaten_id')));
+                });
+            });
+        });
 
-                        $builder->whereHas('kabupaten', function (Builder $builder) {
-                            $builder->whereId(session('operator_kabupaten_id'));
-                        });
+        if ($this->keyword) {
+            $builder->whereHas('tps', function(Builder $builder) {
+                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                
+                $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                });
+    
+                $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                    $builder->whereHas('kecamatan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
                     });
                 });
             });
+        }
 
         $this->addPartisipasiFilter($builder);
         $this->sortResumeSuaraPilbupTpsPaslon($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraKotakKosong($builder);
-
-        if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
 
         return $builder->get();
     }
@@ -143,17 +154,24 @@ class ResumePilbupExport implements FromView, WithStyles
                 resume_suara_pilbup_kelurahan.suara_masuk,
                 resume_suara_pilbup_kelurahan.abstain,
                 resume_suara_pilbup_kelurahan.partisipasi
-            ')
-            ->whereIn('resume_suara_pilbup_kelurahan.id', $this->selectedKelurahan);
+            ');
+
+        $builder->whereIn('resume_suara_pilbup_kelurahan.id', $this->selectedKelurahan);
+
+        if ($this->keyword) {
+            $builder->where(function(Builder $builder) {
+                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                
+                $builder->orWhereHas('kecamatan', function (Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                });
+            });
+        }
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraPilbupKelurahanPaslon($builder);
         $this->sortResumeSuaraKotakKosong($builder);
-
-        if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
 
         return $builder->get();
     }
@@ -172,17 +190,18 @@ class ResumePilbupExport implements FromView, WithStyles
                 resume_suara_pilbup_kecamatan.suara_masuk,
                 resume_suara_pilbup_kecamatan.abstain,
                 resume_suara_pilbup_kecamatan.partisipasi
-            ')
-            ->whereIn('resume_suara_pilbup_kecamatan.id', $this->selectedKecamatan);
+            ');
+
+        $builder->whereIn('resume_suara_pilbup_kecamatan.id', $this->selectedKecamatan);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraPilbupKecamatanPaslon($builder);
         $this->sortResumeSuaraKotakKosong($builder);
-
-        if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
 
         return $builder->get();
     }
