@@ -1,6 +1,12 @@
 @php
-    $isPilkadaTunggal = count($paslon) == 1;
+    $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
+    $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
+    $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
+    $isPilkadaTunggal = count($paslon) == 1;
+@endphp
+
+@php
     $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
     $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
@@ -19,9 +25,9 @@
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
             </th>
-            
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 200px;">
-                Kecamatan
+			
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+                Kabupaten/Kota
             </th>
             
             <th wire:click="sortDpt" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
@@ -33,10 +39,25 @@
                 @elseif ($dptSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
-            </th>
-            
-            @if ($isPilkadaTunggal)
-                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
+            </th>            
+
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="{{ $calon->id }}" wire:click="sortPaslonById({{ $calon->id }})" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
+                        @if ($paslonIdSort != $calon->id)
+                            <i class="fas fa-sort ml-2"></i>
+                        @elseif ($paslonSort === 'asc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-up ml-2"></i>
+                        @elseif ($paslonSort === 'desc' && $paslonIdSort == $calon->id)
+                            <i class="fas fa-sort-down ml-2"></i>
+                        @endif
+                    </th>
+                @endforeach
+            @endif
+
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
                     <span>Kotak Kosong</span>
                     @if ($kotakKosongSort === null)
                         <i class="fas fa-sort ml-2"></i>
@@ -47,19 +68,6 @@
                     @endif
                 </th>
             @endif
-            
-            @foreach ($paslon as $calon)
-                <th wire:key="{{ $calon->id }}" wire:click="sortPaslonById({{ $calon->id }})" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer bg-blue-950" style="min-width: 100px;">
-                    <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
-                    @if ($paslonIdSort != $calon->id)
-                        <i class="fas fa-sort ml-2"></i>
-                    @elseif ($paslonSort === 'asc' && $paslonIdSort == $calon->id)
-                        <i class="fas fa-sort-up ml-2"></i>
-                    @elseif ($paslonSort === 'desc' && $paslonIdSort == $calon->id)
-                        <i class="fas fa-sort-down ml-2"></i>
-                    @endif
-                </th>
-            @endforeach
 
             <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
                 <span>Suara Masuk</span>
@@ -86,20 +94,22 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalDpt, 0, '.', '.') }}
             </th>
-
+        
+            {{-- Calon Totals --}}
+            @if (!$isCalonColumnIgnored)
+                @foreach ($paslon as $calon)
+                    <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                    </th>
+                @endforeach
+            @endif
+        
             {{-- Kotak Kosong --}}
-            @if ($isPilkadaTunggal)
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                 <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
                     {{ $totalKotakKosong }}
                 </th>
             @endif
-        
-            {{-- Calon Totals --}}
-            @foreach ($paslon as $calon)
-                <th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
-                </th>
-            @endforeach
             
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
@@ -118,32 +128,34 @@
                     {{ $datum->getThreeDigitsId() }}
                 </td>
 
-                {{-- Kecamatan --}}
-                <td class="py-3 px-4 text-xs text-left border kecamatan">
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                    <span class="value">{{ number_format($datum->dpt, 0, '', '.') }}</span>
                 </td>
 
+                {{-- Calon-calon --}}
+                @if (!$isCalonColumnIgnored)
+                    @foreach ($paslon as $calon)
+                        @php
+                            $suara = $datum->getCalonSuaraByCalonId($calon->id);
+                        @endphp
+                        <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
+                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
+                        </td>
+                    @endforeach
+                @endif
+
                 {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal)
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                     <td class="py-3 px-4 text-xs border kotak-kosong">
                         {{ number_format($datum->kotak_kosong, 0, '', '.') }}
                     </td>
                 @endif
-
-                {{-- Calon-calon --}}
-                @foreach ($paslon as $calon)
-                    @php
-                        $suara = $datum->getCalonSuaraByCalonId($calon->id);
-                    @endphp
-                    <td wire:key="{{ $datum->id }}{{ $calon->id }}" class="py-3 px-4 text-xs border paslon">
-                        {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
-                    </td>
-                @endforeach
 
                 {{-- Suara Masuk --}}
                 <td class="py-3 px-4 text-xs border suara-masuk">
