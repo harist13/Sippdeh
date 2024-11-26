@@ -20,6 +20,12 @@ return new class extends Migration
 
                 -- DPT
                 COALESCE(SUM(resume_suara_pilwali_kelurahan.dpt), 0) AS dpt,
+                
+                -- DPTb
+                COALESCE(daftar_pemilih_pilwali_kecamatan_view.dptb, 0) AS dptb,
+
+                -- DPK
+                COALESCE(daftar_pemilih_pilwali_kecamatan_view.dpk, 0) AS dpk,
 
                 -- Kotak Kosong
                 (

@@ -31,10 +31,10 @@ return new class extends Migration
             FROM
                 tps
             LEFT JOIN
-                suara_tps ON suara_tps.tps_id = tps.id AND suara_tps.posisi = 'WALIKOTA'
+                suara_tps ON suara_tps.tps_id = tps.id AND suara_tps.posisi = 'BUPATI'
             LEFT JOIN
                 suara_calon ON suara_calon.tps_id = tps.id
-                AND suara_calon.calon_id IN (SELECT id FROM calon WHERE posisi = 'WALIKOTA')
+                AND suara_calon.calon_id IN (SELECT id FROM calon WHERE posisi = 'BUPATI')
             GROUP BY
                 tps.id, tps.nama, tps.dpt, suara_tps.kotak_kosong, suara_tps.suara_tidak_sah;
         ");

@@ -18,6 +18,8 @@ return new class extends Migration
                 kabupaten.nama AS nama,
                 kabupaten.provinsi_id AS provinsi_id,
                 COALESCE(SUM(resume_suara_pilgub_kecamatan.dpt), 0) AS dpt,
+                COALESCE(SUM(resume_suara_pilgub_kecamatan.dptb), 0) AS dptb,
+                COALESCE(SUM(resume_suara_pilgub_kecamatan.dpk), 0) AS dpk,
                 COALESCE(SUM(resume_suara_pilgub_kecamatan.kotak_kosong), 0) AS kotak_kosong,
                 COALESCE(SUM(resume_suara_pilgub_kecamatan.suara_sah), 0) AS suara_sah,
                 COALESCE(SUM(resume_suara_pilgub_kecamatan.suara_tidak_sah), 0) AS suara_tidak_sah,
@@ -33,6 +35,10 @@ return new class extends Migration
                             ) /
                             (
                                 COALESCE(SUM(resume_suara_pilgub_kecamatan.dpt), 0)
+                                +
+                                COALESCE(SUM(resume_suara_pilgub_kecamatan.dptb), 0)
+                                +
+                                COALESCE(SUM(resume_suara_pilgub_kecamatan.dpk), 0)
                             ) * 100
                         ), 1
                     )
