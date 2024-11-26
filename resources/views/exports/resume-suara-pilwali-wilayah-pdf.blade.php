@@ -10,6 +10,17 @@
             font-weight: normal;
             font-style: normal;
         }
+
+            .footnote {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 8pt;
+            color: #666;
+            padding: 10px 0;
+            border-top: 0.5px solid #ccc;
+        }
         
         body {
             font-family: 'DejaVu Sans', sans-serif;
@@ -375,14 +386,9 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 30px;">
-        <p style="text-align: right;">
-            Samarinda, {{ now()->isoFormat('D MMMM Y') }}<br>
-            Kepala Badan Kesatuan Bangsa dan Politik<br>
-            {{ $kabupaten->nama ?? '' }}<br><br><br><br>
-            <u>{{ $kabupaten->kepala_dinas ?? '.........................' }}</u><br>
-            NIP. {{ $kabupaten->nip_kepala_dinas ?? '.........................' }}
-        </p>
+      <div class="footnote">
+        <p>Dokumen ini telah dicetak melalui Aplikasi SIPPPDEH Prov.Kaltim oleh {{ session('operator_name') }}<br>
+        {{ now()->format('d/m/Y H:i') }}</p>
     </div>
 </body>
 </html>
