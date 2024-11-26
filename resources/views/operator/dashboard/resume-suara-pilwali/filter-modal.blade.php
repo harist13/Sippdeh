@@ -5,7 +5,7 @@
             <h3 class="text-lg font-medium text-gray-900">Filter Suara Pemilihan Gubernur Per Wilayah</h3>
         </div>
 
-        @livewire(
+        {{-- @livewire(
             'operator.dashboard.resume-suara-pilwali.filter-resume-suara-pilwali',
             compact(
                 'selectedKabupaten',
@@ -14,6 +14,6 @@
                 'includedColumns',
                 'partisipasi'
             )
-        )
+        ) --}}
     </div>
 </div>

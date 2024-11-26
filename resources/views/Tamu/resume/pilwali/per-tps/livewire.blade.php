@@ -19,7 +19,7 @@
 					<div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 	
 					<div class="px-4">
-						@include('operator.resume.pilwali.per-tps.table', compact('tps', 'paslon', 'includedColumns'))
+						@include('Tamu.resume.pilwali.per-tps.table', compact('tps', 'paslon', 'includedColumns'))
 					</div>
 				</div>
 			</div>
