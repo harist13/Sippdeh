@@ -533,19 +533,11 @@ class InputSuaraUIManager {
                     // partisipasiCell.dataset.value = tps.partisipasi;
                     partisipasiCell.textContent = `${tps.partisipasi}%`;
 
-                    if (tps.partisipasi >= 80) {
+                    if (tps.partisipasi >= 77.5) {
                         partisipasiCell.classList.add('bg-green-400');
                         partisipasiCell.classList.remove('bg-yellow-400');
                         partisipasiCell.classList.remove('bg-red-400');
-                    }
-
-                    if (tps.partisipasi < 80 && tps.partisipasi >= 60) {
-                        partisipasiCell.classList.remove('bg-green-400');
-                        partisipasiCell.classList.add('bg-yellow-400');
-                        partisipasiCell.classList.remove('bg-red-400');
-                    }
-
-                    if (tps.partisipasi < 60) {
+                    } else {
                         partisipasiCell.classList.remove('bg-green-400');
                         partisipasiCell.classList.remove('bg-yellow-400');
                         partisipasiCell.classList.add('bg-red-400');
