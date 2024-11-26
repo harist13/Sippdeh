@@ -16,6 +16,7 @@ return new class extends Migration
             SELECT
                 tps.id AS id,
                 tps.nama AS nama,
+                COALESCE(tps.kelurahan_id, null) AS kelurahan_id,
                 COALESCE(tps.dpt, 0) AS dpt,
                 COALESCE(suara_tps.kotak_kosong, 0) AS kotak_kosong,
                 (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.kotak_kosong, 0)) AS suara_sah,

@@ -18,8 +18,10 @@ return new class extends Migration
                 kecamatan.nama AS nama,
                 kecamatan.kabupaten_id AS kabupaten_id,
 
-                -- Kotak Kosong
+                -- DPT
                 COALESCE(SUM(resume_suara_pilgub_kelurahan.dpt), 0) AS dpt,
+
+                -- Kotak Kosong
                 (
                     COALESCE(SUM(resume_suara_pilgub_kelurahan.kotak_kosong), 0)
                     +
@@ -54,7 +56,7 @@ return new class extends Migration
                     THEN ROUND(
                         (
                             (
-                                -- (Suara Sah + Suara Tidah Sah) / (DPT + DPTb + DPK)
+                                -- (Suara Sah + Suara Tidak Sah) / (DPT + DPTb + DPK)
                                 (
                                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_sah), 0)
                                     +
@@ -82,9 +84,7 @@ return new class extends Migration
             FROM 
                 kecamatan
             LEFT JOIN 
-                kelurahan ON kelurahan.kecamatan_id = kecamatan.id
-            LEFT JOIN 
-                resume_suara_pilgub_kelurahan ON resume_suara_pilgub_kelurahan.id = kelurahan.id
+                resume_suara_pilgub_kelurahan ON resume_suara_pilgub_kelurahan.kecamatan_id = kecamatan.id
             LEFT JOIN 
                 daftar_pemilih_pilgub_kecamatan_view ON daftar_pemilih_pilgub_kecamatan_view.id = kecamatan.id
             GROUP BY 

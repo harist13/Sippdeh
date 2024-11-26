@@ -31,9 +31,7 @@ return new class extends Migration
             FROM 
                 kelurahan
             LEFT JOIN 
-                tps ON tps.kelurahan_id = kelurahan.id
-            LEFT JOIN 
-                resume_suara_pilgub_tps ON resume_suara_pilgub_tps.id = tps.id
+                resume_suara_pilgub_tps ON resume_suara_pilgub_tps.kelurahan_id = kelurahan.id
             GROUP BY 
                 kelurahan.id;
         ");
