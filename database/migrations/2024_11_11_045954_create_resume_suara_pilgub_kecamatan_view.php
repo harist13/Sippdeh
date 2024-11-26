@@ -23,28 +23,28 @@ return new class extends Migration
                 (
                     COALESCE(SUM(resume_suara_pilgub_kelurahan.kotak_kosong), 0)
                     +
-                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.kotak_kosong), 0)
+                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.kotak_kosong, 0)
                 ) AS kotak_kosong,
 
                 -- Suara Sah
                 (
                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_sah), 0)
                     +
-                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.suara_sah), 0)
+                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_sah, 0)
                 ) AS suara_sah,
 
                 -- Suara Tidak Sah
                 (
                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_tidak_sah), 0)
                     +
-                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.suara_tidak_sah), 0)
+                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_tidak_sah, 0)
                 ) AS suara_tidak_sah,
 
                 -- Suara Masuk
                 (
                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_masuk), 0)
                     +
-                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.suara_masuk), 0)
+                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_masuk, 0)
                 ) AS suara_masuk,
                 
                 COALESCE(SUM(resume_suara_pilgub_kelurahan.abstain), 0) AS abstain,
@@ -58,22 +58,22 @@ return new class extends Migration
                                 (
                                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_sah), 0)
                                     +
-                                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.suara_sah), 0)
+                                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_sah, 0)
                                 )
                                 +
-                               (
+                                (
                                     COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_tidak_sah), 0)
                                     +
-                                    COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.suara_tidak_sah), 0)
+                                    COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_tidak_sah, 0)
                                 )
                             )
                             /
                             (
                                 COALESCE(SUM(resume_suara_pilgub_kelurahan.dpt), 0)
                                 +
-                                COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.dptb), 0)
+                                COALESCE(daftar_pemilih_pilgub_kecamatan_view.dptb, 0)
                                 +
-                                COALESCE(SUM(daftar_pemilih_pilgub_kecamatan_view.dpk), 0)
+                                COALESCE(daftar_pemilih_pilgub_kecamatan_view.dpk, 0)
                             )
                         ) * 100, 1
                     )
@@ -88,7 +88,13 @@ return new class extends Migration
             LEFT JOIN 
                 daftar_pemilih_pilgub_kecamatan_view ON daftar_pemilih_pilgub_kecamatan_view.id = kecamatan.id
             GROUP BY 
-                kecamatan.id;
+                kecamatan.id,
+                daftar_pemilih_pilgub_kecamatan_view.dptb,
+                daftar_pemilih_pilgub_kecamatan_view.dpk,
+                daftar_pemilih_pilgub_kecamatan_view.kotak_kosong,
+                daftar_pemilih_pilgub_kecamatan_view.suara_sah,
+                daftar_pemilih_pilgub_kecamatan_view.suara_tidak_sah,
+                daftar_pemilih_pilgub_kecamatan_view.suara_masuk;
         ");
     }
 
