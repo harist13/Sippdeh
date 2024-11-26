@@ -45,7 +45,7 @@ class InputSuaraPilgub extends Component
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $partisipasi = ['HIJAU', 'MERAH'];
 
     public function render()
     {
@@ -101,15 +101,11 @@ class InputSuaraPilgub extends Component
     {
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                $builder->orWhereRaw('partisipasi < 77.5');
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi >= 80');
+                $builder->orWhereRaw('partisipasi >= 77.5');
             }
         });
     }
@@ -122,11 +118,13 @@ class InputSuaraPilgub extends Component
                 
                 $builder->orWhereHas('kelurahan', function (Builder $builder) {
                     $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-                });
-    
-                $builder->orWhereHas('kelurahan', function (Builder $builder) {
-                    $builder->whereHas('kecamatan', function (Builder $builder) {
+
+                    $builder->orWhereHas('kecamatan', function (Builder $builder) {
                         $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+
+                        $builder->orWhereHas('kabupaten', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
                     });
                 });
             });
@@ -148,7 +146,7 @@ class InputSuaraPilgub extends Component
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
     }
 
     #[On('apply-filter')]
@@ -225,16 +223,16 @@ class InputSuaraPilgub extends Component
         }
     }
 
-    public function export(): BinaryFileResponse
-    {
-        $sheet = new InputSuaraPilgubExport(
-            $this->keyword,
-            $this->selectedKecamatan,
-            $this->selectedKelurahan,
-            $this->includedColumns,
-            $this->partisipasi
-        );
+    // public function export(): BinaryFileResponse
+    // {
+    //     $sheet = new InputSuaraPilgubExport(
+    //         $this->keyword,
+    //         $this->selectedKecamatan,
+    //         $this->selectedKelurahan,
+    //         $this->includedColumns,
+    //         $this->partisipasi
+    //     );
 
-        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
-    }
+    //     return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
+    // }
 }

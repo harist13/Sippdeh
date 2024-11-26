@@ -34,7 +34,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
     public array $selectedKelurahan = [];
 
     public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $partisipasi = ['HIJAU', 'MERAH'];
 
     public $paslonSorts = [];
 
@@ -297,15 +297,11 @@ class ResumeSuaraPilgubPerWilayah extends Component
     {
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                $builder->orWhereRaw('partisipasi < 77.5');
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi >= 80');
+                $builder->orWhereRaw('partisipasi >= 77.5');
             }
         });
     }
@@ -345,7 +341,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
     }
 
     #[On('apply-filter')]

@@ -546,19 +546,11 @@ class InputDaftarPemilihUIManager {
                     // partisipasiCell.dataset.value = daftarPemilih.partisipasi;
                     partisipasiCell.textContent = `${daftarPemilih.partisipasi}%`;
 
-                    if (daftarPemilih.partisipasi >= 80) {
+                    if (daftarPemilih.partisipasi >= 77.5) {
                         partisipasiCell.classList.add('bg-green-400');
                         partisipasiCell.classList.remove('bg-yellow-400');
                         partisipasiCell.classList.remove('bg-red-400');
-                    }
-
-                    if (daftarPemilih.partisipasi < 80 && daftarPemilih.partisipasi >= 60) {
-                        partisipasiCell.classList.remove('bg-green-400');
-                        partisipasiCell.classList.add('bg-yellow-400');
-                        partisipasiCell.classList.remove('bg-red-400');
-                    }
-
-                    if (daftarPemilih.partisipasi < 60) {
+                    } else {
                         partisipasiCell.classList.remove('bg-green-400');
                         partisipasiCell.classList.remove('bg-yellow-400');
                         partisipasiCell.classList.add('bg-red-400');

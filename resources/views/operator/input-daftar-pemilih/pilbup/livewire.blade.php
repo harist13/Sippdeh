@@ -78,16 +78,16 @@
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 100px">
 										DPK
 									</th>
+
+									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
+										Kotak Kosong
+									</th>
 						
 									@foreach ($paslon as $calon)
 										<th wire:key="{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;">
 											{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}
 										</th>
 									@endforeach
-						
-									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950" style="min-width: 100px;" {{ !$isPilkadaTunggal ? 'hidden' : '' }}>
-										Kotak Kosong
-									</th>
 						
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="min-width: 50px;">
 										Suara Sah
@@ -113,19 +113,19 @@
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-dpk">
 										{{ number_format($totalDpk, 0, '.', '.') }}
 									</th>
-						
-									@foreach ($paslon as $calon)
-										<th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950 total-calon">
-											{{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
-										</th>
-									@endforeach
-								
+
 									{{-- Kotak Kosong --}}
 									@if ($isPilkadaTunggal)
 										<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-kotak-kosong bg-blue-950">
 											{{ $totalKotakKosong }}
 										</th>
 									@endif
+						
+									@foreach ($paslon as $calon)
+										<th wire:key="total-{{ $calon->id }}" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950 total-calon">
+											{{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+										</th>
+									@endforeach
 								
 									<th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none total-suara-sah">
 										{{ number_format($totalSuaraSah, 0, '.', '.') }}

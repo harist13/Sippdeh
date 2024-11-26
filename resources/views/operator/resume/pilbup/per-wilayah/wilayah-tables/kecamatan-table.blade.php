@@ -45,7 +45,20 @@
                 @elseif ($dptSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
-            </th>            
+            </th>
+            
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
+                    <span>Kotak Kosong</span>
+                    @if ($kotakKosongSort === null)
+                        <i class="fas fa-sort ml-2"></i>
+                    @elseif ($kotakKosongSort === 'asc')
+                        <i class="fas fa-sort-up ml-2"></i>
+                    @elseif ($kotakKosongSort === 'desc')
+                        <i class="fas fa-sort-down ml-2"></i>
+                    @endif
+                </th>
+            @endif
 
             @if (!$isCalonColumnIgnored)
                 @foreach ($paslon as $calon)
@@ -60,19 +73,6 @@
                         @endif
                     </th>
                 @endforeach
-            @endif
-
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th wire:click="sortKotakKosong" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer {{ $isCalonColumnIgnored ? 'hidden' : '' }} bg-blue-950" style="min-width: 100px;">
-                    <span>Kotak Kosong</span>
-                    @if ($kotakKosongSort === null)
-                        <i class="fas fa-sort ml-2"></i>
-                    @elseif ($kotakKosongSort === 'asc')
-                        <i class="fas fa-sort-up ml-2"></i>
-                    @elseif ($kotakKosongSort === 'desc')
-                        <i class="fas fa-sort-down ml-2"></i>
-                    @endif
-                </th>
             @endif
 
             <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
@@ -130,6 +130,13 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalDpt, 0, '.', '.') }}
             </th>
+
+            {{-- Kotak Kosong --}}
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                    {{ $totalKotakKosong }}
+                </th>
+            @endif
         
             {{-- Calon Totals --}}
             @if (!$isCalonColumnIgnored)
@@ -138,13 +145,6 @@
                         {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
                     </th>
                 @endforeach
-            @endif
-        
-            {{-- Kotak Kosong --}}
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{ $totalKotakKosong }}
-                </th>
             @endif
         
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
@@ -188,6 +188,13 @@
                     {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
 
+                {{-- Kotak Kosong --}}
+                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                    <td class="py-3 px-4 text-xs border kotak-kosong">
+                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                    </td>
+                @endif
+
                 {{-- Calon-calon --}}
                 @if (!$isCalonColumnIgnored)
                     @foreach ($paslon as $calon)
@@ -198,13 +205,6 @@
                             {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
-                @endif
-
-                {{-- Kotak Kosong --}}
-                @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                    <td class="py-3 px-4 text-xs border kotak-kosong">
-                        {{ number_format($datum->kotak_kosong, 0, '', '.') }}
-                    </td>
                 @endif
 
                 {{-- Suara Sah --}}
@@ -229,23 +229,15 @@
 
                 {{-- Partisipasi --}}
                 <td class="py-3 px-4 text-xs border partisipasi">
-					@if ($datum->partisipasi >= 80)
-						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
-
-					@if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
-						<span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
-
-					@if ($datum->partisipasi < 60)
-						<span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
+					@if ($datum->partisipasi >= 77.5)
+                        <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @else
+                        <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
 				</td>
             </tr>
         @empty
