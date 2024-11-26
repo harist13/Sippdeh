@@ -44,6 +44,8 @@ class RekapPilbup extends Component
         $suaraTidakSah = max(0, $resumeData->suara_tidak_sah ?? 0);
         $suaraMasuk = max(0, $resumeData->suara_masuk ?? 0);
         $dpt = max(0, $resumeData->dpt ?? 0);
+        $dptb = max(0, $resumeData->dptb ?? 0);
+        $dpk = max(0, $resumeData->dpk ?? 0);
         $abstain = max(0, $resumeData->abstain ?? 0);
         $partisipasi = max(0, $resumeData->partisipasi ?? 0);
 
@@ -53,6 +55,8 @@ class RekapPilbup extends Component
             'suara_sah' => $suaraSah,
             'suara_tidak_sah' => $suaraTidakSah,
             'dpt' => $dpt,
+            'dptb' => $dptb,
+            'dpk' => $dpk,
             'abstain' => $abstain,
             'suara_masuk' => $suaraMasuk,
             'partisipasi' => $partisipasi,

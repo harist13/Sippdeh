@@ -42,6 +42,8 @@ class RekapPilgub extends Component
         $suaraTidakSah = max(0, $resumeSuara->suara_tidak_sah ?? 0);
         $suaraMasuk = max(0, $resumeSuara->suara_masuk ?? 0);
         $dpt = max(0, $resumeSuara->dpt ?? 0);
+        $dptb = max(0, $resumeSuara->dptb ?? 0);
+        $dpk = max(0, $resumeSuara->dpk ?? 0);
         $abstain = max(0, $resumeSuara->abstain ?? 0);
         $partisipasi = max(0, $resumeSuara->partisipasi ?? 0);
 
@@ -51,6 +53,8 @@ class RekapPilgub extends Component
             'suara_sah' => $suaraSah,
             'suara_tidak_sah' => $suaraTidakSah,
             'dpt' => $dpt,
+            'dptb' => $dptb,
+            'dpk' => $dpk,
             'abstain' => $abstain,
             'suara_masuk' => $suaraMasuk,
             'partisipasi' => $partisipasi,

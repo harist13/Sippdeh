@@ -22,6 +22,14 @@
 										<h2 class="text-sm font-semibold text-gray-600">Total DPT</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dpt']) }} Orang</p>
 									</div>
+                                    <div class="flex justify-between items-center border-b pb-2">
+										<h2 class="text-sm font-semibold text-gray-600">Total DPTb</h2>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dptb']) }} Orang</p>
+									</div>
+									<div class="flex justify-between items-center border-b pb-2">
+										<h2 class="text-sm font-semibold text-gray-600">Total DPK</h2>
+										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['dpk']) }} Orang</p>
+									</div>
 									<div class="flex justify-between items-center">
 										<h2 class="text-sm font-semibold text-gray-600">Total Abstain</h2>
 										<p class="text-lg font-bold text-gray-800">{{ number_format($resumeData['abstain']) }} Orang</p>
@@ -43,7 +51,7 @@
                                 </div>
                             </div>
 							<div class="text-center w-1/3">
-								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat {{ $resumeData['nama'] }}</h2>
+								<h2 class="text-xl font-bold">Tingkat Partisipasi Masyarakat<br>{{ $resumeData['nama'] }}</h2>
 							</div>
 							<div class="text-right w-1/3">
 								<div class="text-4xl font-bold {{ $resumeData['warna_partisipasi'] === 'green' ? 'text-green-400' : 'text-red-400' }}">

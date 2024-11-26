@@ -13,9 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement("CREATE VIEW resume_suara_pilbup_tps AS
-            SELECT 
+            SELECT
                 tps.id AS id,
                 tps.nama AS nama,
+                COALESCE(tps.kelurahan_id, null) AS kelurahan_id,
                 COALESCE(tps.dpt, 0) AS dpt,
                 COALESCE(suara_tps.kotak_kosong, 0) AS kotak_kosong,
                 (COALESCE(SUM(suara_calon.suara), 0) + COALESCE(suara_tps.kotak_kosong, 0)) AS suara_sah,
@@ -30,9 +31,9 @@ return new class extends Migration
             FROM
                 tps
             LEFT JOIN
-                suara_tps ON suara_tps.tps_id = tps.id  AND suara_tps.posisi = 'BUPATI'
+                suara_tps ON suara_tps.tps_id = tps.id AND suara_tps.posisi = 'BUPATI'
             LEFT JOIN
-                suara_calon ON suara_calon.tps_id = tps.id 
+                suara_calon ON suara_calon.tps_id = tps.id
                 AND suara_calon.calon_id IN (SELECT id FROM calon WHERE posisi = 'BUPATI')
             GROUP BY
                 tps.id, tps.nama, tps.dpt, suara_tps.kotak_kosong, suara_tps.suara_tidak_sah;

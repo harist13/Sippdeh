@@ -17,29 +17,37 @@ return new class extends Migration
                 kabupaten.id AS id,
                 kabupaten.nama AS nama,
                 kabupaten.provinsi_id AS provinsi_id,
-                COALESCE(SUM(resume_suara_pilwali_tps.dpt), 0) AS dpt,
-                COALESCE(SUM(resume_suara_pilwali_tps.kotak_kosong), 0) AS kotak_kosong,
-                COALESCE(SUM(resume_suara_pilwali_tps.suara_sah), 0) AS suara_sah,
-                COALESCE(SUM(resume_suara_pilwali_tps.suara_tidak_sah), 0) AS suara_tidak_sah,
-                COALESCE(SUM(resume_suara_pilwali_tps.suara_masuk), 0) AS suara_masuk,
-                COALESCE(SUM(resume_suara_pilwali_tps.abstain), 0) AS abstain,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.dpt), 0) AS dpt,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.dptb), 0) AS dptb,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.dpk), 0) AS dpk,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.kotak_kosong), 0) AS kotak_kosong,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.suara_sah), 0) AS suara_sah,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.suara_tidak_sah), 0) AS suara_tidak_sah,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.suara_masuk), 0) AS suara_masuk,
+                COALESCE(SUM(resume_suara_pilwali_kecamatan.abstain), 0) AS abstain,
                 CASE
-                    WHEN COALESCE(SUM(resume_suara_pilwali_tps.dpt), 0) > 0 
-                    THEN ROUND(((COALESCE(SUM(resume_suara_pilwali_tps.suara_sah), 0) + COALESCE(SUM(resume_suara_pilwali_tps.suara_tidak_sah), 0)) / (COALESCE(SUM(resume_suara_pilwali_tps.dpt), 0) + COALESCE(SUM(daftar_pemilih.dptb), 0) + COALESCE(SUM(daftar_pemilih.dpk), 0))) * 100, 1)
+                    WHEN COALESCE(SUM(resume_suara_pilwali_kecamatan.dpt), 0) > 0 
+                    THEN ROUND(
+                        (
+                            (
+                                COALESCE(SUM(resume_suara_pilwali_kecamatan.suara_sah), 0) +
+                                COALESCE(SUM(resume_suara_pilwali_kecamatan.suara_tidak_sah), 0)
+                            ) /
+                            (
+                                COALESCE(SUM(resume_suara_pilwali_kecamatan.dpt), 0)
+                                +
+                                COALESCE(SUM(resume_suara_pilwali_kecamatan.dptb), 0)
+                                +
+                                COALESCE(SUM(resume_suara_pilwali_kecamatan.dpk), 0)
+                            ) * 100
+                        ), 1
+                    )
                     ELSE 0 
                 END AS partisipasi
             FROM 
                 kabupaten
             LEFT JOIN 
-                kecamatan ON kecamatan.kabupaten_id = kabupaten.id
-            LEFT JOIN 
-                kelurahan ON kelurahan.kecamatan_id = kecamatan.id
-            LEFT JOIN 
-                tps ON tps.kelurahan_id = kelurahan.id
-            LEFT JOIN 
-                resume_suara_pilwali_tps ON resume_suara_pilwali_tps.id = tps.id
-            LEFT JOIN 
-                daftar_pemilih ON daftar_pemilih.kecamatan_id = kecamatan.id AND daftar_pemilih.posisi = 'WALIKOTA'
+                resume_suara_pilwali_kecamatan ON resume_suara_pilwali_kecamatan.kabupaten_id = kabupaten.id
             GROUP BY 
                 kabupaten.id;
         ");
