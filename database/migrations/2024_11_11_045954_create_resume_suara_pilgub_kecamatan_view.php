@@ -55,7 +55,21 @@ return new class extends Migration
                     COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_masuk, 0)
                 ) AS suara_masuk,
                 
-                COALESCE(SUM(resume_suara_pilgub_kelurahan.abstain), 0) AS abstain,
+                -- Abstain
+                (
+                    (
+                        COALESCE(SUM(resume_suara_pilgub_kelurahan.dpt), 0)
+                        +
+                        COALESCE(daftar_pemilih_pilgub_kecamatan_view.dptb, 0)
+                        +
+                        COALESCE(daftar_pemilih_pilgub_kecamatan_view.dpk, 0)
+                    ) -
+                    (
+                        COALESCE(SUM(resume_suara_pilgub_kelurahan.suara_masuk), 0)
+                        +
+                        COALESCE(daftar_pemilih_pilgub_kecamatan_view.suara_masuk, 0)
+                    )
+                ) AS abstain,
 
                 CASE 
                     WHEN COALESCE(SUM(resume_suara_pilgub_kelurahan.dpt), 0) > 0 
