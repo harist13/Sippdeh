@@ -473,11 +473,6 @@
                 isValid = false;
             }
 
-            if (limit < 1 || limit > 10) {
-                errorMessage += 'Batas device harus antara 1 sampai 10.\n';
-                isValid = false;
-            }
-
             // For add user form, password is required
             if (form.id === 'tambahUserForm' && password.length < 6) {
                 errorMessage += 'Password harus memiliki minimal 6 karakter.\n';
