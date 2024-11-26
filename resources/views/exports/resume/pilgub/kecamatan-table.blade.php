@@ -27,9 +27,9 @@
 <table class="voting-table">
     <thead>
         <tr>
-            <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
+            {{-- <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
                 NO
-            </th>
+            </th> --}}
 
             @if (!$isProvinsiColumnIgnored)
                 <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">

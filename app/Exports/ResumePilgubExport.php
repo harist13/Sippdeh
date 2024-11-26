@@ -6,6 +6,7 @@ use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
+use App\Models\ResumeSuaraPilgubTPS;
 use App\Traits\SortResumeColumns;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Contracts\View\View;
@@ -72,6 +73,11 @@ class ResumePilgubExport implements FromView, WithStyles
     {
         $includedColumns = $this->includedColumns;
         $paslon = $this->getPaslon();
+
+        if (in_array('TPS', $includedColumns)) {
+            $tps = $this->getSuaraPerTps();
+            return view('exports.input-suara.table', compact('tps', 'paslon', 'includedColumns'));
+        }
         
         if (!empty($this->selectedKelurahan)) {
             $suara = $this->getSuaraPerKelurahan();
@@ -85,6 +91,55 @@ class ResumePilgubExport implements FromView, WithStyles
         
         $suara = $this->getSuaraPerKabupaten();
         return view('exports.resume.pilgub.kabupaten-table', compact('suara', 'paslon', 'includedColumns'));
+    }
+
+    private function getSuaraPerTps()
+    {
+        $builder = ResumeSuaraPilgubTPS::query()
+            ->selectRaw('
+                resume_suara_pilgub_tps.id,
+                resume_suara_pilgub_tps.nama,
+                resume_suara_pilgub_tps.dpt,
+                resume_suara_pilgub_tps.kotak_kosong,
+                resume_suara_pilgub_tps.suara_sah,
+                resume_suara_pilgub_tps.suara_tidak_sah,
+                resume_suara_pilgub_tps.suara_masuk,
+                resume_suara_pilgub_tps.abstain,
+                resume_suara_pilgub_tps.partisipasi
+            ')
+            ->whereHas('tps', function(Builder $builder) {
+                $builder->whereHas('kelurahan', function (Builder $builder) {
+                    if (!empty($this->selectedKelurahan)) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    }
+
+                    $builder->whereHas('kecamatan', function(Builder $builder) {
+                        if (!empty($this->selectedKecamatan)) {
+                            $builder->whereIn('id', $this->selectedKecamatan);
+                        }
+
+                        $builder->whereHas('kabupaten', function (Builder $builder) {
+                            if (!empty($this->selectedKabupaten)) {
+                                $builder->whereIn('id', $this->selectedKabupaten);
+                            }
+
+                            // TODO: Tidak pakai kabupaten dari operator itu sendiri
+                            // $builder->whereId(session('operator_kabupaten_id'));
+                        });
+                    });
+                });
+            });
+
+        $this->addPartisipasiFilter($builder);
+        $this->sortResumeSuaraPilgubTpsPaslon($builder);
+        $this->sortColumns($builder);
+        $this->sortResumeSuaraKotakKosong($builder);
+
+        if ($this->keyword) {
+            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
+
+        return $builder->get();
     }
     
     private function getSuaraPerKelurahan()

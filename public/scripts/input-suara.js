@@ -246,8 +246,16 @@ class InputSuaraUIManager {
     cancelEditModeState = () => localStorage.removeItem('is_edit_mode');
 
     addTPS(id, dpt, kotakKosong, suaraSah, suaraTidakSah, suaraCalon) {
-        const tps = new TPS(id, parseInt(dpt), parseInt(kotakKosong), parseInt(suaraSah), parseInt(suaraTidakSah));
+        const tps = new TPS(
+            id,
+            parseInt(dpt),
+            parseInt(kotakKosong),
+            parseInt(suaraSah),
+            parseInt(suaraTidakSah)
+        );
+
         suaraCalon.forEach(sc => tps.addSuaraCalon(sc.id, parseInt(sc.suara)));
+        
         tps.save();
     }
 
@@ -490,7 +498,7 @@ class InputSuaraUIManager {
     syncTableDataWithSelectedTPS() {
         if (this.isEditMode()) {
             this.caches.components.rows.forEach(row => {
-                const tpsId = row.querySelector('td.nomor').dataset.id;
+                const tpsId = row.dataset.id;
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
@@ -728,7 +736,7 @@ class InputSuaraUIManager {
     syncTableInputWithSelectedTPS() {
         if (this.isEditMode()) {
             this.caches.components.rows.forEach(row => {
-                const tpsId = row.querySelector('td.nomor').dataset.id;
+                const tpsId = row.dataset.id;
                 const tps = TPS.getById(tpsId);
 
                 if (tps instanceof TPS) {
@@ -789,7 +797,7 @@ class InputSuaraUIManager {
         cellQuery,
         onChange
     }) {
-        const rowDataset = row.querySelector('td.nomor').dataset;
+        const rowDataset = row.dataset;
         const tpsId = rowDataset.id;
 
         row.querySelectorAll(cellQuery).forEach(cell => {

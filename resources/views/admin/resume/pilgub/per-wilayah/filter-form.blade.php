@@ -1,7 +1,7 @@
 <div>
-    @include('Admin.resume.pilgub.per-wilayah.wilayah-selects.select-kabupaten')
-    @include('Admin.resume.pilgub.per-wilayah.wilayah-selects.select-kecamatan')
-    @include('Admin.resume.pilgub.per-wilayah.wilayah-selects.select-kelurahan')
+    @include('admin.resume.pilgub.per-wilayah.wilayah-selects.select-kabupaten')
+    @include('admin.resume.pilgub.per-wilayah.wilayah-selects.select-kecamatan')
+    @include('admin.resume.pilgub.per-wilayah.wilayah-selects.select-kelurahan')
 
     <!-- Show Columns Section -->
     <div class="relative mb-5">

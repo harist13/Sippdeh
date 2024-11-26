@@ -60,7 +60,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('Admin.resume.pilwali.per-wilayah.livewire', 
+        return view('admin.resume.pilwali.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }
@@ -74,7 +74,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('Admin.resume.pilwali.per-wilayah.livewire', 
+        return view('admin.resume.pilwali.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }

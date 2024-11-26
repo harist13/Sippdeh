@@ -6,7 +6,7 @@
                     <h1 class="font-bold text-xl">Data Suara Pemilihan Bupati Per Wilayah</h1>
                     
                     {{-- Cari dan Filter --}}
-                    @include('Admin.resume.pilbup.per-wilayah.export-search-filter')
+                    @include('admin.resume.pilbup.per-wilayah.export-search-filter')
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                         class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
-                        @include("Admin.resume.pilbup.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
+                        @include("admin.resume.pilbup.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
                         'includedColumns'))
                     </div>
                 </div>
@@ -33,7 +33,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'Admin.resume.pilbup.per-wilayah.filter-modal',
+        'admin.resume.pilbup.per-wilayah.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',

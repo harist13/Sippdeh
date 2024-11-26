@@ -57,21 +57,9 @@ class FilterResumeSuaraPilwaliPerWilayah extends Component
             ->toArray();
     }
 
-    private function resetWilayahColumns()
-    {
-        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-    }
-
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-        $this->resetWilayahColumns();
-    }
-
-    public function updatedSelectedKelurahan()
-    {
-        $this->resetWilayahColumns();
     }
 
     public function resetFilter()

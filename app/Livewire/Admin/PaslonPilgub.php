@@ -26,7 +26,7 @@ class PaslonPilgub extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
 
-        return view('livewire.Admin.paslon-pilgub', compact('paslon', 'kotakKosong', 'suaraSah'));
+        return view('livewire.admin.paslon-pilgub', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
     private function getSuaraSahTotal(): int

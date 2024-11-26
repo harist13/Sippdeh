@@ -5,7 +5,7 @@
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     <h1 class="font-bold text-xl">Data Suara Pemilihan Walikota Per Wilayah</h1>
                     {{-- Cari dan Filter --}}
-                    @include('Admin.resume.pilwali.per-wilayah.export-search-filter')
+                    @include('admin.resume.pilwali.per-wilayah.export-search-filter')
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                         class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
                     <div class="px-4">
-                        @include("Admin.resume.pilwali.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
+                        @include("admin.resume.pilwali.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
                         'includedColumns'))
                     </div>
                 </div>
@@ -102,7 +102,7 @@
 
     <!-- Filter Pilgub Modal -->
     @include(
-        'Admin.resume.pilwali.per-wilayah.filter-modal',
+        'admin.resume.pilwali.per-wilayah.filter-modal',
         compact(
             'selectedKecamatan',
             'selectedKelurahan',

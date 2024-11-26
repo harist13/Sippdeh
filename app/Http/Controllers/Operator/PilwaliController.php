@@ -11,4 +11,9 @@ class PilwaliController extends Controller
     {
         return view('operator.input-suara.pilwali.index');
     }
+
+    public function daftarPemilih()
+    {
+        return view('operator.input-daftar-pemilih.pilwali.index');
+    }
 }

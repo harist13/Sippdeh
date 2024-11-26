@@ -31,7 +31,7 @@ class FilterResumeSuaraPilgubPerTps extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('Admin.resume.pilgub.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('admin.resume.pilgub.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions(): array

@@ -19,8 +19,8 @@
                 <button id="profileDropdown" class="flex items-center text-gray-600 focus:outline-none">
                     <img src="{{ asset('assets/user.png')}}" alt="Logo" class="w-10 h-10 mr-2">
 
-                    <div class="flex-col text-left hidden sm:flex">
-                        <span class="font-semibold">{{ Auth::user()->wilayah?->nama ?? '-' }}</span>
+                    <div class="flex-col text-left sm:flex">
+                        <span class="font-semibold">{{ session('operator_kabupaten_name') }}</span>
                         <span class="text-sm text-gray-500">{{ Auth::user()->roles->first()->name }}</span>
                     </div>
                 </button>

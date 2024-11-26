@@ -76,26 +76,19 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
 
     private function resetAvailableColumns()
     {
-        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
+        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
     }
 
     public function updatedSelectedKabupaten()
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->resetAvailableColumns();
     }
 
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-        $this->resetAvailableColumns();
-    }
-
-    public function updatedSelectedKelurahan()
-    {
-        $this->resetAvailableColumns();
     }
 
     public function resetFilter()

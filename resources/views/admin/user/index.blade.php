@@ -410,6 +410,8 @@
                 const email = userRow.querySelector('td:nth-child(3)').textContent;
                 const wilayah = userRow.querySelector('td:nth-child(4)').textContent;
                 const role = userRow.querySelector('td:nth-child(5)').textContent;
+                const deviceText = userRow.querySelector('td:nth-child(6)').textContent;
+                const limit = deviceText.split('/')[1].trim();
 
                 document.getElementById('editUsername').value = username;
                 document.getElementById('editEmail').value = email;
@@ -446,6 +448,7 @@
             const role = form.querySelector('[name="role"]').value;
             const wilayah = form.querySelector('[name="wilayah"]').value;
             const password = form.querySelector('[name="password"]').value;
+            const limit = form.querySelector('[name="limit"]').value;
 
             let isValid = true;
             let errorMessage = '';
@@ -467,6 +470,11 @@
 
             if (wilayah === '') {
                 errorMessage += 'Harap pilih wilayah.\n';
+                isValid = false;
+            }
+
+            if (limit < 1 || limit > 10) {
+                errorMessage += 'Batas device harus antara 1 sampai 10.\n';
                 isValid = false;
             }
 

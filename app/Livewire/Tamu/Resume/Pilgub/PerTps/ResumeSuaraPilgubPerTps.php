@@ -7,6 +7,7 @@ use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
 use App\Models\SuaraTPS;
+use App\Models\Kabupaten;
 
 // Livewire
 use Livewire\Component;
@@ -18,6 +19,7 @@ use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Export
 use App\Exports\InputSuaraPilgubExport;
@@ -39,19 +41,26 @@ class ResumeSuaraPilgubPerTps extends Component
     public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render()
     {
-        $paslon = $this->getCalon();
-        $tps = $this->getTps();
-        return view('Tamu.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
+        try {
+            $paslon = $this->getPaslon();
+            $tps = $this->getTps();
+            return view('Tamu.resume.pilgub.per-tps.livewire', compact('tps', 'paslon'));
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+
+            throw $exception;
+        }
     }
 
     private function getTps()
@@ -62,11 +71,62 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+
         $this->sortResumeSuaraPilgubTpsPaslon($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraKotakKosong($builder);
 
         return $builder->paginate($this->perPage);
+    }
+
+     public function exportPdf()
+    {
+        try {
+            // Get all data without pagination
+            $builder = $this->getBaseTPSBuilder();
+            
+            $this->filterKeyword($builder);
+            $this->filterKelurahan($builder);
+            $this->filterKecamatan($builder);
+            $this->filterPartisipasi($builder);
+
+            $data = $builder->get();
+
+            if ($data->isEmpty()) {
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Tidak ada data untuk di-export'
+                ]);
+                return;
+            }
+
+            $kabupaten = Kabupaten::whereId(session('Tamu_kabupaten_id'))->first();
+            $paslon = $this->getPaslon();
+
+            $pdf = PDF::loadView('exports.resume-suara-pilgub-tps-pdf', [
+                'data' => $data,
+                'logo' => $kabupaten->logo ?? null,
+                'kabupaten' => $kabupaten,
+                'paslon' => $paslon,
+                'includedColumns' => $this->includedColumns,
+                'isPilkadaTunggal' => count($paslon) === 1
+            ]);
+
+            $pdf->setPaper('A4', 'landscape');
+
+            return response()->streamDownload(function() use ($pdf) {
+                echo $pdf->output();
+            }, 'resume-suara-pilgub-per-tps.pdf', [
+                'Content-Type' => 'application/pdf',
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal mengekspor PDF'
+            ]);
+        }
     }
 
     private function getBaseTPSBuilder(): Builder
@@ -156,13 +216,11 @@ class ResumeSuaraPilgubPerTps extends Component
         }
     }
 
-    private function getCalon(): Collection
+    private function getPaslon(): Collection
     {
-        $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-
-        $builder->whereHas('provinsi', function (Builder $builder) {
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
-        });
+        $builder = Calon::with('suaraCalon')
+            ->whereProvinsiId(session('Tamu_provinsi_id'))
+            ->wherePosisi($this->posisi);
 
         return $builder->get();
     }
@@ -172,7 +230,7 @@ class ResumeSuaraPilgubPerTps extends Component
     {
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
     }
 
@@ -185,24 +243,6 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    private function insertSuaraCalon(int $tpsId, int $calonId, int $suara): void
-    {
-        try {
-            SuaraCalon::updateOrCreate(
-                [
-                    'tps_id' => $tpsId,
-                    'calon_id' => $calonId,
-                ],
-                [
-                    'suara' => $suara,
-                    'Tamu_id' => Auth::id()
-                ]
-            );
-        } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
     public function export(): BinaryFileResponse
     {
         $sheet = new InputSuaraPilgubExport(
@@ -210,7 +250,17 @@ class ResumeSuaraPilgubPerTps extends Component
             $this->selectedKecamatan,
             $this->selectedKelurahan,
             $this->includedColumns,
-            $this->partisipasi
+            $this->partisipasi,
+
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
         );
 
         return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');

@@ -28,9 +28,9 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
+            {{-- <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
                 NO
-            </th>
+            </th> --}}
             
             @if (!$isProvinsiColumnIgnored)
                 <th rowspan="2" style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">
@@ -136,9 +136,9 @@
     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
         @forelse ($tps as $datum)
             <tr class="border-b text-center select-none tps">
-                <td style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
+                {{-- <td style="border: 1px solid black; vertical-align: middle; text-align: center; width: 50px;">
                     {{ $datum->getThreeDigitsId() }}
-                </td>
+                </td> --}}
 
                 @if (!$isProvinsiColumnIgnored)
                     <td style="border: 1px solid black; vertical-align: middle; text-align: center; width: 300px;">

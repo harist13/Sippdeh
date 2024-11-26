@@ -15,12 +15,19 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('dptb')->default(0);
             $table->unsignedBigInteger('dpk')->default(0);
+            $table->unsignedBigInteger('kotak_kosong')->default(0);
+            $table->unsignedBigInteger('suara_tidak_sah')->default(0);
             $table->enum('posisi', ['GUBERNUR', 'WALIKOTA', 'BUPATI'])->nullable();
             $table->timestamps();
 
-            $table->foreignId('kabupaten_id')
+            $table->foreignId('kecamatan_id')
                 ->nullable()
-                ->constrained('kabupaten')
+                ->constrained('kecamatan')
+                ->nullOnDelete();
+
+            $table->foreignId('operator_id')
+                ->nullable()
+                ->constrained('petugas')
                 ->nullOnDelete();
         });
     }

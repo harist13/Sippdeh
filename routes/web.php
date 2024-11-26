@@ -93,6 +93,10 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::get('/operator/pilwali', [PilwaliController::class, 'index'])->name('operator.input-suara.pilwali');
         Route::get('/operator/pilbup', [PilbupController::class, 'index'])->name('operator.input-suara.pilbup');
 
+        Route::get('/operator/daftar-pemilih/pilgub', [PilgubController::class, 'daftarPemilih'])->name('operator.input-daftar-pemilih.pilgub');
+        Route::get('/operator/daftar-pemilih/pilwali', [PilwaliController::class, 'daftarPemilih'])->name('operator.input-daftar-pemilih.pilwali');
+        Route::get('/operator/daftar-pemilih/pilbup', [PilbupController::class, 'daftarPemilih'])->name('operator.input-daftar-pemilih.pilbup');
+
         Route::post('/updateoperator', [OperatorController::class, 'updateoperator'])->name('updateoperator');
     });
 

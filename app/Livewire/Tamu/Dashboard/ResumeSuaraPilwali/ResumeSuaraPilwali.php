@@ -42,7 +42,7 @@ class ResumeSuaraPilwali extends Component
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
-    public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+    public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
     public function render(): View
@@ -206,8 +206,9 @@ class ResumeSuaraPilwali extends Component
     private function getCalon(): Collection
     {
         try {
-            $builder = Calon::with('suaraCalon')->wherePosisi($this->posisi);
-            $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereNama(session('user_wilayah')));
+            $builder = Calon::with('suaraCalon')
+                ->whereKabupatenId(session('Tamu_kabupaten_id'))
+                ->wherePosisi($this->posisi);
     
             return $builder->get();
         } catch (Exception $exception) {
@@ -221,7 +222,7 @@ class ResumeSuaraPilwali extends Component
     #[On('reset-filter')] 
     public function resetFilter(): void
     {
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
@@ -234,25 +235,5 @@ class ResumeSuaraPilwali extends Component
         $this->selectedKelurahan = $selectedKelurahan;
         $this->includedColumns = $includedColumns;
         $this->partisipasi = $partisipasi;
-    }
-
-    public function export(): BinaryFileResponse
-    {
-        try {
-            $sheet = new InputSuaraPilwaliExport(
-                $this->keyword,
-                $this->selectedKecamatan,
-                $this->selectedKelurahan,
-                $this->includedColumns,
-                $this->partisipasi
-            );
-    
-            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
-        } catch (Exception $exception) {
-            Log::error($exception);
-            SentrySdk::getCurrentHub()->captureException($exception);
-
-            throw $exception;
-        }
     }
 }
