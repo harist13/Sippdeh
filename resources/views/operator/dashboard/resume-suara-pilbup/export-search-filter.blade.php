@@ -24,44 +24,44 @@
     </div>
 
     {{-- Filter Button --}}
-    <button 
+    {{-- <button 
         class="flex items-center justify-center bg-[#ECEFF5] text-white text-sm font-medium px-4 py-2 rounded-lg sm:w-auto w-full"
-        id="openFilterPilbupPerTps"
+        id="openFilterPilgubPerWilayah"
     >
         <img src="{{ asset('assets/icon/filter-lines.png') }}" alt="Filter" class="w-4 h-4 mr-2">
         <span class="text-[#344054]">Filter</span>
-    </button>
+    </button> --}}
 </div>
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
-        function showFilterPilbupPerTpsModal() {
-            const filterPilbupPerTpsModal = document.getElementById('filterPilbupPerTpsModal');
-            filterPilbupPerTpsModal.classList.remove('hidden');
+        function showFilterPilgubPerWilayahModal() {
+            const filterPilgubPerWilayahModal = document.getElementById('filterPilgubPerWilayahModal');
+            filterPilgubPerWilayahModal.classList.remove('hidden');
         }
 
-        function closeFilterPilbupPerTpsModal() {
-            const filterPilbupPerTpsModal = document.getElementById('filterPilbupPerTpsModal');
-            filterPilbupPerTpsModal.classList.add('hidden');
+        function closeFilterPilgubPerWilayahModal() {
+            const filterPilgubPerWilayahModal = document.getElementById('filterPilgubPerWilayahModal');
+            filterPilgubPerWilayahModal.classList.add('hidden');
         }
         
-        function initializeFilterResumeSuaraPilbupPerTps() {
-            document.getElementById('openFilterPilbupPerTps').addEventListener('click', showFilterPilbupPerTpsModal);
-            document.getElementById('cancelFilterPilbupPerTps').addEventListener('click', closeFilterPilbupPerTpsModal);
+        function initializeFilterResumeSuaraPerWilayah() {
+            document.getElementById('openFilterPilgubPerWilayah').addEventListener('click', showFilterPilgubPerWilayahModal);
+            document.getElementById('cancelFilterPilgub').addEventListener('click', closeFilterPilgubPerWilayahModal);
 
             document.addEventListener('keyup', function(event) {
                 if (event.key === "Escape") {
-                    closeFilterPilbupPerTpsModal();
+                    closeFilterPilgubPerWilayahModal();
                 }
             });
 
             document.addEventListener('click', function(event) {
-                if (event.target == filterPilbupPerTpsModal) {
-                    closeFilterPilbupPerTpsModal();
+                if (event.target == filterPilgubPerWilayahModal) {
+                    closeFilterPilgubPerWilayahModal();
                 }
             });
         }
 
-        initializeFilterResumeSuaraPilbupPerTps();
+        initializeFilterResumeSuaraPerWilayah();
     </script>
-@endpush
+@endpush --}}
