@@ -64,70 +64,190 @@ class ResumeSuaraPilgubPerWilayah extends Component
     }
 
     public function exportPdf()
-    {
-        try {
-            // Ambil data tanpa paginasi
-            if (!empty($this->selectedKelurahan)) {
-                $data = ResumeSuaraPilgubKelurahan::query()
-                    ->whereIn('id', $this->selectedKelurahan)
-                    ->where(function($query) {
-                        if ($this->keyword) {
-                            $query->where('nama', 'like', '%' . $this->keyword . '%');
+{
+    try {
+        // Get data based on current view and filters
+        if (in_array('TPS', $this->includedColumns)) {
+            $data = ResumeSuaraPilgubTPS::query()
+                ->selectRaw('
+                    resume_suara_pilgub_tps.id,
+                    resume_suara_pilgub_tps.nama,
+                    resume_suara_pilgub_tps.dpt,
+                    resume_suara_pilgub_tps.kotak_kosong,
+                    resume_suara_pilgub_tps.suara_sah,
+                    resume_suara_pilgub_tps.suara_tidak_sah,
+                    resume_suara_pilgub_tps.suara_masuk,
+                    resume_suara_pilgub_tps.abstain,
+                    resume_suara_pilgub_tps.partisipasi
+                ')
+                ->whereHas('tps', function(Builder $builder) {
+                    $builder->whereHas('kelurahan', function (Builder $builder) {
+                        if (!empty($this->selectedKelurahan)) {
+                            $builder->whereIn('id', $this->selectedKelurahan);
                         }
-                    })->get();
-            } elseif (!empty($this->selectedKecamatan)) {
-                $data = ResumeSuaraPilgubKecamatan::query()
-                    ->whereIn('id', $this->selectedKecamatan)
-                    ->where(function($query) {
-                        if ($this->keyword) {
-                            $query->where('nama', 'like', '%' . $this->keyword . '%');
-                        }
-                    })->get();
-            } else {
-                $data = ResumeSuaraPilgubKabupaten::query()
-                    ->whereIn('id', $this->selectedKabupaten)
-                    ->where(function($query) {
-                        if ($this->keyword) {
-                            $query->where('nama', 'like', '%' . $this->keyword . '%');
-                        }
-                    })->get();
+
+                        $builder->whereHas('kecamatan', function(Builder $builder) {
+                            if (!empty($this->selectedKecamatan)) {
+                                $builder->whereIn('id', $this->selectedKecamatan);
+                            }
+
+                            $builder->whereHas('kabupaten', function (Builder $builder) {
+                                if (!empty($this->selectedKabupaten)) {
+                                    $builder->whereIn('id', $this->selectedKabupaten);
+                                }
+                                
+                                $builder->whereHas('provinsi', function(Builder $builder) {
+                                    $builder->whereId(session('operator_provinsi_id'));
+                                });
+                            });
+                        });
+                    });
+                });
+        } elseif (!empty($this->selectedKelurahan)) {
+            $data = ResumeSuaraPilgubKelurahan::query()
+                ->selectRaw('
+                    resume_suara_pilgub_kelurahan.id,
+                    resume_suara_pilgub_kelurahan.nama,
+                    resume_suara_pilgub_kelurahan.kecamatan_id,
+                    resume_suara_pilgub_kelurahan.dpt,
+                    resume_suara_pilgub_kelurahan.kotak_kosong,
+                    resume_suara_pilgub_kelurahan.suara_sah,
+                    resume_suara_pilgub_kelurahan.suara_tidak_sah,
+                    resume_suara_pilgub_kelurahan.suara_masuk,
+                    resume_suara_pilgub_kelurahan.abstain,
+                    resume_suara_pilgub_kelurahan.partisipasi
+                ')
+                ->whereIn('id', $this->selectedKelurahan);
+        } elseif (!empty($this->selectedKecamatan)) {
+            $data = ResumeSuaraPilgubKecamatan::query()
+                ->selectRaw('
+                    resume_suara_pilgub_kecamatan.id,
+                    resume_suara_pilgub_kecamatan.nama,
+                    resume_suara_pilgub_kecamatan.kabupaten_id,
+                    resume_suara_pilgub_kecamatan.dpt,
+                    resume_suara_pilgub_kecamatan.kotak_kosong,
+                    resume_suara_pilgub_kecamatan.suara_sah,
+                    resume_suara_pilgub_kecamatan.suara_tidak_sah,
+                    resume_suara_pilgub_kecamatan.suara_masuk,
+                    resume_suara_pilgub_kecamatan.abstain,
+                    resume_suara_pilgub_kecamatan.partisipasi
+                ')
+                ->whereIn('id', $this->selectedKecamatan);
+        } else {
+            $data = ResumeSuaraPilgubKabupaten::query()
+                ->selectRaw('
+                    resume_suara_pilgub_kabupaten.id,
+                    resume_suara_pilgub_kabupaten.nama,
+                    resume_suara_pilgub_kabupaten.provinsi_id,
+                    resume_suara_pilgub_kabupaten.dpt,
+                    resume_suara_pilgub_kabupaten.kotak_kosong,
+                    resume_suara_pilgub_kabupaten.suara_sah,
+                    resume_suara_pilgub_kabupaten.suara_tidak_sah,
+                    resume_suara_pilgub_kabupaten.suara_masuk,
+                    resume_suara_pilgub_kabupaten.abstain,
+                    resume_suara_pilgub_kabupaten.partisipasi
+                ')
+                ->whereIn('id', $this->selectedKabupaten);
+        }
+
+        // Apply partisipasi filter
+        $data->where(function (Builder $builder) {
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
             }
-
-            if ($data->isEmpty()) {
-                $this->dispatch('showAlert', [
-                    'type' => 'error',
-                    'message' => 'Tidak ada data untuk di-export'
-                ]);
-                return;
+            if (in_array('KUNING', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
             }
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi >= 80');
+            }
+        });
 
-            $kabupaten = Kabupaten::whereId(session('operator_kabupaten_id'))->first();
-            $paslon = $this->getPaslon();
+        // Apply keyword search if exists
+        if ($this->keyword) {
+            $data->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+        }
 
-            $pdf = PDF::loadView('exports.resume-suara-pilgub-pdf', [
-                'data' => $data,
-                'logo' => $kabupaten->logo ?? null,
-                'kabupaten' => $kabupaten,
-                'paslon' => $paslon,
-                'includedColumns' => $this->includedColumns,
-            ]);
+        // Apply sorting
+        if ($this->dptSort) {
+            $data->orderBy('dpt', $this->dptSort);
+        }
+        if ($this->suaraSahSort) {
+            $data->orderBy('suara_sah', $this->suaraSahSort);
+        }
+        if ($this->suaraTidakSahSort) {
+            $data->orderBy('suara_tidak_sah', $this->suaraTidakSahSort);
+        }
+        if ($this->suaraMasukSort) {
+            $data->orderBy('suara_masuk', $this->suaraMasukSort);
+        }
+        if ($this->abstainSort) {
+            $data->orderBy('abstain', $this->abstainSort);
+        }
+        if ($this->partisipasiSort) {
+            $data->orderBy('partisipasi', $this->partisipasiSort);
+        }
 
-            $pdf->setPaper('A4', 'landscape');
+        $finalData = $data->get();
 
-            return response()->streamDownload(function() use ($pdf) {
-                echo $pdf->output();
-            }, 'resume-suara-pilgub.pdf', [
-                'Content-Type' => 'application/pdf',
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('PDF Export Error: ' . $e->getMessage());
+        if ($finalData->isEmpty()) {
             $this->dispatch('showAlert', [
                 'type' => 'error',
-                'message' => 'Gagal mengekspor PDF'
+                'message' => 'Tidak ada data untuk di-export'
             ]);
+            return;
         }
+
+        $provinsi = session('operator_provinsi_id');
+        $paslon = $this->getPaslon();
+
+        $viewData = [
+            'data' => $finalData,
+            'provinsi' => $provinsi,
+            'paslon' => $paslon,
+            'includedColumns' => $this->includedColumns,
+            'isPilkadaTunggal' => count($paslon) === 1,
+            'isKabupatenView' => empty($this->selectedKecamatan),
+            'isKecamatanView' => !empty($this->selectedKecamatan) && empty($this->selectedKelurahan),
+            'isKelurahanView' => !empty($this->selectedKelurahan),
+            'isTpsView' => in_array('TPS', $this->includedColumns),
+            'isProvinsiColumnIgnored' => !in_array('PROVINSI', $this->includedColumns),
+            'isKabupatenColumnIgnored' => !in_array('KABUPATEN/KOTA', $this->includedColumns),
+            'isKecamatanColumnIgnored' => !in_array('KECAMATAN', $this->includedColumns),
+            'isKelurahanColumnIgnored' => !in_array('KELURAHAN', $this->includedColumns),
+            'isTPSColumnIgnored' => !in_array('TPS', $this->includedColumns),
+            'isCalonColumnIgnored' => !in_array('CALON', $this->includedColumns),
+            'keyword' => $this->keyword,
+            'partisipasi' => $this->partisipasi,
+            'sortInfo' => [
+                'dptSort' => $this->dptSort,
+                'suaraSahSort' => $this->suaraSahSort, 
+                'suaraTidakSahSort' => $this->suaraTidakSahSort,
+                'suaraMasukSort' => $this->suaraMasukSort,
+                'abstainSort' => $this->abstainSort,
+                'partisipasiSort' => $this->partisipasiSort,
+                'paslonIdSort' => $this->paslonIdSort,
+                'paslonSort' => $this->paslonSort,
+            ]
+        ];
+
+        $pdf = PDF::loadView('exports.resume-suara-pilgub-pdf', $viewData);
+        $pdf->setPaper('A4', 'landscape');
+
+        return response()->streamDownload(function() use ($pdf) {
+            echo $pdf->output();
+        }, 'resume-suara-pilgub.pdf', [
+            'Content-Type' => 'application/pdf',
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('PDF Export Error: ' . $e->getMessage());
+        $this->dispatch('showAlert', [
+            'type' => 'error',
+            'message' => 'Gagal mengekspor PDF: ' . $e->getMessage()
+        ]);
     }
+}
 
     private function getTpsTable()
     {
