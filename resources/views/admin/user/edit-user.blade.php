@@ -44,8 +44,7 @@
                     <label for="editLimit" class="block text-sm">Batas Device</label>
                     <input type="number" id="editLimit" name="limit" 
                         class="w-full bg-gray-100 px-3 py-2 rounded-md"
-                        placeholder="Batas device login" 
-                        min="1" max="10" required>
+                        placeholder="Batas device login" required>
                 </div>
             </div>
             <div class="mt-4 text-right">

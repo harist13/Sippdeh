@@ -8,7 +8,6 @@
         @livewire(
             'operator.resume.pilgub.per-wilayah.filter-resume-suara-pilgub-per-wilayah',
             compact(
-                'selectedKabupaten',
                 'selectedKecamatan',
                 'selectedKelurahan',
                 'includedColumns',

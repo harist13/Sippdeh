@@ -448,7 +448,7 @@ class AdminController extends Controller
                 'password' => 'required|min:6',
                 'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
-                'limit' => 'required|integer|min:1|max:10',
+                'limit' => 'required|integer',
             ]);
 
             $kabupaten = Kabupaten::findOrFail($validated['wilayah']);
@@ -481,7 +481,7 @@ class AdminController extends Controller
                 'email' => ['required', 'email', Rule::unique('petugas')->ignore($user->id)],
                 'wilayah' => 'required|exists:kabupaten,id', // Validate that the selected wilayah exists in kabupaten table
                 'role' => 'required|exists:roles,name',
-                'limit' => 'required|integer|min:1|max:10',
+                'limit' => 'required|integer',
             ]);
 
             $kabupaten = Kabupaten::findOrFail($validated['wilayah']);

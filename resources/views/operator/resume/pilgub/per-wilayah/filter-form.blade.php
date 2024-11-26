@@ -1,5 +1,4 @@
 <div>
-    @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kabupaten')
     @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kecamatan')
     @include('operator.resume.pilgub.per-wilayah.wilayah-selects.select-kelurahan')
 
