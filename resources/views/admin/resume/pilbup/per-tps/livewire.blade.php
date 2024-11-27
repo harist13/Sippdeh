@@ -6,7 +6,7 @@
 					<h1 class="font-bold text-xl">Data Suara Pemilihan Bupati Per TPS</h1>
 					
 					{{-- Cari dan Filter --}}
-					@include('admin.resume.pilbup.per-tps.export-search-filter')
+					@include('operator.resume.pilbup.per-tps.export-search-filter')
 				</div>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 					<div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 	
 					<div class="px-4">
-						@include('admin.resume.pilbup.per-tps.table', compact('tps', 'paslon', 'includedColumns'))
+						@include('operator.resume.pilbup.per-tps.table', compact('tps', 'paslon', 'includedColumns'))
 					</div>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 
 	{{-- Filter Pilgub Modal --}}
 	@include(
-		'admin.resume.pilbup.per-tps.filter-modal',
+		'operator.resume.pilbup.per-tps.filter-modal',
 		compact('selectedKecamatan','selectedKelurahan','includedColumns','partisipasi')
 	)
 </div>

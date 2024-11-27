@@ -3,7 +3,7 @@
         <div class="bg-white p-4">
             <div class="container mx-auto">
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
-                    <h1 class="font-bold text-xl">Data Suara Pemilihan Bupati Per Wilayah</h1>
+                    <h1 class="font-bold text-xl">Data Suara Pemilihan Bupati</h1>
                     
                     {{-- Cari dan Filter --}}
                     @include('admin.resume.pilbup.per-wilayah.export-search-filter')
@@ -18,10 +18,17 @@
                     <div wire:loading.delay wire:target.except="export"
                         class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
 
-                    <div class="px-4">
-                        @include("admin.resume.pilbup.per-wilayah.wilayah-tables.$scope-table", compact('suara', 'paslon',
-                        'includedColumns'))
-                    </div>
+                    @if (in_array('TPS', $includedColumns))
+                        @include("admin.resume.pilbup.per-wilayah.wilayah-tables.tps-table", compact('suara', 'paslon', 'includedColumns'))
+                    @else
+                        @if (!empty($selectedKelurahan))
+                            @include("admin.resume.pilbup.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKecamatan))
+                            @include("admin.resume.pilbup.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
+                        @elseif (!empty($selectedKabupaten))
+                            @include("admin.resume.pilbup.per-wilayah.wilayah-tables.kabupaten-table", compact('suara', 'paslon', 'includedColumns'))
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>

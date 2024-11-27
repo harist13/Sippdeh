@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Resume\Pilbup\PerTps;
+namespace App\Livewire\Operator\Resume\Pilbup\PerTps;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -12,41 +12,36 @@ class FilterResumeSuaraPilbupPerTps extends Component
 {
     public $selectedKecamatan = [];
     public $selectedKelurahan = [];
+
     public $availableColumns = [];
     public $includedColumns = [];
-    public $partisipasi = [];
-    public ?int $kabupatenId = null;
 
-    public function mount($kabupatenId = null, $selectedKecamatan = [], $selectedKelurahan = [], $includedColumns = [], $partisipasi = []): void
+    public $partisipasi = [];
+
+    public function mount($selectedKecamatan, $selectedKelurahan, $includedColumns, $partisipasi): void
     {
-        $this->kabupatenId = $kabupatenId;
         $this->selectedKecamatan = $selectedKecamatan;
         $this->selectedKelurahan = $selectedKelurahan;
-        $this->availableColumns = $includedColumns ?: ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->includedColumns = $includedColumns ?: ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = $partisipasi ?: ['HIJAU', 'KUNING', 'MERAH'];
+
+        $this->availableColumns = $includedColumns;
+        $this->includedColumns = $includedColumns;
+        
+        $this->partisipasi = $partisipasi;
     }
 
     public function render(): View
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('admin.resume.pilbup.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('operator.resume.pilbup.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions(): array
     {
-        $query = Kecamatan::query();
-        
-        if ($this->kabupatenId) {
-            $query->where('kabupaten_id', $this->kabupatenId);
-        }
-
-        return $query->get()
-            ->map(fn (Kecamatan $kecamatan) => [
-                'id' => $kecamatan->id, 
-                'name' => $kecamatan->nama
-            ])
+        return Kecamatan::query()
+            ->whereKabupatenId(session('operator_kabupaten_id'))
+            ->get()
+            ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
     }
 
@@ -56,19 +51,10 @@ class FilterResumeSuaraPilbupPerTps extends Component
             return [];
         }
 
-        $query = Kelurahan::query()
-            ->whereHas('kecamatan', function(Builder $builder) {
-                $builder->whereIn('id', $this->selectedKecamatan);
-                if ($this->kabupatenId) {
-                    $builder->where('kabupaten_id', $this->kabupatenId);
-                }
-            });
-
-        return $query->get()
-            ->map(fn (Kelurahan $kelurahan) => [
-                'id' => $kelurahan->id, 
-                'name' => $kelurahan->nama
-            ])
+        return Kelurahan::query()
+            ->whereHas('kecamatan', fn (Builder $builder) => $builder->whereIn('id', $this->selectedKecamatan))
+            ->get()
+            ->map(fn (Kelurahan $kelurahan) => ['id' => $kelurahan->id, 'name' => $kelurahan->nama])
             ->toArray();
     }
 
@@ -79,14 +65,9 @@ class FilterResumeSuaraPilbupPerTps extends Component
 
     public function resetFilter(): void
     {
-        $kecamatanQuery = Kecamatan::query();
-        if ($this->kabupatenId) {
-            $kecamatanQuery->where('kabupaten_id', $this->kabupatenId);
-        }
-
-        $this->selectedKecamatan = $kecamatanQuery->pluck('id')->toArray();
+        $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
         $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
 
         $this->dispatch('reset-filter')->to(ResumeSuaraPilbupPerTps::class);

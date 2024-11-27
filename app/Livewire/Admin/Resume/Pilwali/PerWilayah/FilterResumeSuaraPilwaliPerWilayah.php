@@ -38,6 +38,7 @@ class FilterResumeSuaraPilwaliPerWilayah extends Component
     private function getKecamatanOptions()
     {
         return Kecamatan::query()
+            ->whereKabupatenId(session('Admin_kabupaten_id'))
             ->get()
             ->map(fn (Kecamatan $kecamatan) => ['id' => $kecamatan->id, 'name' => $kecamatan->nama])
             ->toArray();
@@ -56,25 +57,17 @@ class FilterResumeSuaraPilwaliPerWilayah extends Component
             ->toArray();
     }
 
-    private function resetWilayahColumns()
-    {
-        $this->availableColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON'];
-    }
-
     public function updatedSelectedKecamatan()
     {
         $this->selectedKelurahan = [];
-        $this->resetWilayahColumns();
-    }
-
-    public function updatedSelectedKelurahan()
-    {
-        $this->resetWilayahColumns();
     }
 
     public function resetFilter()
     {
+        $this->selectedKelurahan = [];
+        $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
+        
         $this->dispatch('reset-filter')->to(ResumeSuaraPilwaliPerWilayah::class);
     }
 
