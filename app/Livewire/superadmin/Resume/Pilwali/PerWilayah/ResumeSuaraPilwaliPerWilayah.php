@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilwali\PerWilayah;
+namespace App\Livewire\Superadmin\Resume\Pilwali\PerWilayah;
 
 use App\Exports\ResumePilwaliExport;
 use App\Models\Calon;
@@ -60,7 +60,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('superadmin.resume.pilwali.per-wilayah.livewire', 
+        return view('Superadmin.resume.pilwali.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }
@@ -74,7 +74,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
         
-        return view('superadmin.resume.pilwali.per-wilayah.livewire', 
+        return view('Superadmin.resume.pilwali.per-wilayah.livewire', 
             compact('suara', 'paslon', 'kotakKosong', 'suaraSah', 'scope')
         );
     }

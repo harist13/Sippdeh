@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilgub\PerWilayah;
+namespace App\Livewire\Superadmin\Resume\Pilgub\PerWilayah;
 
 use App\Exports\ResumePilgubExport;
 use App\Models\Calon;
@@ -63,7 +63,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $suara = $this->getSuaraPerKelurahan();
         $scope = 'kelurahan';
         
-        return view('superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
+        return view('Superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKecamatanTable()
@@ -72,7 +72,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $suara = $this->getSuaraPerKecamatan();
         $scope = 'kecamatan';
     
-        return view('superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
+        return view('Superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getKabupatenTable()
@@ -81,7 +81,7 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $suara = $this->getSuaraPerKabupaten();
         $scope = 'kabupaten';
 
-        return view('superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
+        return view('Superadmin.resume.pilgub.per-wilayah.livewire', compact('suara', 'paslon', 'scope'));
     }
 
     private function getSuaraPerKelurahan()

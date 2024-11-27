@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Dashboard;
+namespace App\Livewire\Superadmin\Dashboard;
 
 use App\Models\ResumeSuaraPilgubProvinsi;
 use Livewire\Component;
@@ -30,7 +30,7 @@ class DiagramPieChart extends Component
 
     public function render()
     {
-        return view('superadmin.dashboard.diagram-pie-chart');
+        return view('Superadmin.dashboard.diagram-pie-chart');
     }
     
     private function getTotalDptAbstainData(): array 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilwali\PerWilayah;
+namespace App\Livewire\Superadmin\Resume\Pilwali\PerWilayah;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -32,7 +32,7 @@ class FilterResumeSuaraPilwaliPerWilayah extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('superadmin.resume.pilwali.per-wilayah.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('Superadmin.resume.pilwali.per-wilayah.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions()

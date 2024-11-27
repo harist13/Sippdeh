@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Provinsi;
 use App\Models\Kabupaten as Model;
@@ -23,7 +23,7 @@ class Kabupaten extends Component
         $provinsi = Provinsi::all();
         $kabupaten = $this->getKabupaten();
 
-        return view('superadmin.kabupaten.livewire', compact('provinsi', 'kabupaten'));
+        return view('Superadmin.kabupaten.livewire', compact('provinsi', 'kabupaten'));
     }
 
     private function getKabupaten(): LengthAwarePaginator

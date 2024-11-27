@@ -58,7 +58,7 @@ class CalonController extends Controller
             ->paginate($itemsPerPage)
             ->withQueryString();
         
-        return view('superadmin.calon.index', [...compact('provinsi', 'kabupaten', 'calon'), 'disk' => $this->disk]);
+        return view('Superadmin.calon.index', [...compact('provinsi', 'kabupaten', 'calon'), 'disk' => $this->disk]);
     }
 
     private function redirectBack(Request $request): RedirectResponse {

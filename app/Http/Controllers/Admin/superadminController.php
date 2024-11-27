@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class superadminController extends Controller
+class SuperadminController extends Controller
 {
     public function Dashboard()
     {
@@ -73,7 +73,7 @@ class superadminController extends Controller
         $syncedCalonData = $this->getCalonDataByWilayah($kabupatens);
         $provinsiData = $this->getProvinsiData();
         
-        return view('superadmin.dashboard', compact(
+        return view('Superadmin.dashboard', compact(
             'calon', 
             'total_suara', 
             'suaraPerKabupaten', 
@@ -308,7 +308,7 @@ class superadminController extends Controller
 
     public function rekapitulasi()
     {
-        return view('superadmin.rekapitulasi');
+        return view('Superadmin.rekapitulasi');
     }
 
     
@@ -371,7 +371,7 @@ class superadminController extends Controller
         }
 
         if ($request->ajax()) {
-            return view('superadmin.user.index', compact(
+            return view('Superadmin.user.index', compact(
                 'users',
                 'loginHistories',
                 'roles',
@@ -380,7 +380,7 @@ class superadminController extends Controller
             ))->render();
         }
 
-        return view('superadmin.user.index', compact(
+        return view('Superadmin.user.index', compact(
             'users',
             'loginHistories',
             'roles',

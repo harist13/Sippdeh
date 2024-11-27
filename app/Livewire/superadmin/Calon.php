@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
@@ -33,7 +33,7 @@ class Calon extends Component
         $calon = $this->getCalon();
         $disk = Storage::disk($this->diskName);
 
-        return view('superadmin.calon.livewire', compact('provinsi', 'kabupaten', 'calon', 'disk'));
+        return view('Superadmin.calon.livewire', compact('provinsi', 'kabupaten', 'calon', 'disk'));
     }
 
     private function getCalon()

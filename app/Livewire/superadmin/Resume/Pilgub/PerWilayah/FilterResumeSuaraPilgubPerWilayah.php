@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilgub\PerWilayah;
+namespace App\Livewire\Superadmin\Resume\Pilgub\PerWilayah;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
@@ -36,7 +36,7 @@ class FilterResumeSuaraPilgubPerWilayah extends Component
         $kabupaten = $this->getKabupatenOptions();
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('superadmin.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('Superadmin.resume.pilgub.per-wilayah.filter-form', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     private function getKabupatenOptions()

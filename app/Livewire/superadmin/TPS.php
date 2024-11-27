@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Kabupaten;
 use App\Models\Kelurahan;
@@ -24,7 +24,7 @@ class TPS extends Component
         $kabupaten = Kabupaten::all();
         $kelurahan = Kelurahan::all();
         $tps = $this->getTps();
-        return view('superadmin.tps.livewire', compact('kabupaten', 'kelurahan', 'tps'));
+        return view('Superadmin.tps.livewire', compact('kabupaten', 'kelurahan', 'tps'));
     }
 
     private function getTps(): LengthAwarePaginator

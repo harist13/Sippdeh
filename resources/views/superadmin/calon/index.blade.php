@@ -1,4 +1,4 @@
-@extends('superadmin.layout.app')
+@extends('Superadmin.layout.app')
 
 @push('styles')
     <style>
@@ -67,13 +67,13 @@
             </div>
         @endisset
 
-        @livewire('superadmin.calon')
+        @livewire('Superadmin.calon')
     </main>
 
-    @include('superadmin.calon.tambah-modal')
-    @include('superadmin.calon.edit-modal')
-    @include('superadmin.calon.hapus-modal')
-    @include('superadmin.calon.hapus-gambar-modal')
+    @include('Superadmin.calon.tambah-modal')
+    @include('Superadmin.calon.edit-modal')
+    @include('Superadmin.calon.hapus-modal')
+    @include('Superadmin.calon.hapus-gambar-modal')
 @endsection
 
 @push('scripts')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Dashboard;
+namespace App\Livewire\Superadmin\Dashboard;
 
 use App\Models\Calon;
 use App\Models\SuaraCalon;
@@ -78,6 +78,6 @@ class ScoreBar extends Component
 
     public function render()
     {
-        return view('superadmin.dashboard.score-bar');
+        return view('Superadmin.dashboard.score-bar');
     }
 }

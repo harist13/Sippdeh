@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan as Model;
@@ -22,7 +22,7 @@ class Kecamatan extends Component
     {
         $kabupaten = Kabupaten::all();
         $kecamatan = $this->getKecamatan();
-        return view('superadmin.kecamatan.livewire', compact('kabupaten', 'kecamatan'));
+        return view('Superadmin.kecamatan.livewire', compact('kabupaten', 'kecamatan'));
     }
 
     private function getKecamatan(): LengthAwarePaginator

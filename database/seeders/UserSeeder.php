@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         // Ensure the roles are created with the correct guard
-        Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'Superadmin', 'guard_name' => 'web']);
         Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         Role::firstOrCreate(['name' => 'operator', 'guard_name' => 'web']);
         Role::firstOrCreate(['name' => 'tamu', 'guard_name' => 'web']);
@@ -37,20 +37,20 @@ class UserSeeder extends Seeder
             $admin->assignRole('admin');
 
             
-            // Buat pengguna superadmin
-            $superadmin = Petugas::create([
-                'username' => "superadmin$namaKabupaten",
+            // Buat pengguna Superadmin
+            $Superadmin = Petugas::create([
+                'username' => "Superadmin$namaKabupaten",
                 'password' => bcrypt('12345678'),
-                'email' => "superadmin$namaKabupaten@sipppdeh.designforus.id",
+                'email' => "Superadmin$namaKabupaten@sipppdeh.designforus.id",
                 'kabupaten_id' => $kabupaten->id,
-                'role' => 'superadmin',
+                'role' => 'Superadmin',
                 'limit' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
     
-            // Berikan role superadmin kepada pengguna tersebut
-            $superadmin->assignRole('superadmin');
+            // Berikan role Superadmin kepada pengguna tersebut
+            $Superadmin->assignRole('Superadmin');
 
             for ($i = 1; $i <= 5; $i++) {
                 // Buat pengguna operator

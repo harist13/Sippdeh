@@ -1,4 +1,4 @@
-@extends('superadmin.layout.app')
+@extends('Superadmin.layout.app')
 
 @push('styles')
     <style>
@@ -196,7 +196,7 @@
                 $paslon1Wins = $paslon1->total_suara >= $paslon2->total_suara;
             @endphp
 
-            @livewire('superadmin.dashboard.score-bar')
+            @livewire('Superadmin.dashboard.score-bar')
             
         </section>
 
@@ -205,7 +205,7 @@
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Peta Perolehan Suara Gubernur Per-Kabupaten/Kota</h3>
                     <div id="map" class="p-4 relative">
-                        @include('superadmin.peta-kaltim.map')
+                        @include('Superadmin.peta-kaltim.map')
                         <div id="tooltip" class="hidden">
                             <div class="kabupaten-title" id="kabupaten-name"></div>
                             <div class="info-grid">
@@ -239,7 +239,7 @@
                 </section>
                 <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                     <h3 class="bg-[#3560A0] text-white text-center py-2">Jumlah Suara Masuk Dan Abstain Se-Kalimantan Timur</h3>
-                @livewire('superadmin.dashboard.diagram-pie-chart')
+                @livewire('Superadmin.dashboard.diagram-pie-chart')
                 </section>
             </div>
 
@@ -247,7 +247,7 @@
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
                 <h3 class="bg-[#3560A0] text-white text-center py-2 chart-title">Perolehan Suara Gubernur Per Kabupaten/Kota</h3>
 
-                @livewire('superadmin.dashboard.diagram-bar-pilgub')
+                @livewire('Superadmin.dashboard.diagram-bar-pilgub')
             </section>
         </div>
 
@@ -255,7 +255,7 @@
                 @php
                     $kabupatens = App\Models\Kabupaten::orderBy('nama')->get();
                 @endphp
-                @livewire('superadmin.dashboard.kabupaten-buttons')
+                @livewire('Superadmin.dashboard.kabupaten-buttons')
             
 
             <section class="bg-gray-100 rounded-lg shadow-md overflow-hidden mb-8">
@@ -516,7 +516,7 @@
                 </button>
                 <br>
             </div>
-            @livewire('superadmin.dashboard.table-pilgub')
+            @livewire('Superadmin.dashboard.table-pilgub')
     </main>
 @endsection
 

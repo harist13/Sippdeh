@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Dashboard;
+namespace App\Livewire\Superadmin\Dashboard;
 
 use App\Models\Kabupaten;
 use App\Models\Calon;
@@ -33,7 +33,7 @@ class TablePilgub extends Component
 
     public function render()
     {
-        return view('superadmin.dashboard.table-pilgub');
+        return view('Superadmin.dashboard.table-pilgub');
     }
 
     private function getTableData(): array

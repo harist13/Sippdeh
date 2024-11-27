@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Kabupaten;
 use App\Models\Provinsi as Model;
@@ -24,7 +24,7 @@ class Provinsi extends Component
     public function render(): View
     {
         $provinsi = $this->getProvinsi();
-        return view('superadmin.provinsi.livewire', compact('provinsi'));
+        return view('Superadmin.provinsi.livewire', compact('provinsi'));
     }
 
     private function getProvinsi(): LengthAwarePaginator

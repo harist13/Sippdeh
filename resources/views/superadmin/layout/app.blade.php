@@ -124,15 +124,15 @@
 
 	<body class="relative flex flex-col h-full bg-gray-100">
 		{{-- Sidebar --}}
-		@include('superadmin.layout.sidebar')
+		@include('Superadmin.layout.sidebar')
 
 		<!-- Header & Navbar -->
-		@include('superadmin.layout.header')
+		@include('Superadmin.layout.header')
 		
 		@yield('content')
 		
 		<!-- Footer -->
-		@include('superadmin.layout.footer')
+		@include('Superadmin.layout.footer')
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 		
@@ -172,7 +172,7 @@
 				var form = document.getElementById("profileForm");
 				var formData = new FormData(form);
 
-				fetch('/updatesuperadmin', {
+				fetch('/updateSuperadmin', {
 						method: 'POST',
 						body: formData,
 						headers: {

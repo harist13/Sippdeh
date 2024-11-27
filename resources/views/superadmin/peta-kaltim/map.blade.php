@@ -1,16 +1,16 @@
 <div id="map" style="width: 500px;">
     <?xml version="1.0" encoding="utf-8"?>
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-        @include('superadmin.peta-kaltim.regions.berau', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.kutai-timur', ['color' => '#F9D926'])
-        @include('superadmin.peta-kaltim.regions.penajam-paser-utara', ['color' => '#F9D926'])
-        @include('superadmin.peta-kaltim.regions.paser', ['color' => '#F9D926'])
-        @include('superadmin.peta-kaltim.regions.mahakam-ulu', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.kutai-barat', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.kutai-kartanegara', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.samarinda', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.bontang', ['color' => '#2259A8'])
-        @include('superadmin.peta-kaltim.regions.balikpapan', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.berau', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.kutai-timur', ['color' => '#F9D926'])
+        @include('Superadmin.peta-kaltim.regions.penajam-paser-utara', ['color' => '#F9D926'])
+        @include('Superadmin.peta-kaltim.regions.paser', ['color' => '#F9D926'])
+        @include('Superadmin.peta-kaltim.regions.mahakam-ulu', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.kutai-barat', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.kutai-kartanegara', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.samarinda', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.bontang', ['color' => '#2259A8'])
+        @include('Superadmin.peta-kaltim.regions.balikpapan', ['color' => '#2259A8'])
     </svg>
 </div>
 

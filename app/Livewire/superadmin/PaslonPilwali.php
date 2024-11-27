@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use App\Models\Calon;
 use App\Models\Kabupaten;
@@ -26,7 +26,7 @@ class PaslonPilwali extends Component
         $suaraSah = $this->getSuaraSahTotal();
         $kotakKosong = $this->getKotakKosongTotal();
 
-        return view('livewire.superadmin.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
+        return view('livewire.Superadmin.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
     private function getSuaraSahTotal(): int

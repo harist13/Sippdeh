@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -224,7 +224,7 @@ class RangkumanTable extends Component
 
     public function render()
     {
-        return view('livewire.superadmin.rangkuman-table', [
+        return view('livewire.Superadmin.rangkuman-table', [
             'summaryData' => $this->summaryData
         ]);
     }

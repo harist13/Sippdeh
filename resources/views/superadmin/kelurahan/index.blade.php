@@ -1,4 +1,4 @@
-@extends('superadmin.layout.app')
+@extends('Superadmin.layout.app')
 
 @push('styles')
     <style>
@@ -63,6 +63,6 @@
             @include('components.alert-gagal', ['message' => $errors->first('kecamatan_id')])
         @endif
 
-        @livewire('superadmin.kelurahan')
+        @livewire('Superadmin.kelurahan')
     </main>
 @endsection

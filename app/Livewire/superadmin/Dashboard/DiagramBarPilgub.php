@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Dashboard;
+namespace App\Livewire\Superadmin\Dashboard;
 
 use App\Models\Calon;
 use App\Models\Kabupaten;
@@ -32,7 +32,7 @@ class DiagramBarPilgub extends Component
     public function render()
     {
         $data = $this->getData();
-        return view('superadmin.dashboard.diagram-bar-pilgub', compact('data'));
+        return view('Superadmin.dashboard.diagram-bar-pilgub', compact('data'));
     }
 
     private function getData(): array
@@ -165,7 +165,7 @@ class DiagramBarPilgub extends Component
     //     ->join('tps', function($join) {
     //         $join->join('kelurahan', 'kelurahan.id', '=', 'tps.kelurahan_id')
     //             ->join('kecamatan', 'kecamatan.id', '=', 'kelurahan.kecamatan_id')
-    //             ->where('kecamatan.kabupaten_id', session('superadmin_kabupaten_id'));
+    //             ->where('kecamatan.kabupaten_id', session('Superadmin_kabupaten_id'));
     //     })
     //     ->leftJoin('suara_calon', function($join) {
     //         $join->on('suara_calon.calon_id', '=', 'calon.id')
@@ -173,7 +173,7 @@ class DiagramBarPilgub extends Component
     //     })
     //     ->where([
     //         ['calon.posisi', '=', $this->posisi],
-    //         ['calon.provinsi_id', '=', session('superadmin_provinsi_id')]
+    //         ['calon.provinsi_id', '=', session('Superadmin_provinsi_id')]
     //     ])
     //     ->groupBy([
     //         'calon.id',

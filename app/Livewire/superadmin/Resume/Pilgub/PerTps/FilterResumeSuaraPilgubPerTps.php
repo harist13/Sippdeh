@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilgub\PerTps;
+namespace App\Livewire\Superadmin\Resume\Pilgub\PerTps;
 
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -31,7 +31,7 @@ class FilterResumeSuaraPilgubPerTps extends Component
     {
         $kecamatan = $this->getKecamatanOptions();
         $kelurahan = $this->getKelurahanOptions();
-        return view('superadmin.resume.pilgub.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
+        return view('Superadmin.resume.pilgub.per-tps.filter-form', compact('kecamatan', 'kelurahan'));
     }
 
     private function getKecamatanOptions(): array

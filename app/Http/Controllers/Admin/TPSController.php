@@ -24,7 +24,7 @@ class TPSController extends Controller
      */
     public function index()
     {
-        return view('superadmin.tps.index');
+        return view('Superadmin.tps.index');
     }
 
     /**

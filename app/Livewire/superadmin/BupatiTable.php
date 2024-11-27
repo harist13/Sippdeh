@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin;
+namespace App\Livewire\Superadmin;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -219,7 +219,7 @@ class BupatiTable extends Component
 
     public function render()
     {
-        return view('livewire.superadmin.bupati-table', [
+        return view('livewire.Superadmin.bupati-table', [
             'bupatiData' => $this->bupatiData
         ]);
     }

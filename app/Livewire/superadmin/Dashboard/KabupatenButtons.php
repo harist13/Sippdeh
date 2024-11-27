@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Dashboard;
+namespace App\Livewire\Superadmin\Dashboard;
 
 use App\Models\Kabupaten;
 use Livewire\Component;
@@ -38,7 +38,7 @@ class KabupatenButtons extends Component
         // Determine if it's a city (kota) or regency (kabupaten)
         $isKota = str_contains(strtolower($kabupaten->nama), 'kota');
 
-        return redirect()->route('superadmin.resume', [
+        return redirect()->route('Superadmin.resume', [
             'wilayah' => $wilayah,
             'kabupatenId' => $kabupaten->id,
             'showPilgub' => false,
@@ -50,7 +50,7 @@ class KabupatenButtons extends Component
     public function render()
     {
         $kabupatens = $this->getKabupatens();
-        return view('superadmin.dashboard.kabupaten-buttons', [
+        return view('Superadmin.dashboard.kabupaten-buttons', [
             'kabupatens' => $kabupatens
         ]);
     }

@@ -95,11 +95,11 @@
         </div>
     </div>
 
-    @include('superadmin.kelurahan.tambah-modal')
-    @include('superadmin.kelurahan.edit-modal')
-    @include('superadmin.kelurahan.hapus-modal')
-    {{-- @include('superadmin.kelurahan.impor-modal') --}}
-    {{-- @include('superadmin.kelurahan.ekspor-modal') --}}
+    @include('Superadmin.kelurahan.tambah-modal')
+    @include('Superadmin.kelurahan.edit-modal')
+    @include('Superadmin.kelurahan.hapus-modal')
+    {{-- @include('Superadmin.kelurahan.impor-modal') --}}
+    {{-- @include('Superadmin.kelurahan.ekspor-modal') --}}
 </div>
 
 @script

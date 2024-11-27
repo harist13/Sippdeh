@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\superadmin\Resume\Pilbup\PerTps;
+namespace App\Livewire\Superadmin\Resume\Pilbup\PerTps;
 
 use App\Exports\InputSuaraPilbupExport;
 use App\Models\Calon;
@@ -46,7 +46,7 @@ class ResumeSuaraPilbupPerTps extends Component
         try {
             $paslon = $this->getCalon();
             $tps = $this->getTps();
-            return view('superadmin.resume.pilbup.per-tps.livewire', compact('tps', 'paslon'));
+            return view('Superadmin.resume.pilbup.per-tps.livewire', compact('tps', 'paslon'));
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);

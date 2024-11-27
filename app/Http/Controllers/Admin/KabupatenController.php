@@ -23,7 +23,7 @@ class KabupatenController extends Controller
      */
     public function index(Request $request)
     {
-        return view('superadmin.kabupaten.index');
+        return view('Superadmin.kabupaten.index');
     }
 
     public function export(Request $request)

@@ -20,7 +20,7 @@
             </svg>
             <span class="ml-2">Dashboard</span>
         </a>
-        <a href="{{ route('superadmin.resume') }}"
+        <a href="{{ route('Superadmin.resume') }}"
             class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('rangkuman') ? 'active' : '' }}">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
