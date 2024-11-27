@@ -102,6 +102,21 @@ class LoginController extends Controller
                 session(['Admin_kabupaten_name' => $user->kabupaten->nama]);
             }
 
+            if ($user->role == 'superadmin') {
+                $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
+
+                if ($calonWalikota->count() > 0) {
+                    session(['superadmin_jenis_wilayah' => 'kota']);
+                } else {
+                    session(['superadmin_jenis_wilayah' => 'kabupaten']);
+                }
+
+                session(['superadmin_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['superadmin_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['superadmin_kabupaten_id' => $user->kabupaten->id]);
+                session(['superadmin_kabupaten_name' => $user->kabupaten->nama]);
+            }
+
             // Simpan riwayat login
             LoginHistory::create([
                 'user_id' => $user->id,
@@ -112,6 +127,8 @@ class LoginController extends Controller
             ]);
 
             if ($user->hasRole('admin')) {
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil!');
+            } elseif ($user->hasRole('superadmin')) {
                 return redirect()->route('Dashboard')->with('success', 'Login berhasil!');
             } elseif ($user->hasRole('operator')) {
                 return redirect()->route('operator.dashboard')->with('success', 'Login berhasil!');
