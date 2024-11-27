@@ -4,7 +4,7 @@
             <button id="openSidebar" class="mr-4 text-gray-600 focus:outline-none">
                 <i class="text-xl fas fa-bars"></i>
             </button>
-            <a href="{{ route('Dashboard') }}">
+            <a href="{{ route('admin.dashboard') }}">
                 <div class="flex items-center">
                     <img src="{{ asset('assets/logo.png')}}" alt="Logo" class="w-8 h-10 mr-2">
                     <div class="flex flex-col">

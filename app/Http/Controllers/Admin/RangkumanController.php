@@ -17,7 +17,7 @@ class RangkumanController extends Controller
     {
         // Default to showing only Gubernur data when no wilayah is specified
         if (!$wilayah) {
-            return view('superadmin.resume.index', [
+            return view('admin.resume.index', [
                 'wilayah' => null,
                 'kabupatenId' => null,
                 'showPilgub' => true,
@@ -32,7 +32,7 @@ class RangkumanController extends Controller
         // Determine if it's a city (kota) or regency (kabupaten)
         $isKota = $kabupaten->isKota();
 
-        return view('superadmin.resume.index', [
+        return view('admin.resume.index', [
             'wilayah' => $wilayah,
             'kabupatenId' => $kabupaten->id,
             'showPilgub' => false,
@@ -43,16 +43,16 @@ class RangkumanController extends Controller
 
     public function pilgub(Request $request)
     {
-        return view('superadmin.input-suara.pilgub.index');
+        return view('admin.input-suara.pilgub.index');
     }
 
     public function pilwali(Request $request)
     {
-        return view('superadmin.input-suara.pilwali.index');
+        return view('admin.input-suara.pilwali.index');
     }
 
     public function pilbub(Request $request)
     {
-        return view('superadmin.input-suara.pilbub.index');
+        return view('admin.input-suara.pilbub.index');
     }
 }
