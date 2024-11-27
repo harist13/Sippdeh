@@ -8,7 +8,7 @@
 
     <!-- Sidebar Navigation -->
     <nav class="mt-4">
-        <a href="{{ route('Dashboard') }}"
+        <a href="{{ route('admin.dashboard') }}"
             class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('Dashboard') ? 'active' : '' }}">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -38,48 +38,6 @@
 
         <hr class="my-2 ml-2 mr-2 rounded-md gradient-hr">
 
-        <div class="px-2 py-2 text-gray-700 font-bold text-base">User</div>
-        <a href="{{ route('user')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('user') ? 'active' : '' }}">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="6" r="4" fill="currentColor" />
-                <ellipse cx="12" cy="17" rx="7" ry="4" fill="currentColor" />
-            </svg>
-            <span class="ml-2">User</span>
-        </a>
-
-        <hr class="my-2 ml-2 mr-2 rounded-md gradient-hr">
-
-        <div class="px-2 py-2 text-gray-700 font-bold text-base">Data</div>
-        <a href="{{ route('provinsi')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('provinsi') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/provinsi.svg') }}" alt="Provinsi">
-            <span class="ml-2">Provinsi</span>
-        </a>
-        <a href="{{ route('kabupaten')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('kabupaten') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/kabupaten.svg') }}" alt="Kabupaten">
-            <span class="ml-2">Kabupaten/Kota</span>
-        </a>
-        <a href="{{ route('kecamatan')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('kecamatan') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/kecamatan.svg') }}" alt="Kecamatan">
-            <span class="ml-2">Kecamatan</span>
-        </a>
-        <a href="{{ route('kelurahan')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('kelurahan') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/kelurahan.svg') }}" alt="Kelurahan">
-            <span class="ml-2">Kelurahan</span>
-        </a>
-        <a href="{{ route('tps')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('tps') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/tps.svg') }}" alt="TPS">
-            <span class="ml-2">TPS</span>
-        </a>
-        <a href="{{ route('calon')}}"
-            class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg mx-2 {{ Request::routeIs('calon') ? 'active' : '' }}">
-            <img src="{{ asset('assets/icon/pasangan_calon.svg') }}" alt="Calon">
-            <span class="ml-2">Calon Kabupaten/Kota</span>
-        </a>
+     
     </nav>
 </div>

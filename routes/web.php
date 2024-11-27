@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Admin\superadminController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CalonController;
 use App\Http\Controllers\Admin\ProvinsiController;
@@ -25,13 +26,13 @@ Route::post('/login', [LoginController::class, 'login'])->name('submitLogin'); /
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Route untuk logout
 
 Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
-    // Middleware untuk admin
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
+    // Middleware untuk superadmin
+    Route::middleware(['auth', 'role:superadmin'])->group(function () {
+        Route::get('/Dashboard', [superadminController::class, 'Dashboard'])->name('Dashboard');
         Route::get('/rangkuman', [RangkumanController::class, 'rangkuman'])->name('rangkuman');
         Route::get('/api/kecamatan/{kabupatenId}', [RangkumanController::class, 'getKecamatan']);
         Route::get('/api/kelurahan/{kecamatanId}', [RangkumanController::class, 'getKelurahan']);
-        Route::get('admin/rangkuman/export', [RangkumanController::class, 'export'])->name('admin.rangkuman.export');
+        Route::get('superadmin/rangkuman/export', [RangkumanController::class, 'export'])->name('superadmin.rangkuman.export');
         Route::get('/suara', [RangkumanController::class, 'suara'])->name('suara');
         
         Route::get('provinsi/ekspor', [ProvinsiController::class, 'export'])->name('provinsi.export');
@@ -69,19 +70,34 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         ]);
         Route::delete('calon/{id}/gambar', [CalonController::class, 'destroyGambar'])->name('calon.destroy-gambar');
 
-        Route::get('/user', [AdminController::class, 'user'])->name('user');
-        Route::post('/storeUser', [AdminController::class, 'storeUser'])->name('storeUser');
-        Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
-        Route::delete('/deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
-        Route::post('/forceLogout/{id}', [AdminController::class, 'forceLogout'])->name('forceLogout');
-        Route::post('/reactivateUser/{id}', [AdminController::class, 'reactivateUser'])->name('reactivateUser');
-        Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [AdminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
-        Route::post('/updateProfile', [AdminController::class, 'updateProfile'])->name('updateProfile');
+        Route::get('/user', [superadminController::class, 'user'])->name('user');
+        Route::post('/storeUser', [superadminController::class, 'storeUser'])->name('storeUser');
+        Route::put('/updateUser/{id}', [superadminController::class, 'updateUser'])->name('updateUser');
+        Route::delete('/deleteUser/{id}', [superadminController::class, 'deleteUser'])->name('deleteUser');
+        Route::post('/forceLogout/{id}', [superadminController::class, 'forceLogout'])->name('forceLogout');
+        Route::post('/reactivateUser/{id}', [superadminController::class, 'reactivateUser'])->name('reactivateUser');
+        Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [superadminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
+        Route::post('/updateProfile', [superadminController::class, 'updateProfile'])->name('updateProfile');
+        Route::get('/superadmin/resume', [RangkumanController::class, 'resume'])->name('superadmin.resume');
+        Route::get('/superadmin/pilgub', [RangkumanController::class, 'pilgub'])->name('superadmin.input-suara.pilgub');
+        Route::get('/superadmin/pilwali', [RangkumanController::class, 'pilwali'])->name('superadmin.input-suara.pilwali');
+        Route::get('/superadmin/pilbup', [RangkumanController::class, 'pilbub'])->name('superadmin.input-suara.pilbup');
+        Route::get('resume/{wilayah}', [RangkumanController::class, 'resume'])->name('superadmin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
+    });
+
+     // Middleware untuk admin
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/admin/Dashboard', [AdminController::class, 'Dashboard'])->name('admin.dashboard');
+        Route::get('/admin/rangkuman', [RangkumanController::class, 'rangkuman'])->name('rangkuman');
+        Route::get('/admin/api/kecamatan/{kabupatenId}', [RangkumanController::class, 'getKecamatan']);
+        Route::get('/admin/api/kelurahan/{kecamatanId}', [RangkumanController::class, 'getKelurahan']);
+        Route::get('admin/rangkuman/export', [RangkumanController::class, 'export'])->name('admin.rangkuman.export');
+        Route::post('/admin/updateProfile', [AdminController::class, 'updateProfile'])->name('updateProfile');
         Route::get('/admin/resume', [RangkumanController::class, 'resume'])->name('admin.resume');
         Route::get('/admin/pilgub', [RangkumanController::class, 'pilgub'])->name('admin.input-suara.pilgub');
         Route::get('/admin/pilwali', [RangkumanController::class, 'pilwali'])->name('admin.input-suara.pilwali');
         Route::get('/admin/pilbup', [RangkumanController::class, 'pilbub'])->name('admin.input-suara.pilbup');
-        Route::get('resume/{wilayah}', [RangkumanController::class, 'resume'])->name('admin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
+        Route::get('admin/resume/{wilayah}', [RangkumanController::class, 'resume'])->name('admin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
     });
 
     // Middleware untuk operator
