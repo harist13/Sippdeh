@@ -37,19 +37,24 @@ class PaslonPilgub extends Component
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
             'kabupaten.nama',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara_sah')
+            DB::raw('(
+                SELECT COALESCE(SUM(sc.suara), 0)
+                FROM suara_calon sc
+                JOIN tps t ON sc.tps_id = t.id
+                JOIN kelurahan k ON t.kelurahan_id = k.id
+                JOIN kecamatan kc ON k.kecamatan_id = kc.id
+                JOIN calon c ON sc.calon_id = c.id
+                WHERE kc.kabupaten_id = kabupaten.id
+                AND c.posisi = "' . $this->posisi . '"
+            ) + (
+                SELECT COALESCE(SUM(scdp.suara), 0)
+                FROM suara_calon_daftar_pemilih scdp
+                JOIN kecamatan kc ON scdp.kecamatan_id = kc.id
+                JOIN calon c ON scdp.calon_id = c.id
+                WHERE kc.kabupaten_id = kabupaten.id
+                AND c.posisi = "' . $this->posisi . '"
+            ) AS suara_sah')
         ])
-        ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-        ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-        ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-        ->leftJoin('suara_calon', function ($join) {
-            $join->on('suara_calon.tps_id', '=', 'tps.id')
-                ->whereIn('suara_calon.calon_id', function ($query) {
-                    $query->select('id')
-                        ->from('calon')
-                        ->where('posisi', $this->posisi);
-                });
-        })
         ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
         ->groupBy('kabupaten.id');
         
@@ -65,15 +70,24 @@ class PaslonPilgub extends Component
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
-            DB::raw('SUM(suara_tps.kotak_kosong) AS kotak_kosong'),
+            DB::raw('(
+                SELECT COALESCE(SUM(st.kotak_kosong), 0)
+                FROM suara_tps st
+                JOIN tps t ON st.tps_id = t.id
+                JOIN kelurahan k ON t.kelurahan_id = k.id
+                JOIN kecamatan kc ON k.kecamatan_id = kc.id
+                WHERE kc.kabupaten_id = ' . $this->getKabupatenIdOfOperator() . '
+                AND st.posisi = "' . $this->posisi . '"
+            ) + (
+                SELECT COALESCE(SUM(dp.kotak_kosong), 0)
+                FROM daftar_pemilih dp
+                JOIN kecamatan kc ON dp.kecamatan_id = kc.id
+                WHERE kc.kabupaten_id = ' . $this->getKabupatenIdOfOperator() . '
+                AND dp.posisi = "' . $this->posisi . '"
+            ) AS kotak_kosong')
         ])
-            ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-            ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-            ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-            ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
-            ->where('suara_tps.posisi', $this->posisi)
-            ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
-            ->groupBy('kabupaten.id');
+        ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
+        ->groupBy('kabupaten.id');
         
         if ($kabupaten->count() > 0) {
             $kabupaten = $kabupaten->first();
@@ -93,17 +107,22 @@ class PaslonPilgub extends Component
             'calon.provinsi_id',
             'calon.kabupaten_id',
             'calon.no_urut',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
+            DB::raw('(
+                SELECT COALESCE(SUM(sc.suara), 0)
+                FROM suara_calon sc
+                JOIN tps t ON sc.tps_id = t.id
+                JOIN kelurahan k ON t.kelurahan_id = k.id
+                JOIN kecamatan kc ON k.kecamatan_id = kc.id
+                WHERE sc.calon_id = calon.id
+                AND kc.kabupaten_id = ' . session('operator_kabupaten_id') . '
+            ) + (
+                SELECT COALESCE(SUM(scdp.suara), 0)
+                FROM suara_calon_daftar_pemilih scdp
+                JOIN kecamatan kc ON scdp.kecamatan_id = kc.id
+                WHERE scdp.calon_id = calon.id
+                AND kc.kabupaten_id = ' . session('operator_kabupaten_id') . '
+            ) AS suara')
         ])
-        ->join('tps', function($join) {
-            $join->join('kelurahan', 'kelurahan.id', '=', 'tps.kelurahan_id')
-                ->join('kecamatan', 'kecamatan.id', '=', 'kelurahan.kecamatan_id')
-                ->where('kecamatan.kabupaten_id', session('operator_kabupaten_id'));
-        })
-        ->leftJoin('suara_calon', function($join) {
-            $join->on('suara_calon.calon_id', '=', 'calon.id')
-                ->on('suara_calon.tps_id', '=', 'tps.id');
-        })
         ->where([
             ['calon.posisi', '=', $this->posisi],
             ['calon.provinsi_id', '=', session('operator_provinsi_id')]
