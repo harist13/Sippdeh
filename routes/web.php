@@ -77,7 +77,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::post('/forceLogout/{id}', [superadminController::class, 'forceLogout'])->name('forceLogout');
         Route::post('/reactivateUser/{id}', [superadminController::class, 'reactivateUser'])->name('reactivateUser');
         Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [superadminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
-        Route::post('/updateProfile', [superadminController::class, 'updateProfile'])->name('updateProfile');
+        Route::post('/updateProfile', [superadminController::class, 'updateProfile'])->name('superadmin.updateProfile');
         Route::get('/superadmin/resume', [RangkumanController::class, 'resume'])->name('superadmin.resume');
         Route::get('/superadmin/pilgub', [RangkumanController::class, 'pilgub'])->name('superadmin.input-suara.pilgub');
         Route::get('/superadmin/pilwali', [RangkumanController::class, 'pilwali'])->name('superadmin.input-suara.pilwali');
@@ -88,10 +88,7 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
      // Middleware untuk admin
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/Dashboard', [AdminController::class, 'Dashboard'])->name('admin.dashboard');
-        Route::get('/admin/rangkuman', [RangkumanController::class, 'rangkuman'])->name('rangkuman');
-        Route::get('/admin/api/kecamatan/{kabupatenId}', [RangkumanController::class, 'getKecamatan']);
-        Route::get('/admin/api/kelurahan/{kecamatanId}', [RangkumanController::class, 'getKelurahan']);
-        Route::get('admin/rangkuman/export', [RangkumanController::class, 'export'])->name('admin.rangkuman.export');
+        Route::get('/admin/rangkuman', [RangkumanController::class, 'rangkuman'])->name('admin.rangkuman');
         Route::post('/admin/updateProfile', [AdminController::class, 'updateProfile'])->name('updateProfile');
         Route::get('/admin/resume', [RangkumanController::class, 'resume'])->name('admin.resume');
         Route::get('/admin/pilgub', [RangkumanController::class, 'pilgub'])->name('admin.input-suara.pilgub');
