@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
                 'email' => "admin$namaKabupaten@sipppdeh.designforus.id",
                 'kabupaten_id' => $kabupaten->id,
                 'role' => 'admin',
+                'limit' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -42,6 +43,7 @@ class UserSeeder extends Seeder
                     'email' => "operator{$namaKabupaten}$i@sipppdeh.designforus.id",
                     'kabupaten_id' => $kabupaten->id,
                     'role' => 'operator',
+                    'limit' => 5,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -57,6 +59,7 @@ class UserSeeder extends Seeder
                 'email' => "tamu$namaKabupaten@sipppdeh.designforus.id",
                 'kabupaten_id' => $kabupaten->id,
                 'role' => 'tamu',
+                'limit' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
