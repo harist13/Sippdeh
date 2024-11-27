@@ -109,18 +109,16 @@
         $kabupatenId = session('operator_kabupaten_id');
     @endphp
 
-    @if(str_contains(strtolower($kabupatenName), 'bontang'))
+    @if(str_contains(strtolower($kabupatenName), 'mahakam ulu'))
     <div class="letterhead">
         <div class="logo-container">
             <img src="{{ public_path('storage/' . $logo) }}" class="logo">
         </div>
         <div class="header-text">
-            <h2>PEMERINTAH KOTA BONTANG</h2>
-            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
-            <p>Gedung Taman Praja Blok 1 Jalan Moch Roem Nomor 1 Bontang Selatan.</p>
-            <p>Bontang, Kalimantan Timur 75325</p>
-            <p class="website-email">Telepon (0548) 5116603, 3030303 Faksimile (0548) 3030313</p>
-            <p>Laman kesbangpol.bontang.go.id</p>
+            <h2>PEMERINTAH KABUPATEN MAHAKAM ULU</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIKK</h3>
+            <p>Jalan Poros Kampung Ujoh Bilang – Long Bagun, Kec. Long Bagun.</p>
+            <p>UJOH  BILANG</p>
         </div>
     </div>
 
@@ -134,6 +132,19 @@
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
             <p>jalan Drs. awang sabran, bc. Hk. Nomor G.3 Telp (0541) 661518 fax (0541) 662602</p>
             <p class="website-email">Website kesbangpol.kukarkab.go.id Email: kesbangpol@kukarkab.go.id kode pos 75514</p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'penajam paser utara'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN PENAJAM PASER UTARA</h2>
+            <h3>SEKRETARIAT DAERAH</h3>
+            <p>Jalan Propinsi Km. 09 Nipah-Nipah. Telp. (0542) 7211400 Fax. (0542) 7211515</p>
+            <p class="website-email"> PENAJAM 76141</p>
         </div>
     </div>
 
