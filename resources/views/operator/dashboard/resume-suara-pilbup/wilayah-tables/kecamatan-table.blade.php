@@ -1,7 +1,7 @@
 @php
     $isPilkadaTunggal = count($paslon) == 1;
 
-    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalDpt = $suara->sum(fn ($datum) => ($datum->dpt + $datum->dptb + $datum->dpk) ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
     
     try {
@@ -130,7 +130,7 @@
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                    {{ number_format(($datum->dpt + $datum->dptb + $datum->dpk), 0, '', '.') }}
                 </td>
 
                 {{-- Kotak Kosong --}}
