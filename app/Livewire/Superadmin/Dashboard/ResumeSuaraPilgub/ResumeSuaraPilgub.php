@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Dashboard\ResumeSuaraPilgub;
+namespace App\Livewire\Superadmin\Dashboard\ResumeSuaraPilgub;
 
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubKecamatan;
@@ -27,7 +27,7 @@ class ResumeSuaraPilgub extends Component
     {
         $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKecamatan();
-        return view('admin.dashboard.resume-suara-pilgub.livewire', compact('suara', 'paslon'));
+        return view('superadmin.dashboard.resume-suara-pilgub.livewire', compact('suara', 'paslon'));
     }
 
     private function getSuaraPerKecamatan()
@@ -48,7 +48,7 @@ class ResumeSuaraPilgub extends Component
                 resume_suara_pilgub_kecamatan.partisipasi
             ');
 
-        // Removed kabupaten_id session restriction to show all regions
+        // Removed kabupaten_id restriction to show all regions
 
         if ($this->keyword) {
             $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
@@ -74,7 +74,7 @@ class ResumeSuaraPilgub extends Component
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
-            // Removed provinsi_id session restriction to show candidates from all provinces
+            // Removed provinsi_id restriction to show candidates from all provinces
             ->groupBy('calon.id');
 
         return $builder->get();
