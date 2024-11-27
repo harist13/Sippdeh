@@ -3,12 +3,23 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Resume Suara Pemilihan Gubernur</title>
-    <style>
+     <style>
         @font-face {
             font-family: 'DejaVu Sans';
             src: url('{{ storage_path("fonts/DejaVuSans.ttf") }}') format("truetype");
             font-weight: normal;
             font-style: normal;
+        }
+
+            .footnote {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 8pt;
+            color: #666;
+            padding: 10px 0;
+            border-top: 0.5px solid #ccc;
         }
         
         body {
@@ -22,40 +33,58 @@
             margin-bottom: 30px;
             border-bottom: 2px solid black;
             padding-bottom: 20px;
+            width: 100%;
+        }
+        .logo-container {
+            position: absolute;
+            left: 30px;
+            top: 10px;
+        }
+        .logo {
+            width: 150px;
+            height: auto;
         }
         .header-text {
             text-align: center;
+            margin: 0 auto;
+            padding: 10px 0;
         }
         .header-text h2 {
-            font-size: 14pt;
+            font-size: 16pt;
             font-weight: bold;
             margin: 0;
             padding: 5px 0;
             text-transform: uppercase;
         }
         .header-text h3 {
-            font-size: 12pt;
+            font-size: 14pt;
             font-weight: bold;
             margin: 0;
             padding: 5px 0;
             text-transform: uppercase;
         }
         .header-text p {
-            font-size: 9pt;
+            font-size: 10pt;
             margin: 0;
             padding: 2px 0;
+            line-height: 1.3;
         }
-        .document-info {
-            text-align: left;
-            margin: 20px 0;
+        .website-email {
+            margin-top: 5px;
         }
-        .document-info p {
-            margin: 3px 0;
+        .website-email a {
+            color: black;
+            text-decoration: none;
         }
-        .date-info {
-            text-align: right;
-            margin-bottom: 20px;
-        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bg-green { background-color: #4ade80; }
+        .bg-yellow { background-color: #facc15; }
+        .bg-red { background-color: #f87171; }
+        .text-white { color: white; }
+        .bg-blue-950 { background-color: #172554; }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -65,54 +94,119 @@
         th, td {
             border: 0.5px solid black;
             padding: 5px;
-            text-align: center;
         }
         th {
             background-color: #3560A0;
             color: white;
             font-weight: bold;
-            vertical-align: middle;
-        }
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .text-white { color: white; }
-        
-        .bg-blue-950 { background-color: #172554; }
-        .bg-green { background-color: #4ade80; }
-        .bg-yellow { background-color: #facc15; }
-        .bg-red { background-color: #f87171; }
-
-        .footer {
-            margin-top: 30px;
-            text-align: right;
-            font-size: 10pt;
-        }
-
-        .filter-info {
-            margin: 10px 0;
-            font-size: 9pt;
         }
     </style>
 </head>
 <body>
+    @php
+    $kabupatenName = session('operator_kabupaten_name');
+    $jenisWilayah = session('operator_jenis_wilayah');
+    $kabupaten = App\Models\Kabupaten::find(session('operator_kabupaten_id'));
+    $logo = $kabupaten ? $kabupaten->logo : null;
+@endphp
+
+ @if(str_contains(strtolower($kabupatenName), 'mahakam ulu'))
     <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
         <div class="header-text">
-            <h2>PEMERINTAH PROVINSI KALIMANTAN TIMUR</h2>
-            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
-            <p>Jalan Jenderal Sudirman No.1 Samarinda 75119</p>
+            <h2>PEMERINTAH KABUPATEN MAHAKAM ULU</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIKK</h3>
+            <p>Jalan Poros Kampung Ujoh Bilang – Long Bagun, Kec. Long Bagun.</p>
+            <p>UJOH  BILANG</p>
         </div>
     </div>
 
-    <div class="filter-info">
-        @if($keyword)
-            <p>Filter Pencarian: {{ $keyword }}</p>
-        @endif
-        
-        @if(count($partisipasi) < 3)
-            <p>Filter Partisipasi: {{ implode(', ', $partisipasi) }}</p>
-        @endif
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai kartanegara'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI KARTANEGARA</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>jalan Drs. awang sabran, bc. Hk. Nomor G.3 Telp (0541) 661518 fax (0541) 662602</p>
+            <p class="website-email">Website kesbangpol.kukarkab.go.id Email: kesbangpol@kukarkab.go.id kode pos 75514</p>
+        </div>
     </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'penajam paser utara'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN PENAJAM PASER UTARA</h2>
+            <h3>SEKRETARIAT DAERAH</h3>
+            <p>Jalan Propinsi Km. 09 Nipah-Nipah. Telp. (0542) 7211400 Fax. (0542) 7211515</p>
+            <p class="website-email"> PENAJAM 76141</p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai barat'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI BARAT</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Alamat : Pusat Perkantoran Pemerintah Kabupaten Kutai Barat</p>
+            <p>SENDAWAR</p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'samarinda'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KOTA SAMARINDA</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Alamat Jalan Balaikota No. 27 Telepon (0541) 733033 Fax (0541) 741429</p>
+            <p>Samarinda (Kalimantan Timur) Kode Pos 75121</p>
+            <p class="website-email">
+                <a href="http://kesbangpol.samarindakota.go.id/">http://kesbangpol.samarindakota.go.id/</a>
+                Email: kesbangpol.samarindakota@gmail.com
+            </p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai timur'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI TIMUR</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Jl. Soekarno-Hatta, Sangatta Utara</p>
+            <p>Kutai Timur, Kalimantan Timur 75683</p>
+            <p class="website-email">Telp. (0549) 21006 Fax. (0549) 21002</p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'paser'))
+    <div class="letterhead">
+        <div class="logo-container">
+            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+        </div>
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN PASER</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Jl. Kesuma Bangsa Km.05, Komplek Perkantoran Pemkab. paser</p>
+            <p>Gedung F Lantai 2, paser, kalimantan timur 76215</p>
+            <p class="website-email">Laman kesbangpol.paserkab.go.id, Pos-el kesbangpol_paser@yahoo.com</p>
+        </div>
+    </div>
+@endif
 
     <table autosize="1">
         <thead>
@@ -284,12 +378,9 @@
         </tbody>
     </table>
 
-    <div class="footer">
-        <p>Samarinda, {{ now()->isoFormat('D MMMM Y') }}<br>
-        Kepala Badan Kesbangpol<br>
-        Provinsi Kalimantan Timur<br><br><br><br>
-        <u>...................................</u><br>
-        NIP. ...........................</p>
+      <div class="footnote">
+        <p>Dokumen ini telah dicetak melalui Aplikasi SIPPPDEH Prov.Kaltim oleh {{ session('operator_name') }}<br>
+        {{ now()->format('d/m/Y H:i') }}</p>
     </div>
 </body>
 </html>
