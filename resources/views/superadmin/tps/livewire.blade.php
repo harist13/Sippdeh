@@ -101,11 +101,11 @@
 		</div>
 	</div>
 
-	@include('admin.tps.tambah-modal')
-	@include('admin.tps.edit-modal')
-	@include('admin.tps.hapus-modal')
-	@include('admin.tps.impor-modal')
-	@include('admin.tps.ekspor-modal')
+	@include('superadmin.tps.tambah-modal')
+	@include('superadmin.tps.edit-modal')
+	@include('superadmin.tps.hapus-modal')
+	@include('superadmin.tps.impor-modal')
+	@include('superadmin.tps.ekspor-modal')
 </div>
 
 @script

@@ -22,7 +22,7 @@ class ProvinsiController extends Controller
      */
    public function index()
     {
-        return view('admin.provinsi.index');
+        return view('superadmin.provinsi.index');
     }
 
     public function store(StoreProvinsiRequest $request)

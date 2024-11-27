@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\KecamatanController;
 use App\Http\Controllers\Admin\KelurahanController;
 use App\Http\Controllers\Admin\TPSController;
 use App\Http\Controllers\Admin\RangkumanController;
+use App\Http\Controllers\Admin\SuperResumeController;
 use App\Http\Controllers\Operator\PilbupController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\Operator\PilgubController;
@@ -77,12 +78,12 @@ Route::middleware(['auth', 'checkForcedLogout'])->group(function () {
         Route::post('/forceLogout/{id}', [superadminController::class, 'forceLogout'])->name('forceLogout');
         Route::post('/reactivateUser/{id}', [superadminController::class, 'reactivateUser'])->name('reactivateUser');
         Route::post('/forceLogoutDevice/{userId}/{loginHistoryId}', [superadminController::class, 'forceLogoutDevice'])->name('forceLogoutDevice');
-        Route::post('/updateProfile', [superadminController::class, 'updateProfile'])->name('superadmin.updateProfile');
-        Route::get('/superadmin/resume', [RangkumanController::class, 'resume'])->name('superadmin.resume');
-        Route::get('/superadmin/pilgub', [RangkumanController::class, 'pilgub'])->name('superadmin.input-suara.pilgub');
-        Route::get('/superadmin/pilwali', [RangkumanController::class, 'pilwali'])->name('superadmin.input-suara.pilwali');
-        Route::get('/superadmin/pilbup', [RangkumanController::class, 'pilbub'])->name('superadmin.input-suara.pilbup');
-        Route::get('resume/{wilayah}', [RangkumanController::class, 'resume'])->name('superadmin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
+        Route::post('/updateProfile', [superadminController::class, 'updateProfile'])->name('updatesuperadmin');
+        Route::get('/superadmin/resume', [SuperResumeController::class, 'resume'])->name('superadmin.resume');
+        Route::get('/superadmin/pilgub', [SuperResumeController::class, 'pilgub'])->name('superadmin.input-suara.pilgub');
+        Route::get('/superadmin/pilwali', [SuperResumeController::class, 'pilwali'])->name('superadmin.input-suara.pilwali');
+        Route::get('/superadmin/pilbup', [SuperResumeController::class, 'pilbub'])->name('superadmin.input-suara.pilbup');
+        Route::get('resume/{wilayah}', [SuperResumeController::class, 'resume'])->name('superadmin.resume.wilayah')->where('wilayah', '[a-z0-9-]+');
     });
 
      // Middleware untuk admin

@@ -11,7 +11,7 @@ use App\Models\Kelurahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RangkumanController extends Controller
+class SuperResumeController extends Controller
 {
     public function resume(Request $request, $wilayah = null)
     {

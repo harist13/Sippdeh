@@ -172,7 +172,7 @@
 				var form = document.getElementById("profileForm");
 				var formData = new FormData(form);
 
-				fetch('/updateProfile', {
+				fetch('/updatesuperadmin', {
 						method: 'POST',
 						body: formData,
 						headers: {

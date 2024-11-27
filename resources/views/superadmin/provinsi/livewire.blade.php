@@ -118,11 +118,11 @@
         </div>
     </div>
     
-    @include('admin.provinsi.tambah-modal')
-    @include('admin.provinsi.edit-modal')
-    @include('admin.provinsi.hapus-modal')
-    @include('admin.provinsi.ekspor-modal')
-    @include('admin.provinsi.impor-modal')
+    @include('superadmin.provinsi.tambah-modal')
+    @include('superadmin.provinsi.edit-modal')
+    @include('superadmin.provinsi.hapus-modal')
+    @include('superadmin.provinsi.ekspor-modal')
+    @include('superadmin.provinsi.impor-modal')
 </div>
 
 @script
