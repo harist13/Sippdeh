@@ -96,11 +96,11 @@
 		</div>
 	</div>
 
-	@include('admin.kecamatan.tambah-modal')
-	@include('admin.kecamatan.edit-modal')
-	@include('admin.kecamatan.hapus-modal')
-	{{-- @include('admin.kecamatan.ekspor-modal') --}}
-	{{-- @include('admin.kecamatan.impor-modal') --}}
+	@include('superadmin.kecamatan.tambah-modal')
+	@include('superadmin.kecamatan.edit-modal')
+	@include('superadmin.kecamatan.hapus-modal')
+	{{-- @include('superadmin.kecamatan.ekspor-modal') --}}
+	{{-- @include('superadmin.kecamatan.impor-modal') --}}
 </div>
 
 @script

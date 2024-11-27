@@ -102,19 +102,19 @@ class LoginController extends Controller
                 session(['Admin_kabupaten_name' => $user->kabupaten->nama]);
             }
 
-            if ($user->role == 'superadmin') {
+            if ($user->role == 'Superadmin') {
                 $calonWalikota = Calon::query()->wherePosisi('WALIKOTA')->whereKabupatenId($user->kabupaten->id);
 
                 if ($calonWalikota->count() > 0) {
-                    session(['superadmin_jenis_wilayah' => 'kota']);
+                    session(['Superadmin_jenis_wilayah' => 'kota']);
                 } else {
-                    session(['superadmin_jenis_wilayah' => 'kabupaten']);
+                    session(['Superadmin_jenis_wilayah' => 'kabupaten']);
                 }
 
-                session(['superadmin_provinsi_id' => $user->kabupaten->provinsi->id]);
-                session(['superadmin_provinsi_name' => $user->kabupaten->provinsi->nama]);
-                session(['superadmin_kabupaten_id' => $user->kabupaten->id]);
-                session(['superadmin_kabupaten_name' => $user->kabupaten->nama]);
+                session(['Superadmin_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['Superadmin_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['Superadmin_kabupaten_id' => $user->kabupaten->id]);
+                session(['Superadmin_kabupaten_name' => $user->kabupaten->nama]);
             }
 
             // Simpan riwayat login
@@ -128,7 +128,7 @@ class LoginController extends Controller
 
             if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard')->with('success', 'Login berhasil!');
-            } elseif ($user->hasRole('superadmin')) {
+            } elseif ($user->hasRole('Superadmin')) {
                 return redirect()->route('Dashboard')->with('success', 'Login berhasil!');
             } elseif ($user->hasRole('operator')) {
                 return redirect()->route('operator.dashboard')->with('success', 'Login berhasil!');

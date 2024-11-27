@@ -41,7 +41,7 @@ return [
             'provider' => 'petugas', // Use the petugas provider for web guard
         ],
 
-        'superadmin' => [
+        'Superadmin' => [
             'driver' => 'session',
             'provider' => 'petugas',  // Use the petugas provider for admin guard
         ],

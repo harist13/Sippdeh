@@ -60,7 +60,7 @@ class KelurahanController extends Controller
             ->paginate($itemsPerPage)
             ->withQueryString();
         
-        return view('admin.kelurahan.index', compact('kabupaten', 'kecamatan', 'kelurahan'));
+        return view('superadmin.kelurahan.index', compact('kabupaten', 'kecamatan', 'kelurahan'));
     }
 
     public function export(Request $request)

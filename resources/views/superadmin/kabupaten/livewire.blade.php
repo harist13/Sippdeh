@@ -117,11 +117,11 @@
         </div>
     </div>
     
-    @include('admin.kabupaten.tambah-modal')
-    @include('admin.kabupaten.edit-modal')
-    @include('admin.kabupaten.hapus-modal')
-    {{-- @include('admin.kabupaten.impor-modal') --}}
-    {{-- @include('admin.kabupaten.ekspor-modal') --}}
+    @include('superadmin.kabupaten.tambah-modal')
+    @include('superadmin.kabupaten.edit-modal')
+    @include('superadmin.kabupaten.hapus-modal')
+    {{-- @include('superadmin.kabupaten.impor-modal') --}}
+    {{-- @include('superadmin.kabupaten.ekspor-modal') --}}
 </div>
 
 @script

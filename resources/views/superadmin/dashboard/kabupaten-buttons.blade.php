@@ -2,7 +2,7 @@
     @foreach($kabupatens as $kabupaten)
         @php
             $isKota = str_contains(strtolower($kabupaten->nama), 'kota');
-            $route = route('superadmin.resume', [
+            $route = route('Superadmin.resume', [
                 'wilayah' => $kabupaten->slug,
                 'kabupatenId' => $kabupaten->id,
                 'showPilgub' => false,
