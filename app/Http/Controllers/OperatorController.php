@@ -24,6 +24,8 @@ class OperatorController extends Controller
     {
         return view('operator.dashboard');
     }
+
+    //test buat batalin commit
     
     public function updateoperator(Request $request)
     {
