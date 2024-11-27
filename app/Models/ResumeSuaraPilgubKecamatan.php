@@ -41,19 +41,21 @@ class ResumeSuaraPilgubKecamatan extends Model
                 'calon.nama',
                 'calon.nama_wakil',
                 'calon.posisi',
-                DB::raw('COALESCE(SUM(suara_calon.suara), 0) as total_suara')
+                DB::raw('(
+                    SELECT COALESCE(SUM(suara), 0) 
+                    FROM suara_calon sc
+                    JOIN tps t ON sc.tps_id = t.id
+                    JOIN kelurahan k ON t.kelurahan_id = k.id
+                    WHERE sc.calon_id = calon.id 
+                    AND k.kecamatan_id = ' . $this->getKey() . '
+                ) + (
+                    SELECT COALESCE(SUM(suara), 0)
+                    FROM suara_calon_daftar_pemilih scdp
+                    WHERE scdp.calon_id = calon.id
+                    AND scdp.kecamatan_id = ' . $this->getKey() . '
+                ) as total_suara')
             ])
-            ->leftJoin('suara_calon', 'calon.id', '=', 'suara_calon.calon_id')
-            ->leftJoin('tps', 'suara_calon.tps_id', '=', 'tps.id')
-            ->leftJoin('kelurahan', 'tps.kelurahan_id', '=', 'kelurahan.id')
-            ->where('kelurahan.kecamatan_id', $this->getKey())
             ->where('calon.id', $calonId)
-            ->groupBy([
-                'calon.id',
-                'calon.nama', 
-                'calon.nama_wakil',
-                'calon.posisi'
-            ])
             ->first();
     }
 }
