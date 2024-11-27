@@ -8,6 +8,9 @@
         @if ($isPilkadaTunggal)
             <div class="bg-white rounded-lg shadow overflow-hidden">
                 <div class="h-[217px] bg-gradient-to-b from-[#3560a0] to-[#608ac9] overflow-hidden">
+                    <img class="w-full h-full object-cover" 
+                        src="{{ asset('assets/kotakkosong.png') }}" 
+                        alt="Kotak Kosong">
                 </div>
                 <div class="p-4 text-center">
                     <div class="text-[#52526c] text-xl font-bold mb-2">
