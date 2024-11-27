@@ -22,7 +22,8 @@ class StoreKelurahanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:kelurahan,nama|max:300',
+            // 'name' => 'required|unique:kelurahan,nama|max:300',
+            'name' => 'required|max:300',
             'kecamatan_id' => 'required|exists:kecamatan,id'
         ];
     }

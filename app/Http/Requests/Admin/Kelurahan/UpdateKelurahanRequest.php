@@ -27,7 +27,7 @@ class UpdateKelurahanRequest extends FormRequest
             'name' => [
                 'required',
                 'max:300',
-                Rule::unique('kelurahan', 'nama')->ignore($id)
+                // Rule::unique('kelurahan', 'nama')->ignore($id)
             ],
             'kecamatan_id' => 'required|exists:kecamatan,id'
         ];
