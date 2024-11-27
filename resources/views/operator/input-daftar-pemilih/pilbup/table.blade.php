@@ -15,7 +15,12 @@
     $totalSuaraTidakSah = $kecamatan->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
     $totalSuaraMasuk = $kecamatan->sum(fn ($datum) => $datum->suara_masuk ?? 0);
     $totalAbstain = $kecamatan->sum(fn ($datum) => $datum->abstain ?? 0);
-    $totalPartisipasi = $kecamatan->avg(fn ($datum) => $datum->partisipasi ?? 0);
+    
+    try {
+        $totalPartisipasi = ($totalSuaraMasuk / ($totalDptb + $totalDpk)) * 100;
+    } catch (DivisionByZeroError $error) {
+        $totalPartisipasi = 0;
+    }
 
     $totalsPerCalon = [];
     foreach ($paslon as $calon) {

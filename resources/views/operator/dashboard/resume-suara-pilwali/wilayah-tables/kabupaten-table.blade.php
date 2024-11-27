@@ -9,7 +9,12 @@
 @php
     $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
-    $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
+    
+    try {
+        $totalPartisipasi = ($totalSuaraMasuk / $totalDpt) * 100;
+    } catch (DivisionByZeroError $error) {
+        $totalPartisipasi = 0;
+    }
 
     $totalsPerCalon = [];
     foreach ($paslon as $calon) {
