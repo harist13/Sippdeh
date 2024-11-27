@@ -1,7 +1,7 @@
 @php
     $isPilkadaTunggal = count($paslon) == 1;
 
-    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalDpt = $suara->sum(fn ($datum) => ($datum->dpt + $datum->dptb + $datum->dpk) ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
     
     try {
@@ -21,9 +21,9 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+            {{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
-            </th>
+            </th> --}}
             
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 200px;">
                 Kecamatan
@@ -88,9 +88,9 @@
             </th>
         </tr>
         <tr>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
+            {{-- <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalDpt, 0, '.', '.') }}
-            </th>
+            </th> --}}
 
             {{-- Kotak Kosong --}}
             @if ($isPilkadaTunggal)
@@ -130,7 +130,7 @@
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                    {{ number_format(($datum->dpt + $datum->dptb + $datum->dpk), 0, '', '.') }}
                 </td>
 
                 {{-- Kotak Kosong --}}
