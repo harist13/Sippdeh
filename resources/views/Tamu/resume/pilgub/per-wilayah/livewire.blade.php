@@ -25,8 +25,6 @@
                                 @include("Tamu.resume.pilgub.per-wilayah.wilayah-tables.kelurahan-table", compact('suara', 'paslon', 'includedColumns'))
                             @elseif (!empty($selectedKecamatan))
                                 @include("Tamu.resume.pilgub.per-wilayah.wilayah-tables.kecamatan-table", compact('suara', 'paslon', 'includedColumns'))
-                            @elseif (!empty($selectedKabupaten))
-                                @include("Tamu.resume.pilgub.per-wilayah.wilayah-tables.kabupaten-table", compact('suara', 'paslon', 'includedColumns'))
                             @endif
                         @endif
                     </div>
@@ -43,7 +41,6 @@
     @include(
         'Tamu.resume.pilgub.per-wilayah.filter-modal',
         compact(
-            'selectedKabupaten',
             'selectedKecamatan',
             'selectedKelurahan',
             'includedColumns',

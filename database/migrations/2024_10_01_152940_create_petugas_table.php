@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('role');
             $table->boolean('is_forced_logout')->default(false);
-            $table->integer('limit', 100);
+            $table->integer('limit');
             $table->rememberToken();
             $table->timestamps();
 
