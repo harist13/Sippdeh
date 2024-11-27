@@ -46,6 +46,18 @@ class InputDaftarPemilihPilgub extends Component
     private function insertSuaraDaftarPemilih(int $kecamatanId, int $dptb, int $dpk, int $kotakKosong, int $suaraTidakSah): void
     {
         try {
+            if (session('operator_jenis_wilayah') == 'kota') {
+                DaftarPemilih::updateOrCreate(
+                    [ 'kecamatan_id' => $kecamatanId, 'posisi' => 'WALIKOTA' ],
+                    [ 'dptb' => $dptb, 'dpk' => $dpk ]
+                );
+            } else {
+                DaftarPemilih::updateOrCreate(
+                    [ 'kecamatan_id' => $kecamatanId, 'posisi' => 'BUPATI' ],
+                    [ 'dptb' => $dptb, 'dpk' => $dpk ]
+                );
+            }
+
             DaftarPemilih::updateOrCreate(
                 [
                     'kecamatan_id' => $kecamatanId,
