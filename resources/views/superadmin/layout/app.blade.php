@@ -124,15 +124,15 @@
 
 	<body class="relative flex flex-col h-full bg-gray-100">
 		{{-- Sidebar --}}
-		@include('Superadmin.layout.sidebar')
+		@include('superadmin.layout.sidebar')
 
 		<!-- Header & Navbar -->
-		@include('Superadmin.layout.header')
+		@include('superadmin.layout.header')
 		
 		@yield('content')
 		
 		<!-- Footer -->
-		@include('Superadmin.layout.footer')
+		@include('superadmin.layout.footer')
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 		

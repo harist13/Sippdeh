@@ -6,7 +6,7 @@
         </div>
     
         @livewire(
-            'Superadmin.resume.pilwali.per-wilayah.filter-resume-suara-pilwali-per-wilayah',
+            'superadmin.resume.pilwali.per-wilayah.filter-resume-suara-pilwali-per-wilayah',
             compact(
                 'selectedKecamatan',
                 'selectedKelurahan',

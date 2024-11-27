@@ -22,7 +22,7 @@ class KecamatanController extends Controller
      */
      public function index()
     {
-        return view('Superadmin.kecamatan.index');
+        return view('superadmin.kecamatan.index');
     }
 
     public function export(Request $request)

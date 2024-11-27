@@ -1,4 +1,4 @@
-@extends('Superadmin.layout.app')
+@extends('superadmin.layout.app')
 
 @push('scripts')
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -313,10 +313,10 @@
     </main>
 
     <!-- Modal Tambah User -->
-    @include('Superadmin.user.tambah-user')
+    @include('superadmin.user.tambah-user')
 
     <!-- Modal Edit User -->
-    @include('Superadmin.user.edit-user')
+    @include('superadmin.user.edit-user')
 @endsection
 
 @push('scripts')
