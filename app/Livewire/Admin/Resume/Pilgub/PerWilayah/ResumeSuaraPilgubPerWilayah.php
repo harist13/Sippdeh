@@ -2,10 +2,9 @@
 
 namespace App\Livewire\Admin\Resume\Pilgub\PerWilayah;
 
-use App\Exports\ResumePilgubExport;
+use App\Exports\ResumePilgubAdminExport;
 use App\Models\Calon;
 use App\Models\Kabupaten;
-use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubKecamatan;
 use App\Models\ResumeSuaraPilgubKelurahan;
@@ -98,17 +97,28 @@ class ResumeSuaraPilgubPerWilayah extends Component
                 resume_suara_pilgub_kelurahan.suara_masuk,
                 resume_suara_pilgub_kelurahan.abstain,
                 resume_suara_pilgub_kelurahan.partisipasi
-            ')
-            ->whereIn('resume_suara_pilgub_kelurahan.id', $this->selectedKelurahan);
+            ');
+        
+        $builder->whereIn('resume_suara_pilgub_kelurahan.id', $this->selectedKelurahan);
+
+        if ($this->keyword) {
+            $builder->where(function(Builder $builder) {
+                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                
+                $builder->orWhereHas('kecamatan', function (Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                });
+
+                $builder->orWhereHas('kecamatan.kabupaten', function (Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                });
+            });
+        }
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
         $this->sortResumeSuaraPilgubKelurahanPaslon($builder);
         $this->sortResumeSuaraKotakKosong($builder);
-
-        if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-        }
 
         return $builder->paginate($this->perPage);
     }
@@ -121,14 +131,17 @@ class ResumeSuaraPilgubPerWilayah extends Component
                 resume_suara_pilgub_kecamatan.nama,
                 resume_suara_pilgub_kecamatan.kabupaten_id,
                 resume_suara_pilgub_kecamatan.dpt,
+                resume_suara_pilgub_kecamatan.dptb,
+                resume_suara_pilgub_kecamatan.dpk,
                 resume_suara_pilgub_kecamatan.kotak_kosong,
                 resume_suara_pilgub_kecamatan.suara_sah,
                 resume_suara_pilgub_kecamatan.suara_tidak_sah,
                 resume_suara_pilgub_kecamatan.suara_masuk,
                 resume_suara_pilgub_kecamatan.abstain,
                 resume_suara_pilgub_kecamatan.partisipasi
-            ')
-            ->whereIn('resume_suara_pilgub_kecamatan.id', $this->selectedKecamatan);
+            ');
+
+        $builder->whereIn('resume_suara_pilgub_kecamatan.id', $this->selectedKecamatan);
 
         $this->addPartisipasiFilter($builder);
         $this->sortColumns($builder);
@@ -150,6 +163,8 @@ class ResumeSuaraPilgubPerWilayah extends Component
                 resume_suara_pilgub_kabupaten.nama,
                 resume_suara_pilgub_kabupaten.provinsi_id,
                 resume_suara_pilgub_kabupaten.dpt,
+                resume_suara_pilgub_kabupaten.dptb,
+                resume_suara_pilgub_kabupaten.dpk,
                 resume_suara_pilgub_kabupaten.kotak_kosong,
                 resume_suara_pilgub_kabupaten.suara_sah,
                 resume_suara_pilgub_kabupaten.suara_tidak_sah,
@@ -227,13 +242,23 @@ class ResumeSuaraPilgubPerWilayah extends Component
 
     public function export()
     {
-        $sheet = new ResumePilgubExport(
+        $sheet = new ResumePilgubAdminExport(
             $this->keyword,
             $this->selectedKabupaten,
             $this->selectedKecamatan,
             $this->selectedKelurahan,
             $this->includedColumns,
-            $this->partisipasi
+            $this->partisipasi,
+
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
         );
 
         return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');

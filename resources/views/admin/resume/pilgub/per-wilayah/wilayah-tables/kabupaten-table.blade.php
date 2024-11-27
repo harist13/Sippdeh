@@ -7,7 +7,7 @@
 @endphp
 
 @php
-    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalDpt = $suara->sum(fn ($datum) => ($datum->dpt + $datum->dptb + $datum->dpk) ?? 0);
     $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
     $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
@@ -177,7 +177,7 @@
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    <span class="value">{{ number_format($datum->dpt, 0, '', '.') }}</span>
+                    <span class="value">{{ number_format(($datum->dpt + $datum->dptb + $datum->dpk), 0, '', '.') }}</span>
                 </td>
 
                 {{-- Calon-calon --}}

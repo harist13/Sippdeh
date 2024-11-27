@@ -65,8 +65,9 @@ class AdminController extends Controller
         
         // Hitung persentase untuk masing-masing paslon
         foreach ($calon as $paslon) {
-            $paslon->persentase = $total_suara > 0 ? 
-                round(($paslon->total_suara / $total_suara) * 100, 1) : 0;
+            $paslon->persentase = $total_suara > 0
+                ? round(($paslon->total_suara / $total_suara) * 100, 1)
+                : 0;
         }
 
         $kabupatenData = $this->getKabupatenData();
