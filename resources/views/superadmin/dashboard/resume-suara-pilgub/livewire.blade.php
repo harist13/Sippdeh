@@ -6,7 +6,7 @@
                     <h1 class="font-bold text-xl">Data Suara Pemilihan Gubernur</h1>
                     
                     {{-- Cari dan Filter --}}
-                    @include('operator.dashboard.resume-suara-pilgub.export-search-filter')
+                    @include('superadmin.dashboard.resume-suara-pilgub.export-search-filter')
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                         {{-- Loading Overlay --}}
                         <div wire:loading.delay wire:target.except="export" class="absolute inset-0 bg-gray-200 bg-opacity-75 flex items-center justify-center z-10"></div>
                         
-                        @include("operator.dashboard.resume-suara-pilgub.wilayah-tables.kecamatan-table", compact('suara', 'paslon'))
+                        @include("superadmin.dashboard.resume-suara-pilgub.wilayah-tables.kecamatan-table", compact('suara', 'paslon'))
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
 
     {{-- Filter Pilgub Modal --}}
     {{-- @include(
-        'operator.dashboard.resume-suara-pilgub.filter-modal',
+        'superadmin.dashboard.resume-suara-pilgub.filter-modal',
         compact(
             'selectedKabupaten',
             'selectedKecamatan',

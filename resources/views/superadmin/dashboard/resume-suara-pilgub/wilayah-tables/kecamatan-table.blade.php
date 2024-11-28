@@ -1,3 +1,4 @@
+{{-- Template View --}}
 @php
     $isPilkadaTunggal = count($paslon) == 1;
 
@@ -21,9 +22,9 @@
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            {{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
-                NO
-            </th> --}}
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 200px;">
+                Kabupaten
+            </th>
             
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 200px;">
                 Kecamatan
@@ -88,6 +89,7 @@
             </th>
         </tr>
         <tr>
+            {{-- First two columns are rowspan=2 so they don't need entries here --}}
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalDpt, 0, '.', '.') }}
             </th>
@@ -95,7 +97,7 @@
             {{-- Kotak Kosong --}}
             @if ($isPilkadaTunggal)
                 <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{ $totalKotakKosong }}
+                    {{ number_format($totalKotakKosong, 0, '.', '.') }}
                 </th>
             @endif
         
@@ -118,10 +120,10 @@
     <tbody class="bg-[#F5F5F5] divide-y divide-gray-200">
         @forelse ($suara as $datum)
             <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none tps">
-                {{-- ID TPS --}}
-                {{-- <td class="py-3 px-4 border nomor">
-                    {{ $datum->getThreeDigitsId() }}
-                </td> --}}
+                {{-- Kabupaten --}}
+                <td class="py-3 px-4 text-xs text-left border kabupaten">
+                    {{ $datum->kabupaten_nama }}
+                </td>
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan">
@@ -157,28 +159,28 @@
 
                 {{-- Partisipasi --}}
                 <td class="py-3 px-4 text-xs border partisipasi">
-					@if ($datum->partisipasi >= 80)
-						<span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
+                    @if ($datum->partisipasi >= 80)
+                        <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
 
-					@if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
-						<span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
+                    @if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
+                        <span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
 
-					@if ($datum->partisipasi < 60)
-						<span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
-							{{ number_format($datum->partisipasi, 1, '.', '.') }}%
-						</span>
-					@endif
-				</td>
+                    @if ($datum->partisipasi < 60)
+                        <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
+                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                        </span>
+                    @endif
+                </td>
             </tr>
         @empty
             <tr>
-                <td colspan="15" class="py-5 px-2 text-center text-gray-500">
+                <td colspan="16" class="py-5 px-2 text-center text-gray-500">
                     Data tidak tersedia.
                 </td>
             </tr>

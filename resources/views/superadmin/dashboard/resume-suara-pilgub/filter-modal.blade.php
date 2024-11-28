@@ -6,7 +6,7 @@
         </div>
 
         {{-- @livewire(
-            'operator.dashboard.resume-suara-pilgub.filter-resume-suara-pilgub',
+            'superadmin.dashboard.resume-suara-pilgub.filter-resume-suara-pilgub',
             compact(
                 'selectedKabupaten',
                 'selectedKecamatan',

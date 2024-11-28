@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Operator\Dashboard\ResumeSuaraPilgub;
+namespace App\Livewire\Superadmin\Dashboard\ResumeSuaraPilgub;
 
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilgubKecamatan;
@@ -28,7 +28,7 @@ class ResumeSuaraPilgub extends Component
     {
         $paslon = $this->getPaslon();
         $suara = $this->getSuaraPerKecamatan();
-        return view('operator.dashboard.resume-suara-pilgub.livewire', compact('suara', 'paslon'));
+        return view('superadmin.dashboard.resume-suara-pilgub.livewire', compact('suara', 'paslon'));
     }
 
     private function getSuaraPerKecamatan()
@@ -47,12 +47,15 @@ class ResumeSuaraPilgub extends Component
                 resume_suara_pilgub_kecamatan.suara_masuk,
                 resume_suara_pilgub_kecamatan.abstain,
                 resume_suara_pilgub_kecamatan.partisipasi
-            ');
-
-        $builder->where('resume_suara_pilgub_kecamatan.kabupaten_id', session('operator_kabupaten_id'));
+            ')
+            ->join('kabupaten', 'kabupaten.id', '=', 'resume_suara_pilgub_kecamatan.kabupaten_id')
+            ->addSelect('kabupaten.nama as kabupaten_nama');
 
         if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+            $builder->where(function($query) {
+                $query->whereRaw('LOWER(resume_suara_pilgub_kecamatan.nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
+                      ->orWhereRaw('LOWER(kabupaten.nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+            });
         }
 
         $this->sortColumns($builder);
@@ -75,7 +78,6 @@ class ResumeSuaraPilgub extends Component
         ])
             ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
             ->where('calon.posisi', $this->posisi)
-            ->where('calon.provinsi_id', session('operator_provinsi_id'))
             ->groupBy('calon.id');
 
         return $builder->get();
