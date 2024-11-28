@@ -190,7 +190,7 @@ class ResumeSuaraPilbupPerWilayah extends Component
         $builder->whereIn('resume_suara_pilbup_kecamatan.id', $this->selectedKecamatan);
 
         if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+            $builder->whereRaw('LOWER(resume_suara_pilbup_kecamatan.nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         }
 
         $this->addPartisipasiFilter($builder);
@@ -292,99 +292,109 @@ class ResumeSuaraPilbupPerWilayah extends Component
 
        // Build base query
        if (in_array('TPS', $this->includedColumns)) {
-           $query = ResumeSuaraPilbupTPS::query()
-               ->selectRaw('
-                   resume_suara_pilbup_tps.id,
-                   resume_suara_pilbup_tps.nama,
-                   resume_suara_pilbup_tps.dpt,
-                   resume_suara_pilbup_tps.kotak_kosong,
-                   resume_suara_pilbup_tps.suara_sah,
-                   resume_suara_pilbup_tps.suara_tidak_sah,
-                   resume_suara_pilbup_tps.suara_masuk,
-                   resume_suara_pilbup_tps.abstain,
-                   resume_suara_pilbup_tps.partisipasi
-               ')
-               ->with([
-                   'tps.kelurahan.kecamatan.kabupaten',
-                   'suaraCalon'
-               ])
-               ->whereHas('tps', function(Builder $builder) {
-                   $builder->whereHas('kelurahan', function (Builder $builder) {
-                       if (!empty($this->selectedKelurahan)) {
-                           $builder->whereIn('id', $this->selectedKelurahan);
-                       }
+            $query = ResumeSuaraPilbupTPS::query()
+                ->selectRaw('
+                    resume_suara_pilbup_tps.id,
+                    resume_suara_pilbup_tps.nama,
+                    resume_suara_pilbup_tps.dpt,
+                    resume_suara_pilbup_tps.kotak_kosong,
+                    resume_suara_pilbup_tps.suara_sah,
+                    resume_suara_pilbup_tps.suara_tidak_sah,
+                    resume_suara_pilbup_tps.suara_masuk,
+                    resume_suara_pilbup_tps.abstain,
+                    resume_suara_pilbup_tps.partisipasi
+                ')
+                ->with(['tps.kelurahan.kecamatan.kabupaten']);
 
-                       $builder->whereHas('kecamatan', function(Builder $builder) {
-                           if (!empty($this->selectedKecamatan)) {
-                               $builder->whereIn('id', $this->selectedKecamatan);
-                           }
+            if ($this->keyword) {
+                $query->whereHas('tps', function(Builder $builder) {
+                    $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    });
+        
+                    $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                        $builder->whereHas('kecamatan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+                    });
+                });
+            }
 
-                           $builder->whereHas('kabupaten', function (Builder $builder) {
-                               $builder->whereId(session('operator_kabupaten_id'));
-                           });
-                       });
-                   });
-               });
+            if (!empty($this->selectedKelurahan)) {
+                $query->whereHas('tps.kelurahan', function (Builder $builder) {
+                    $builder->whereIn('id', $this->selectedKelurahan);
+                });
+            }
 
-       } elseif (!empty($this->selectedKelurahan)) {
-           $query = ResumeSuaraPilbupKelurahan::query()
-               ->selectRaw('
-                   resume_suara_pilbup_kelurahan.id,
-                   resume_suara_pilbup_kelurahan.nama, 
-                   resume_suara_pilbup_kelurahan.kecamatan_id,
-                   resume_suara_pilbup_kelurahan.dpt,
-                   resume_suara_pilbup_kelurahan.kotak_kosong,
-                   resume_suara_pilbup_kelurahan.suara_sah,
-                   resume_suara_pilbup_kelurahan.suara_tidak_sah,
-                   resume_suara_pilbup_kelurahan.suara_masuk,
-                   resume_suara_pilbup_kelurahan.abstain,
-                   resume_suara_pilbup_kelurahan.partisipasi
-               ')
-               ->with([
-                   'kecamatan.kabupaten',
-                   'suaraCalon'
-               ])
-               ->whereIn('id', $this->selectedKelurahan);
-       } else {
-           $query = ResumeSuaraPilbupKecamatan::query()
-               ->selectRaw('
-                   resume_suara_pilbup_kecamatan.id,
-                   resume_suara_pilbup_kecamatan.nama,
-                   resume_suara_pilbup_kecamatan.kabupaten_id,
-                   resume_suara_pilbup_kecamatan.dpt,
-                   resume_suara_pilbup_kecamatan.dptb,
-                   resume_suara_pilbup_kecamatan.dpk,
-                   resume_suara_pilbup_kecamatan.kotak_kosong,
-                   resume_suara_pilbup_kecamatan.suara_sah,
-                   resume_suara_pilbup_kecamatan.suara_tidak_sah,
-                   resume_suara_pilbup_kecamatan.suara_masuk,
-                   resume_suara_pilbup_kecamatan.abstain,
-                   resume_suara_pilbup_kecamatan.partisipasi
-               ')
-               ->with([
-                   'kabupaten',
-                   'suaraCalon'
-               ])
-               ->whereIn('id', $this->selectedKecamatan);
-       }
+            if (!empty($this->selectedKecamatan)) {
+                $query->whereHas('tps.kelurahan.kecamatan', function(Builder $builder) {
+                    $builder->whereIn('id', $this->selectedKecamatan);
+                });
+            }
+        } else {
+            if (!empty($this->selectedKelurahan)) {
+                $query = ResumeSuaraPilbupKelurahan::query()
+                    ->selectRaw('
+                        resume_suara_pilbup_kelurahan.id,
+                        resume_suara_pilbup_kelurahan.nama,
+                        resume_suara_pilbup_kelurahan.kecamatan_id,
+                        resume_suara_pilbup_kelurahan.dpt,
+                        resume_suara_pilbup_kelurahan.kotak_kosong,
+                        resume_suara_pilbup_kelurahan.suara_sah,
+                        resume_suara_pilbup_kelurahan.suara_tidak_sah,
+                        resume_suara_pilbup_kelurahan.suara_masuk,
+                        resume_suara_pilbup_kelurahan.abstain,
+                        resume_suara_pilbup_kelurahan.partisipasi
+                    ')
+                    ->with([
+                        'kecamatan.kabupaten'
+                    ])
+                    ->whereIn('id', $this->selectedKelurahan);
+
+                if ($this->keyword) {
+                    $query->where(function($query) {
+                        $query->whereRaw('LOWER(resume_suara_pilbup_kelurahan.nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
+                            ->orWhereHas('kecamatan', function($q) {
+                                $q->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                            });
+                    });
+                }
+            } else if (!empty($this->selectedKecamatan)) {
+                $query = ResumeSuaraPilbupKecamatan::query()
+                    ->selectRaw('
+                        resume_suara_pilbup_kecamatan.id,
+                        resume_suara_pilbup_kecamatan.nama,
+                        resume_suara_pilbup_kecamatan.kabupaten_id,
+                        resume_suara_pilbup_kecamatan.dpt,
+                        resume_suara_pilbup_kecamatan.kotak_kosong,
+                        resume_suara_pilbup_kecamatan.suara_sah,
+                        resume_suara_pilbup_kecamatan.suara_tidak_sah,
+                        resume_suara_pilbup_kecamatan.suara_masuk,
+                        resume_suara_pilbup_kecamatan.abstain,
+                        resume_suara_pilbup_kecamatan.partisipasi
+                    ')
+                    ->with([
+                        'kabupaten'
+                    ])
+                    ->whereIn('id', $this->selectedKecamatan);
+                
+                if ($this->keyword) {
+                    $query->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                }
+            }
+        }
 
        // Apply partisipasi filter
        $query->where(function (Builder $builder) {
-           if (in_array('MERAH', $this->partisipasi)) {
-               $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-           }
-           if (in_array('KUNING', $this->partisipasi)) {
-               $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
-           }
-           if (in_array('HIJAU', $this->partisipasi)) {
-               $builder->orWhereRaw('partisipasi >= 80');
-           }
+            if (in_array('MERAH', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi < 77.5');
+            }
+            if (in_array('HIJAU', $this->partisipasi)) {
+                $builder->orWhereRaw('partisipasi >= 77.5');
+            }
        });
-
-       // Apply keyword search if exists
-       if ($this->keyword) {
-           $query->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
-       }
 
        // Apply sorting
        if ($this->dptSort) {
@@ -465,7 +475,10 @@ class ResumeSuaraPilbupPerWilayah extends Component
            'isHtml5ParserEnabled' => true,
            'dpi' => 150,
            'defaultFont' => 'DejaVu Sans',
-           'chroot' => public_path('/'),
+           'chroot' => [
+                public_path('images'),
+                public_path('storage'),
+            ],
            'enable_font_subsetting' => true,
            'pdf_backend' => 'CPDF'
        ]);
