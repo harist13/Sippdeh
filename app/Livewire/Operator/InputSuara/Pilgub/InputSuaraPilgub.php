@@ -31,10 +31,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
+use Livewire\WithFileUploads;
 
 class InputSuaraPilgub extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, WithFileUploads;
 
     public string $posisi = 'GUBERNUR';
 
@@ -46,6 +47,8 @@ class InputSuaraPilgub extends Component
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'MERAH'];
+
+    public $importSpreadsheet;
 
     public function render()
     {
@@ -223,16 +226,8 @@ class InputSuaraPilgub extends Component
         }
     }
 
-    // public function export(): BinaryFileResponse
-    // {
-    //     $sheet = new InputSuaraPilgubExport(
-    //         $this->keyword,
-    //         $this->selectedKecamatan,
-    //         $this->selectedKelurahan,
-    //         $this->includedColumns,
-    //         $this->partisipasi
-    //     );
-
-    //     return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
-    // }
+    public function import()
+    {
+        dump($this->importSpreadsheet);
+    }
 }
