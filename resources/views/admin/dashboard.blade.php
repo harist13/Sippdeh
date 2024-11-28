@@ -197,7 +197,6 @@
             @endphp
 
             @livewire('admin.dashboard.score-bar')
-            
         </section>
 
         <div class="container mx-auto px-4">
@@ -516,7 +515,7 @@
                 </button>
                 <br>
             </div>
-            @livewire('admin.dashboard.table-pilgub')
+            @livewire('admin.dashboard.resume-suara-pilgub.resume-suara-pilgub')
     </main>
 @endsection
 

@@ -516,7 +516,7 @@
                 </button>
                 <br>
             </div>
-            @livewire('superadmin.dashboard.table-pilgub')
+            @livewire('superadmin.dashboard.resume-suara-pilgub.resume-suara-pilgub')
     </main>
 @endsection
 

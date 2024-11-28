@@ -9,7 +9,7 @@
 @endphp
 
 @php
-    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
+    $totalDpt = $suara->sum(fn ($datum) => ($datum->dpt + $datum->dptb + $datum->dpk) ?? 0);
     $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
     $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
@@ -139,7 +139,7 @@
                 @endif
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                    {{ number_format(($datum->dpt + $datum->dptb + $datum->dpk), 0, '', '.') }}
                 </td>
 
                 @if (!$isCalonColumnIgnored)

@@ -2,18 +2,21 @@
     $isProvinsiColumnIgnored = !in_array('PROVINSI', $includedColumns);
     $isKabupatenColumnIgnored = !in_array('KABUPATEN/KOTA', $includedColumns);
     $isKecamatanColumnIgnored = !in_array('KECAMATAN', $includedColumns);
+    $isKelurahanColumnIgnored = !in_array('KELURAHAN', $includedColumns);
     $isCalonColumnIgnored = !in_array('CALON', $includedColumns);
 
     $isPilkadaTunggal = count($paslon) == 1;
 @endphp
 
 @php
-    $totalDpt = $suara->sum(fn ($datum) => ($datum->dpt + $datum->dptb + $datum->dpk) ?? 0);
-    $totalSuaraSah = $suara->sum(fn ($datum) => $datum->suara_sah ?? 0);
-    $totalSuaraTidakSah = $suara->sum(fn ($datum) => $datum->suara_tidak_sah ?? 0);
+    $totalDpt = $suara->sum(fn ($datum) => $datum->dpt ?? 0);
     $totalSuaraMasuk = $suara->sum(fn ($datum) => $datum->suara_masuk ?? 0);
-    $totalAbstain = $suara->sum(fn ($datum) => $datum->abstain ?? 0);
-    $totalPartisipasi = $suara->avg(fn ($datum) => $datum->partisipasi ?? 0);
+    
+    try {
+        $totalPartisipasi = ($totalSuaraMasuk / $totalDpt) * 100;
+    } catch (DivisionByZeroError $error) {
+        $totalPartisipasi = 0;
+    }
 
     $totalsPerCalon = [];
     foreach ($paslon as $calon) {
@@ -30,14 +33,17 @@
                 NO
             </th>
 			
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isProvinsiColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
                 Provinsi
             </th>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
                 Kabupaten/Kota
             </th>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="width: 200px;">
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
                 Kecamatan
+            </th>
+            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}" style="width: 150px;">
+                Kelurahan
             </th>
             
             <th wire:click="sortDpt" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
@@ -79,26 +85,6 @@
                 </th>
             @endif
 
-            <th wire:click="sortSuaraSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Suara Sah</span>
-                @if ($suaraSahSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($suaraSahSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($suaraSahSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
-            <th wire:click="sortSuaraTidakSah" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Suara Tidak Sah</span>
-                @if ($suaraTidakSahSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($suaraTidakSahSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($suaraTidakSahSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
             <th wire:click="sortSuaraMasuk" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
                 <span>Suara Masuk</span>
                 @if ($suaraMasukSort === null)
@@ -106,16 +92,6 @@
                 @elseif ($suaraMasukSort === 'asc')
                     <i class="fas fa-sort-up ml-2"></i>
                 @elseif ($suaraMasukSort === 'desc')
-                    <i class="fas fa-sort-down ml-2"></i>
-                @endif
-            </th>
-            <th wire:click="sortAbstain" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none cursor-pointer" style="min-width: 50px;">
-                <span>Abstain</span>
-                @if ($abstainSort === null)
-                    <i class="fas fa-sort ml-2"></i>
-                @elseif ($abstainSort === 'asc')
-                    <i class="fas fa-sort-up ml-2"></i>
-                @elseif ($abstainSort === 'desc')
                     <i class="fas fa-sort-down ml-2"></i>
                 @endif
             </th>
@@ -150,18 +126,9 @@
                     {{ $totalKotakKosong }}
                 </th>
             @endif
-        
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalSuaraSah, 0, '.', '.') }}
-            </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
-            </th>
+            
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
-            </th>
-            <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
-                {{ number_format($totalAbstain, 0, '.', '.') }}
             </th>
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalPartisipasi, 1, '.', '.') }}%
@@ -179,17 +146,22 @@
 
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs text-left border kabupaten {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}">
-                    {{ $datum->kabupaten?->nama ?? '-' }}
+                    {{ $datum->kecamatan->kabupaten->nama }}
                 </td>
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}">
+                    {{ $datum->kecamatan?->nama ?? '-' }}
+                </td>
+
+                {{-- Kelurahan --}}
+                <td class="py-3 px-4 text-xs text-left border kelurahan {{ $isKelurahanColumnIgnored ? 'hidden' : '' }}">
                     {{ $datum->nama }}
                 </td>
 
                 {{-- DPT --}}
                 <td class="py-3 px-4 text-xs border dpt">
-                    {{ number_format(($datum->dpt + $datum->dptb + $datum->dpk), 0, '', '.') }}
+                    {{ number_format($datum->dpt, 0, '', '.') }}
                 </td>
 
                 {{-- Calon-calon --}}
@@ -211,24 +183,9 @@
                     </td>
                 @endif
 
-                {{-- Suara Sah --}}
-                <td class="py-3 px-4 text-xs border suara-sah">
-                    {{ number_format($datum->suara_sah, 0, '', '.') }}
-                </td>
-
-                {{-- Suara Tidak Sah --}}
-                <td class="py-3 px-4 text-xs border suara-tidak-sah">
-                    {{ number_format($datum->suara_tidak_sah, 0, '', '.') }}
-                </td>
-
                 {{-- Suara Masuk --}}
                 <td class="py-3 px-4 text-xs border suara-masuk">
                     {{ number_format($datum->suara_masuk, 0, '', '.') }}
-                </td>
-
-                {{-- Abstain --}}
-                <td class="py-3 px-4 text-xs border abstain">
-                    {{ number_format($datum->abstain, 0, '', '.') }}
                 </td>
 
                 {{-- Partisipasi --}}
