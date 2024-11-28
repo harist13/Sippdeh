@@ -111,9 +111,11 @@
 
     @if(str_contains(strtolower($kabupatenName), 'mahakam ulu'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN MAHAKAM ULU</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIKK</h3>
@@ -124,9 +126,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'kutai kartanegara'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN KUTAI KARTANEGARA</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
@@ -137,9 +141,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'penajam paser utara'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN PENAJAM PASER UTARA</h2>
             <h3>SEKRETARIAT DAERAH</h3>
@@ -150,9 +156,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'kutai barat'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN KUTAI BARAT</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
@@ -163,9 +171,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'samarinda'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KOTA SAMARINDA</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
@@ -180,9 +190,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'kutai timur'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN KUTAI TIMUR</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
@@ -194,9 +206,11 @@
 
     @elseif(str_contains(strtolower($kabupatenName), 'paser'))
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH KABUPATEN PASER</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
@@ -208,9 +222,11 @@
 
     @else
     <div class="letterhead">
-        <div class="logo-container">
-            <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-        </div>
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
         <div class="header-text">
             <h2>PEMERINTAH {{ $jenisWilayah === 'kota' ? 'KOTA' : 'KABUPATEN' }} {{ strtoupper($kabupatenName) }}</h2>
             <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
