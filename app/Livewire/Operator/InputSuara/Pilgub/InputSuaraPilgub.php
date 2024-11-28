@@ -40,7 +40,6 @@ class InputSuaraPilgub extends Component
     public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
@@ -48,7 +47,7 @@ class InputSuaraPilgub extends Component
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'MERAH'];
 
-    public $importSpreadsheet;
+    public string $tpsQuery;
 
     public function render()
     {
@@ -65,6 +64,8 @@ class InputSuaraPilgub extends Component
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+
+        $this->tpsQuery = $builder->toRawSql();
 
         return $builder->paginate($this->perPage);
     }
@@ -224,10 +225,5 @@ class InputSuaraPilgub extends Component
         } catch (Exception $exception) {
             throw $exception;
         }
-    }
-
-    public function import()
-    {
-        dump($this->importSpreadsheet);
     }
 }
