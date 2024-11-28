@@ -190,7 +190,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $builder->whereIn('resume_suara_pilwali_kecamatan.id', $this->selectedKecamatan);
 
         if ($this->keyword) {
-            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+            $builder->whereRaw('LOWER(resume_suara_pilwali_kecamatan.nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
         }
 
         $this->addPartisipasiFilter($builder);
@@ -304,62 +304,86 @@ class ResumeSuaraPilwaliPerWilayah extends Component
                         resume_suara_pilwali_tps.abstain,
                         resume_suara_pilwali_tps.partisipasi
                     ')
-                    ->with([
-                        'tps.kelurahan.kecamatan.kabupaten',
-                        'suaraCalon'
-                    ])
-                    ->whereHas('tps', function(Builder $builder) {
-                        $builder->whereHas('kelurahan', function (Builder $builder) {
-                            if (!empty($this->selectedKelurahan)) {
-                                $builder->whereIn('id', $this->selectedKelurahan);
-                            }
+                    ->with(['tps.kelurahan.kecamatan.kabupaten']);
 
-                            $builder->whereHas('kecamatan', function(Builder $builder) {
-                                if (!empty($this->selectedKecamatan)) {
-                                    $builder->whereIn('id', $this->selectedKecamatan);
-                                }
+                if ($this->keyword) {
+                    $query->whereHas('tps', function(Builder $builder) {
+                        $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        
+                        $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                            $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                        });
+            
+                        $builder->orWhereHas('kelurahan', function (Builder $builder) {
+                            $builder->whereHas('kecamatan', function (Builder $builder) {
+                                $builder->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
                             });
                         });
                     });
+                }
 
-            } elseif (!empty($this->selectedKelurahan)) {
-                $query = ResumeSuaraPilwaliKelurahan::query()
-                    ->selectRaw('
-                        resume_suara_pilwali_kelurahan.id,
-                        resume_suara_pilwali_kelurahan.nama,
-                        resume_suara_pilwali_kelurahan.kecamatan_id,
-                        resume_suara_pilwali_kelurahan.dpt,
-                        resume_suara_pilwali_kelurahan.kotak_kosong,
-                        resume_suara_pilwali_kelurahan.suara_sah,
-                        resume_suara_pilwali_kelurahan.suara_tidak_sah,
-                        resume_suara_pilwali_kelurahan.suara_masuk,
-                        resume_suara_pilwali_kelurahan.abstain,
-                        resume_suara_pilwali_kelurahan.partisipasi
-                    ')
-                    ->with([
-                        'kecamatan.kabupaten',
-                        'suaraCalon'
-                    ])
-                    ->whereIn('id', $this->selectedKelurahan);
+                if (!empty($this->selectedKelurahan)) {
+                    $query->whereHas('tps.kelurahan', function (Builder $builder) {
+                        $builder->whereIn('id', $this->selectedKelurahan);
+                    });
+                }
+
+                if (!empty($this->selectedKecamatan)) {
+                    $query->whereHas('tps.kelurahan.kecamatan', function(Builder $builder) {
+                        $builder->whereIn('id', $this->selectedKecamatan);
+                    });
+                }
             } else {
-                $query = ResumeSuaraPilwaliKecamatan::query()
-                    ->selectRaw('
-                        resume_suara_pilwali_kecamatan.id,
-                        resume_suara_pilwali_kecamatan.nama,
-                        resume_suara_pilwali_kecamatan.kabupaten_id,
-                        resume_suara_pilwali_kecamatan.dpt,
-                        resume_suara_pilwali_kecamatan.kotak_kosong,
-                        resume_suara_pilwali_kecamatan.suara_sah,
-                        resume_suara_pilwali_kecamatan.suara_tidak_sah,
-                        resume_suara_pilwali_kecamatan.suara_masuk,
-                        resume_suara_pilwali_kecamatan.abstain,
-                        resume_suara_pilwali_kecamatan.partisipasi
-                    ')
-                    ->with([
-                        'kabupaten',
-                        'suaraCalon'
-                    ])
-                    ->whereIn('id', $this->selectedKecamatan);
+                if (!empty($this->selectedKelurahan)) {
+                    $query = ResumeSuaraPilwaliKelurahan::query()
+                        ->selectRaw('
+                            resume_suara_pilwali_kelurahan.id,
+                            resume_suara_pilwali_kelurahan.nama,
+                            resume_suara_pilwali_kelurahan.kecamatan_id,
+                            resume_suara_pilwali_kelurahan.dpt,
+                            resume_suara_pilwali_kelurahan.kotak_kosong,
+                            resume_suara_pilwali_kelurahan.suara_sah,
+                            resume_suara_pilwali_kelurahan.suara_tidak_sah,
+                            resume_suara_pilwali_kelurahan.suara_masuk,
+                            resume_suara_pilwali_kelurahan.abstain,
+                            resume_suara_pilwali_kelurahan.partisipasi
+                        ')
+                        ->with([
+                            'kecamatan.kabupaten'
+                        ])
+                        ->whereIn('id', $this->selectedKelurahan);
+
+                    if ($this->keyword) {
+                        $query->where(function($query) {
+                            $query->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%'])
+                                ->orWhereHas('kecamatan', function($q) {
+                                    $q->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                                });
+                        });
+                    }
+                } else if (!empty($this->selectedKecamatan)) {
+                    $query = ResumeSuaraPilwaliKecamatan::query()
+                        ->selectRaw('
+                            resume_suara_pilwali_kecamatan.id,
+                            resume_suara_pilwali_kecamatan.nama,
+                            resume_suara_pilwali_kecamatan.kabupaten_id,
+                            resume_suara_pilwali_kecamatan.dpt,
+                            resume_suara_pilwali_kecamatan.kotak_kosong,
+                            resume_suara_pilwali_kecamatan.suara_sah,
+                            resume_suara_pilwali_kecamatan.suara_tidak_sah,
+                            resume_suara_pilwali_kecamatan.suara_masuk,
+                            resume_suara_pilwali_kecamatan.abstain,
+                            resume_suara_pilwali_kecamatan.partisipasi
+                        ')
+                        ->with([
+                            'kabupaten'
+                        ])
+                        ->whereIn('id', $this->selectedKecamatan);
+                    
+                    if ($this->keyword) {
+                        $query->whereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($this->keyword) . '%']);
+                    }
+                }
             }
 
             // Apply filters
@@ -371,10 +395,6 @@ class ResumeSuaraPilwaliPerWilayah extends Component
                     $builder->orWhereRaw('partisipasi >= 77.5');
                 }
             });
-
-            if ($this->keyword) {
-                $query->where('nama', 'like', '%' . $this->keyword . '%');
-            }
 
             // Apply sorting
             if ($this->dptSort) {
@@ -403,6 +423,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
                     'type' => 'error',
                     'message' => 'Tidak ada data untuk di-export'
                 ]);
+                dump(123);
                 return;
             }
 
@@ -453,8 +474,9 @@ class ResumeSuaraPilwaliPerWilayah extends Component
             }, 'resume-suara-pemilihan-bupati.pdf', [
                 'Content-Type' => 'application/pdf',
             ]);
-
         } catch (\Exception $e) {
+            dump($e);
+
             Log::error('PDF Export Error: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
             
@@ -462,6 +484,8 @@ class ResumeSuaraPilwaliPerWilayah extends Component
                 'type' => 'error',
                 'message' => 'Gagal mengekspor PDF: ' . $e->getMessage()
             ]);
+
+            dump($e);
         }
     }
 }
