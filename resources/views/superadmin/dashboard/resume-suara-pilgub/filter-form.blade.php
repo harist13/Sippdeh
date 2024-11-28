@@ -1,7 +1,7 @@
 <div>
-    @include('operator.dashboard.resume-suara-pilgub.wilayah-selects.select-kabupaten')
-    @include('operator.dashboard.resume-suara-pilgub.wilayah-selects.select-kecamatan')
-    @include('operator.dashboard.resume-suara-pilgub.wilayah-selects.select-kelurahan')
+    @include('superadmin.dashboard.resume-suara-pilgub.wilayah-selects.select-kabupaten')
+    @include('superadmin.dashboard.resume-suara-pilgub.wilayah-selects.select-kecamatan')
+    @include('superadmin.dashboard.resume-suara-pilgub.wilayah-selects.select-kelurahan')
 
     <!-- Show Columns Section -->
     <div class="relative mb-5">
