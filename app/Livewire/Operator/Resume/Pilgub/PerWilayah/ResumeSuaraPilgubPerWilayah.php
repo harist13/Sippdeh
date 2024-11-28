@@ -258,7 +258,10 @@ class ResumeSuaraPilgubPerWilayah extends Component
             'isHtml5ParserEnabled' => true,
             'dpi' => 150,
             'defaultFont' => 'DejaVu Sans',
-            'chroot' => public_path('/'),
+            'chroot' => [
+                public_path('images'),
+                public_path('storage'),
+            ],
             'enable_font_subsetting' => true,
             'pdf_backend' => 'CPDF'
         ]);
