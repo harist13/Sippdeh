@@ -268,6 +268,11 @@
                 <th class="text-center">{{ number_format($data->sum('dpt'), 0, ',', '.') }}</th>
                 
                 @if(!$isCalonColumnIgnored)
+                    @if($isPilkadaTunggal)
+                        <th class="text-center bg-blue-950 text-white">
+                            {{ number_format($data->sum('kotak_kosong'), 0, ',', '.') }}
+                        </th>
+                    @endif
                     @foreach($paslon as $calon)
                         <th class="text-center bg-blue-950 text-white">
                             @if($isTpsView)
@@ -277,11 +282,6 @@
                             @endif
                         </th>
                     @endforeach
-                    @if($isPilkadaTunggal)
-                        <th class="text-center bg-blue-950 text-white">
-                            {{ number_format($data->sum('kotak_kosong'), 0, ',', '.') }}
-                        </th>
-                    @endif
                 @endif
 
                 <th class="text-center">{{ number_format($data->sum('suara_sah'), 0, ',', '.') }}</th>

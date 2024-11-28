@@ -288,16 +288,16 @@
                 </th>
                 
                 @if(in_array('CALON', $includedColumns))
-                    @foreach($paslon as $calon)
-                        <th class="text-center bg-blue-950">
-                            {{ number_format($totalsPerCalon[$calon->id], 0, ',', '.') }}
-                        </th>
-                    @endforeach
                     @if($isPilkadaTunggal)
                         <th class="text-center bg-blue-950">
                             {{ number_format($totalKotakKosong, 0, ',', '.') }}
                         </th>
                     @endif
+                    @foreach($paslon as $calon)
+                        <th class="text-center bg-blue-950">
+                            {{ number_format($totalsPerCalon[$calon->id], 0, ',', '.') }}
+                        </th>
+                    @endforeach
                 @endif
 
                 <th class="text-center">{{ number_format($totalSuaraSah, 0, ',', '.') }}</th>
