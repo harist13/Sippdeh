@@ -126,9 +126,35 @@
         </div>
     </div>
 
-   
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai kartanegara'))
+    <div class="letterhead">
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI KARTANEGARA</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>jalan Drs. awang sabran, bc. Hk. Nomor G.3 Telp (0541) 661518 fax (0541) 662602</p>
+            <p class="website-email">Website kesbangpol.kukarkab.go.id Email: kesbangpol@kukarkab.go.id kode pos 75514</p>
+        </div>
+    </div>
 
-    
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai barat'))
+    <div class="letterhead">
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI BARAT</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Alamat : Pusat Perkantoran Pemerintah Kabupaten Kutai Barat</p>
+            <p>SENDAWAR</p>
+        </div>
+    </div>
 
     @elseif(str_contains(strtolower($kabupatenName), 'samarinda'))
     <div class="letterhead">
@@ -149,7 +175,37 @@
         </div>
     </div>
 
-    
+    @elseif(str_contains(strtolower($kabupatenName), 'kutai timur'))
+    <div class="letterhead">
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN KUTAI TIMUR</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Jl. Soekarno-Hatta, Sangatta Utara</p>
+            <p>Kutai Timur, Kalimantan Timur 75683</p>
+            <p class="website-email">Telp. (0549) 21006 Fax. (0549) 21002</p>
+        </div>
+    </div>
+
+    @elseif(str_contains(strtolower($kabupatenName), 'paser'))
+    <div class="letterhead">
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
+        <div class="header-text">
+            <h2>PEMERINTAH KABUPATEN PASER</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Jl. Kesuma Bangsa Km.05, Komplek Perkantoran Pemkab. paser</p>
+            <p>Gedung F Lantai 2, paser, kalimantan timur 76215</p>
+            <p class="website-email">Laman kesbangpol.paserkab.go.id, Pos-el kesbangpol_paser@yahoo.com</p>
+        </div>
+    </div>
 
     @else
     <div class="letterhead">

@@ -31,21 +31,39 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
+use Livewire\WithFileUploads;
 
 class InputSuaraPilgub extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, WithFileUploads;
+
+    protected $listeners = [
+        '$refresh',
+        'import-success' => 'handleImportSuccess',
+        'import-error' => 'handleImportError'
+    ];
+
+    public function handleImportSuccess($message)
+    {
+        session()->flash('pesan_sukses', $message);
+    }
+
+    public function handleImportError($message)
+    {
+        session()->flash('pesan_gagal', $message);
+    }
 
     public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';
-
     public int $perPage = 10;
 
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'MERAH'];
+
+    public string $tpsQuery;
 
     public function render()
     {
@@ -62,6 +80,8 @@ class InputSuaraPilgub extends Component
         $this->filterKelurahan($builder);
         $this->filterKecamatan($builder);
         $this->filterPartisipasi($builder);
+
+        $this->tpsQuery = $builder->toRawSql();
 
         return $builder->paginate($this->perPage);
     }
@@ -222,17 +242,4 @@ class InputSuaraPilgub extends Component
             throw $exception;
         }
     }
-
-    // public function export(): BinaryFileResponse
-    // {
-    //     $sheet = new InputSuaraPilgubExport(
-    //         $this->keyword,
-    //         $this->selectedKecamatan,
-    //         $this->selectedKelurahan,
-    //         $this->includedColumns,
-    //         $this->partisipasi
-    //     );
-
-    //     return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
-    // }
 }
