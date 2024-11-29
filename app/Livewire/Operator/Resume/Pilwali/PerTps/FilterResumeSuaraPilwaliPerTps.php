@@ -68,7 +68,7 @@ class FilterResumeSuaraPilwaliPerTps extends Component
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
 
         $this->dispatch('reset-filter')->to(ResumeSuaraPilwaliPerTps::class);
     }

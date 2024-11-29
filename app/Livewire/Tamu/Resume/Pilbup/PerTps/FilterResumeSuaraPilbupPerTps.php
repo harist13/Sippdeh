@@ -68,7 +68,7 @@ class FilterResumeSuaraPilbupPerTps extends Component
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'CALON', 'TPS'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
 
         $this->dispatch('reset-filter')->to(ResumeSuaraPilbupPerTps::class);
     }

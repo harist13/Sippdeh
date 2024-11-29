@@ -47,7 +47,7 @@ class ResumeSuaraPilgubPerTps extends Component
     public array $selectedKelurahan = [];
     
     public array $includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $partisipasi = ['HIJAU', 'MERAH'];
 
     public function render()
     {
@@ -184,15 +184,11 @@ class ResumeSuaraPilgubPerTps extends Component
     {
         $builder->where(function (Builder $builder) {
             if (in_array('MERAH', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-            }
-        
-            if (in_array('KUNING', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                $builder->orWhereRaw('partisipasi < 77.5');
             }
             
             if (in_array('HIJAU', $this->partisipasi)) {
-                $builder->orWhereRaw('partisipasi >= 80');
+                $builder->orWhereRaw('partisipasi >= 77.5');
             }
         });
     }
@@ -231,7 +227,7 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN/KOTA', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
     }
 
     #[On('apply-filter')]

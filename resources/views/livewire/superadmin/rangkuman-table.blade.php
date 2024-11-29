@@ -338,8 +338,7 @@
                         <td class="py-3 px-4 border-r">
                             @php
                             $partisipasi = $data->partisipasi ?? 0;
-                            $colorClass = $partisipasi >= 70 ? 'bg-green-400' : 
-                                    ($partisipasi >= 50 ? 'bg-yellow-400' : 'bg-red-400');
+                            $colorClass = $partisipasi >= 77.5 ? 'bg-green-400' : 'bg-red-400';
                             @endphp
                             <div class="participation-button {{ $colorClass }} text-white py-1 px-7 rounded text-xs">
                                 {{ number_format($partisipasi, 1) }}%

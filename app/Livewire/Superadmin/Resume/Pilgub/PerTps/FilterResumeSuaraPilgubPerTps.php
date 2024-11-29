@@ -24,7 +24,7 @@ class FilterResumeSuaraPilgubPerTps extends Component
         $this->selectedKelurahan = $selectedKelurahan;
         $this->availableColumns = $includedColumns ?: ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->includedColumns = $includedColumns ?: ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = $partisipasi ?: ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = $partisipasi ?: ['HIJAU', 'MERAH'];
     }
 
     public function render(): View
@@ -87,7 +87,7 @@ class FilterResumeSuaraPilgubPerTps extends Component
         $this->selectedKecamatan = $kecamatanQuery->pluck('id')->toArray();
         $this->selectedKelurahan = [];
         $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
 
         $this->dispatch('reset-filter')->to(ResumeSuaraPilgubPerTps::class);
     }

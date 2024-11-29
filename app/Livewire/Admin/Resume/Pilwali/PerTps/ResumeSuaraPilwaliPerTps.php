@@ -34,7 +34,7 @@ class ResumeSuaraPilwaliPerTps extends Component
     public array $selectedKecamatan = [];
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $partisipasi = ['HIJAU', 'MERAH'];
 
     public function mount($kabupatenId = null)
     {
@@ -150,15 +150,11 @@ class ResumeSuaraPilwaliPerTps extends Component
         try {
             $builder->where(function (Builder $builder) {
                 if (in_array('MERAH', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-                }
-            
-                if (in_array('KUNING', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                    $builder->orWhereRaw('partisipasi < 77.5');
                 }
                 
                 if (in_array('HIJAU', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi >= 80');
+                    $builder->orWhereRaw('partisipasi >= 77.5');
                 }
             });
         } catch (Exception $exception) {
@@ -213,7 +209,7 @@ class ResumeSuaraPilwaliPerTps extends Component
         $this->includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
         $this->selectedKecamatan = [];
         $this->selectedKelurahan = [];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
     }
 
     #[On('apply-filter')]
@@ -225,23 +221,23 @@ class ResumeSuaraPilwaliPerTps extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    public function export(): BinaryFileResponse
-    {
-        try {
-            $sheet = new InputSuaraPilwaliExport(
-                $this->keyword,
-                $this->selectedKecamatan,
-                $this->selectedKelurahan,
-                $this->includedColumns,
-                $this->partisipasi,
-                $this->kabupatenId
-            );
+    // public function export(): BinaryFileResponse
+    // {
+    //     try {
+    //         $sheet = new InputSuaraPilwaliExport(
+    //             $this->keyword,
+    //             $this->selectedKecamatan,
+    //             $this->selectedKelurahan,
+    //             $this->includedColumns,
+    //             $this->partisipasi,
+    //             $this->kabupatenId
+    //         );
     
-            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
-        } catch (Exception $exception) {
-            Log::error($exception);
-            SentrySdk::getCurrentHub()->captureException($exception);
-            throw $exception;
-        }
-    }
+    //         return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
+    //     } catch (Exception $exception) {
+    //         Log::error($exception);
+    //         SentrySdk::getCurrentHub()->captureException($exception);
+    //         throw $exception;
+    //     }
+    // }
 }

@@ -374,10 +374,8 @@
                     <td class="text-right">{{ number_format($item->suara_masuk, 0, ',', '.') }}</td>
                     <td class="text-right">{{ number_format($item->abstain, 0, ',', '.') }}</td>
                     <td class="text-center 
-                        @if($item->partisipasi >= 80)
+                        @if($item->partisipasi >= 77.5)
                             bg-green
-                        @elseif($item->partisipasi >= 60)
-                            bg-yellow
                         @else
                             bg-red
                         @endif">

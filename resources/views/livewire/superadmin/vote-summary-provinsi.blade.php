@@ -59,9 +59,7 @@
                             $partisipasi = $data->total_dpt > 0 
                                 ? round(($data->total_suara_masuk / $data->total_dpt) * 100, 1) 
                                 : 0;
-                            $colorClass = $partisipasi >= 70 
-                                ? 'bg-green-500' 
-                                : ($partisipasi >= 50 ? 'bg-yellow-500' : 'bg-red-500');
+                            $colorClass = $partisipasi >= 77.5 ? 'bg-green-400' : 'bg-red-400';
                         @endphp
                         <span class="{{ $colorClass }} text-white px-2 py-1 rounded">
                             {{ $partisipasi }}%

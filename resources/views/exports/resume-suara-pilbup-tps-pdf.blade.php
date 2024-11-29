@@ -220,7 +220,7 @@
                         <td class="text-right">{{ number_format($item->suara_tidak_sah, 0, ',', '.') }}</td>
                         <td class="text-right">{{ number_format($item->suara_masuk, 0, ',', '.') }}</td>
                         <td class="text-right">{{ number_format($item->abstain, 0, ',', '.') }}</td>
-                        <td class="text-center {{ $item->partisipasi >= 80 ? 'bg-green' : ($item->partisipasi >= 60 ? 'bg-yellow' : 'bg-red') }}">
+                        <td class="text-center {{ $item->partisipasi >= 77.5 ? 'bg-green' : 'bg-red' }}">
                             {{ number_format($item->partisipasi, 1, ',', '.') }}%
                         </td>
                     </tr>

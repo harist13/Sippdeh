@@ -179,15 +179,11 @@ class InputSuaraPilwaliExport implements FromView
         try {
             $builder->where(function (Builder $builder) {
                 if (in_array('MERAH', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 0 AND 59.9');
-                }
-            
-                if (in_array('KUNING', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi BETWEEN 60 AND 79.9');
+                    $builder->orWhereRaw('partisipasi < 77.5');
                 }
                 
                 if (in_array('HIJAU', $this->partisipasi)) {
-                    $builder->orWhereRaw('partisipasi >= 80');
+                    $builder->orWhereRaw('partisipasi >= 77.5');
                 }
             });
         } catch (Exception $exception) {
