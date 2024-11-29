@@ -42,8 +42,8 @@
                     <span class="text-red-800 mb-3 block">{{ $errors->first('spreadsheet') }}</span>
                 @endif --}}
                 
-                <p class="text-xs text-gray-500 my-2">
-                    Catatan: Pastikan file yang akan diimpor memiliki format yang sama dengan berkas hasil ekspor di Resume per-TPS.
+                <p class="text-sm text-gray-500 leading-6 my-2">
+                    Catatan: Pastikan file yang akan diimpor merupakan file yang telah diunduh dari menekan tombol:<br> <strong>Unduh Template Impor</strong>
                 </p>
 
                 <hr class="h-1 my-3">
