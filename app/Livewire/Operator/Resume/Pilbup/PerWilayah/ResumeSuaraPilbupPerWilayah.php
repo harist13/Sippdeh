@@ -368,6 +368,8 @@ class ResumeSuaraPilbupPerWilayah extends Component
                         resume_suara_pilbup_kecamatan.nama,
                         resume_suara_pilbup_kecamatan.kabupaten_id,
                         resume_suara_pilbup_kecamatan.dpt,
+                        resume_suara_pilbup_kecamatan.dptb,
+                        resume_suara_pilbup_kecamatan.dpk,
                         resume_suara_pilbup_kecamatan.kotak_kosong,
                         resume_suara_pilbup_kecamatan.suara_sah,
                         resume_suara_pilbup_kecamatan.suara_tidak_sah,
