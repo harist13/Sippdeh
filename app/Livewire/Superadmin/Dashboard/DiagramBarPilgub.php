@@ -5,6 +5,7 @@ namespace App\Livewire\Superadmin\Dashboard;
 use App\Models\Calon;
 use App\Models\Kabupaten;
 use App\Models\SuaraCalon;
+use App\Models\SuaraCalonDaftarPemilih;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -125,10 +126,17 @@ class DiagramBarPilgub extends Component
     private function getSuaraCalonGubernurInKabupaten(int $calonId, int $kabupatenId): int
     {
         try {
-            return SuaraCalon::query()
+            $suaraCalon = SuaraCalon::query()
                 ->whereHas('tps.kelurahan.kecamatan.kabupaten', fn (Builder $builder) => $builder->whereId($kabupatenId))
                 ->where('calon_id', $calonId)
                 ->sum('suara');
+
+            $suaraTambahan = SuaraCalonDaftarPemilih::query()
+                ->whereHas('kecamatan.kabupaten', fn (Builder $builder) => $builder->whereId($kabupatenId))
+                ->where('calon_id', $calonId)
+                ->sum('suara');
+
+            return $suaraCalon + $suaraTambahan;
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);
