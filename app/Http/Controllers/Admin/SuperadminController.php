@@ -16,6 +16,7 @@ use App\Models\ResumeSuaraTPS;
 use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubProvinsi;
+use App\Models\SuaraCalonDaftarPemilih;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -42,8 +43,13 @@ class SuperadminController extends Controller
                     $q->where('id', $kabupaten->id);
                 })->where('calon_id', $paslon->id)->sum('suara');
                 
-                $suaraPaslon[$paslon->id] = $totalSuara;
-                $totalSuaraKabupaten += $totalSuara;
+                $totalSuaraTambahan = SuaraCalonDaftarPemilih::query()
+                    ->whereHas('kecamatan.kabupaten', fn ($builder) => $builder->whereId($kabupaten->id))
+                    ->where('calon_id', $paslon->id)
+                    ->sum('suara');
+                
+                $suaraPaslon[$paslon->id] = ($totalSuara + $totalSuaraTambahan);
+                $totalSuaraKabupaten += ($totalSuara + $totalSuaraTambahan);
             }
 
             // Hitung persentase suara untuk setiap paslon di kabupaten ini
