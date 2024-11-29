@@ -169,24 +169,6 @@
         </div>
     </div>
 
-    @elseif(str_contains(strtolower($kabupatenName), 'samarinda'))
-    <div class="letterhead">
-        @if($logo && file_exists(public_path('storage/' . $logo)))
-            <div class="logo-container">
-                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
-            </div>
-        @endif
-        <div class="header-text">
-            <h2>PEMERINTAH KOTA SAMARINDA</h2>
-            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
-            <p>Alamat Jalan Balaikota No. 27 Telepon (0541) 733033 Fax (0541) 741429</p>
-            <p>Samarinda (Kalimantan Timur) Kode Pos 75121</p>
-            <p class="website-email">
-                <a href="http://kesbangpol.samarindakota.go.id/">http://kesbangpol.samarindakota.go.id/</a>
-                Email: kesbangpol.samarindakota@gmail.com
-            </p>
-        </div>
-    </div>
 
     @elseif(str_contains(strtolower($kabupatenName), 'kutai timur'))
     <div class="letterhead">
