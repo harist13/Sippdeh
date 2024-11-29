@@ -37,6 +37,22 @@ class InputSuaraPilgub extends Component
 {
     use WithPagination, WithoutUrlPagination, WithFileUploads;
 
+    protected $listeners = [
+        '$refresh',
+        'import-success' => 'handleImportSuccess',
+        'import-error' => 'handleImportError'
+    ];
+
+    public function handleImportSuccess($message)
+    {
+        session()->flash('pesan_sukses', $message);
+    }
+
+    public function handleImportError($message)
+    {
+        session()->flash('pesan_gagal', $message);
+    }
+
     public string $posisi = 'GUBERNUR';
 
     public string $keyword = '';

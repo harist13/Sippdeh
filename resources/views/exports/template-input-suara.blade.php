@@ -49,6 +49,8 @@
                 $kelurahan = App\Models\Kelurahan::find($datum->kelurahan_id);
                 $kecamatan = App\Models\Kecamatan::find($kelurahan->kecamatan_id);
                 $kabupaten = App\Models\Kabupaten::find($kecamatan->kabupaten_id);
+
+                $tps = App\Models\TPS::find($datum->id);
             @endphp
 
             <tr>
@@ -79,13 +81,17 @@
                 @endif
 
                 @foreach ($paslon as $calon)
+                    @php
+                        $suaraCalon = $tps->suaraCalonByCalonId($calon->id)->first();
+                        $suaraCalon = $suaraCalon ? $suaraCalon->suara : 0;
+                    @endphp
                     <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                        
+                        {{ $suaraCalon }}
                     </td>
                 @endforeach
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    
+                    {{ $datum->suara_tidak_sah }}
                 </td>
             </tr>
         @endforeach

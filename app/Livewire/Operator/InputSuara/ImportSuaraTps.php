@@ -4,9 +4,9 @@ namespace App\Livewire\Operator\InputSuara;
 
 use App\Exports\InputSuaraTemplateExport;
 use App\Imports\InputSuaraImport;
+use App\Livewire\Operator\InputSuara\Pilgub\InputSuaraPilgub;
+use App\Livewire\Operator\InputSuara\Pilwali\InputSuaraPilwali;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -51,11 +51,23 @@ class ImportSuaraTps extends Component
 
                 // 4. Clean up the temporary file
                 Storage::disk('local')->delete($namaSpreadsheet);
+
+                session()->flash('pesan_sukses', 'Berhasil menyimpan data.');
+
+                if ($this->posisi == 'GUBERNUR') {
+                    $this->dispatch('import-success', 'Berhasil menyimpan data.')->to(InputSuaraPilgub::class);
+                    $this->dispatch('$refresh')->to(InputSuaraPilgub::class);
+                }
+    
+                if ($this->posisi == 'WALIKOTA') {
+                    $this->dispatch('import-success', 'Berhasil menyimpan data.')->to(InputSuaraPilwali::class);
+                    $this->dispatch('$refresh')->to(InputSuaraPilwali::class);
+                }
             } catch (Exception $exception) {
                 Log::error($exception);
                 SentrySdk::getCurrentHub()->captureException($exception);
                 
-                dump($exception);
+                session()->flash('pesan_gagal', 'Gagal menyimpan data.');
             }
         }
     }

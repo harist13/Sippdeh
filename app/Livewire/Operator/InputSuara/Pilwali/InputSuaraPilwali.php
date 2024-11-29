@@ -33,6 +33,10 @@ class InputSuaraPilwali extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
+    protected $listeners = [
+        '$refresh'
+    ];
+
     public string $posisi = 'WALIKOTA';
 
     public string $keyword = '';
