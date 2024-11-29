@@ -138,6 +138,8 @@ class ResumeSuaraPilgubPerWilayah extends Component
                         resume_suara_pilgub_kecamatan.nama,
                         resume_suara_pilgub_kecamatan.kabupaten_id,
                         resume_suara_pilgub_kecamatan.dpt,
+                        resume_suara_pilgub_kecamatan.dptb,
+                        resume_suara_pilgub_kecamatan.dpk,
                         resume_suara_pilgub_kecamatan.kotak_kosong,
                         resume_suara_pilgub_kecamatan.suara_sah,
                         resume_suara_pilgub_kecamatan.suara_tidak_sah,

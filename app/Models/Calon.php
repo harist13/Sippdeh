@@ -59,4 +59,8 @@ class Calon extends Model
     public function suaraCalon(): HasMany {
         return $this->hasMany(SuaraCalon::class, 'calon_id');
     }
+
+    public function suaraCalonTambahan(): HasMany {
+        return $this->hasMany(SuaraCalonDaftarPemilih::class, 'calon_id');
+    }
 }

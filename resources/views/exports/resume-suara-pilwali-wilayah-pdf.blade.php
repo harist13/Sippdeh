@@ -228,7 +228,12 @@
         $totalSuaraTidakSah = $data->sum('suara_tidak_sah');
         $totalSuaraMasuk = $data->sum('suara_masuk');
         $totalAbstain = $data->sum('abstain');
-        $avgPartisipasi = $data->avg('partisipasi');
+        
+        try {
+            $totalPartisipasi = ($totalSuaraMasuk / $totalDpt) * 100;
+        } catch (DivisionByZeroError $error) {
+            $totalPartisipasi = 0;
+        }
 
         $totalsPerCalon = [];
         foreach ($paslon as $calon) {
@@ -304,7 +309,7 @@
                 <th class="text-center">{{ number_format($totalSuaraTidakSah, 0, ',', '.') }}</th>
                 <th class="text-center">{{ number_format($totalSuaraMasuk, 0, ',', '.') }}</th>
                 <th class="text-center">{{ number_format($totalAbstain, 0, ',', '.') }}</th>
-                <th class="text-center">{{ number_format($avgPartisipasi, 1, ',', '.') }}%</th>
+                <th class="text-center">{{ number_format($totalPartisipasi, 1, ',', '.') }}%</th>
             </tr>
         </thead>
         <tbody>

@@ -176,11 +176,18 @@
                         @endforeach
                     @endif
                     
+                    @php
+                        try {
+                            $totalPartisipasi = ($data->sum('suara_masuk') / $data->sum('dpt')) * 100;
+                        } catch (DivisionByZeroError $error) {
+                            $totalPartisipasi = 0;
+                        }
+                    @endphp
                     <th class="text-center">{{ number_format($data->sum('suara_sah'), 0, ',', '.') }}</th>
                     <th class="text-center">{{ number_format($data->sum('suara_tidak_sah'), 0, ',', '.') }}</th>
                     <th class="text-center">{{ number_format($data->sum('suara_masuk'), 0, ',', '.') }}</th>
                     <th class="text-center">{{ number_format($data->sum('abstain'), 0, ',', '.') }}</th>
-                    <th class="text-center">{{ number_format($data->avg('partisipasi'), 1, ',', '.') }}%</th>
+                    <th class="text-center">{{ number_format($totalPartisipasi, 1, ',', '.') }}%</th>
                 </tr>
             </thead>
             <tbody>

@@ -60,7 +60,7 @@ class ScoreBar extends Component
 
         // Hitung total suara untuk masing-masing paslon
         foreach ($this->calon as $paslon) {
-            $paslon->total_suara = $paslon->suaraCalon()->sum('suara');
+            $paslon->total_suara = $paslon->suaraCalon()->sum('suara') + $paslon->suaraCalonTambahan()->sum('suara');;
         }
         
         // Hitung total semua suara

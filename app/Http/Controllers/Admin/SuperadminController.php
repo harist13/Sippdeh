@@ -16,6 +16,7 @@ use App\Models\ResumeSuaraTPS;
 use App\Models\Provinsi;
 use App\Models\ResumeSuaraPilgubKabupaten;
 use App\Models\ResumeSuaraPilgubProvinsi;
+use App\Models\SuaraCalonDaftarPemilih;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -42,8 +43,13 @@ class SuperadminController extends Controller
                     $q->where('id', $kabupaten->id);
                 })->where('calon_id', $paslon->id)->sum('suara');
                 
-                $suaraPaslon[$paslon->id] = $totalSuara;
-                $totalSuaraKabupaten += $totalSuara;
+                $totalSuaraTambahan = SuaraCalonDaftarPemilih::query()
+                    ->whereHas('kecamatan.kabupaten', fn ($builder) => $builder->whereId($kabupaten->id))
+                    ->where('calon_id', $paslon->id)
+                    ->sum('suara');
+                
+                $suaraPaslon[$paslon->id] = ($totalSuara + $totalSuaraTambahan);
+                $totalSuaraKabupaten += ($totalSuara + $totalSuaraTambahan);
             }
 
             // Hitung persentase suara untuk setiap paslon di kabupaten ini
@@ -98,13 +104,15 @@ class SuperadminController extends Controller
             DB::raw('SUM(suara_sah) as suara_sah'),
             DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(dptb) as dptb'),
+            DB::raw('SUM(dpk) as dpk'),
             DB::raw('SUM(abstain) as abstain')
         )->first();
 
         // Ensure no negative values
         $suaraSah = max(0, $ringkasanData->suara_sah ?? 0);
         $suaraTidakSah = max(0, $ringkasanData->suara_tidak_sah ?? 0);
-        $dpt = max(0, $ringkasanData->dpt ?? 0);
+        $dpt = max(0, ($ringkasanData->dpt + $ringkasanData->dptb + $ringkasanData->dpk) ?? 0);
         $abstain = max(0, $ringkasanData->abstain ?? 0);
 
         // Calculate suara masuk
@@ -245,7 +253,7 @@ class SuperadminController extends Controller
             // Ensure no negative values
             $suaraSah = max(0, $ringkasanData['suara_sah'] ?? 0);
             $suaraTidakSah = max(0, $ringkasanData['suara_tidak_sah'] ?? 0);
-            $dpt = max(0, $ringkasanData['dpt'] ?? 0);
+            $dpt = max(0, ($ringkasanData['dpt'] + $ringkasanData['dptb'] + $ringkasanData['dpk']) ?? 0);
             $abstain = max(0, $ringkasanData['abstain'] ?? 0);
             
             // Calculate suara masuk (total votes cast)
@@ -276,6 +284,8 @@ class SuperadminController extends Controller
             DB::raw('SUM(suara_sah) as suara_sah'),
             DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(dptb) as dptb'),
+            DB::raw('SUM(dpk) as dpk'),
             DB::raw('SUM(abstain) as abstain')
         );
 
