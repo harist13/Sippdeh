@@ -99,13 +99,15 @@ class AdminController extends Controller
             DB::raw('SUM(suara_sah) as suara_sah'),
             DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(dptb) as dptb'),
+            DB::raw('SUM(dpk) as dpk'),
             DB::raw('SUM(abstain) as abstain')
         )->first();
 
         // Ensure no negative values
         $suaraSah = max(0, $ringkasanData->suara_sah ?? 0);
         $suaraTidakSah = max(0, $ringkasanData->suara_tidak_sah ?? 0);
-        $dpt = max(0, $ringkasanData->dpt ?? 0);
+        $dpt = max(0, ($ringkasanData->dpt + $ringkasanData->dptb + $ringkasanData->dpk) ?? 0);
         $abstain = max(0, $ringkasanData->abstain ?? 0);
 
         // Calculate suara masuk
@@ -246,7 +248,7 @@ class AdminController extends Controller
             // Ensure no negative values
             $suaraSah = max(0, $ringkasanData['suara_sah'] ?? 0);
             $suaraTidakSah = max(0, $ringkasanData['suara_tidak_sah'] ?? 0);
-            $dpt = max(0, $ringkasanData['dpt'] ?? 0);
+            $dpt = max(0, ($ringkasanData['dpt'] + $ringkasanData['dptb'] + $ringkasanData['dpk']) ?? 0);
             $abstain = max(0, $ringkasanData['abstain'] ?? 0);
             
             // Calculate suara masuk (total votes cast)
@@ -277,6 +279,8 @@ class AdminController extends Controller
             DB::raw('SUM(suara_sah) as suara_sah'),
             DB::raw('SUM(suara_tidak_sah) as suara_tidak_sah'),
             DB::raw('SUM(dpt) as dpt'),
+            DB::raw('SUM(dptb) as dptb'),
+            DB::raw('SUM(dpk) as dpk'),
             DB::raw('SUM(abstain) as abstain')
         );
 
