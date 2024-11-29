@@ -82,13 +82,10 @@ class VoteSummaryProvinsi extends Component
         if ($this->filterPartisipasi) {
             switch ($this->filterPartisipasi) {
                 case 'tinggi':
-                    $query->havingRaw('(total_suara_masuk / total_dpt) * 100 >= 70');
-                    break;
-                case 'sedang':
-                    $query->havingRaw('(total_suara_masuk / total_dpt) * 100 BETWEEN 50 AND 69.99');
+                    $query->havingRaw('(total_suara_masuk / total_dpt) * 100 >= 77.5');
                     break;
                 case 'rendah':
-                    $query->havingRaw('(total_suara_masuk / total_dpt) * 100 < 50');
+                    $query->havingRaw('(total_suara_masuk / total_dpt) * 100 < 77.5');
                     break;
             }
         }

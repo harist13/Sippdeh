@@ -9,7 +9,7 @@ trait InputSuara {
 
     public string $keyword = '';
     
-    public array $partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+    public array $partisipasi = ['HIJAU', 'MERAH'];
 
     #[On('reset-filter')]
 	public function applyFilter() {
@@ -20,6 +20,6 @@ trait InputSuara {
     public function resetFilter()
     {
         $this->includedColumns = ['KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
-        $this->partisipasi = ['HIJAU', 'KUNING', 'MERAH'];
+        $this->partisipasi = ['HIJAU', 'MERAH'];
     }
 }

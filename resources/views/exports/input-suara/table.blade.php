@@ -214,19 +214,11 @@
                 </td>
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                    @if ($datum->partisipasi >= 80)
+                    @if ($datum->partisipasi >= 77.5)
                         <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
                             {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
-                    @endif
-
-                    @if ($datum->partisipasi < 80 && $datum->partisipasi >= 60)
-                        <span class="bg-yellow-400 block text-white py-1 px-7 rounded text-xs">
-                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
-                        </span>
-                    @endif
-
-                    @if ($datum->partisipasi < 60)
+                    @else
                         <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
                             {{ number_format($datum->partisipasi, 1, '.', '.') }}%
                         </span>
