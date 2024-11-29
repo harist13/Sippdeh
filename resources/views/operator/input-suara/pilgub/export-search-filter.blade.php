@@ -1,6 +1,9 @@
 <div class="flex flex-col space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:items-center order-1 lg:order-2">
-    {{-- Import Button --}}
-    <livewire:operator.input-suara.import-suara-tps key="{{ now() }}" posisi="GUBERNUR" tpsQuery="{{ $tpsQuery }}" />
+    {{-- Sementara cuma untuk Kota Balikpapan --}}
+    @if (session('operator_kabupaten_id') == 8)
+        {{-- Import Button --}}
+        <livewire:operator.input-suara.import-suara-tps key="{{ now() }}" posisi="GUBERNUR" tpsQuery="{{ $tpsQuery }}" />
+    @endif
     
     {{-- Search Input --}}
     <div class="flex items-center rounded-lg bg-[#ECEFF5] px-4 py-2">

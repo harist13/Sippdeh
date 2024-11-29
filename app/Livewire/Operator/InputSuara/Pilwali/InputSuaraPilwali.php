@@ -34,8 +34,20 @@ class InputSuaraPilwali extends Component
     use WithPagination, WithoutUrlPagination;
 
     protected $listeners = [
-        '$refresh'
+        '$refresh',
+        'import-success' => 'handleImportSuccess',
+        'import-error' => 'handleImportError'
     ];
+
+    public function handleImportSuccess($message)
+    {
+        session()->flash('pesan_sukses', $message);
+    }
+
+    public function handleImportError($message)
+    {
+        session()->flash('pesan_gagal', $message);
+    }
 
     public string $posisi = 'WALIKOTA';
 
@@ -47,6 +59,8 @@ class InputSuaraPilwali extends Component
     public array $selectedKelurahan = [];
     public array $includedColumns = ['KABUPATEN', 'KECAMATAN', 'KELURAHAN', 'TPS', 'CALON'];
     public array $partisipasi = ['HIJAU', 'MERAH'];
+
+    public string $tpsQuery;
 
     public function render(): View
     {
@@ -71,6 +85,8 @@ class InputSuaraPilwali extends Component
             $this->filterKelurahan($builder);
             $this->filterKecamatan($builder);
             $this->filterPartisipasi($builder);
+
+            $this->tpsQuery = $builder->toRawSql();
     
             return $builder->paginate($this->perPage);
         } catch (Exception $exception) {
