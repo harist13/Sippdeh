@@ -125,6 +125,23 @@
         </div>
     </div>
 
+    @elseif(str_contains(strtolower($kabupatenName), 'bontang'))
+    <div class="letterhead">
+        @if($logo && file_exists(public_path('storage/' . $logo)))
+            <div class="logo-container">
+                <img src="{{ public_path('storage/' . $logo) }}" class="logo">
+            </div>
+        @endif
+        <div class="header-text">
+            <h2>PEMERINTAH KOTA BONTANG</h2>
+            <h3>BADAN KESATUAN BANGSA DAN POLITIK</h3>
+            <p>Gedung Taman Praja Blok 1 Jalan Moch Roem Nomor 1 Bontang Selatan.</p>
+            <p>Bontang, Kalimantan Timur 75325</p>
+            <p class="website-email">Telepon (0548) 5116603, 3030303 Faksimile (0548) 3030313</p>
+            <p>Laman kesbangpol.bontang.go.id</p>
+        </div>
+    </div>
+
     @elseif(str_contains(strtolower($kabupatenName), 'kutai kartanegara'))
     <div class="letterhead">
         @if($logo && file_exists(public_path('storage/' . $logo)))
