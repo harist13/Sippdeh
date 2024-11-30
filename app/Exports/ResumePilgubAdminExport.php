@@ -114,7 +114,7 @@ class ResumePilgubAdminExport implements FromView, WithStyles
                         $builder->whereIn('id', $this->selectedKecamatan);
                     }
 
-                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereId(session('operator_kabupaten_id')));
+                    $builder->whereHas('kabupaten', fn (Builder $builder) => $builder->whereId(session('Admin_kabupaten_id')));
                 });
             });
         });
@@ -290,7 +290,7 @@ class ResumePilgubAdminExport implements FromView, WithStyles
             ) AS suara')
         ])
         ->where('calon.posisi', $this->posisi)
-        ->where('calon.provinsi_id', session('operator_provinsi_id'))
+        ->where('calon.provinsi_id', session('Admin_provinsi_id'))
         ->groupBy('calon.id')
         ->get();
     }

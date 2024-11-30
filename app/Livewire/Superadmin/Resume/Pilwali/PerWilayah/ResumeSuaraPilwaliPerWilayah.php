@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Superadmin\Resume\Pilwali\PerWilayah;
 
+use App\Exports\Admin\ResumePilwaliWilayahExport;
 use App\Exports\ResumePilwaliExport;
 use App\Models\Calon;
 use App\Models\Kabupaten;
@@ -223,16 +224,28 @@ class ResumeSuaraPilwaliPerWilayah extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    // public function export()
-    // {
-    //     $sheet = new ResumePilwaliExport(
-    //         $this->selectedKecamatan,
-    //         $this->selectedKelurahan,
-    //         $this->includedColumns,
-    //         $this->partisipasi,
-    //         $this->kabupatenId
-    //     );
+    public function export()
+    {
+        $sheet = new ResumePilwaliWilayahExport(
+            $this->kabupatenId,
+            
+            $this->keyword,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi,
 
-    //     return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
-    // }
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
+    }
 }

@@ -115,6 +115,11 @@ class LoginController extends Controller
                 session(['Superadmin_provinsi_name' => $user->kabupaten->provinsi->nama]);
                 session(['Superadmin_kabupaten_id' => $user->kabupaten->id]);
                 session(['Superadmin_kabupaten_name' => $user->kabupaten->nama]);
+
+                session(['Admin_provinsi_id' => $user->kabupaten->provinsi->id]);
+                session(['Admin_provinsi_name' => $user->kabupaten->provinsi->nama]);
+                session(['Admin_kabupaten_id' => $user->kabupaten->id]);
+                session(['Admin_kabupaten_name' => $user->kabupaten->nama]);
             }
 
             // Simpan riwayat login

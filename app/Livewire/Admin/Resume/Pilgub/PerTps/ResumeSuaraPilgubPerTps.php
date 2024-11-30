@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\Resume\Pilgub\PerTps;
 
 // Models
+
+use App\Exports\Admin\ResumePilgubTPSExport;
 use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
@@ -240,7 +242,7 @@ class ResumeSuaraPilgubPerTps extends Component
     public function export(): BinaryFileResponse
     {
         try {
-            $sheet = new InputSuaraPilgubExport(
+            $sheet = new ResumePilgubTPSExport(
                 $this->keyword,
                 $this->selectedKecamatan,
                 $this->selectedKelurahan,
