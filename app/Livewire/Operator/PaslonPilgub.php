@@ -21,18 +21,13 @@ class PaslonPilgub extends Component
     public function render()
     {
         $paslon = $this->getPaslon();
-        $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
-        $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
+        $suaraSah = $this->getSuaraSah();
+        $kotakKosong = $this->getKotakKosong();
 
         return view('livewire.operator.paslon-pilgub', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
-    private function getKabupatenIdOfOperator(): int
-    {
-        return session('operator_kabupaten_id');
-    }
-
-    private function getSuaraSahOfOperatorKabupaten(): int
+    private function getSuaraSah(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
@@ -55,7 +50,7 @@ class PaslonPilgub extends Component
                 AND c.posisi = "' . $this->posisi . '"
             ) AS suara_sah')
         ])
-        ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
+        ->where('kabupaten.id', session('operator_kabupaten_id'))
         ->groupBy('kabupaten.id');
         
         if ($kabupaten->count() > 0) {
@@ -66,7 +61,7 @@ class PaslonPilgub extends Component
         return 0;
     }
 
-    private function getKotakKosongOfOperatorKabupaten(): int
+    private function getKotakKosong(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
@@ -76,17 +71,17 @@ class PaslonPilgub extends Component
                 JOIN tps t ON st.tps_id = t.id
                 JOIN kelurahan k ON t.kelurahan_id = k.id
                 JOIN kecamatan kc ON k.kecamatan_id = kc.id
-                WHERE kc.kabupaten_id = ' . $this->getKabupatenIdOfOperator() . '
+                WHERE kc.kabupaten_id = ' . session('operator_kabupaten_id') . '
                 AND st.posisi = "' . $this->posisi . '"
             ) + (
                 SELECT COALESCE(SUM(dp.kotak_kosong), 0)
                 FROM daftar_pemilih dp
                 JOIN kecamatan kc ON dp.kecamatan_id = kc.id
-                WHERE kc.kabupaten_id = ' . $this->getKabupatenIdOfOperator() . '
+                WHERE kc.kabupaten_id = ' . session('operator_kabupaten_id') . '
                 AND dp.posisi = "' . $this->posisi . '"
             ) AS kotak_kosong')
         ])
-        ->where('kabupaten.id', $this->getKabupatenIdOfOperator())
+        ->where('kabupaten.id', session('operator_kabupaten_id'))
         ->groupBy('kabupaten.id');
         
         if ($kabupaten->count() > 0) {

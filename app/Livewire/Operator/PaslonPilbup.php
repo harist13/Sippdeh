@@ -22,13 +22,13 @@ class PaslonPilbup extends Component
     public function render()
     {
         $paslon = $this->getPaslon();
-        $suaraSah = $this->getSuaraSahOfOperatorKabupaten();
-        $kotakKosong = $this->getKotakKosongOfOperatorKabupaten();
+        $suaraSah = $this->getSuaraSah();
+        $kotakKosong = $this->getKotakKosong();
 
         return view('livewire.operator.paslon-pilbup', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
-    private function getSuaraSahOfOperatorKabupaten(): int
+    private function getSuaraSah(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
@@ -62,7 +62,7 @@ class PaslonPilbup extends Component
         return 0;
     }
 
-    private function getKotakKosongOfOperatorKabupaten(): int
+    private function getKotakKosong(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
