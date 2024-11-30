@@ -21,8 +21,8 @@ class PaslonPilgub extends Component
     public function render()
     {
         $paslon = $this->getPaslon();
-        $suaraSah = $this->getSuaraSahOfTamuKabupaten();
-        $kotakKosong = $this->getKotakKosongOfTamuKabupaten();
+        $suaraSah = $this->getSuaraSah();
+        $kotakKosong = $this->getKotakKosong();
 
         return view('livewire.Tamu.paslon-pilgub', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
@@ -32,7 +32,7 @@ class PaslonPilgub extends Component
         return session('Tamu_kabupaten_id');
     }
     
-    private function getSuaraSahOfTamuKabupaten(): int
+    private function getSuaraSah(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
@@ -66,7 +66,7 @@ class PaslonPilgub extends Component
         return 0;
     }
 
-    private function getKotakKosongOfTamuKabupaten(): int
+    private function getKotakKosong(): int
     {
         $kabupaten = Kabupaten::select([
             'kabupaten.id',
