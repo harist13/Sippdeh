@@ -63,7 +63,7 @@ class SuperadminController extends Controller
         
         // Hitung total suara untuk masing-masing paslon (keseluruhan)
         foreach ($calon as $paslon) {
-            $paslon->total_suara = $paslon->suaraCalon()->sum('suara');
+            $paslon->total_suara = $paslon->suaraCalon()->sum('suara') + $paslon->suaraCalonTambahan()->sum('suara');
         }
         
         // Hitung total semua suara
@@ -129,10 +129,19 @@ class SuperadminController extends Controller
         $candidates = [];
         foreach ($gubernurCalon as $index => $cal) {
             // Get total votes from all kabupaten for this candidate
-            $totalSuara = SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
-                $query->where('id', $provinsi->id);
-            })->where('calon_id', $cal->id)
-            ->sum('suara');
+            $totalSuara = SuaraCalon::query()
+                ->whereHas('tps.kelurahan.kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
+                    $query->where('id', $provinsi->id);
+                })
+                ->where('calon_id', $cal->id)
+                ->sum('suara');
+
+            $totalSuara += SuaraCalonDaftarPemilih::query()
+                ->whereHas('kecamatan.kabupaten.provinsi', function($query) use ($provinsi) {
+                    $query->where('id', $provinsi->id);
+                })
+                ->where('calon_id', $cal->id)
+                ->sum('suara');
 
             $persentase = $suaraSah > 0 ? round(($totalSuara / $suaraSah) * 100, 2) : 0;
 
@@ -224,9 +233,19 @@ class SuperadminController extends Controller
 
     private function getSuaraCalonByWilayah(int $calonId, int $kabupatenId): int
     {
-        return SuaraCalon::whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
-            $query->where('id', $kabupatenId);
-        })->where('calon_id', $calonId)->sum('suara') ?? 0;
+        $suaraCalon = SuaraCalon::query()
+            ->whereHas('tps.kelurahan.kecamatan.kabupaten', function($query) use ($kabupatenId) {
+                $query->where('id', $kabupatenId);
+            })
+            ->where('calon_id', $calonId)->sum('suara') ?? 0;
+
+        $suaraTambahan = SuaraCalonDaftarPemilih::query()
+            ->whereHas('kecamatan.kabupaten', function($query) use ($kabupatenId) {
+                $query->where('id', $kabupatenId);
+            })
+            ->where('calon_id', $calonId)->sum('suara') ?? 0;
+
+        return $suaraCalon + $suaraTambahan;
     }
 
     private function hitungPersentaseSuaraCalon(int $totalSuara, int $kabupatenId): float
