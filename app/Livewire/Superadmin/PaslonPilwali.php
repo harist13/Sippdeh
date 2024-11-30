@@ -4,7 +4,6 @@ namespace App\Livewire\Superadmin;
 
 use App\Models\Calon;
 use App\Models\Kabupaten;
-use App\Models\Provinsi;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -23,56 +22,68 @@ class PaslonPilwali extends Component
     public function render()
     {
         $paslon = $this->getPaslon();
-        $suaraSah = $this->getSuaraSahTotal();
-        $kotakKosong = $this->getKotakKosongTotal();
+        $suaraSah = $this->getSuaraSah();
+        $kotakKosong = $this->getKotakKosong();
 
-        return view('livewire.superadmin.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
+        return view('livewire.admin.paslon-pilwali', compact('paslon', 'kotakKosong', 'suaraSah'));
     }
 
-    private function getSuaraSahTotal(): int
+    private function getSuaraSah(): int
     {
-        $builder = Kabupaten::select([
+        $kabupaten = Kabupaten::select([
             'kabupaten.id',
             'kabupaten.nama',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara_sah')
+            DB::raw('(
+                SELECT COALESCE(SUM(sc.suara), 0)
+                FROM suara_calon sc
+                JOIN calon c ON sc.calon_id = c.id
+                WHERE c.posisi = "' . $this->posisi . '"
+                AND c.kabupaten_id = ' . $this->kabupatenId . '
+            ) + (
+                SELECT COALESCE(SUM(scdp.suara), 0)
+                FROM suara_calon_daftar_pemilih scdp
+                JOIN calon c ON scdp.calon_id = c.id
+                WHERE c.posisi = "' . $this->posisi . '"
+                AND c.kabupaten_id = ' . $this->kabupatenId . '
+            ) AS suara_sah')
         ])
-        ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-        ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-        ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-        ->leftJoin('suara_calon', function ($join) {
-            $join->on('suara_calon.tps_id', '=', 'tps.id')
-                ->whereIn('suara_calon.calon_id', function ($query) {
-                    $query->select('id')
-                        ->from('calon')
-                        ->where('posisi', $this->posisi);
-                });
-        })
         ->where('kabupaten.id', $this->kabupatenId)
         ->groupBy('kabupaten.id');
         
-        if ($builder->count() > 0) {
-            return $builder->first()->suara_sah;
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->suara_sah;
         }
 
         return 0;
     }
 
-    private function getKotakKosongTotal(): int
+    private function getKotakKosong(): int
     {
-        $builder = Kabupaten::select([
+        $kabupaten = Kabupaten::select([
             'kabupaten.id',
-            DB::raw('COALESCE(SUM(suara_tps.kotak_kosong), 0) AS kotak_kosong'),
+            DB::raw('(
+                SELECT COALESCE(SUM(st.kotak_kosong), 0)
+                FROM suara_tps st
+                JOIN tps t ON st.tps_id = t.id
+                JOIN kelurahan k ON t.kelurahan_id = k.id
+                JOIN kecamatan kc ON k.kecamatan_id = kc.id
+                WHERE kc.kabupaten_id = ' . $this->kabupatenId . '
+                AND st.posisi = "' . $this->posisi . '"
+            ) + (
+                SELECT COALESCE(SUM(dp.kotak_kosong), 0)
+                FROM daftar_pemilih dp
+                JOIN kecamatan kc ON dp.kecamatan_id = kc.id
+                WHERE kc.kabupaten_id = ' . $this->kabupatenId . '
+                AND dp.posisi = "' . $this->posisi . '"
+            ) AS kotak_kosong')
         ])
-            ->leftJoin('kecamatan', 'kecamatan.kabupaten_id', '=', 'kabupaten.id')
-            ->leftJoin('kelurahan', 'kelurahan.kecamatan_id', '=', 'kecamatan.id')
-            ->leftJoin('tps', 'tps.kelurahan_id', '=', 'kelurahan.id')
-            ->leftJoin('suara_tps', 'suara_tps.tps_id', '=', 'tps.id')
-            ->where('suara_tps.posisi', $this->posisi)
-            ->where('kabupaten.id', $this->kabupatenId)
-            ->groupBy('kabupaten.id');
+        ->where('kabupaten.id', $this->kabupatenId)
+        ->groupBy('kabupaten.id');
         
-        if ($builder->count() > 0) {
-            return $builder->first()->kotak_kosong;
+        if ($kabupaten->count() > 0) {
+            $kabupaten = $kabupaten->first();
+            return $kabupaten->kotak_kosong;
         }
 
         return 0;
@@ -87,13 +98,20 @@ class PaslonPilwali extends Component
             'calon.foto',
             'calon.kabupaten_id',
             'calon.no_urut',
-            DB::raw('COALESCE(SUM(suara_calon.suara), 0) AS suara'),
+            DB::raw('(
+                SELECT COALESCE(SUM(sc.suara), 0)
+                FROM suara_calon sc
+                WHERE sc.calon_id = calon.id
+            ) + (
+                SELECT COALESCE(SUM(scdp.suara), 0)
+                FROM suara_calon_daftar_pemilih scdp
+                WHERE scdp.calon_id = calon.id
+            ) AS suara')
         ])
-            ->leftJoin('suara_calon', 'suara_calon.calon_id', '=', 'calon.id')
-            ->where('calon.posisi', $this->posisi)
-            ->where('calon.kabupaten_id', $this->kabupatenId)
-            ->groupBy('calon.id')
-            ->orderBy('calon.no_urut', 'asc')
-            ->get();
+        ->where('calon.posisi', $this->posisi)
+        ->where('calon.kabupaten_id', $this->kabupatenId)
+        ->groupBy('calon.id')
+        ->orderBy('calon.no_urut', 'asc')
+        ->get();
     }
 }

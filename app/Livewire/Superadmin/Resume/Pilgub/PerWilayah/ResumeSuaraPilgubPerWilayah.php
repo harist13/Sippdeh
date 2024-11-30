@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Superadmin\Resume\Pilgub\PerWilayah;
 
+use App\Exports\ResumePilgubAdminExport;
 use App\Exports\ResumePilgubExport;
 use App\Models\Calon;
 use App\Models\Kabupaten;
@@ -225,17 +226,27 @@ class ResumeSuaraPilgubPerWilayah extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    // public function export()
-    // {
-    //     $sheet = new ResumePilgubExport(
-    //         $this->keyword,
-    //         $this->selectedKabupaten,
-    //         $this->selectedKecamatan,
-    //         $this->selectedKelurahan,
-    //         $this->includedColumns,
-    //         $this->partisipasi
-    //     );
+    public function export()
+    {
+        $sheet = new ResumePilgubAdminExport(
+            $this->keyword,
+            $this->selectedKabupaten,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi,
 
-    //     return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
-    // }
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
+    }
 }

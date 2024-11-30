@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Superadmin\Resume\Pilbup\PerWilayah;
 
+use App\Exports\Admin\ResumePilbupWilayahExport;
 use App\Exports\ResumePilbupExport;
 use App\Models\Calon;
 use App\Models\Kabupaten;
@@ -222,16 +223,28 @@ class ResumeSuaraPilbupPerWilayah extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    // public function export()
-    // {
-    //     $sheet = new ResumePilbupExport(
-    //         $this->selectedKecamatan,
-    //         $this->selectedKelurahan,
-    //         $this->includedColumns,
-    //         $this->partisipasi,
-    //         $this->kabupatenId
-    //     );
+    public function export()
+    {
+        $sheet = new ResumePilbupWilayahExport(
+            $this->kabupatenId,
+            
+            $this->keyword,
+            $this->selectedKecamatan,
+            $this->selectedKelurahan,
+            $this->includedColumns,
+            $this->partisipasi,
 
-    //     return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
-    // }
+            $this->dptSort,
+            $this->suaraSahSort,
+            $this->suaraTidakSahSort,
+            $this->suaraMasukSort,
+            $this->abstainSort,
+            $this->partisipasiSort,
+
+            $this->paslonIdSort,
+            $this->paslonSort,
+        );
+
+        return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
+    }
 }

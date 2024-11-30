@@ -59,17 +59,17 @@
             </th>            
 
             @if (!$isCalonColumnIgnored)
-                @foreach ($paslon as $calon)
-                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
-                    </th>
-                @endforeach
-
                 @if ($isPilkadaTunggal)
                     <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
                         <span>Kotak Kosong</span>
                     </th>
                 @endif
+
+                @foreach ($paslon as $calon)
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        <span>{{ $calon->nama }}/<br>{{ $calon->nama_wakil }}</span>
+                    </th>
+                @endforeach
             @endif
 
             <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
@@ -94,17 +94,17 @@
             </th>
         
             @if (!$isCalonColumnIgnored)
-                @foreach ($paslon as $calon)
-                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
-                    </th>
-                @endforeach
-
                 @if ($isPilkadaTunggal)
                     <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
                         {{ $totalKotakKosong }}
                     </th>
                 @endif
+                
+                @foreach ($paslon as $calon)
+                    <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                    </th>
+                @endforeach
             @endif
         
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
@@ -155,6 +155,12 @@
                 </td>
 
                 @if (!$isCalonColumnIgnored)
+                    @if ($isPilkadaTunggal)
+                        <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
+                            {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                        </td>
+                    @endif
+                    
                     @foreach ($paslon as $calon)
                         @php
                             $suara = $datum->getCalonSuaraByCalonId($calon->id);
@@ -163,12 +169,6 @@
                             {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
                         </td>
                     @endforeach
-
-                    @if ($isPilkadaTunggal)
-                        <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                            {{ number_format($datum->kotak_kosong, 0, '', '.') }}
-                        </td>
-                    @endif
                 @endif
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">

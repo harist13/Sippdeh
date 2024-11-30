@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Resume\Pilwali\PerTps;
 
+use App\Exports\Admin\ResumePilwaliTPSExport;
 use App\Exports\InputSuaraPilwaliExport;
 use App\Models\Calon;
 use App\Models\ResumeSuaraPilwaliTPS;
@@ -221,23 +222,34 @@ class ResumeSuaraPilwaliPerTps extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    // public function export(): BinaryFileResponse
-    // {
-    //     try {
-    //         $sheet = new InputSuaraPilwaliExport(
-    //             $this->keyword,
-    //             $this->selectedKecamatan,
-    //             $this->selectedKelurahan,
-    //             $this->includedColumns,
-    //             $this->partisipasi,
-    //             $this->kabupatenId
-    //         );
+    public function export(): BinaryFileResponse
+    {
+        try {
+            $sheet = new ResumePilwaliTPSExport(
+                $this->kabupatenId,
+
+                $this->keyword,
+                $this->selectedKecamatan,
+                $this->selectedKelurahan,
+                $this->includedColumns,
+                $this->partisipasi,
+
+                $this->dptSort,
+                $this->suaraSahSort,
+                $this->suaraTidakSahSort,
+                $this->suaraMasukSort,
+                $this->abstainSort,
+                $this->partisipasiSort,
+
+                $this->paslonIdSort,
+                $this->paslonSort,
+            );
     
-    //         return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
-    //     } catch (Exception $exception) {
-    //         Log::error($exception);
-    //         SentrySdk::getCurrentHub()->captureException($exception);
-    //         throw $exception;
-    //     }
-    // }
+            return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            throw $exception;
+        }
+    }
 }

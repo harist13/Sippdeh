@@ -6,7 +6,7 @@
         <div class="mb-8">
             @livewire('superadmin.resume.pilgub.per-wilayah.resume-suara-pilgub-per-wilayah')
             @livewire('superadmin.resume.pilgub.per-tps.resume-suara-pilgub-per-tps')
-            @livewire('superadmin.paslon-pilgub')
+            @livewire('superadmin.paslon-pilgub', ['kabupatenId' => request()->get('kabupatenId')])
         </div>
     @endif
 

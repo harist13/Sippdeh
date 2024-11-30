@@ -3,6 +3,8 @@
 namespace App\Livewire\Superadmin\Resume\Pilgub\PerTps;
 
 // Models
+
+use App\Exports\Admin\ResumePilgubTPSExport;
 use App\Models\ResumeSuaraPilgubTPS;
 use App\Models\Calon;
 use App\Models\SuaraCalon;
@@ -237,23 +239,32 @@ class ResumeSuaraPilgubPerTps extends Component
         $this->partisipasi = $partisipasi;
     }
 
-    // public function export(): BinaryFileResponse
-    // {
-    //     try {
-    //         $sheet = new InputSuaraPilgubExport(
-    //             $this->keyword,
-    //             $this->selectedKecamatan,
-    //             $this->selectedKelurahan,
-    //             $this->includedColumns,
-    //             $this->partisipasi,
-    //             $this->kabupatenId
-    //         );
+    public function export(): BinaryFileResponse
+    {
+        try {
+            $sheet = new ResumePilgubTPSExport(
+                $this->keyword,
+                $this->selectedKecamatan,
+                $this->selectedKelurahan,
+                $this->includedColumns,
+                $this->partisipasi,
     
-    //         return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
-    //     } catch (Exception $exception) {
-    //         Log::error($exception);
-    //         SentrySdk::getCurrentHub()->captureException($exception);
-    //         throw $exception;
-    //     }
-    // }
+                $this->dptSort,
+                $this->suaraSahSort,
+                $this->suaraTidakSahSort,
+                $this->suaraMasukSort,
+                $this->abstainSort,
+                $this->partisipasiSort,
+    
+                $this->paslonIdSort,
+                $this->paslonSort,
+            );
+    
+            return Excel::download($sheet, 'resume-suara-pemilihan-gubernur.xlsx');
+        } catch (Exception $exception) {
+            Log::error($exception);
+            SentrySdk::getCurrentHub()->captureException($exception);
+            throw $exception;
+        }
+    }
 }
