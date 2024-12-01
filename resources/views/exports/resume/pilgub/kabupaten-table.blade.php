@@ -90,7 +90,7 @@
             @if (!$isCalonColumnIgnored)
                 @if ($isPilkadaTunggal)
                     <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                        {{ $totalKotakKosong }}
+                        {{ number_format($totalKotakKosong, 0, '.', '.') }}
                     </th>
                 @endif
                 
