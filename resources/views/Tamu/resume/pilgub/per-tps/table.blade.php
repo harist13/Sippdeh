@@ -160,7 +160,7 @@
             {{-- Kotak Kosong --}}
             @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
                 <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{ $totalKotakKosong }}
+                    {{ number_format($totalKotakKosong, 0, '.', '.') }}
                 </th>
             @endif
         
