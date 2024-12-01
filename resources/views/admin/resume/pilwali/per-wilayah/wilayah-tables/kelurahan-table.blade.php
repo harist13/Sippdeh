@@ -139,6 +139,13 @@
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
                 {{ number_format($totalDpt, 0, '.', '.') }}
             </th>
+
+            {{-- Kotak Kosong --}}
+            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
+                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
+                    {{ number_format($totalKotakKosong, 0, '.', '.') }}
+                </th>
+            @endif
         
             {{-- Calon Totals --}}
             @if (!$isCalonColumnIgnored)
@@ -147,13 +154,6 @@
                         {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
                     </th>
                 @endforeach
-            @endif
-        
-            {{-- Kotak Kosong --}}
-            @if ($isPilkadaTunggal && !$isCalonColumnIgnored)
-                <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none bg-blue-950">
-                    {{ number_format($totalKotakKosong, 0, '.', '.') }}
-                </th>
             @endif
         
             <th class="py-4 px-2 text-center font-semibold text-xs border border-white select-none">
