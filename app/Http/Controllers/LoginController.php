@@ -66,6 +66,7 @@ class LoginController extends Controller
                     session(['operator_jenis_wilayah' => 'kabupaten']);
                 }
 
+                session(['operator_name' => $user->username]);
                 session(['operator_provinsi_id' => $user->kabupaten->provinsi->id]);
                 session(['operator_provinsi_name' => $user->kabupaten->provinsi->nama]);
                 session(['operator_kabupaten_id' => $user->kabupaten->id]);

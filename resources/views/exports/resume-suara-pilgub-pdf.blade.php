@@ -418,7 +418,7 @@
 
       <div class="footnote">
         <p>Dokumen ini telah dicetak melalui Aplikasi SIPPPDEH Prov.Kaltim oleh {{ session('operator_name') }}<br>
-        {{ now()->format('d/m/Y H:i') }}</p>
+        {{ now()->format('d/m/Y H:i') }} WITA</p>
     </div>
 </body>
 </html>
