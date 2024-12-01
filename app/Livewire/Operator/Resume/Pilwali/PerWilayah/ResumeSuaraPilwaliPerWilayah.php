@@ -478,7 +478,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
 
             return response()->streamDownload(function() use ($pdf) {
                 echo $pdf->output();
-            }, 'resume-suara-pemilihan-bupati.pdf', [
+            }, 'resume-suara-pemilihan-walikota.pdf', [
                 'Content-Type' => 'application/pdf',
             ]);
         } catch (\Exception $e) {

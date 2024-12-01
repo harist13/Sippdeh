@@ -245,7 +245,7 @@ class ResumeSuaraPilwaliPerTps extends Component
                 $this->paslonSort,
             );
     
-            return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
+            return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
         } catch (Exception $exception) {
             Log::error($exception);
             SentrySdk::getCurrentHub()->captureException($exception);

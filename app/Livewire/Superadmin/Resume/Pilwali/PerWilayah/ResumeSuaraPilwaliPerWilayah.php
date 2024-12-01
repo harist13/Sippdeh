@@ -246,6 +246,6 @@ class ResumeSuaraPilwaliPerWilayah extends Component
             $this->paslonSort,
         );
 
-        return Excel::download($sheet, 'resume-suara-pemilihan-bupati.xlsx');
+        return Excel::download($sheet, 'resume-suara-pemilihan-walikota.xlsx');
     }
 }
