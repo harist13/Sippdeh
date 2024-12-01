@@ -371,7 +371,7 @@ class ResumeSuaraPilwaliPerWilayah extends Component
                             (
                                 resume_suara_pilwali_kecamatan.dpt
                                 +
-                                resume_suara_pilwali_kecamatan.dptb,
+                                resume_suara_pilwali_kecamatan.dptb
                                 +
                                 resume_suara_pilwali_kecamatan.dpk
                             ) AS dpt,
