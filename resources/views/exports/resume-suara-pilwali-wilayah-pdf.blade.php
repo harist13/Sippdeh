@@ -271,14 +271,14 @@
                 <th rowspan="1" width="10%">DPT</th>
 
                 @if(in_array('CALON', $includedColumns))
+                    @if($isPilkadaTunggal)
+                        <th class="bg-blue-950">KOTAK KOSONG</th>
+                    @endif
                     @foreach($paslon as $calon)
                         <th class="bg-blue-950">
                             {{ $calon->nama }}<br>{{ $calon->nama_wakil }}
                         </th>
                     @endforeach
-                    @if($isPilkadaTunggal)
-                        <th class="bg-blue-950">KOTAK KOSONG</th>
-                    @endif
                 @endif
 
                 <th width="10%">SUARA SAH</th>
@@ -358,6 +358,11 @@
                     <td class="text-right">{{ number_format($item->dpt, 0, ',', '.') }}</td>
 
                     @if(in_array('CALON', $includedColumns))
+                        @if($isPilkadaTunggal)
+                            <td class="text-right">
+                                {{ number_format($item->kotak_kosong, 0, ',', '.') }}
+                            </td>
+                        @endif
                         @foreach($paslon as $calon)
                             <td class="text-right">
                                 @if($isTpsView)
@@ -367,11 +372,6 @@
                                 @endif
                             </td>
                         @endforeach
-                        @if($isPilkadaTunggal)
-                            <td class="text-right">
-                                {{ number_format($item->kotak_kosong, 0, ',', '.') }}
-                            </td>
-                        @endif
                     @endif
 
                     <td class="text-right">{{ number_format($item->suara_sah, 0, ',', '.') }}</td>
