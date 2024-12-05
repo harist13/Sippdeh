@@ -96,37 +96,37 @@
         </tr>
         <tr>
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalDpt, 0, '.', '.') }}
+                {{ number_format($totalDpt, 0, '', '') }}
             </th>
         
             @if (!$isCalonColumnIgnored)
                 @if ($isPilkadaTunggal)
                     <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                        {{ number_format($totalKotakKosong, 0, '.', '.') }}
+                        {{ number_format($totalKotakKosong, 0, '', '') }}
                     </th>
                 @endif
                 
                 @foreach ($paslon as $calon)
                     <th style="border: 1px solid black; vertical-align: middle; text-align: center; width: 150px;">
-                        {{ number_format($totalsPerCalon[$calon->id], 0, '.', '.') }}
+                        {{ number_format($totalsPerCalon[$calon->id], 0, '', '') }}
                     </th>
                 @endforeach
             @endif
         
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalSuaraSah, 0, '.', '.') }}
+                {{ number_format($totalSuaraSah, 0, '', '') }}
             </th>
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalSuaraTidakSah, 0, '.', '.') }}
+                {{ number_format($totalSuaraTidakSah, 0, '', '') }}
             </th>
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalSuaraMasuk, 0, '.', '.') }}
+                {{ number_format($totalSuaraMasuk, 0, '', '') }}
             </th>
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalAbstain, 0, '.', '.') }}
+                {{ number_format($totalAbstain, 0, '', '') }}
             </th>
             <th style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                {{ number_format($totalPartisipasi, 1, '.', '.') }}%
+                {{ number_format($totalPartisipasi, 1, '', '.') }}%
             </th>
         </tr>
     </thead>
@@ -163,13 +163,13 @@
                 @endif
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->dpt, 0, '', '.') }}
+                    {{ number_format($datum->dpt, 0, '', '') }}
                 </td>
 
                 @if (!$isCalonColumnIgnored)
                     @if ($isPilkadaTunggal)
                         <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                            {{ number_format($datum->kotak_kosong, 0, '', '.') }}
+                            {{ number_format($datum->kotak_kosong, 0, '', '') }}
                         </td>
                     @endif
 
@@ -178,35 +178,35 @@
                             $suara = $datum->getCalonSuaraByCalonId($calon->id);
                         @endphp
                         <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '.') }}
+                            {{ number_format($suara ? $suara->total_suara : 0, 0, '', '') }}
                         </td>
                     @endforeach
                 @endif
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->suara_sah, 0, '', '.') }}
+                    {{ number_format($datum->suara_sah, 0, '', '') }}
                 </td>
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->suara_tidak_sah, 0, '', '.') }}
+                    {{ number_format($datum->suara_tidak_sah, 0, '', '') }}
                 </td>
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->suara_masuk, 0, '', '.') }}
+                    {{ number_format($datum->suara_masuk, 0, '', '') }}
                 </td>
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
-                    {{ number_format($datum->abstain, 0, '', '.') }}
+                    {{ number_format($datum->abstain, 0, '', '') }}
                 </td>
 
                 <td style="border: 1px solid black; vertical-align: middle; text-align: center;">
                     @if ($datum->partisipasi >= 77.5)
                         <span class="bg-green-400 block text-white py-1 px-7 rounded text-xs">
-                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                            {{ number_format($datum->partisipasi, 1, '', '.') }}%
                         </span>
                     @else
                         <span class="bg-red-400 block text-white py-1 px-7 rounded text-xs">
-                            {{ number_format($datum->partisipasi, 1, '.', '.') }}%
+                            {{ number_format($datum->partisipasi, 1, '', '.') }}%
                         </span>
                     @endif
                 </td>
