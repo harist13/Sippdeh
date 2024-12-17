@@ -123,4 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'input_suara_enabled' => (bool) env('INPUT_SUARA_ENABLED', true)
 ];
