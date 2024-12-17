@@ -48,9 +48,11 @@
             {{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
                 NO
             </th> --}}
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
-                <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-            </th>
+            @InputSuaraEnabled
+                <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+                    <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+                </th>
+            @endInputSuaraEnabled
             
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">
                 Kabupaten/Kota
@@ -142,9 +144,11 @@
                 </td> --}}
 
                 {{-- Checkbox --}}
-                <td class="py-3 px-4 border centang" data-id="{{ $datum->id }}">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
-                </td>
+                @InputSuaraEnabled
+                    <td class="py-3 px-4 border centang" data-id="{{ $datum->id }}">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+                    </td>
+                @endInputSuaraEnabled
 
                 {{-- Kabupaten --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" data-kabupaten-id="{{ $datum->tps?->kelurahan?->kecamatan?->kabupaten?->id ?? '-' }}">

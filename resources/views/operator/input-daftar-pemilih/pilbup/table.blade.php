@@ -82,9 +82,11 @@
 <table class="min-w-full divide-y divide-gray-200 sticky-table input-suara-table" style="table-layout: fixed;">
     <thead class="bg-[#3560A0] text-white">
         <tr>
-            <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="width: 30px;">
-                <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-            </th>
+            @InputSuaraEnabled
+                <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="width: 30px;">
+                    <input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+                </th>
+            @endInputSuaraEnabled
             
             <th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 300px">
                 Kecamatan
@@ -167,9 +169,11 @@
         @forelse ($kecamatan as $datum)
             <tr wire:key="{{ $datum->id }}" class="border-b text-center select-none cursor-pointer daftar-pemilih" data-id="{{ $datum->id }}">
                 {{-- Checkbox --}}
-                <td class="py-3 px-4 border centang" data-id="{{ $datum->id }}" style="width: 30px;">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
-                </td>
+                @InputSuaraEnabled
+                    <td class="py-3 px-4 border centang" data-id="{{ $datum->id }}" style="width: 30px;">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+                    </td>
+                @endInputSuaraEnabled
 
                 {{-- Kecamatan --}}
                 <td class="py-3 px-4 text-xs text-left border kecamatan" data-kecamatan-id="{{ $datum->id ?? '-' }}" style="width: 300px">

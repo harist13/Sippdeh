@@ -80,7 +80,9 @@
                 {{-- Actionable --}}
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.input-suara.pilwali.action-buttons')
+					@InputSuaraEnabled
+						@include('operator.input-suara.pilwali.action-buttons')
+					@endInputSuaraEnabled
                     
                     {{-- Cari dan Filter --}}
                     @include('operator.input-suara.pilwali.export-search-filter')
@@ -112,9 +114,11 @@
 							<thead class="bg-[#3560A0] text-white">
 								<tr>
 									{{-- <th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">NO</th> --}}
-									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
-										<input type="checkbox" disabled class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-									</th>
+									@InputSuaraEnabled
+										<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="min-width: 50px;">
+											<input type="checkbox" disabled class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+										</th>
+									@endInputSuaraEnabled
 									
 									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKabupatenColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">Kabupaten/Kota</th>
 									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none {{ $isKecamatanColumnIgnored ? 'hidden' : '' }}" style="min-width: 100px;">Kecamatan</th>

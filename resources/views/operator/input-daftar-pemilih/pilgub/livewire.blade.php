@@ -38,7 +38,9 @@
                 {{-- Actionable --}}
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.input-daftar-pemilih.pilgub.action-buttons')
+					@InputSuaraEnabled
+						@include('operator.input-daftar-pemilih.pilgub.action-buttons')
+					@endInputSuaraEnabled
                     
                     {{-- Cari dan Filter --}}
                     @include('operator.input-daftar-pemilih.pilgub.export-search-filter')
@@ -69,9 +71,11 @@
 						<table class="min-w-full divide-y divide-gray-200">
 							<thead class="bg-[#3560A0] text-white">
 								<tr>
-									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="width: 30px;">
-										<input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
-									</th>
+									@InputSuaraEnabled
+										<th rowspan="2" class="py-4 px-2 text-center font-semibold text-sm border border-white select-none" style="width: 30px;">
+											<input type="checkbox" id="checkAll" class="form-checkbox h-5 w-5 text-white border-white select-none rounded focus:ring-blue-500 focus:ring-2 checked:bg-blue-500 checked:border-blue-500 transition duration-200">
+										</th>
+									@endInputSuaraEnabled
 									
 									<th rowspan="2" class="py-4 px-2 text-center font-semibold text-xs border border-white select-none" style="width: 300px">
 										Kecamatan

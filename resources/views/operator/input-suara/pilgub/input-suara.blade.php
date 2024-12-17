@@ -80,7 +80,9 @@
                 {{-- Actionable --}}
                 <div class="flex flex-col gap-5 lg:flex-row lg:space-x-2 lg:items-center lg:justify-between">
                     {{-- Simpan, Batal Edit, dan Masuk Edit Mode --}}
-                    @include('operator.input-suara.pilgub.action-buttons')
+					@InputSuaraEnabled
+						@include('operator.input-suara.pilgub.action-buttons')
+					@endInputSuaraEnabled
                     
                     {{-- Cari dan Filter --}}
                     @include('operator.input-suara.pilgub.export-search-filter')
